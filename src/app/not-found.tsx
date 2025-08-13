@@ -5,12 +5,12 @@ export default function NotFound() {
             <p className="mt-4 text-lg text-gray-600">
                 Sorry, the page you’re looking for doesn’t exist.
             </p>
-            <a
+            <link
                 href="/"
                 className="mt-6 rounded-lg border border-white/20 px-4 py-2 hover:bg-white hover:text-black"
             >
                 Go Home
-            </a>
+            </link>
         </div>
     );
 }

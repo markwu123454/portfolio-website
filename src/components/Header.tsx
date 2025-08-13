@@ -58,17 +58,20 @@ const NAV: NavItem[] = [
 function PlusMinus({ active }: { active: boolean }) {
     return (
         <span className="relative ml-0.5 inline-flex h-3 w-3 items-center justify-center">
-      <span className="absolute h-[2px] w-full bg-current" />
-      <span
-          className={[
-              "absolute w-[2px] bg-current origin-center will-change-transform",
-              "transition-transform duration-150 ease-out",
-              active ? "scale-y-0" : "scale-y-100"
-          ].join(" ")}
-      />
+      {/* horizontal bar: always visible */}
+            <span className="absolute h-[2px] w-full bg-current" />
+            {/* vertical bar: appears when active */}
+            <span
+                className={[
+                    "absolute w-[2px] h-full bg-current origin-center transform",
+                    "transition-transform duration-150 ease-out",
+                    active ? "scale-y-0" : "scale-y-100",
+                ].join(" ")}
+            />
     </span>
     );
 }
+
 
 export function Header() {
     const [open, setOpen] = useState(false);

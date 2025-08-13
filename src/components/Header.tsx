@@ -86,8 +86,8 @@ export function Header() {
             if (e.propertyName !== "opacity") return;
             if (!open) setActive(null);
         };
-        el.addEventListener("transitionend", onEnd as any);
-        return () => el.removeEventListener("transitionend", onEnd as any);
+        el.addEventListener("transitionend", onEnd as never);
+        return () => el.removeEventListener("transitionend", onEnd as never);
     }, [open]);
 
     const show = (item: NavItem | null) => {

@@ -15,7 +15,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
         <html lang="en">
         <body className="min-h-dvh grid grid-rows-[auto_1fr_auto]">
         <Header/>
-        <main className="px-4 mx-auto w-full max-w-5xl">{children}</main>
+        <main className="px-4 mx-auto w-full max-w-5xl text-white">{children}</main>
         <Footer/>
         </body>
         </html>

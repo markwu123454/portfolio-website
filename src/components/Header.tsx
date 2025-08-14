@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {Menu, X, ChevronRight} from "lucide-react";
+import {useEffect, useRef, useState} from "react";
+import {usePathname} from "next/navigation";
 
 type SubLink = { label: string; href: string };
 export type NavItem = {
@@ -19,12 +20,12 @@ const NAV: NavItem[] = [
             heading: "TEAM SPROCKET 3473",
             links: [
                 { label: "Overview", href: "/teamsprocket" },
-                { label: "Team Website", href: "https://www.team3473.com/" },
+                { label: "Official Website", href: "https://www.team3473.com/" },
                 { label: "Cad", href: "/teamsprocket/cad" },
                 { label: "Programming", href: "/teamsprocket/scouting" }
             ],
             blurb:
-                "Team Sprocket is a student-centered FIRST Robotics Competition team. I contribute as a member of the CAD subteam and lead the development and maintenance of the team’s scouting application. The team earned the Impact Award at regionals and advanced to the World Championships in both 2024 and 2025."
+                "Team Sprocket is a student-centered FIRST Robotics Competition team. I am a member of the CAD subteam and developed the team’s newest scouting application. The team earned the FIRST Impact Award at regionals and advanced to the World Championships in both 2024 and 2025."
         }
     },
     {
@@ -34,11 +35,21 @@ const NAV: NavItem[] = [
             heading: "DRONESCAPE CLUB",
             links: [
                 { label: "Overview", href: "/dronescape" },
-                { label: "Club Website", href: "https://www.dronescapeclub.org/" },
+                { label: "Official Website", href: "https://www.dronescapeclub.org/" },
                 { label: "My UAV", href: "/dronescape/uav" },
                 { label: "My GCS", href: "/dronescape/gcs" }
             ],
-            blurb: "Dronescape is a competitive FPV racing club that also includes engineering."
+            blurb:
+                "Dronescape is a competitive FPV racing club with a cinematic, racing, and engineering subteam. I lead an engineering project to step the club into fixed wing UAVs beyond multi-rotor or racing drones."
+        }
+    },
+    {
+        label: "Other projects",
+        href: "/misc",
+        menu: {
+            heading: "OTHER PROJECTS",
+            links: [{ label: "RateMyTeacher", href: "/misc/ratemyteacher" }],
+            blurb: "A list of other smaller projects or ones I contributed less."
         }
     },
     {
@@ -58,66 +69,122 @@ const NAV: NavItem[] = [
 function PlusMinus({ active }: { active: boolean }) {
     return (
         <span className="relative ml-0.5 inline-flex h-3 w-3 items-center justify-center">
-      {/* horizontal bar: always visible */}
-            <span className="absolute h-[2px] w-full bg-current" />
-            {/* vertical bar: appears when active */}
-            <span
-                className={[
-                    "absolute w-[2px] h-full bg-current origin-center transform",
-                    "transition-transform duration-150 ease-out",
-                    active ? "scale-y-0" : "scale-y-100",
-                ].join(" ")}
-            />
+      <span className="absolute h-[2px] w-full bg-current" />
+      <span
+          className={[
+              "absolute w-[2px] h-full bg-current origin-center transform",
+              "transition-transform duration-150 ease-out",
+              active ? "scale-y-0" : "scale-y-100"
+          ].join(" ")}
+      />
     </span>
     );
 }
 
-
 export function Header() {
-    const [open, setOpen] = useState(false);
+    // Desktop mega menu
+    const [megaOpen, setMegaOpen] = useState(false);
     const [active, setActive] = useState<NavItem | null>(null);
+
+    // Mobile breakaway
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [mobileActive, setMobileActive] = useState<string | null>(null);
+
     const [mounted, setMounted] = useState(false);
+    const [hidden, setHidden] = useState(false);
     const panelRef = useRef<HTMLDivElement | null>(null);
+    const pathname = usePathname();
 
     useEffect(() => setMounted(true), []);
 
-    // Defer unmount of content until the fade-out completes to avoid disappearing text.
+    // Hide-on-scroll (disabled while any menu is open)
+    useEffect(() => {
+        const el = document.getElementById("content-scroll");
+        if (!el) return;
+
+        let lastY = el.scrollTop;
+        let ticking = false;
+        const MIN_DELTA = 8;
+        const MIN_START = 72;
+
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const y = el.scrollTop;
+                const dy = y - lastY;
+
+                if (megaOpen || mobileOpen) {
+                    setHidden(false);
+                } else if (Math.abs(dy) > MIN_DELTA) {
+                    if (y > MIN_START && dy > 0) setHidden(true);
+                    else if (dy < 0) setHidden(false);
+                }
+
+                lastY = y <= 0 ? 0 : y;
+                ticking = false;
+            });
+        };
+
+        el.addEventListener("scroll", onScroll, { passive: true });
+        return () => el.removeEventListener("scroll", onScroll);
+    }, [megaOpen, mobileOpen, pathname]);
+
+    // Desktop mega: defer unmount of content until fade-out completes
     useEffect(() => {
         const el = panelRef.current;
         if (!el) return;
         const onEnd = (e: TransitionEvent) => {
             if (e.propertyName !== "opacity") return;
-            if (!open) setActive(null);
+            if (!megaOpen) setActive(null);
         };
         el.addEventListener("transitionend", onEnd as never);
         return () => el.removeEventListener("transitionend", onEnd as never);
-    }, [open]);
+    }, [megaOpen]);
+
+    // Close menus on route change
+    useEffect(() => {
+        setMegaOpen(false);
+        setActive(null);
+        setMobileOpen(false);
+        setMobileActive(null);
+    }, [pathname]);
 
     const show = (item: NavItem | null) => {
         setActive(item?.menu ? item : null);
-        setOpen(!!item?.menu);
+        setMegaOpen(!!item?.menu);
+        setHidden(false);
     };
 
-    const scheduleClose = () => {
-        setOpen(false); // let transition run; active cleared on transitionend
-    };
+    const scheduleClose = () => setMegaOpen(false);
 
     const onKeyDown: React.KeyboardEventHandler<HTMLElement> = (e) => {
-        if (e.key === "Escape") setOpen(false);
+        if (e.key === "Escape") {
+            setMegaOpen(false);
+            setMobileOpen(false);
+            setMobileActive(null);
+        }
     };
 
-    const panelId = active ? `mega-${active.label.replace(/\s+/g, "-").toLowerCase()}` : undefined;
+    const panelId = active
+        ? `mega-${active.label.replace(/\s+/g, "-").toLowerCase()}`
+        : undefined;
 
     return (
         <header
-            className="sticky top-0 z-50 border-b border-white bg-black text-white"
+            className={[
+                "sticky top-0 z-50 border-b border-white bg-black text-white",
+                "transform-gpu transition-transform duration-300 ease-out",
+                hidden ? "-translate-y-full" : "translate-y-0"
+            ].join(" ")}
             onKeyDown={onKeyDown}
             data-ui-ready={mounted}
             onMouseLeave={scheduleClose}
+            onMouseEnter={() => setHidden(false)}
         >
-            <div className="relative mx-auto flex h-24 max-w-7xl items-center justify-between px-4">
+            <div className="relative mx-auto flex h-24 items-center justify-between px-4">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Link href="/" className="flex items-center gap-2 font-semibold flex-shrink-0">
                     <div className="h-6 w-6 bg-white" />
                     MARKWU
                 </Link>
@@ -125,10 +192,14 @@ export function Header() {
                 {/* Divider */}
                 <div className="mx-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
 
-                {/* Center nav */}
-                <nav className="hidden gap-7 md:flex" role="navigation" aria-label="Primary">
+                {/* Center nav — desktop only */}
+                <nav
+                    className="hidden md:flex flex-grow justify-start gap-12"
+                    role="navigation"
+                    aria-label="Primary"
+                >
                     {NAV.map((item) => {
-                        const isActive = open && active?.label === item.label;
+                        const isActive = megaOpen && active?.label === item.label;
                         const itemId = `trigger-${item.label.replace(/\s+/g, "-").toLowerCase()}`;
                         return (
                             <div key={item.label} className="relative" onMouseEnter={() => show(item)}>
@@ -136,14 +207,11 @@ export function Header() {
                                     id={itemId}
                                     href={item.href}
                                     className={[
-                                        "nav-link group relative inline-flex items-center gap-1 text-base font-medium",
-                                        "tracking-tight transition-colors hover:opacity-90 focus:outline-none",
-                                        "underline-swipe"
+                                        "underline-swipe group relative inline-flex items-center gap-1 text-base font-medium",
+                                        "tracking-tight transition-colors hover:opacity-90 focus:outline-none"
                                     ].join(" ")}
                                     onFocus={() => show(item)}
-                                    onClick={() => {
-                                        setOpen(false); // don't clear active here; let fade handle it
-                                    }}
+                                    onClick={() => setMegaOpen(false)}
                                     aria-haspopup={!!item.menu}
                                     aria-expanded={isActive}
                                     aria-controls={isActive ? panelId : undefined}
@@ -161,17 +229,31 @@ export function Header() {
                 <div className="mx-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
 
                 {/* Right */}
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6 flex-shrink-0">
                     <Link href="/contact" className="hidden text-base hover:underline md:block">
                         Contact
                     </Link>
-                    <button className="md:hidden" aria-label="Toggle menu">
-                        {open ? <X size={20} /> : <Menu size={20} />}
+                    {/* Mobile menu toggle */}
+                    <button
+                        className="md:hidden"
+                        aria-label="Toggle menu"
+                        onClick={() => {
+                            const next = !mobileOpen;
+                            setMobileOpen(next);
+                            if (next) {
+                                setMegaOpen(false);
+                                setHidden(false);
+                            } else {
+                                setMobileActive(null);
+                            }
+                        }}
+                    >
+                        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
                     </button>
                 </div>
             </div>
 
-            {/* MEGA PANEL */}
+            {/* DESKTOP MEGA PANEL */}
             <div
                 ref={panelRef}
                 id={panelId}
@@ -180,25 +262,26 @@ export function Header() {
                 className={[
                     "absolute left-1/2 top-[calc(100%+1px)] w-screen -translate-x-1/2",
                     "border-b border-white bg-black transition-opacity duration-150",
-                    open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+                    "hidden md:block",
+                    megaOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
                 ].join(" ")}
-                onMouseEnter={() => open && setOpen(true)}
+                onMouseEnter={() => megaOpen && setMegaOpen(true)}
                 onMouseLeave={scheduleClose}
             >
                 <div className="mx-auto max-w-7xl px-6 py-10">
                     <div className="grid grid-cols-1 items-stretch gap-x-10 md:grid-cols-[1fr_auto_1fr]">
                         {/* Left column */}
                         <div className="pb-8 md:pb-0 md:pr-10">
-                            <p className="mb-4 text-xs tracking-widest text-white">{active?.menu?.heading ?? ""}</p>
+                            <p className="mb-4 text-xs tracking-widest text-white">
+                                {active?.menu?.heading ?? ""}
+                            </p>
                             <ul className="space-y-3 text-2xl font-semibold leading-tight">
                                 {active?.menu?.links.map((l) => (
                                     <li key={l.href}>
                                         <Link
                                             href={l.href}
                                             className="hover:opacity-80"
-                                            onClick={() => {
-                                                setOpen(false); // fade then unmount via transitionend
-                                            }}
+                                            onClick={() => setMegaOpen(false)}
                                         >
                                             {l.label}
                                         </Link>
@@ -220,36 +303,180 @@ export function Header() {
                 </div>
             </div>
 
-            {/* underline animations gated by data attributes */}
+            {/* MOBILE BREAKAWAY PANEL (slides from header) */}
+            <div
+                className={[
+                    "md:hidden fixed inset-x-0 top-0 z-40",
+                    "transform transition-transform duration-300 ease-out will-change-transform",
+                    mobileOpen ? "translate-y-0" : "-translate-y-full"
+                ].join(" ")}
+                aria-hidden={!mobileOpen}
+            >
+                {/* Keep header visible above the panel */}
+                <div className="pt-24 bg-black border-b border-white">
+                    <nav aria-label="Mobile Primary" className="px-4 py-2">
+                        <ul className="divide-y divide-white/20">
+                            {NAV.map((item) => {
+                                const id = `m-${item.label.replace(/\s+/g, "-").toLowerCase()}`;
+                                const expanded = mobileActive === id;
+                                return (
+                                    <li key={id} className="py-1">
+                                        {/* Top-level: button only (no navigation) */}
+                                        <button
+                                            className="flex w-full items-center justify-between py-4 text-left text-lg font-semibold tracking-tight"
+                                            aria-controls={`${id}-panel`}
+                                            aria-expanded={expanded}
+                                            onClick={() => setMobileActive(expanded ? null : id)}
+                                        >
+                      <span className="inline-flex items-center gap-2">
+                        {item.label}
+                          {item.menu ? <PlusMinus active={expanded} /> : null}
+                      </span>
+                                            {/* Optional: tiny chevron for affordance */}
+                                            <ChevronRight
+                                                size={18}
+                                                className={[
+                                                    "transition-transform duration-200",
+                                                    expanded ? "rotate-90" : "rotate-0"
+                                                ].join(" ")}
+                                                aria-hidden
+                                            />
+                                        </button>
+
+                                        {/* Collapsible sublinks */}
+                                        <div
+                                            id={`${id}-panel`}
+                                            className={[
+                                                "grid transition-[grid-template-rows,opacity] duration-200 ease-out",
+                                                expanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                                            ].join(" ")}
+                                        >
+                                            <div className="min-h-0 overflow-hidden">
+                                                {item.menu ? (
+                                                    <div className="pb-4 pl-1">
+                                                        {item.menu.heading && (
+                                                            <p className="mb-2 text-[10px] tracking-widest text-white/70">
+                                                                {item.menu.heading}
+                                                            </p>
+                                                        )}
+                                                        <ul className="space-y-2">
+                                                            {item.menu.links.map((l) => (
+                                                                <li key={l.href}>
+                                                                    <Link
+                                                                        href={l.href}
+                                                                        className="block text-base font-medium hover:underline"
+                                                                        onClick={() => {
+                                                                            setMobileOpen(false);
+                                                                            setMobileActive(null);
+                                                                        }}
+                                                                    >
+                                                                        {l.label}
+                                                                    </Link>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                        {item.menu.blurb && (
+                                                            <p className="mt-3 max-w-prose text-sm text-white/70">
+                                                                {item.menu.blurb}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <div className="pb-4 pl-1">
+                                                        {/* For items without a submenu, provide a dedicated link row */}
+                                                        <Link
+                                                            href={item.href}
+                                                            className="inline-flex items-center gap-2 text-base font-medium hover:underline"
+                                                            onClick={() => {
+                                                                setMobileOpen(false);
+                                                                setMobileActive(null);
+                                                            }}
+                                                        >
+                                                            Open {item.label}
+                                                        </Link>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+
+                            {/* Static link(s) at bottom */}
+                            <li className="py-1">
+                                <Link
+                                    href="/contact"
+                                    className="block py-4 text-lg font-semibold hover:underline"
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    Contact
+                                </Link>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                {/* Tap-to-close underlay (below header, above content) */}
+                <button
+                    aria-label="Close menu"
+                    className="h-[calc(100dvh-6rem)] w-full bg-black/60 backdrop-blur-[1px]"
+                    onClick={() => {
+                        setMobileOpen(false);
+                        setMobileActive(null);
+                    }}
+                />
+            </div>
+
+            {/* underline animations (kept) */}
             <style jsx global>{`
-                /* Scope underline animation to this header to avoid leakage */
-                header[data-ui-ready] .underline-swipe { position: relative; }
-                header[data-ui-ready] .underline-swipe::after {
-                    content: "";
-                    position: absolute;
-                    left: 0;
-                    bottom: -2px;
-                    height: 2px;
-                    width: 100%;
-                    background: currentColor;
-                    transform: scaleX(0);
-                    transform-origin: left;
-                    pointer-events: none;
-                }
-                header[data-ui-ready="true"] .underline-swipe[data-underline="on"]::after {
-                    animation: uw-in 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
-                }
-                header[data-ui-ready="true"] .underline-swipe[data-underline="off"]::after {
-                    animation: uw-out 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
-                }
-                @keyframes uw-in { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-                @keyframes uw-out { from { transform: translateX(0) scaleX(1); } to { transform: translateX(100%) scaleX(0); } }
-                /* Respect reduced motion */
-                @media (prefers-reduced-motion: reduce) {
-                    header[data-ui-ready="true"] .underline-swipe[data-underline]::after { animation: none; transform: scaleX(1); }
-                }
-                .underline-swipe:focus-visible::after { transform: scaleX(1); animation: none; }
-            `}</style>
+        header[data-ui-ready] .underline-swipe {
+          position: relative;
+        }
+        header[data-ui-ready] .underline-swipe::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -2px;
+          height: 2px;
+          width: 100%;
+          background: currentColor;
+          transform: scaleX(0);
+          transform-origin: left;
+          pointer-events: none;
+        }
+        header[data-ui-ready="true"] .underline-swipe[data-underline="on"]::after {
+          animation: uw-in 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+        }
+        header[data-ui-ready="true"] .underline-swipe[data-underline="off"]::after {
+          animation: uw-out 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+        }
+        @keyframes uw-in {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+        @keyframes uw-out {
+          from {
+            transform: translateX(0) scaleX(1);
+          }
+          to {
+            transform: translateX(100%) scaleX(0);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          header[data-ui-ready="true"] .underline-swipe[data-underline]::after {
+            animation: none;
+            transform: scaleX(1);
+          }
+        }
+        .underline-swipe:focus-visible::after {
+          transform: scaleX(1);
+          animation: none;
+        }
+      `}</style>
         </header>
     );
 }

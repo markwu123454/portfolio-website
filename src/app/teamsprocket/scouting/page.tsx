@@ -1,11 +1,15 @@
-export default function scoutingPage() {
+
+
+export default function ScoutingPage() {
     return (
-        <div className="py-20">
-            <h1 className="text-3xl font-bold mb-4">Scouting app</h1>
-            <p className="text-gray-600 max-w-prose">
-                This is a placeholder page for Scouting app. Add project details, team
-                bios, images, and relevant links here.
+        <main className="px-6 py-10">
+            <h1 className="text-4xl font-bold mb-6">FRC Scouting App</h1>
+
+            {/* Rest of your content */}
+            <p className="mt-6 text-lg">
+                This app enables real-time match data collection, offline-first
+                functionality, and instant analytics for strategy meetings.
             </p>
-        </div>
+        </main>
     );
 }

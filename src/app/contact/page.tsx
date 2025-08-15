@@ -172,7 +172,7 @@ export default function Page() {
                                         src={src}
                                         alt={k}
                                         draggable={false}
-                                        className="h-20 w-auto opacity-90 transition group-hover:opacity-100 select-none flex-none shrink-0"
+                                        className="h-20 w-auto opacity-90 transition group-hover:opacity-100 select-none flex-none shrink-0 hover:scale-120"
                                     />
                                 </button>
                             </div>

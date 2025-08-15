@@ -1,15 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@700;900&display=swap');
 @import "tailwindcss";
 
+/* Import fonts */
+
+
 :root {
-  --background: #000000;
+  --background: #09090b;
   --foreground: #171717;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,22 +26,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-mono), serif; /* default site-wide font */
 }
 
-/* Chrome, Edge, Safari */
-#content-scroll::-webkit-scrollbar {
-  display: none;
+/* Scrollbar hiding */
+#content-scroll::-webkit-scrollbar { display: none; }
+#content-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Marquee animation */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
-
-/* Firefox */
-#content-scroll {
-  scrollbar-width: none;
+.marquee { overflow: hidden; position: relative; }
+.marquee .track { display: flex; width: 200%; animation: marquee 24s linear infinite; }
+.marquee:hover .track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .marquee .track { animation: none; transform: translateX(0); }
 }
-
-/* IE/old Edge */
-#content-scroll {
-  -ms-overflow-style: none;
-}
-
-

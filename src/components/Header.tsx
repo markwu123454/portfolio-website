@@ -19,10 +19,10 @@ const NAV: NavItem[] = [
         menu: {
             heading: "TEAM SPROCKET 3473",
             links: [
-                { label: "Overview", href: "/teamsprocket" },
-                { label: "Official Website", href: "https://www.team3473.com/" },
-                { label: "Cad", href: "/teamsprocket/cad" },
-                { label: "Programming", href: "/teamsprocket/scouting" }
+                {label: "Overview", href: "/teamsprocket"},
+                {label: "Official Website", href: "https://www.team3473.com/"},
+                {label: "Cad", href: "/teamsprocket/cad"},
+                {label: "Programming", href: "/teamsprocket/scouting"}
             ],
             blurb:
                 "Team Sprocket is a student-centered FIRST Robotics Competition team. I am a member of the CAD subteam and developed the team’s newest scouting application. The team earned the FIRST Impact Award at regionals and advanced to the World Championships in both 2024 and 2025."
@@ -34,10 +34,10 @@ const NAV: NavItem[] = [
         menu: {
             heading: "DRONESCAPE CLUB",
             links: [
-                { label: "Overview", href: "/dronescape" },
-                { label: "Official Website", href: "https://www.dronescapeclub.org/" },
-                { label: "My UAV", href: "/dronescape/uav" },
-                { label: "My GCS", href: "/dronescape/gcs" }
+                {label: "Overview", href: "/dronescape"},
+                {label: "Official Website", href: "https://www.dronescapeclub.org/"},
+                {label: "My UAV", href: "/dronescape/uav"},
+                {label: "My GCS", href: "/dronescape/gcs"}
             ],
             blurb:
                 "Dronescape is a competitive FPV racing club with a cinematic, racing, and engineering subteam. I lead an engineering project to step the club into fixed wing UAVs beyond multi-rotor or racing drones."
@@ -48,7 +48,10 @@ const NAV: NavItem[] = [
         href: "/misc",
         menu: {
             heading: "OTHER PROJECTS",
-            links: [{ label: "RateMyTeacher", href: "/misc/ratemyteacher" }],
+            links: [
+                {label: "RateMyTeacher", href: "/misc/ratemyteacher"},
+                {label: "Portfolio website(this)", href: "/misc/portfolio"},
+            ],
             blurb: "A list of other smaller projects or ones I contributed less."
         }
     },
@@ -58,18 +61,18 @@ const NAV: NavItem[] = [
         menu: {
             heading: "LEGACY PROJECTS",
             links: [
-                { label: "Team Infernope", href: "/legacy/teaminfernope" },
-                { label: "SigmaCat Robotics", href: "/legacy/sigmacat" }
+                {label: "Team Infernope", href: "/legacy/teaminfernope"},
+                {label: "SigmaCat Robotics", href: "/legacy/sigmacat"}
             ],
             blurb: "An archive of past teams, projects, and competitions I've contributed to."
         }
     }
 ];
 
-function PlusMinus({ active }: { active: boolean }) {
+function PlusMinus({active}: { active: boolean }) {
     return (
         <span className="relative ml-0.5 inline-flex h-3 w-3 items-center justify-center">
-      <span className="absolute h-[2px] w-full bg-current" />
+      <span className="absolute h-[2px] w-full bg-current"/>
       <span
           className={[
               "absolute w-[2px] h-full bg-current origin-center transform",
@@ -126,7 +129,7 @@ export function Header() {
             });
         };
 
-        el.addEventListener("scroll", onScroll, { passive: true });
+        el.addEventListener("scroll", onScroll, {passive: true});
         return () => el.removeEventListener("scroll", onScroll);
     }, [megaOpen, mobileOpen, pathname]);
 
@@ -173,7 +176,7 @@ export function Header() {
     return (
         <header
             className={[
-                "sticky top-0 z-50 border-b border-white bg-black text-white",
+                "sticky top-0 z-50 border-b border-white bg-zinc-950 text-white",
                 "transform-gpu transition-transform duration-300 ease-out",
                 hidden ? "-translate-y-full" : "translate-y-0"
             ].join(" ")}
@@ -182,15 +185,15 @@ export function Header() {
             onMouseLeave={scheduleClose}
             onMouseEnter={() => setHidden(false)}
         >
-            <div className="relative mx-auto flex h-24 items-center justify-between px-4">
+            <div className="relative mx-auto flex h-24 items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 font-semibold flex-shrink-0">
-                    <div className="h-6 w-6 bg-white" />
+                <Link href="/" className="flex items-center gap-2 font-semibold flex-shrink-0 fill-anim pl-4 h-full self-stretch pr-6">
+                    <div className="h-6 w-6 bg-white"/>
                     MARKWU
                 </Link>
 
                 {/* Divider */}
-                <div className="mx-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
+                <div className="mr-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden/>
 
                 {/* Center nav — desktop only */}
                 <nav
@@ -218,7 +221,7 @@ export function Header() {
                                     data-underline={!mounted ? "idle" : isActive ? "on" : "off"}
                                 >
                                     {item.label}
-                                    {item.menu && <PlusMinus active={isActive} />}
+                                    {item.menu && <PlusMinus active={isActive}/>}
                                 </Link>
                             </div>
                         );
@@ -226,31 +229,44 @@ export function Header() {
                 </nav>
 
                 {/* Divider */}
-                <div className="mx-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
+                <div className="hidden w-px self-stretch bg-white/80 md:block" aria-hidden/>
 
                 {/* Right */}
-                <div className="flex items-center gap-6 flex-shrink-0">
-                    <Link href="/contact" className="hidden text-base hover:underline md:block">
+                <Link
+                    href="/about"
+                    className="hidden md:flex h-full self-stretch items-center px-10 text-base fill-anim"
+                >
+                    About me
+                </Link>
+
+                {/* Divider */}
+                <div className="hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
+
+                {/* Right */}
+                <div className="flex h-full self-stretch items-center flex-shrink-0">
+                    {/* Contact block fills its own padding area */}
+                    <Link
+                        href="/contact"
+                        className="hidden md:flex h-full self-stretch items-center px-10 text-base fill-anim"
+                    >
                         Contact
                     </Link>
-                    {/* Mobile menu toggle */}
+
+                    {/* Mobile toggle */}
                     <button
-                        className="md:hidden"
+                        className="md:hidden ml-6"
                         aria-label="Toggle menu"
                         onClick={() => {
                             const next = !mobileOpen;
                             setMobileOpen(next);
-                            if (next) {
-                                setMegaOpen(false);
-                                setHidden(false);
-                            } else {
-                                setMobileActive(null);
-                            }
+                            if (next) { setMegaOpen(false); setHidden(false); }
+                            else { setMobileActive(null); }
                         }}
                     >
-                        {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                        {mobileOpen ? <X size={20}/> : <Menu size={20}/>}
                     </button>
                 </div>
+
             </div>
 
             {/* DESKTOP MEGA PANEL */}
@@ -261,7 +277,7 @@ export function Header() {
                 aria-label={active?.label || undefined}
                 className={[
                     "absolute left-1/2 top-[calc(100%+1px)] w-screen -translate-x-1/2",
-                    "border-b border-white bg-black transition-opacity duration-150",
+                    "border-b border-white bg-zinc-950 transition-opacity duration-150",
                     "hidden md:block",
                     megaOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
                 ].join(" ")}
@@ -291,7 +307,7 @@ export function Header() {
                         </div>
 
                         {/* Middle divider */}
-                        <div className="hidden h-full w-px bg-white md:block" />
+                        <div className="hidden h-full w-px bg-white md:block"/>
 
                         {/* Right column */}
                         <div className="pt-8 md:pt-0">
@@ -313,7 +329,7 @@ export function Header() {
                 aria-hidden={!mobileOpen}
             >
                 {/* Keep header visible above the panel */}
-                <div className="pt-24 bg-black border-b border-white">
+                <div className="pt-24 bg-zinc-950 border-b border-white">
                     <nav aria-label="Mobile Primary" className="px-4 py-2">
                         <ul className="divide-y divide-white/20">
                             {NAV.map((item) => {
@@ -328,10 +344,10 @@ export function Header() {
                                             aria-expanded={expanded}
                                             onClick={() => setMobileActive(expanded ? null : id)}
                                         >
-                      <span className="inline-flex items-center gap-2">
-                        {item.label}
-                          {item.menu ? <PlusMinus active={expanded} /> : null}
-                      </span>
+                                            <span className="inline-flex items-center gap-2">
+                                                {item.label}
+                                                {item.menu ? <PlusMinus active={expanded}/> : null}
+                                            </span>
                                             {/* Optional: tiny chevron for affordance */}
                                             <ChevronRight
                                                 size={18}
@@ -419,7 +435,7 @@ export function Header() {
                 {/* Tap-to-close underlay (below header, above content) */}
                 <button
                     aria-label="Close menu"
-                    className="h-[calc(100dvh-6rem)] w-full bg-black/60 backdrop-blur-[1px]"
+                    className="h-[calc(100dvh-6rem)] w-full bg-zinc-950/60 backdrop-blur-[1px]"
                     onClick={() => {
                         setMobileOpen(false);
                         setMobileActive(null);
@@ -429,54 +445,95 @@ export function Header() {
 
             {/* underline animations (kept) */}
             <style jsx global>{`
-        header[data-ui-ready] .underline-swipe {
-          position: relative;
-        }
-        header[data-ui-ready] .underline-swipe::after {
-          content: "";
-          position: absolute;
-          left: 0;
-          bottom: -2px;
-          height: 2px;
-          width: 100%;
-          background: currentColor;
-          transform: scaleX(0);
-          transform-origin: left;
-          pointer-events: none;
-        }
-        header[data-ui-ready="true"] .underline-swipe[data-underline="on"]::after {
-          animation: uw-in 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
-        }
-        header[data-ui-ready="true"] .underline-swipe[data-underline="off"]::after {
-          animation: uw-out 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
-        }
-        @keyframes uw-in {
-          from {
-            transform: scaleX(0);
-          }
-          to {
-            transform: scaleX(1);
-          }
-        }
-        @keyframes uw-out {
-          from {
-            transform: translateX(0) scaleX(1);
-          }
-          to {
-            transform: translateX(100%) scaleX(0);
-          }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          header[data-ui-ready="true"] .underline-swipe[data-underline]::after {
-            animation: none;
-            transform: scaleX(1);
-          }
-        }
-        .underline-swipe:focus-visible::after {
-          transform: scaleX(1);
-          animation: none;
-        }
-      `}</style>
+                header[data-ui-ready] .underline-swipe {
+                    position: relative;
+                }
+
+                header[data-ui-ready] .underline-swipe::after {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    bottom: -2px;
+                    height: 2px;
+                    width: 100%;
+                    background: currentColor;
+                    transform: scaleX(0);
+                    transform-origin: left;
+                    pointer-events: none;
+                }
+
+                header[data-ui-ready="true"] .underline-swipe[data-underline="on"]::after {
+                    animation: uw-in 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+                }
+
+                header[data-ui-ready="true"] .underline-swipe[data-underline="off"]::after {
+                    animation: uw-out 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+                }
+
+                @keyframes uw-in {
+                    from {
+                        transform: scaleX(0);
+                    }
+                    to {
+                        transform: scaleX(1);
+                    }
+                }
+
+                @keyframes uw-out {
+                    from {
+                        transform: translateX(0) scaleX(1);
+                    }
+                    to {
+                        transform: translateX(100%) scaleX(0);
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    header[data-ui-ready="true"] .underline-swipe[data-underline]::after {
+                        animation: none;
+                        transform: scaleX(1);
+                    }
+                }
+
+                header[data-ui-ready] .fill-anim {
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                header[data-ui-ready] .fill-anim::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background-color: rgba(255, 255, 255, 0.20);
+                    z-index: 0;
+                    transform: scaleY(0);
+                    transform-origin: bottom; /* start filling from bottom */
+                    transition: transform 0.25s ease-out;
+                }
+
+                /* Expand on hover/focus */
+                header[data-ui-ready] .fill-anim:hover::before,
+                header[data-ui-ready] .fill-anim:focus-within::before {
+                    transform: scaleY(1);
+                    transform-origin: bottom; /* still grows upward */
+                    transition: transform 0.25s ease-out;
+                }
+
+                /* Collapse upward when leaving */
+                header[data-ui-ready] .fill-anim:not(:hover)::before {
+                    transform: scaleY(0);
+                    transform-origin: top; /* collapses upward */
+                    transition: transform 0.25s ease-in;
+                }
+
+                /* Keep text above overlay */
+                header[data-ui-ready] .fill-anim > * {
+                    position: relative;
+                    z-index: 1;
+                }
+
+
+            `}</style>
         </header>
     );
 }

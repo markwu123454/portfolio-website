@@ -1,10 +1,21 @@
 // from-black via-zinc-700 to-zinc-200
 import Link from "next/link";
+import JsonLd from "@/components/JsonLD";
 
 export default function HomePage() {
+    const person = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Mark Wu",
+        url: "https://markwu.org",
+        sameAs: ["https://github.com/markwu123454"],
+        jobTitle: "Student Engineer",
+    };
+
     return (
         <div
             className="flex flex-col justify-start min-h-screen pt-10 px-10 space-y-8 bg-gradient-to-b text-white">
+            <JsonLd id="person-jsonld" data={person} />
             {/* Hero Section */}
             <section className="max-w-5xl">
                 <h1 className="text-5xl font-extrabold tracking-tight">

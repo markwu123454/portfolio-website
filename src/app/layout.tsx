@@ -6,8 +6,11 @@ import {Footer} from "@/components/Footer";
 import React from "react";
 
 export const metadata: Metadata = {
-    title: "Mark Wu — Engineer",
-    description: "UAV GCS and analytics",
+    metadataBase: new URL("https://markwu.org"),
+    title: { default: "Mark Wu", template: "%s · Mark Wu" },
+    description: "UAV, robotics, and software projects.",
+    openGraph: { type: "website", url: "/", siteName: "Mark Wu" },
+    twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

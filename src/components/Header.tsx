@@ -22,7 +22,7 @@ const NAV: NavItem[] = [
                 {label: "Overview", href: "/teamsprocket"},
                 {label: "Official Website", href: "https://www.team3473.com/"},
                 {label: "Cad", href: "/teamsprocket/cad"},
-                {label: "Programming", href: "/teamsprocket/scouting"}
+                {label: "Scouting", href: "/teamsprocket/scouting"}
             ],
             blurb:
                 "Team Sprocket is a student-centered FIRST Robotics Competition team. I am a member of the CAD subteam and developed the team’s newest scouting application. The team earned the FIRST Impact Award at regionals and advanced to the World Championships in both 2024 and 2025."
@@ -49,7 +49,7 @@ const NAV: NavItem[] = [
         menu: {
             heading: "OTHER PROJECTS",
             links: [
-                {label: "RateMyTeacher", href: "/misc/ratemyteacher"},
+                {label: "The GradeBook", href: "/misc/ratemyteacher"},
                 {label: "Portfolio website(this)", href: "/misc/portfolio"},
             ],
             blurb: "A list of other smaller projects or ones I contributed less."
@@ -94,6 +94,7 @@ export function Header() {
     const [mobileActive, setMobileActive] = useState<string | null>(null);
 
     const [mounted, setMounted] = useState(false);
+    const [armed, setArmed] = useState(false);
     const [hidden, setHidden] = useState(false);
     const panelRef = useRef<HTMLDivElement | null>(null);
     const pathname = usePathname();
@@ -169,6 +170,15 @@ export function Header() {
         }
     };
 
+    useEffect(() => setMounted(true), []);
+
+    useEffect(() => {
+        const a = requestAnimationFrame(() =>
+            requestAnimationFrame(() => setArmed(true))
+        );
+        return () => cancelAnimationFrame(a);
+    }, []);
+
     const panelId = active
         ? `mega-${active.label.replace(/\s+/g, "-").toLowerCase()}`
         : undefined;
@@ -176,12 +186,13 @@ export function Header() {
     return (
         <header
             className={[
-                "sticky top-0 z-50 border-b border-white bg-zinc-950 text-white",
+                "fixed top-0 inset-x-0 z-50 h-24 border-b border-white bg-zinc-950 text-white",
                 "transform-gpu transition-transform duration-300 ease-out",
                 hidden ? "-translate-y-full" : "translate-y-0"
             ].join(" ")}
             onKeyDown={onKeyDown}
-            data-ui-ready={mounted}
+            data-ui-ready={mounted ? "true" : "false"}
+            data-armed={armed ? "true" : "false"}
             onMouseLeave={scheduleClose}
             onMouseEnter={() => setHidden(false)}
         >
@@ -276,6 +287,7 @@ export function Header() {
                 role="region"
                 aria-label={active?.label || undefined}
                 className={[
+                    "mega",
                     "absolute left-1/2 top-[calc(100%+1px)] w-screen -translate-x-1/2",
                     "border-b border-white bg-zinc-950 transition-opacity duration-150",
                     "hidden md:block",
@@ -296,7 +308,7 @@ export function Header() {
                                     <li key={l.href}>
                                         <Link
                                             href={l.href}
-                                            className="hover:opacity-80"
+                                            className="underline-swipe hover:opacity-80"   // ← add underline-swipe
                                             onClick={() => setMegaOpen(false)}
                                         >
                                             {l.label}
@@ -445,10 +457,11 @@ export function Header() {
 
             {/* underline animations (kept) */}
             <style jsx global>{`
+                /* Handles underline swipe of buttons */
                 header[data-ui-ready] .underline-swipe {
                     position: relative;
+                    display: inline-block;
                 }
-
                 header[data-ui-ready] .underline-swipe::after {
                     content: "";
                     position: absolute;
@@ -457,44 +470,43 @@ export function Header() {
                     height: 2px;
                     width: 100%;
                     background: currentColor;
-                    transform: scaleX(0);
-                    transform-origin: left;
                     pointer-events: none;
+
+                    --uw-scale: 0;
+                    --uw-origin: left;
+
+                    transform: scaleX(var(--uw-scale));
+                    transform-origin: var(--uw-origin);
+
+                    transition: none;
                 }
 
-                header[data-ui-ready="true"] .underline-swipe[data-underline="on"]::after {
-                    animation: uw-in 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+                header[data-ui-ready="true"][data-armed="true"] .underline-swipe::after {
+                    transition: transform 300ms cubic-bezier(0.3, 1, 0.3, 1);
                 }
 
-                header[data-ui-ready="true"] .underline-swipe[data-underline="off"]::after {
-                    animation: uw-out 300ms cubic-bezier(0.3, 1, 0.3, 1) forwards;
+                header[data-ui-ready="true"][data-armed="true"] .underline-swipe[data-underline="on"]::after,
+                header[data-ui-ready="true"] .mega a.underline-swipe:hover::after,
+                header[data-ui-ready="true"] .mega a.underline-swipe:focus-visible::after {
+                    --uw-scale: 1;
+                    --uw-origin: left;
                 }
 
-                @keyframes uw-in {
-                    from {
-                        transform: scaleX(0);
-                    }
-                    to {
-                        transform: scaleX(1);
-                    }
-                }
-
-                @keyframes uw-out {
-                    from {
-                        transform: translateX(0) scaleX(1);
-                    }
-                    to {
-                        transform: translateX(100%) scaleX(0);
-                    }
+                header[data-ui-ready="true"][data-armed="true"] .underline-swipe[data-underline="off"]::after,
+                header[data-ui-ready="true"] .mega a.underline-swipe:not(:hover):not(:focus-visible)::after {
+                    --uw-scale: 0;
+                    --uw-origin: right;
                 }
 
                 @media (prefers-reduced-motion: reduce) {
-                    header[data-ui-ready="true"] .underline-swipe[data-underline]::after {
-                        animation: none;
-                        transform: scaleX(1);
+                    header .underline-swipe::after {
+                        transition: none !important;
+                        --uw-scale: 1 !important;
+                        --uw-origin: left !important;
                     }
                 }
 
+                /* Handles background fill of logo, about, and contact */
                 header[data-ui-ready] .fill-anim {
                     position: relative;
                     overflow: hidden;
@@ -507,32 +519,28 @@ export function Header() {
                     background-color: rgba(255, 255, 255, 0.20);
                     z-index: 0;
                     transform: scaleY(0);
-                    transform-origin: bottom; /* start filling from bottom */
+                    transform-origin: bottom;
                     transition: transform 0.25s ease-out;
                 }
 
-                /* Expand on hover/focus */
+                /* Handles header collapse on scroll */
                 header[data-ui-ready] .fill-anim:hover::before,
                 header[data-ui-ready] .fill-anim:focus-within::before {
                     transform: scaleY(1);
-                    transform-origin: bottom; /* still grows upward */
+                    transform-origin: bottom;
                     transition: transform 0.25s ease-out;
                 }
 
-                /* Collapse upward when leaving */
                 header[data-ui-ready] .fill-anim:not(:hover)::before {
                     transform: scaleY(0);
-                    transform-origin: top; /* collapses upward */
+                    transform-origin: top;
                     transition: transform 0.25s ease-in;
                 }
 
-                /* Keep text above overlay */
                 header[data-ui-ready] .fill-anim > * {
                     position: relative;
                     z-index: 1;
                 }
-
-
             `}</style>
         </header>
     );

@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             className="h-dvh overflow-y-auto [scrollbar-gutter:auto]"
         >
             {/* Push content below header height */}
-            <main className="pt-24 mx-auto w-screen max-w-none text-white">
+            <main className="mx-auto w-screen max-w-none text-white">
                 {children}
             </main>
             <Footer />

@@ -37,15 +37,15 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Git</h3>
             <p className="mt-1 text-sm text-white/80">
-                Or more specifically Github is a file sharing and hosting website I use for most of my projects.
+                Or more specifically Github is a file sharing and hosting website I use for most of my projects. Git(Github) is used in all my projects.
             </p>
         </div>
     ),
     sklearn: (
         <div className="p-5">
-            <h3 className="font-semibold">scikit learn</h3>
+            <h3 className="font-semibold">SciKit Learn</h3>
             <p className="mt-1 text-sm text-white/80">
-                A python ml library I used in the Team Sprocket Scouting app to process data using various models.
+                A python ml library I used in the Team Sprocket Scouting app to process data using various models. SKLearn is used in the Scouting App.
             </p>
         </div>
     ),
@@ -53,7 +53,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">PostGreSQL</h3>
             <p className="mt-1 text-sm text-white/80">
-                Opensource database I used in the Team Sprocket Scouting app to store and retrieve generated data.
+                Opensource database I used in the Team Sprocket Scouting app to store and retrieve generated data. PostGre is used in the Scouting App and The Gradebook.
             </p>
         </div>
     ),
@@ -61,7 +61,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Next.js</h3>
             <p className="mt-1 text-sm text-white/80">
-                A typescript framework that incorporate frontend and backend that I used for this website.
+                A typescript framework that incorporate frontend and backend that I used for this website. Next.js(and vercel) is used in The GradeBook and this website.
             </p>
         </div>
     ),
@@ -69,7 +69,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">TypeScript</h3>
             <p className="mt-1 text-sm text-white/80">
-                A popular programming language that is commonly used in web development.
+                A popular programming language that is commonly used in web development. TS is used in The GradeBook, this website, Aetherius GCS, and the Scouting App.
             </p>
         </div>
     ),
@@ -77,7 +77,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">React</h3>
             <p className="mt-1 text-sm text-white/80">
-                A typescript framework I used in multiple other projects.
+                A typescript framework I used in multiple other projects. React is used in The GradeBook, this website, Aetherius GCS, and the Scouting App.
             </p>
         </div>
     ),
@@ -85,7 +85,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Tailwind CSS</h3>
             <p className="mt-1 text-sm text-white/80">
-                A useful css replacement tool I use on all my web projects to improve ui and presentation.
+                A useful css replacement tool I use on all my web projects to improve ui and presentation. TailWind is used in The GradeBook, this website, Aetherius GCS, and the Scouting App.
             </p>
         </div>
     ),
@@ -93,7 +93,7 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Python</h3>
             <p className="mt-1 text-sm text-white/80">
-                A general purpose programming language I use to host backend/server, data processing, and a variety of other programs.
+                A general purpose programming language I use to host backend/server, data processing, and a variety of other programs. Python is used in Aetherius GCS and the Scouting App.
             </p>
         </div>
     ),
@@ -101,38 +101,38 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">FastAPI</h3>
             <p className="mt-1 text-sm text-white/80">
-                A Python backend library I commonly use with React.
+                A Python backend library I commonly use with React. Fastapi(and uvicorn) is used in Aetherius GCS and the Scouting App.
             </p>
         </div>
     ),
     solidworks: (
         <div className="p-5">
             <h3 className="font-semibold">SolidWorks</h3>
-            <p className="mt-1 text-sm text-white/80">A cading software I use in Team Sprocket for designing complex subsystems and robot assemblies</p>
+            <p className="mt-1 text-sm text-white/80">A cading software I use in Team Sprocket for designing complex subsystems and robot assemblies. SolidWorks is used in Team Sprocket and SigmaCat Robotics.</p>
         </div>
     ),
     fusion360: (
         <div className="p-5">
             <h3 className="font-semibold">Fusion 360</h3>
-            <p className="mt-1 text-sm text-white/80">A cading software I use in various robotics projects for </p>
+            <p className="mt-1 text-sm text-white/80">A cading software I use in various robotics projects. </p>
         </div>
     ),
     raspberrypi: (
         <div className="p-5">
             <h3 className="font-semibold">Raspberry Pi</h3>
-            <p className="mt-1 text-sm text-white/80">A mini-computer or microcontroller I used in Dronescape and various other projects.</p>
+            <p className="mt-1 text-sm text-white/80">A mini-computer or microcontroller I used in Dronescape and various other projects. Raspberry pi is used in Aetherius UAV</p>
         </div>
     ),
     bambulab: (
         <div className="p-5">
             <h3 className="font-semibold">Bambu Lab</h3>
-            <p className="mt-1 text-sm text-white/80">A 3D printer brand which I utilised a lot in various projects.</p>
+            <p className="mt-1 text-sm text-white/80">A 3D printer brand which I utilised a lot in various projects. BambuLab (specifically A1 & X1C, and studio) is used in Team Sprocket, Aetherius UAV, and Team Infernope.</p>
         </div>
     ),
     mavlink: (
         <div className="p-5">
             <h3 className="font-semibold">MAVLink</h3>
-            <p className="mt-1 text-sm text-white/80">A communication protocol used in my Dronescape project, where I specifically used PyMavLink</p>
+            <p className="mt-1 text-sm text-white/80">A communication protocol used in my Dronescape project, where I specifically used PyMavLink. Mavlink(and PixHawk and ArduPilot) is used in Aetherius UAV & GCS.</p>
         </div>
     ),
 };
@@ -166,10 +166,10 @@ export default function HomePage() {
 
     return (
         <div
-            className="flex flex-col justify-start min-h-screen pt-10 px-10 space-y-8 bg-gradient-to-b text-white">
+            className="flex flex-col justify-start min-h-screen pt-10 space-y-8 bg-gradient-to-b text-white">
             <JsonLd id="person-jsonld" data={person}/>
             {/* Hero Section */}
-            <section className="max-w-5xl">
+            <section className="pt-24 max-w-5xl px-10">
                 <h1 className="text-5xl font-extrabold tracking-tight">
                     Hi! I&#39;m Mark.
                 </h1>
@@ -180,59 +180,85 @@ export default function HomePage() {
             </section>
 
             {/* Featured Projects Placeholder */}
-            <section className="max-w-6xl">
+            <section className="max-w-6xl px-10">
                 <h2 className="text-2xl font-bold mb-4">Featured Projects</h2>
                 <div className="grid gap-6 md:grid-cols-3">
-                    {["Project One", "Project Two", "Project Three"].map((name, i) => (
-                        <div
-                            key={i}
-                            className="rounded-lg bg-zinc-900/80 border border-white/10 p-4 hover:bg-zinc-800 transition-colors"
-                        >
-                            <h3 className="text-xl font-semibold">{name}</h3>
-                            <p className="mt-2 text-gray-400">
-                                Brief description of {name} with the main technologies used
-                                and its purpose.
-                            </p>
-                            <button className="mt-3 text-sm font-medium text-white/80 hover:text-white underline">
-                                Learn more →
-                            </button>
-                        </div>
-                    ))}
+                    <div
+                        className="rounded-lg bg-zinc-900/80 border border-white/10 p-4 hover:bg-zinc-800 transition-colors"
+                    >
+                        <h3 className="text-xl font-semibold">Aetherius UAV</h3>
+                        <p className="mt-2 text-gray-400">
+                            A twin bloom drone for long duration mission, mainly terrain mapping, using a onboard raspberry pi to communicate to a custom ground control station.
+                        </p>
+                        <a className="mt-3 text-sm font-medium text-white/80 hover:text-white underline" href="/dronescape/uav">
+                            See more →
+                        </a>
+                    </div>
+
+                    <div
+                        className="rounded-lg bg-zinc-900/80 border border-white/10 p-4 hover:bg-zinc-800 transition-colors"
+                    >
+                        <h3 className="text-xl font-semibold">FRC Scouting App</h3>
+                        <p className="mt-2 text-gray-400">
+                            A scouting app for FRC that I developed, which use a react frontend and python FastAPI backend, it features live sync over HTTPS, live AI powered data analytics, and full offline scouting.
+                        </p>
+                        <a className="mt-3 text-sm font-medium text-white/80 hover:text-white underline" href="/teamsprocket/scouting">
+                            See more →
+                        </a>
+                    </div>
+
+                    <div
+                        className="rounded-lg bg-zinc-900/80 border border-white/10 p-4 hover:bg-zinc-800 transition-colors"
+                    >
+                        <h3 className="text-xl font-semibold">The Gradebook</h3>
+                        <p className="mt-2 text-gray-400">
+                            Following the footsteps of the BerkeleyTime project made by students in UC Berkeley, The GradeBook aims to help students with course selection in Diamond Bar High School.
+                        </p>
+                        <button className="mt-3 text-sm font-medium text-white/80 hover:text-white underline">
+                            See more →
+                        </button>
+                    </div>
                 </div>
             </section>
 
-            {/* Scrolling logos */}
-            <section className="marquee select-none py-10 border-b border-white/10">
-                <div className="track">
-                    {doubled.map((src, i) => {
-                        const k = keyFromPath(src);
-                        return (
-                            <div key={`${k}-${i}`} className="mx-10 flex items-center justify-center flex-none h-12">
-                                <button
-                                    className="group rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40 flex-none"
-                                    onMouseEnter={() => setActiveKey(k)}
-                                    onFocus={() => setActiveKey(k)}
-                                    onMouseLeave={() => setActiveKey(null)}
-                                    onBlur={() => setActiveKey(null)}
+            <section className="select-none py-10 border-b border-white/10">
+                <div className="marquee">
+                    <div className="track flex items-center overflow-x-hidden overflow-y-visible">
+                        {doubled.map((src, i) => {
+                            const k = keyFromPath(src);
+                            return (
+                                <div
+                                    key={`${k}-${i}`}
+                                    className="px-10 flex items-center justify-center flex-none min-h-28 logo-tile"  // was h-12
                                 >
-                                    <img
-                                        src={src}
-                                        alt={k}
-                                        draggable={false}
-                                        className="h-20 w-auto opacity-90 transition group-hover:opacity-100 select-none flex-none shrink-0 hover:scale-120"
-                                    />
-                                </button>
-                            </div>
-                        );
-                    })}
+                                    <button
+                                        className="group rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40 flex-none"
+                                        onMouseEnter={() => setActiveKey(k)}
+                                        onFocus={() => setActiveKey(k)}
+                                        onMouseLeave={() => setActiveKey(null)}
+                                        onBlur={() => setActiveKey(null)}
+                                    >
+                                        <img
+                                            src={src}
+                                            alt={k}
+                                            draggable={false}
+                                            className="h-20 w-auto opacity-90 transition group-hover:opacity-100 select-none flex-none shrink-0 hover:scale-120"
+                                        />
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-                <div className="rounded-none border-t border-white/10 backdrop-blur mt-10">
+
+                <div className="rounded-none border-t border-white/10 backdrop-blur mt-4">
                     {activeKey && detailByKey[activeKey] ? detailByKey[activeKey] : defaultCard}
                 </div>
             </section>
 
+
             {/* Contact Section */}
-            <section className="max-w-4xl space-y-3">
+            <section className="max-w-4xl space-y-3 px-10">
                 <h2 className="text-2xl font-bold">Links</h2>
                 <p className="text-gray-300">
                     Interested in collaborating or learning more about my work?

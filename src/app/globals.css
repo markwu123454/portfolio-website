@@ -44,3 +44,4 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .marquee .track { animation: none; transform: translateX(0); }
 }
+

@@ -36,8 +36,8 @@ const NAV: NavItem[] = [
             links: [
                 {label: "Overview", href: "/dronescape"},
                 {label: "Official Website", href: "https://www.dronescapeclub.org/"},
-                {label: "My UAV", href: "/dronescape/uav"},
-                {label: "My GCS", href: "/dronescape/gcs"}
+                {label: "Aetherius UAV", href: "/dronescape/uav"},
+                {label: "Aetherius GCS", href: "/dronescape/gcs"}
             ],
             blurb:
                 "Dronescape is a competitive FPV racing club with a cinematic, racing, and engineering subteam. I lead an engineering project to step the club into fixed wing UAVs beyond multi-rotor or racing drones."
@@ -308,7 +308,7 @@ export function Header() {
                                     <li key={l.href}>
                                         <Link
                                             href={l.href}
-                                            className="underline-swipe hover:opacity-80"   // ← add underline-swipe
+                                            className="underline-swipe"   // ← add underline-swipe
                                             onClick={() => setMegaOpen(false)}
                                         >
                                             {l.label}
@@ -324,7 +324,7 @@ export function Header() {
                         {/* Right column */}
                         <div className="pt-8 md:pt-0">
                             {active?.menu?.blurb && (
-                                <p className="max-w-prose text-sm text-white/80">{active.menu.blurb}</p>
+                                <p className="max-w-prose text-sm">{active.menu.blurb}</p>
                             )}
                         </div>
                     </div>

@@ -210,13 +210,13 @@ export default function HomePage() {
                     <div
                         className="rounded-lg bg-zinc-900/80 border border-white/10 p-4 hover:bg-zinc-800 transition-colors"
                     >
-                        <h3 className="text-xl font-semibold">The Gradebook</h3>
+                        <h3 className="text-xl font-semibold">The GradeBook</h3>
                         <p className="mt-2 text-gray-400">
                             Following the footsteps of the BerkeleyTime project made by students in UC Berkeley, The GradeBook aims to help students with course selection in Diamond Bar High School.
                         </p>
-                        <button className="mt-3 text-sm font-medium text-white/80 hover:text-white underline">
+                        <a className="mt-3 text-sm font-medium text-white/80 hover:text-white underline" href="/misc/ratemyteacher">
                             See more →
-                        </button>
+                        </a>
                     </div>
                 </div>
             </section>

@@ -346,15 +346,15 @@ const Subsection = ({
 );
 
 function GridFromCsv() {
-    const [rows, setRows] = useState<any[]>([]);
-    const [cols, setCols] = useState<any[]>([]);
+    const [rows, setRows] = useState<never[]>([]);
+    const [cols, setCols] = useState<never[]>([]);
 
     useEffect(() => {
         (async () => {
             const csvText = await fetch("/thegradebook/formresult1.csv", {cache: "no-store"}).then(r => r.text());
             const Papa = (await import("papaparse")).default;
             const parsed = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true});
-            const data = parsed.data as any[];
+            const data = parsed.data as never[];
             const columnDefs = Object.keys(data[0] ?? {}).map(k => ({field: k}));
             setRows(data);
             setCols(columnDefs);

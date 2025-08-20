@@ -9,6 +9,7 @@ import "@/lib/aggrid";
 import React, {useEffect, useState} from "react";
 import {AgGridReact} from "ag-grid-react";
 import {themeQuartz} from "ag-grid-community";
+import type { ColDef } from "ag-grid-community";
 import {
     RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
@@ -345,26 +346,27 @@ const Subsection = ({
     </div>
 );
 
+
+type CsvRow = Record<string, string | number | boolean | null>;
 function GridFromCsv() {
-    const [rows, setRows] = useState<never[]>([]);
-    const [cols, setCols] = useState<never[]>([]);
+    const [rows, setRows] = useState<CsvRow[]>([]);
+    const [cols, setCols] = useState<ColDef[]>([]);
 
     useEffect(() => {
         (async () => {
-            const csvText = await fetch("/thegradebook/formresult1.csv", {cache: "no-store"}).then(r => r.text());
+            const csvText = await fetch("/thegradebook/formresult1.csv", { cache: "no-store" }).then(r => r.text());
             const Papa = (await import("papaparse")).default;
-            const parsed = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true});
-            const data = parsed.data as never[];
-            const columnDefs = Object.keys(data[0] ?? {}).map(k => ({field: k}));
+            const parsed = Papa.parse<CsvRow>(csvText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+            const data = parsed.data;
+            const columnDefs: ColDef[] = Object.keys(data[0] ?? {}).map(k => ({ field: k }));
             setRows(data);
             setCols(columnDefs);
         })();
     }, []);
 
     return (
-        <div className="ag-theme-quartz" style={{height: 650, width: "100%"}}>
-            <AgGridReact
-                theme={blackTheme}
+        <div className="ag-theme-quartz" style={{ height: 650, width: "100%" }}>
+            <AgGridReact<CsvRow>
                 rowData={rows}
                 columnDefs={cols}
                 pagination

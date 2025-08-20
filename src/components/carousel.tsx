@@ -1,8 +1,7 @@
 "use client";
 
 import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import { useCallback, useEffect, useRef, useState, useMemo } from "react";
+import {useCallback, useEffect, useState, useMemo, useRef} from "react";
 import Image from "next/image";
 import type { EmblaOptionsType } from "embla-carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -18,7 +17,7 @@ export default function Carousel({
     options?: EmblaOptionsType;
     flyThroughRewind?: boolean;
 }) {
-    // Force loop off when flyThroughRewind is enabled to get edge "yield + bounce"
+    // Force loop off when flyThroughRewind is enabled
     const effectiveOptions: EmblaOptionsType = useMemo(() => {
         if (flyThroughRewind) {
             return {
@@ -31,38 +30,20 @@ export default function Carousel({
         return options;
     }, [options, flyThroughRewind]);
 
-    const autoplay = useRef(Autoplay({ delay: 3500, stopOnInteraction: false }));
-    const [emblaRef, emblaApi] = useEmblaCarousel(effectiveOptions, [autoplay.current]);
+    const [emblaRef, emblaApi] = useEmblaCarousel(effectiveOptions);
 
     const [selected, setSelected] = useState(0);
-    const restartTimeout = useRef<NodeJS.Timeout | null>(null);
-    const autopilotTimeout = useRef<NodeJS.Timeout | null>(null);
     const isFlying = useRef(false);
-
-    const clearTimers = () => {
-        if (restartTimeout.current) clearTimeout(restartTimeout.current);
-        restartTimeout.current = null;
-        if (autopilotTimeout.current) clearTimeout(autopilotTimeout.current);
-        autopilotTimeout.current = null;
-    };
 
     const scrollTo = useCallback((i: number) => emblaApi?.scrollTo(i), [emblaApi]);
     const nextRaw = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
     const prevRaw = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
 
-    const pauseAndRestart = useCallback(() => {
-        autoplay.current?.stop();
-        if (restartTimeout.current) clearTimeout(restartTimeout.current);
-        restartTimeout.current = setTimeout(() => autoplay.current?.play(), 30_000);
-    }, []);
-
-    // Fly-through animator
+    // Fly-through animator (manual only now)
     const flyThrough = useCallback(
         async (dir: "left" | "right") => {
             if (!emblaApi || isFlying.current) return;
             isFlying.current = true;
-            clearTimers();
-            autoplay.current?.stop();
 
             const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
             const stepMs = 120;
@@ -81,12 +62,11 @@ export default function Carousel({
             }
 
             isFlying.current = false;
-            autoplay.current?.play();
         },
         [emblaApi]
     );
 
-    // Smart next/prev with fly-through at ends (buttons + autoplay)
+    // Smart next/prev with fly-through at ends
     const next = useCallback(() => {
         if (!emblaApi) return;
         const last = emblaApi.scrollSnapList().length - 1;
@@ -111,57 +91,33 @@ export default function Carousel({
         const onKey = (e: KeyboardEvent) => {
             if (e.key === "ArrowRight") {
                 next();
-                pauseAndRestart();
             } else if (e.key === "ArrowLeft") {
                 prev();
-                pauseAndRestart();
             }
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [next, prev, pauseAndRestart]);
+    }, [next, prev]);
 
-    // Events + intercept autoplay at ends
+    // Update dots
     useEffect(() => {
         if (!emblaApi) return;
 
         const onSelect = () => {
             setSelected(emblaApi.selectedScrollSnap());
-
-            if (!flyThroughRewind || isFlying.current) return;
-
-            const last = emblaApi.scrollSnapList().length - 1;
-            const idx = emblaApi.selectedScrollSnap();
-
-            // When autoplay lands on an end, schedule fly-through
-            if (idx === last || idx === 0) {
-                clearTimers();
-                autoplay.current?.stop();
-                const delay = (autoplay.current?.options?.delay as number) ?? 3500;
-                autopilotTimeout.current = setTimeout(() => {
-                    void flyThrough(idx === last ? "left" : "right");
-                }, delay);
-            }
         };
 
-        const onPointerOrScroll = () => pauseAndRestart();
-
         emblaApi.on("select", onSelect);
-        emblaApi.on("pointerDown", onPointerOrScroll);
-        emblaApi.on("scroll", onPointerOrScroll);
         onSelect();
 
         return () => {
-            clearTimers();
             emblaApi.off("select", onSelect);
-            emblaApi.off("pointerDown", onPointerOrScroll);
-            emblaApi.off("scroll", onPointerOrScroll);
         };
-    }, [emblaApi, flyThroughRewind, pauseAndRestart, flyThrough]);
+    }, [emblaApi]);
 
     return (
         <section
-            className="group relative bg-black" // black shows during edge-yield
+            className="group relative bg-black"
             aria-roledescription="carousel"
             aria-label="Image carousel"
         >
@@ -192,7 +148,6 @@ export default function Carousel({
                 onClick={() => {
                     if (isFlying.current) return;
                     prev();
-                    pauseAndRestart();
                 }}
                 className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white opacity-0 transition group-hover:opacity-100 hover:bg-black/60"
             >
@@ -204,7 +159,6 @@ export default function Carousel({
                 onClick={() => {
                     if (isFlying.current) return;
                     next();
-                    pauseAndRestart();
                 }}
                 className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 p-3 text-white opacity-0 transition group-hover:opacity-100 hover:bg-black/60"
             >
@@ -221,7 +175,6 @@ export default function Carousel({
                         onClick={() => {
                             if (isFlying.current) return;
                             scrollTo(i);
-                            pauseAndRestart();
                         }}
                         className={`h-2 w-2 rounded-full ${selected === i ? "bg-white" : "bg-white/50"}`}
                     />

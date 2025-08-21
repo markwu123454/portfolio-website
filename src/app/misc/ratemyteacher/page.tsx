@@ -10,6 +10,8 @@ import {
     RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 import PdfCarousel from "@/components/carousel";
+import Link from "next/link";
+import {MoveRight} from "lucide-react";
 
 
 function CourseSelectionRadar() {
@@ -236,6 +238,13 @@ export default function Thegradebook() {
     return (
         <div className="pt-24">
             <Doc>
+                <Link
+                    href="https://thegradebook-git-master-markwu123454s-projects.vercel.app/"
+                    target="_blank"
+                    className="font-semibold underline-offset-4 inline-flex items-center gap-1 transition text-2xl hover:underline pb-4"
+                >
+                    Visit the project website <MoveRight className="w-6 h-6" />
+                </Link>
                 <H1>IB Design Cycle Documentation</H1>
                 <Divider/>
 

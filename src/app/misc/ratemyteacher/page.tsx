@@ -1,19 +1,16 @@
 "use client";
-// IBDesignDoc.tsx
-// Single-file TSX “Notion-like” block primitives + example usage.
-// Author by writing JSX blocks; Tailwind handles layout/typography.
-
-/* --- PRIMITIVES -------------------------------------------------------- */
 
 import "@/lib/aggrid";
 import React, {useEffect, useState} from "react";
+import Image from "next/image";
 import {AgGridReact} from "ag-grid-react";
 import {themeQuartz} from "ag-grid-community";
-import type { ColDef } from "ag-grid-community";
+import type {ColDef} from "ag-grid-community";
 import {
     RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 import PdfCarousel from "@/components/carousel";
+
 
 function CourseSelectionRadar() {
     // ---- Hardcoded PROBLEM % (0–100) ----
@@ -108,25 +105,11 @@ function CourseSelectionRadar() {
     );
 }
 
-
-const blackTheme = themeQuartz.withParams({
-    backgroundColor: "#000000",
-    foregroundColor: "#e5e7eb",
-    headerBackgroundColor: "#0a0a0a",
-    headerTextColor: "#ffffff",
-    oddRowBackgroundColor: "#0a0a0a",
-    rowHoverColor: "#111111",
-    selectedRowBackgroundColor: "#111111",
-    borderColor: "#1f2937",
-    accentColor: "#38bdf8",
-});
-
-
 // Container (full width with readable line length)
 function Doc({children}: { children: React.ReactNode }) {
     return (
         <main className="w-full px-6 py-10">
-            <article className="prose dark:prose-invert max-w-5xl mx-auto prose-headings:scroll-mt-24">
+            <article className="prose dark:prose-invert min-w-0 px-50 mx-auto prose-headings:scroll-mt-24">
                 {children}
             </article>
         </main>
@@ -159,161 +142,10 @@ const H3 = ({children}: { children: React.ReactNode }) => (
 
 // Text
 const P = ({children}: { children: React.ReactNode }) => <p>{children}</p>;
-const Small = ({children}: { children: React.ReactNode }) => (
-    <p className="text-sm text-black/60 dark:text-white/60">{children}</p>
-);
 
-// Lists
-const Ul = ({children}: { children: React.ReactNode }) => <ul>{children}</ul>;
-const Ol = ({children}: { children: React.ReactNode }) => <ol>{children}</ol>;
-const Li = ({children}: { children: React.ReactNode }) => <li>{children}</li>;
-
-// Checklist
-function Checklist({children}: { children: React.ReactNode }) {
-    return <ul className="list-none pl-0 space-y-2">{children}</ul>;
-}
-
-function CheckItem({
-                       children,
-                       checked = false,
-                   }: {
-    children: React.ReactNode;
-    checked?: boolean;
-}) {
-    return (
-        <li className="flex items-start gap-2">
-            <input type="checkbox" defaultChecked={checked} className="mt-1 h-4 w-4"/>
-            <div className={checked ? "line-through opacity-70" : ""}>{children}</div>
-        </li>
-    );
-}
-
-// Quote / Callout / Divider
-const Quote = ({children}: { children: React.ReactNode }) => (
-    <blockquote className="border-l-4 pl-4">{children}</blockquote>
-);
-
-function Callout({
-                     children,
-                     tone = "info",
-                 }: {
-    children: React.ReactNode;
-    tone?: "info" | "warn" | "success" | "neutral";
-}) {
-    const toneMap: Record<string, string> = {
-        info: "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-900/50",
-        warn: "bg-yellow-50 dark:bg-yellow-950/30 border-yellow-200 dark:border-yellow-900/50",
-        success: "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900/50",
-        neutral: "bg-black/5 dark:bg-white/5 border-black/10 dark:border-white/10",
-    };
-    return (
-        <div className={`not-prose border rounded-xl px-4 py-3 ${toneMap[tone]}`}>{children}</div>
-    );
-}
 
 const Divider = () => <hr className="my-6"/>;
 
-// Grid / Columns
-function Columns({
-                     children,
-                     n = 2,
-                 }: {
-    children: React.ReactNode;
-    n?: 2 | 3 | 4;
-}) {
-    return (
-        <div
-            className={`not-prose grid gap-4 ${
-                n === 2 ? "md:grid-cols-2" : n === 3 ? "md:grid-cols-3" : "md:grid-cols-4"
-            }`}
-        >
-            {children}
-        </div>
-    );
-}
-
-// Code
-function Code({children}: { children: React.ReactNode }) {
-    return <code className="px-1 py-0.5 rounded bg-black/10 dark:bg-white/10">{children}</code>;
-}
-
-function CodeBlock({
-                       children,
-                       lang,
-                   }: {
-    children: React.ReactNode;
-    lang?: string;
-}) {
-    return (
-        <pre className="not-prose rounded-xl border border-black/10 dark:border-white/10 p-4 overflow-auto">
-      <code className={lang ? `language-${lang}` : ""}>{children}</code>
-    </pre>
-    );
-}
-
-// Table
-function Table({
-                   head,
-                   children,
-               }: {
-    head?: React.ReactNode;
-    children: React.ReactNode;
-}) {
-    return (
-        <div className="not-prose overflow-x-auto">
-            <table className="w-full border-collapse">
-                {head ? <thead>{head}</thead> : null}
-                <tbody>{children}</tbody>
-            </table>
-        </div>
-    );
-}
-
-const Tr = ({children}: { children: React.ReactNode }) => (
-    <tr className="border-b border-black/10 dark:border-white/10">{children}</tr>
-);
-const Th = ({children}: { children: React.ReactNode }) => (
-    <th className="text-left font-semibold px-3 py-2 bg-black/5 dark:bg-white/10">{children}</th>
-);
-const Td = ({children}: { children: React.ReactNode }) => (
-    <td className="align-top px-3 py-2">{children}</td>
-);
-
-// Media
-function Figure({
-                    src,
-                    alt,
-                    caption,
-                    full = false,
-                }: {
-    src: string;
-    alt: string;
-    caption?: string;
-    full?: boolean; // full-bleed
-}) {
-    return (
-        <figure className={full ? "not-prose mx-[calc(50%-50vw)] w-screen px-6" : ""}>
-            <img
-                src={src}
-                alt={alt}
-                className={`rounded-xl border border-black/10 dark:border-white/10 shadow-sm ${
-                    full ? "w-full max-h-[60vh] object-contain" : ""
-                }`}
-            />
-            {caption ? (
-                <figcaption className="text-sm text-black/60 dark:text-white/60 mt-1">{caption}</figcaption>
-            ) : null}
-        </figure>
-    );
-}
-
-// Tag/Badge
-const Tag = ({children}: { children: React.ReactNode }) => (
-    <span
-        className="not-prose inline-flex items-center rounded-full border border-black/10 dark:border-white/10 px-2 py-0.5 text-xs">
-    {children}
-  </span>
-);
 
 // Section wrappers
 function Section({
@@ -348,25 +180,49 @@ const Subsection = ({
 
 
 type CsvRow = Record<string, string | number | boolean | null>;
+
 function GridFromCsv() {
     const [rows, setRows] = useState<CsvRow[]>([]);
     const [cols, setCols] = useState<ColDef[]>([]);
 
+    const blackTheme = themeQuartz.withParams({
+        backgroundColor: "#000000",
+        foregroundColor: "#e5e7eb",
+        headerBackgroundColor: "#0a0a0a",
+        headerTextColor: "#ffffff",
+        oddRowBackgroundColor: "#0a0a0a",
+        rowHoverColor: "#111111",
+        selectedRowBackgroundColor: "#111111",
+        borderColor: "#1f2937",
+        accentColor: "#38bdf8",
+    });
+
     useEffect(() => {
         (async () => {
-            const csvText = await fetch("/thegradebook/formresult1.csv", { cache: "no-store" }).then(r => r.text());
+            const csvText = await fetch("/thegradebook/formresult1.csv", {
+                cache: "no-store",
+            }).then((r) => r.text());
             const Papa = (await import("papaparse")).default;
-            const parsed = Papa.parse<CsvRow>(csvText, { header: true, dynamicTyping: true, skipEmptyLines: true });
+            const parsed = Papa.parse<CsvRow>(csvText, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+            });
             const data = parsed.data;
-            const columnDefs: ColDef[] = Object.keys(data[0] ?? {}).map(k => ({ field: k }));
+            const columnDefs: ColDef[] =
+                Object.keys(data[0] ?? {}).map((k) => ({field: k}));
             setRows(data);
             setCols(columnDefs);
         })();
     }, []);
 
     return (
-        <div className="ag-theme-quartz" style={{ height: 650, width: "100%" }}>
+        <div
+            className="ag-theme-quartz" // base theme class
+            style={{height: 650, width: "100%"}}
+        >
             <AgGridReact<CsvRow>
+                theme={blackTheme}        // injects your custom colors
                 rowData={rows}
                 columnDefs={cols}
                 pagination
@@ -376,7 +232,7 @@ function GridFromCsv() {
     );
 }
 
-export default function thegradebook() {
+export default function Thegradebook() {
     return (
         <div className="pt-24">
             <Doc>
@@ -425,29 +281,115 @@ export default function thegradebook() {
                     </Subsection>
                     <Divider/>
                     <Subsection title="A3 – Analyze existing solutions">
-                        <Columns n={3}>
-                            <Callout tone="neutral">
-                                <strong>Solution A</strong>
-                                <Ul>
-                                    <Li>Strengths: …</Li>
-                                    <Li>Weaknesses: …</Li>
-                                </Ul>
-                            </Callout>
-                            <Callout tone="neutral">
-                                <strong>Solution B</strong>
-                                <Ul>
-                                    <Li>Strengths: …</Li>
-                                    <Li>Weaknesses: …</Li>
-                                </Ul>
-                            </Callout>
-                            <Callout tone="neutral">
-                                <strong>Solution C</strong>
-                                <Ul>
-                                    <Li>Strengths: …</Li>
-                                    <Li>Weaknesses: …</Li>
-                                </Ul>
-                            </Callout>
-                        </Columns>
+                        <table className="table-auto border-collapse border border-gray-400 w-full text-left">
+                            <thead>
+                            <tr>
+                                <th className="border border-gray-400 px-4 py-2">Categories</th>
+                                <th className="border border-gray-400 px-4 py-2">BerkeleyTime</th>
+                                <th className="border border-gray-400 px-4 py-2">RateMyTeachers</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">Who’s the target audience/</td>
+                                <td className="border border-gray-400 px-4 py-2">UC Berkeley students planning their
+                                    courses and exploring professors.
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Middle school and high school students
+                                    seeking peer opinions about teachers.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">What’s the problem being addressed?
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Lack of easy access to grade
+                                    distributions and class information in the official university system.
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Lack of transparency about teachers and
+                                    teaching styles in secondary schools.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">What’s unique about it?</td>
+                                <td className="border border-gray-400 px-4 py-2">Uses official grade data presented in
+                                    clean, visual charts.
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Allows student driven qualitative
+                                    feedback on teachers in a centralized space.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">Strength:</td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <li>Clean, professional interface designed specifically for students.</li>
+                                    <li>Provides visual grade distributions (bar charts) that make data easy to
+                                        understand.
+                                    </li>
+                                    <li>Centralizes course and instructor information in one place.</li>
+                                    <li>Widely trusted by students because data comes from official sources.</li>
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <li>Gives students a voice.</li>
+                                    <li>Provides quick, direct insight into teacher personality and teaching style.</li>
+                                    <li>Centralized platform for reviews.</li>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">Weakness:</td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <li>Only quantitative (data only, no personal feedback).</li>
+                                    <li>Only for UC Berkeley (not adaptable to HS).</li>
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <li>Reviews are often unmoderated → biased or unprofessional.</li>
+                                    <li>Focuses only on teachers, not classes.</li>
+                                    <li>Sometimes vague or unhelpful.</li>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">What would you change?</td>
+                                <td className="border border-gray-400 px-4 py-2">Add student comments in a moderated way
+                                    to give context beyond grades. This can help students better understand the class.
+                                    Most class descriptions only have what teachers right and not feedback about the
+                                    class.
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Add grade data or workload indicators
+                                    to complement reviews; improve moderation. This will help students decide whether or
+                                    not this class will be too difficult for them.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">What’s the take away?</td>
+                                <td className="border border-gray-400 px-4 py-2">Official, visual data builds trust and
+                                    usability. It brings authenticity to each review. Ultimately, this will help
+                                    students understand what each class is like
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">Student voices are valuable but need
+                                    structure moderation and balance with data. Remove all ads.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-gray-400 px-4 py-2">Screenshots</td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <Image src="/thegradebook/berkeleytime1.png"
+                                           alt="BerkeleyTime image"
+                                           width="500" height="500"
+                                    />
+                                    <Image src="/thegradebook/berkeleytime2.png"
+                                           alt="BerkeleyTime image"
+                                           width="500" height="500"
+                                           className="pt-2"
+                                    />
+                                </td>
+                                <td className="border border-gray-400 px-4 py-2">
+                                    <Image src="/thegradebook/ratemyteacher1.png"
+                                           alt="ratemyteachers image"
+                                           width="500" height="500"
+                                    />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </Subsection>
                     <Divider/>
                     <Subsection title="A4 – Design brief">

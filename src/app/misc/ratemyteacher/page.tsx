@@ -398,6 +398,9 @@ export default function Thegradebook() {
                             {src: "/thegradebook/Creative Brief P2.jpg", alt: "Page 2", width: 1920, height: 1080},
                             {src: "/thegradebook/Creative Brief P3.jpg", alt: "Page 3", width: 1920, height: 1080},
                             {src: "/thegradebook/Creative Brief P4.jpg", alt: "Page 4", width: 1920, height: 1080},
+                            {src: "/thegradebook/Creative Brief P5.jpg", alt: "Page 5", width: 1920, height: 1080},
+                            {src: "/thegradebook/Creative Brief P6.jpg", alt: "Page 6", width: 1920, height: 1080},
+                            {src: "/thegradebook/Creative Brief P7.jpg", alt: "Page 7", width: 1920, height: 1080},
                         ]} flyThroughRewind={true}/>
                     </Subsection>
                 </Section>

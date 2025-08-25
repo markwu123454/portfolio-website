@@ -1,5 +1,30 @@
 "use client";
 
+import UnderConstruction, { Stage } from "@/components/NotImplemented";
+
+export default function Page() {
+    const stages: Stage[] = [
+        { label: "Preparing", status: "done" },
+        { label: "Drafting", status: "in_progress" },
+        { label: "Reviewing", status: "todo" },
+        { label: "Polishing", status: "todo" },
+    ];
+
+    return (
+        <UnderConstruction
+            name="The Gradebook"
+            stages={stages}
+            channelStatus="active"
+            passphrase="Scouting!"
+            preview={<ScoutingPage />}
+        />
+    );
+}
+
+
+
+
+
 import Image from "next/image";
 import {useEffect, useMemo, useRef, useState} from "react";
 
@@ -27,7 +52,7 @@ function usePrefersReducedMotion() {
     return reduced;
 }
 
-export default function ScoutingPage() {
+function ScoutingPage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const blobsRef = useRef<BlobSpec[]>([]);
     const rafRef = useRef<number | null>(null);

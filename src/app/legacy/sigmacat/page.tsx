@@ -1,11 +1,20 @@
-export default function SigmaCatRoboticsPage() {
+"use client";
+
+import UnderConstruction, { Stage } from "@/components/NotImplemented";
+
+export default function Page() {
+    const stages: Stage[] = [
+        { label: "Preparing", status: "in_progress" },
+        { label: "Drafting", status: "todo" },
+        { label: "Reviewing", status: "todo" },
+        { label: "Polishing", status: "todo" },
+    ];
+
     return (
-        <div className="py-20">
-            <h1 className="text-3xl font-bold mb-4">SigmaCat Robotics</h1>
-            <p className="text-gray-600 max-w-prose">
-                This is a placeholder page for SigmaCat Robotics. Add project details, team
-                bios, images, and relevant links here.
-            </p>
-        </div>
+        <UnderConstruction
+            name="SigmaCat Robotics"
+            stages={stages}
+            channelStatus="hold"
+        />
     );
 }

@@ -34,14 +34,21 @@ body {
 #content-scroll { scrollbar-width: none; -ms-overflow-style: none; }
 
 /* Marquee animation */
+/* Kill any keyframe-based marquee on the track */
+.track { animation: none !important; }
+
+/* (Optional) If you keep a keyframes block around, it's harmless; just don't apply it */
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
 }
-.marquee { overflow: hidden; position: relative; }
-.marquee .track { display: flex; width: 200%; animation: marquee 24s linear infinite; }
-.marquee:hover .track { animation-play-state: paused; }
+
+.marquee { overflow-y: visible; position: relative; }
+
+/* Respect reduced motion (JS also sets speed=0) */
 @media (prefers-reduced-motion: reduce) {
-  .marquee .track { animation: none; transform: translateX(0); }
+    .track { transform: none !important; }
 }
+
+
 

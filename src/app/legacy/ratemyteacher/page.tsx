@@ -1,5 +1,36 @@
 "use client";
 
+import UnderConstruction, { Stage } from "@/components/NotImplemented";
+
+export default function Page() {
+    const stages: Stage[] = [
+        { label: "Preparing", status: "in_progress" },
+        { label: "Drafting", status: "todo" },
+        { label: "Reviewing", status: "todo" },
+        { label: "Polishing", status: "todo" },
+    ];
+
+    return (
+        <UnderConstruction
+            name="The Gradebook"
+            stages={stages}
+            channelStatus="hold"
+            passphrase="IsThisEthical"
+            preview={<Thegradebook />}
+        />
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
 import "@/lib/aggrid";
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
@@ -234,7 +265,7 @@ function GridFromCsv() {
     );
 }
 
-export default function Thegradebook() {
+function Thegradebook() {
     return (
         <div className="pt-24">
             <Doc>

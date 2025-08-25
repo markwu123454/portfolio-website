@@ -49,7 +49,6 @@ const NAV: NavItem[] = [
         menu: {
             heading: "OTHER PROJECTS",
             links: [
-                {label: "The GradeBook", href: "/misc/ratemyteacher"},
                 {label: "Portfolio website(this)", href: "/misc/portfolio"},
             ],
             blurb: "A list of other smaller projects or ones I contributed less."
@@ -61,6 +60,7 @@ const NAV: NavItem[] = [
         menu: {
             heading: "LEGACY PROJECTS",
             links: [
+                {label: "The GradeBook", href: "/legacy/ratemyteacher"},
                 {label: "Team Infernope", href: "/legacy/teaminfernope"},
                 {label: "SigmaCat Robotics", href: "/legacy/sigmacat"}
             ],
@@ -186,7 +186,8 @@ export function Header() {
     return (
         <header
             className={[
-                "fixed top-0 inset-x-0 z-50 h-24 border-b border-white bg-zinc-950 text-white",
+                "fixed top-0 inset-x-0 z-50 h-24 border-b border-white/10",
+                "bg-black/70 backdrop-blur supports-[backdrop-filter]:bg-black/60 text-white",
                 "transform-gpu transition-transform duration-300 ease-out",
                 hidden ? "-translate-y-full" : "translate-y-0"
             ].join(" ")}
@@ -196,15 +197,27 @@ export function Header() {
             onMouseLeave={scheduleClose}
             onMouseEnter={() => setHidden(false)}
         >
+            <div aria-hidden
+                 className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-emerald-400 opacity-70"/>
             <div className="relative mx-auto flex h-24 items-center justify-between">
+                {/* neon top accent */}
+                <div aria-hidden
+                     className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-emerald-400 opacity-70"/>
+
                 {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 font-semibold flex-shrink-0 fill-anim pl-4 h-full self-stretch pr-6">
-                    <div className="h-6 w-6 bg-white"/>
+                <Link href="/"
+                      className="flex items-center gap-2 font-semibold flex-shrink-0 fill-anim pl-4 h-full self-stretch pr-6">
+                    <div
+                        className="relative h-6 w-6 rounded-md bg-gradient-to-tr from-cyan-400 via-fuchsia-400 to-emerald-300">
+                        <span aria-hidden
+                              className="absolute inset-0 rounded-md blur-sm opacity-70 bg-gradient-to-tr from-cyan-400 via-fuchsia-400 to-emerald-300"/>
+                    </div>
                     MARKWU
                 </Link>
 
+
                 {/* Divider */}
-                <div className="mr-6 hidden w-px self-stretch bg-white/80 md:block" aria-hidden/>
+                <div className="mr-6 hidden w-px self-stretch bg-white/10 md:block" aria-hidden/>
 
                 {/* Center nav — desktop only */}
                 <nav
@@ -221,7 +234,7 @@ export function Header() {
                                     id={itemId}
                                     href={item.href}
                                     className={[
-                                        "underline-swipe group relative inline-flex items-center gap-1 text-base font-medium",
+                                        "underline-swipe group relative inline-flex items-center gap-1 text-base font-medium text-white/90",
                                         "tracking-tight transition-colors hover:opacity-90 focus:outline-none"
                                     ].join(" ")}
                                     onFocus={() => show(item)}
@@ -240,7 +253,7 @@ export function Header() {
                 </nav>
 
                 {/* Divider */}
-                <div className="hidden w-px self-stretch bg-white/80 md:block" aria-hidden/>
+                <div className="hidden w-px self-stretch bg-white/10 md:block" aria-hidden/>
 
                 {/* Right */}
                 <Link
@@ -251,7 +264,7 @@ export function Header() {
                 </Link>
 
                 {/* Divider */}
-                <div className="hidden w-px self-stretch bg-white/80 md:block" aria-hidden />
+                <div className="hidden w-px self-stretch bg-white/10 md:block" aria-hidden/>
 
                 {/* Right */}
                 <div className="flex h-full self-stretch items-center flex-shrink-0">
@@ -270,8 +283,12 @@ export function Header() {
                         onClick={() => {
                             const next = !mobileOpen;
                             setMobileOpen(next);
-                            if (next) { setMegaOpen(false); setHidden(false); }
-                            else { setMobileActive(null); }
+                            if (next) {
+                                setMegaOpen(false);
+                                setHidden(false);
+                            } else {
+                                setMobileActive(null);
+                            }
                         }}
                     >
                         {mobileOpen ? <X size={20}/> : <Menu size={20}/>}
@@ -289,13 +306,26 @@ export function Header() {
                 className={[
                     "mega",
                     "absolute left-1/2 top-[calc(100%+1px)] w-screen -translate-x-1/2",
-                    "border-b border-white bg-zinc-950 transition-opacity duration-150",
-                    "hidden md:block",
+                    "hidden md:block transition-opacity duration-200",
+                    // glass + border + glow
+                    "rounded-b-2xl border border-white/10 bg-black backdrop-blur-md",
+                    "shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_24px_60px_-12px_rgba(0,255,255,0.12)]",
                     megaOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
                 ].join(" ")}
                 onMouseEnter={() => megaOpen && setMegaOpen(true)}
                 onMouseLeave={scheduleClose}
             >
+                {/* scanline film */}
+                <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-b-2xl opacity-[0.06] [background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.8)_0,rgba(255,255,255,.8)_1px,transparent_2px,transparent_3px)]"
+                />
+                {/* corner bloom */}
+                <span
+                    aria-hidden
+                    className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-gradient-to-tr from-fuchsia-400 via-violet-400 to-cyan-400 blur-3xl opacity-20"
+                />
+
                 <div className="mx-auto max-w-7xl px-6 py-10">
                     <div className="grid grid-cols-1 items-stretch gap-x-10 md:grid-cols-[1fr_auto_1fr]">
                         {/* Left column */}
@@ -308,7 +338,7 @@ export function Header() {
                                     <li key={l.href}>
                                         <Link
                                             href={l.href}
-                                            className="underline-swipe"   // ← add underline-swipe
+                                            className="underline-swipe neon-swipe"
                                             onClick={() => setMegaOpen(false)}
                                         >
                                             {l.label}
@@ -319,17 +349,18 @@ export function Header() {
                         </div>
 
                         {/* Middle divider */}
-                        <div className="hidden h-full w-px bg-white md:block"/>
+                        <div className="hidden h-full w-px bg-white/10 md:block"/>
 
                         {/* Right column */}
                         <div className="pt-8 md:pt-0">
                             {active?.menu?.blurb && (
-                                <p className="max-w-prose text-sm">{active.menu.blurb}</p>
+                                <p className="max-w-prose text-sm text-zinc-200/90">{active.menu.blurb}</p>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/* MOBILE BREAKAWAY PANEL (slides from header) */}
             <div
@@ -340,10 +371,9 @@ export function Header() {
                 ].join(" ")}
                 aria-hidden={!mobileOpen}
             >
-                {/* Keep header visible above the panel */}
-                <div className="pt-24 bg-zinc-950 border-b border-white">
+                <div className="pt-24 bg-black/80 backdrop-blur-sm border-b border-white/10">
                     <nav aria-label="Mobile Primary" className="px-4 py-2">
-                        <ul className="divide-y divide-white/20">
+                        <ul className="divide-y divide-white/10">
                             {NAV.map((item) => {
                                 const id = `m-${item.label.replace(/\s+/g, "-").toLowerCase()}`;
                                 const expanded = mobileActive === id;
@@ -444,10 +474,10 @@ export function Header() {
                     </nav>
                 </div>
 
-                {/* Tap-to-close underlay (below header, above content) */}
+                {/* Tap-to-close underlay */}
                 <button
                     aria-label="Close menu"
-                    className="h-[calc(100dvh-6rem)] w-full bg-zinc-950/60 backdrop-blur-[1px]"
+                    className="h-[calc(100dvh-6rem)] w-full bg-black/60 backdrop-blur-[2px]"
                     onClick={() => {
                         setMobileOpen(false);
                         setMobileActive(null);
@@ -455,13 +485,15 @@ export function Header() {
                 />
             </div>
 
-            {/* underline animations (kept) */}
             <style jsx global>{`
-                /* Handles underline swipe of buttons */
+                /* =========================
+                   Underline & Neon Sweep
+                   ========================= */
                 header[data-ui-ready] .underline-swipe {
                     position: relative;
                     display: inline-block;
                 }
+                /* base underline (driven by CSS vars) */
                 header[data-ui-ready] .underline-swipe::after {
                     content: "";
                     position: absolute;
@@ -477,27 +509,40 @@ export function Header() {
 
                     transform: scaleX(var(--uw-scale));
                     transform-origin: var(--uw-origin);
-
                     transition: none;
                 }
-
+                /* enable animation only when ready & armed */
                 header[data-ui-ready="true"][data-armed="true"] .underline-swipe::after {
                     transition: transform 300ms cubic-bezier(0.3, 1, 0.3, 1);
                 }
-
+                /* turn on/off via data attr or hover/focus in mega */
                 header[data-ui-ready="true"][data-armed="true"] .underline-swipe[data-underline="on"]::after,
                 header[data-ui-ready="true"] .mega a.underline-swipe:hover::after,
                 header[data-ui-ready="true"] .mega a.underline-swipe:focus-visible::after {
                     --uw-scale: 1;
                     --uw-origin: left;
                 }
-
                 header[data-ui-ready="true"][data-armed="true"] .underline-swipe[data-underline="off"]::after,
                 header[data-ui-ready="true"] .mega a.underline-swipe:not(:hover):not(:focus-visible)::after {
                     --uw-scale: 0;
                     --uw-origin: right;
                 }
 
+                /* Neon variant augments the same ::after (no second pseudo-element needed) */
+                header .underline-swipe.neon-swipe::after {
+                    bottom: -3px;
+                    background: linear-gradient(90deg, #f0abfc, #22d3ee, #34d399);
+                    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+                }
+                header .mega a.neon-swipe {
+                    transition: text-shadow 200ms ease, color 200ms ease;
+                }
+                header .mega a.neon-swipe:hover {
+                    color: #e5e7eb;
+                    text-shadow: 0 0 12px rgba(34, 211, 238, 0.35);
+                }
+
+                /* Reduced motion */
                 @media (prefers-reduced-motion: reduce) {
                     header .underline-swipe::after {
                         transition: none !important;
@@ -506,42 +551,159 @@ export function Header() {
                     }
                 }
 
-                /* Handles background fill of logo, about, and contact */
+                /* ============ Glass Fill + Swipe Sheen ============ */
                 header[data-ui-ready] .fill-anim {
                     position: relative;
                     overflow: hidden;
+                    border-radius: 0.75rem;
+                    isolation: isolate;
                 }
 
+                /* soft background lift */
                 header[data-ui-ready] .fill-anim::before {
                     content: "";
                     position: absolute;
                     inset: 0;
-                    background-color: rgba(255, 255, 255, 0.20);
+                    border-radius: inherit;
+                    background: rgba(255, 255, 255, 0.03);
+                    opacity: 0;
+                    transition: opacity 160ms ease, box-shadow 160ms ease;
                     z-index: 0;
-                    transform: scaleY(0);
-                    transform-origin: bottom;
-                    transition: transform 0.25s ease-out;
                 }
 
-                /* Handles header collapse on scroll */
+                /* thin glass ring + faint neon glow */
+                header[data-ui-ready] .fill-anim::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    border-radius: inherit;
+                    pointer-events: none;
+                    opacity: 0;
+                    box-shadow:
+                            inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+                            0 8px 22px -10px rgba(34, 211, 238, 0.08);
+                    transition: opacity 160ms ease;
+                    z-index: 0;
+                }
+
+                /* sheen swipe element */
+                header[data-ui-ready] .fill-anim::marker,
+                header[data-ui-ready] .fill-anim .sheen {
+                    display: none; /* ensures no accidental rendering */
+                }
+                header[data-ui-ready] .fill-anim::selection { background: none; }
+
+                header[data-ui-ready] .fill-anim::before,
+                header[data-ui-ready] .fill-anim::after {
+                    pointer-events: none;
+                }
+
+                /* separate pseudo for sheen */
+                header[data-ui-ready] .fill-anim::part(sheen),
+                header[data-ui-ready] .fill-anim::after-sheen {
+                    display: none;
+                }
+
+                /* sheen implemented via an extra pseudo-element */
+                header[data-ui-ready] .fill-anim::selection { background: none; }
+                header[data-ui-ready] .fill-anim::placeholder { opacity: 0; }
+
+                header[data-ui-ready] .fill-anim::before,
+                header[data-ui-ready] .fill-anim::after {
+                    pointer-events: none;
+                }
+
+                /* real sheen */
+                header[data-ui-ready] .fill-anim::backdrop,
+                header[data-ui-ready] .fill-anim:before-sheen {
+                    display: none;
+                }
+
+                /* add a ::after sibling for sheen sweep */
+                header[data-ui-ready] .fill-anim::after-sheen { display: none; }
+
+                /* use an extra ::before sibling for sheen effect */
+                header[data-ui-ready] .fill-anim::after,
+                header[data-ui-ready] .fill-anim::before {
+                    pointer-events: none;
+                }
+
+                /* --- Sheen using ::before overlay --- */
+                header[data-ui-ready] .fill-anim::after-sheen { display: none; }
+
+                header[data-ui-ready] .fill-anim::after,
+                header[data-ui-ready] .fill-anim::before {
+                    pointer-events: none;
+                }
+
+                header[data-ui-ready] .fill-anim::before,
+                header[data-ui-ready] .fill-anim::after {
+                    z-index: 0;
+                }
+
+                header[data-ui-ready] .fill-anim::before,
+                header[data-ui-ready] .fill-anim::after {
+                    transition: opacity 160ms ease;
+                }
+
+                /* create a third pseudo for the sheen sweep */
+                header[data-ui-ready] .fill-anim::before,
+                header[data-ui-ready] .fill-anim::after,
+                header[data-ui-ready] .fill-anim::after-swipe {
+                    pointer-events: none;
+                }
+
+                /* SWIPE: use ::before overlay to hold the sheen */
+                header[data-ui-ready] .fill-anim::before-sheen {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    border-radius: inherit;
+                    background: linear-gradient(
+                            120deg,
+                            transparent 0%,
+                            rgba(255, 255, 255, 0.25) 25%,
+                            transparent 50%
+                    );
+                    transform: translateX(-150%);
+                    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                    z-index: 1;
+                    opacity: 0;
+                }
+
+                /* hover/focus states */
                 header[data-ui-ready] .fill-anim:hover::before,
-                header[data-ui-ready] .fill-anim:focus-within::before {
-                    transform: scaleY(1);
-                    transform-origin: bottom;
-                    transition: transform 0.25s ease-out;
+                header[data-ui-ready] .fill-anim:focus-visible::before {
+                    opacity: 1;
+                }
+                header[data-ui-ready] .fill-anim:hover::after,
+                header[data-ui-ready] .fill-anim:focus-visible::after {
+                    opacity: 1;
+                }
+                header[data-ui-ready] .fill-anim:hover::before-sheen,
+                header[data-ui-ready] .fill-anim:focus-visible::before-sheen {
+                    opacity: 1;
+                    transform: translateX(150%);
                 }
 
-                header[data-ui-ready] .fill-anim:not(:hover)::before {
-                    transform: scaleY(0);
-                    transform-origin: top;
-                    transition: transform 0.25s ease-in;
-                }
-
+                /* keep content above effects */
                 header[data-ui-ready] .fill-anim > * {
                     position: relative;
-                    z-index: 1;
+                    z-index: 2;
                 }
+
+                /* Reduced motion: disable swipe, keep static lift */
+                @media (prefers-reduced-motion: reduce) {
+                    header .fill-anim::before-sheen {
+                        transition: none !important;
+                        transform: none !important;
+                        opacity: 0 !important;
+                    }
+                }
+
             `}</style>
+
+
         </header>
     );
 }

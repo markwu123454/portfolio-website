@@ -419,12 +419,6 @@ export default function HomePage() {
                             Active Projects
                             <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
                         </h2>
-                        <Link
-                            href="/projects"
-                            className="text-sm text-white/70 hover:text-white/90 underline underline-offset-4"
-                        >
-                            View all
-                        </Link>
                     </div>
 
                     <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -441,9 +435,9 @@ export default function HomePage() {
                             <p className="mt-2 text-xs text-white/60"><span
                                 className="text-white/70">Current:</span> Waiting for fund allocation and hardware issue
                                 fixes.</p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 24, 2025 12:15</p>
+                            <p className="mt-1 text-xs text-white/50">Updated Aug 17, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[62%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[17%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/dronescape/uav"
@@ -463,11 +457,11 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with
                                 offline-first PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing for preseason end to end testing.
+                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing.
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 24, 2025 10:00</p>
+                            <p className="mt-1 text-xs text-white/50">Updated Aug 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[78%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket/scouting"
@@ -484,12 +478,12 @@ export default function HomePage() {
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Next.js serverless website.</p>
+                            <p className="mt-1 text-sm text-white/75">Next.js serverless website, this one :D</p>
                             <p className="mt-2 text-xs text-white/60"><span
                                 className="text-white/70">Current:</span> Preparing documentation for projects, standardizing theme.</p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 18, 2025 09:10</p>
+                            <p className="mt-1 text-xs text-white/50">Updated Aug 24, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[18%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[23%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/misc/portfolio"

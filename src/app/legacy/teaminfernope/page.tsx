@@ -409,8 +409,8 @@ function forceDirectedLayout(
         for (let i = 0; i < N; i++) {
             const ax = P[3 * i], ay = P[3 * i + 1], az = P[3 * i + 2];
             for (let j = i + 1; j < N; j++) {
-                let dx = P[3 * j] - ax, dy = P[3 * j + 1] - ay, dz = P[3 * j + 2] - az;
-                let d2 = dx * dx + dy * dy + dz * dz + 1e-9;
+                const dx = P[3 * j] - ax, dy = P[3 * j + 1] - ay, dz = P[3 * j + 2] - az;
+                const d2 = dx * dx + dy * dy + dz * dz + 1e-9;
                 // soften extremely close pairs
                 const inv = 1 / (d2);
                 const mag = kRepel * inv;
@@ -445,7 +445,7 @@ function forceDirectedLayout(
             for (let ii = 0; ii < k; ii++) {
                 const i = nu[ii];
                 let aix = P[3 * i] - ux, aiy = P[3 * i + 1] - uy, aiz = P[3 * i + 2] - uz;
-                let al = Math.hypot(aix, aiy, aiz) + 1e-9;
+                const al = Math.hypot(aix, aiy, aiz) + 1e-9;
                 aix /= al;
                 aiy /= al;
                 aiz /= al;
@@ -453,7 +453,7 @@ function forceDirectedLayout(
                 for (let jj = ii + 1; jj < k; jj++) {
                     const j = nu[jj];
                     let bjx = P[3 * j] - ux, bjy = P[3 * j + 1] - uy, bjz = P[3 * j + 2] - uz;
-                    let bl = Math.hypot(bjx, bjy, bjz) + 1e-9;
+                    const bl = Math.hypot(bjx, bjy, bjz) + 1e-9;
                     bjx /= bl;
                     bjy /= bl;
                     bjz /= bl;
@@ -490,7 +490,7 @@ function forceDirectedLayout(
                 let dx = P[3 * j] - ax,
                     dy = P[3 * j + 1] - ay,
                     dz = P[3 * j + 2] - az;
-                let d2 = dx * dx + dy * dy + dz * dz + 1e-12;
+                const d2 = dx * dx + dy * dy + dz * dz + 1e-12;
                 const d = Math.sqrt(d2);
                 if (d >= dMin) continue;
 

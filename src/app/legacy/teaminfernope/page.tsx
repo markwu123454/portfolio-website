@@ -740,10 +740,12 @@ function RushHourUnitStepExplorer() {
             setModel(model);
             const res = bfsExplore(model, start, Math.max(1, maxStates));
             setResult(res);
-        } catch (e: any) {
-            setResult(null);
-            setModel(null);
-            setError(e?.message ?? String(e));
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                setError(e.message);
+            } else {
+                setError(String(e));
+            }
         }
     }
 

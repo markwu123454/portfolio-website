@@ -1,10 +1,33 @@
 "use client";
 
+import UnderConstruction, { Stage } from "@/components/NotImplemented";
+
+export default function Page() {
+    const stages: Stage[] = [
+        { label: "Preparing", status: "done" },
+        { label: "Drafting", status: "done" },
+        { label: "Reviewing", status: "in_progress" },
+        { label: "Polishing", status: "in_progress" },
+    ];
+
+    return (
+        <UnderConstruction
+            name="Computed Aided Design"
+            stages={stages}
+            channelStatus="active"
+            preview={<CADPage />}
+        />
+    );
+}
+
+
+
+
 import Image from "next/image";
 import {useId, useState} from "react";
 import {ChevronDown} from "lucide-react";
 
-export default function CADPage() {
+function CADPage() {
     const [p1Open, setP1Open] = useState(false);
     const [p2Open, setP2Open] = useState(false);
     const p1Id = useId();
@@ -283,7 +306,7 @@ export default function CADPage() {
                                         <div className="md:col-span-3">
                                             <h4 className="text-lg font-semibold mb-1">Elevator</h4>
                                             <p className="mb-3 text-white/80">
-                                                4-stage, short-and-wide continuous elevator using Dyneema; 6:1 custom gearbox. Pivot motor for the arm shares the stack. Pocketed rails for mass reduction. ~135″ total extension.
+                                                4-stage, short-and-wide continuous elevator using Dyneema rope; 6:1 custom gearbox. Pivot motor for the arm shares the stack. Pocketed rails for mass reduction. ~135″ total extension.
                                             </p>
                                         </div>
                                         <div className="md:col-span-2">
@@ -325,11 +348,11 @@ export default function CADPage() {
                                             </div>
                                             <h4 className="text-lg font-semibold mb-1">Hand (end effector / multi-tool)</h4>
                                             <p className="mb-3 text-white/80">
-                                                Ground intake from any orientation; compact package. Holds coral in two orientations (L1 vs L2–L4). Can ground-intake and retain algae.
+                                                Ground intake from any orientation; compact package. Holds coral in two orientations (L1 vs L2–L4). Can ground-intake and scoree algae.
                                             </p>
                                             <ul className="mb-2 text-white/70 list-disc pl-5 text-sm">
-                                                <li>Tool-less belt swap; wrist service loop.</li>
-                                                <li>Hard stops at floor-pickup and high-score angles.</li>
+                                                <li>~300 degrees pivot.</li>
+                                                <li>Hard stops at floor-pickup.</li>
                                             </ul>
                                         </div>
                                         <div className="clear-both" />

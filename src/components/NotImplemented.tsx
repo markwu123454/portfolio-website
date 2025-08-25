@@ -102,7 +102,7 @@ export default function UnderConstruction({
             <GridGlow/>
 
             <section
-                className="relative z-10 mx-auto flex max-w-3xl flex-col gap-8 px-6 py-20 md:py-28 min-h-[calc(100vh-209px)] mt-24">
+                className="relative z-10 mx-auto flex max-w-3xl flex-col gap-8 px-6 pt-16 md:pt-20 min-h-[calc(100vh-209px)] mt-24">
                 <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center">
                     <div
                         className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] text-white/70 shadow-lg backdrop-blur ${statusCfg.ring}`}
@@ -182,36 +182,48 @@ export default function UnderConstruction({
                     </Link>
                 </div>
 
-                {passphrase && preview && (
+                {preview && (
                     <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur md:p-6">
                         <p className="mb-3 text-sm text-white/80">
-                            Developer preview available. Enter password to view.
+                            Developer preview available. {passphrase ? "Enter password to view." : "Click to view."}
                         </p>
                         <div className="flex flex-wrap items-center gap-3">
-                            <div className="relative">
-                                <input
-                                    id="preview-pass"
-                                    type={showPass ? "text" : "password"}
-                                    autoComplete="off"
-                                    value={typed}
-                                    onChange={(e) => setTyped(e.target.value)}
-                                    placeholder="Password"
-                                    className="w-64 rounded-xl border border-white/15 bg-black/40 px-3 py-2 pr-10 text-sm text-white placeholder-white/40 outline-none focus:ring-2 focus:ring-emerald-400/60"
-                                />
+                            {passphrase ? (
+                                <div className="relative">
+                                    <input
+                                        id="preview-pass"
+                                        type={showPass ? "text" : "password"}
+                                        autoComplete="off"
+                                        value={typed}
+                                        onChange={(e) => setTyped(e.target.value)}
+                                        placeholder="Password"
+                                        className="w-64 rounded-xl border border-white/15 bg-black/40 px-3 py-2 pr-10 text-sm text-white placeholder-white/40 outline-none focus:ring-2 focus:ring-emerald-400/60"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPass(!showPass)}
+                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80"
+                                    >
+                                        {showPass ? <EyeOff size={16}/> : <Eye size={16}/>}
+                                    </button>
+                                </div>
+                            ) : (
                                 <button
                                     type="button"
-                                    onClick={() => setShowPass(!showPass)}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80"
+                                    onClick={() => setUnlocked(true)}
+                                    className="rounded-xl border border-white/15 bg-black/40 px-4 py-2 text-sm text-white/80 hover:bg-white/10 focus:ring-2 focus:ring-emerald-400/60"
                                 >
-                                    {showPass ? <EyeOff size={16}/> : <Eye size={16}/>}
+                                    See Preview
                                 </button>
-                            </div>
-                            {typed && typed !== passphrase && (
+                            )}
+
+                            {passphrase && typed && typed !== passphrase && (
                                 <span className="text-xs text-red-400/90">Incorrect password.</span>
                             )}
                         </div>
                     </div>
                 )}
+
 
             </section>
         </main>

@@ -399,64 +399,69 @@ function forceDirectedLayout(
         }
     };
 
-    // Angle spreading: for each node u, for each neighbor pair (i,j), reduce dot(a,b)
-    // a, b are unit vectors along edges from u→i and u→j. Gradient approx:
-    //   F_i += -kAngle * dot(a,b) * b
-    //   F_j += -kAngle * dot(a,b) * a
-    //   F_u += - (F_i + F_j)   (action-reaction)
-    // Cap incident-edge spreading at >= angleCapDeg (default 90 or 89)
-    const angleCapDeg = 90;                         // set to 89 if you want slack
+    // Angle spreading: keep your <90° cap, plus a gentle "aim for 90°" nudge near orthogonality.
+    const angleCapDeg = 90; // repel if angle < cap
     const cosCap = Math.cos((angleCapDeg * Math.PI) / 180);
 
-    // OPTIONAL: gentle z-flattening to keep natural grids flat but still 3D
-    const kPlane = 0.0008;                          // set 0 to disable
+// NEW: near-orthogonality nudge
+// Apply only when |dot| <= orthoBand: this softly drives dot -> 0 (≈90°) from either side.
+// Pick small kOrtho; increase gradually if you need more structure.
+    const kOrtho = 0.02;     // strength of 90° nudge (very gentle)
+    const orthoBand = 0.30;  // act when |cosθ| ≤ 0.30  (≈ 72°–108° window)
 
     const angleSpreading = () => {
         for (let u = 0; u < N; u++) {
             const nu = nbrs[u];
             const ux = P[3 * u], uy = P[3 * u + 1], uz = P[3 * u + 2];
             const k = nu.length;
-            if (k < 2) {
-                if (kPlane) step(u, 0, 0, -kPlane * uz);  // light planar bias even for degree<2
-                continue;
-            }
+            if (k < 2) continue;
 
             for (let ii = 0; ii < k; ii++) {
                 const i = nu[ii];
                 let aix = P[3 * i] - ux, aiy = P[3 * i + 1] - uy, aiz = P[3 * i + 2] - uz;
                 const al = Math.hypot(aix, aiy, aiz) + 1e-9;
-                aix /= al;
-                aiy /= al;
-                aiz /= al;
+                aix /= al; aiy /= al; aiz /= al;
 
                 for (let jj = ii + 1; jj < k; jj++) {
                     const j = nu[jj];
                     let bjx = P[3 * j] - ux, bjy = P[3 * j + 1] - uy, bjz = P[3 * j + 2] - uz;
                     const bl = Math.hypot(bjx, bjy, bjz) + 1e-9;
-                    bjx /= bl;
-                    bjy /= bl;
-                    bjz /= bl;
+                    bjx /= bl; bjy /= bl; bjz /= bl;
 
-                    const dot = aix * bjx + aiy * bjy + aiz * bjz; // cosine between incident edges
+                    const dot = aix * bjx + aiy * bjy + aiz * bjz; // cos between incident edges
 
-                    // Only repel if the angle is LESS than the cap (cos larger than threshold)
-                    if (dot <= cosCap) continue;
+                    // 1) Keep your "< cap" repulsion (angle < 90° if cap=90)
+                    if (dot > cosCap) {
+                        const s = kAngle * (dot - cosCap);
+                        const fix = -s * bjx, fiy = -s * bjy, fiz = -s * bjz;
+                        const fjx = -s * aix, fjy = -s * aiy, fjz = -s * aiz;
 
-                    // Push i along -b and j along -a, proportional to (dot - cosCap)
-                    const s = kAngle * (dot - cosCap);
-                    const fix = -s * bjx, fiy = -s * bjy, fiz = -s * bjz;
-                    const fjx = -s * aix, fjy = -s * aiy, fjz = -s * aiz;
+                        step(i, fix, fiy, fiz);
+                        step(j, fjx, fjy, fjz);
+                        step(u, -(fix + fjx), -(fiy + fjy), -(fiz + fjz));
+                        continue;
+                    }
 
-                    step(i, fix, fiy, fiz);
-                    step(j, fjx, fjy, fjz);
-                    step(u, -(fix + fjx), -(fiy + fjy), -(fiz + fjz)); // conserve momentum
+                    // 2) NEW: near-orthogonality nudge (pull dot toward 0 when close to 90°)
+                    // Gradient of (1/2)*dot^2 wrt directions gives forces:
+                    //   F_i += -kOrtho * dot * b
+                    //   F_j += -kOrtho * dot * a
+                    //   F_u += -(F_i + F_j)
+                    const absDot = Math.abs(dot);
+                    if (absDot <= orthoBand) {
+                        const s = kOrtho * dot; // sign matters: pushes dot toward 0 from either side
+                        const fix = -s * bjx, fiy = -s * bjy, fiz = -s * bjz;
+                        const fjx = -s * aix, fjy = -s * aiy, fjz = -s * aiz;
+
+                        step(i, fix, fiy, fiz);
+                        step(j, fjx, fjy, fjz);
+                        step(u, -(fix + fjx), -(fiy + fjy), -(fiz + fjz));
+                    }
                 }
             }
-
-            // gentle planar bias after handling pairs
-            if (kPlane) step(u, 0, 0, -kPlane * uz);
         }
     };
+
 
     // Minimum allowed distance between nodes
     const dMin = 3;      // adjust to taste
@@ -577,7 +582,8 @@ function RushHourUnitStepExplorer() {
     const [result, setResult] = useState<ExploreResult | null>(null);
     const [model, setModel] = useState<BoardModel | null>(null);
     const [sel, setSel] = useState<{ r: number; c: number } | null>(null);
-    const [size, setSize] = useState<{ h: number; w: number }>({ h: H || 6, w: W || 6 });
+    const [size, setSize] = useState<{ h: number; w: number }>({ h: H || 6, w: W || 6 })
+    const [allowed, setAllowed] = useState<Set<string>>(new Set());
 
     // --- viz controls ---
     const [vizDepth, setVizDepth] = useState<number>(16);
@@ -777,7 +783,7 @@ function RushHourUnitStepExplorer() {
 
     // --- layout ---
     return (
-        <div className="mx-auto max-w-[1400px] p-6 mt-24">
+        <div className="mx-auto max-w-[1400px] p-6 pt-24">
             <h1 className="text-2xl font-bold mb-4">State-Space + Explorer (Rush Hour)</h1>
 
             {/* Desktop-first: 3 columns on lg */}
@@ -824,16 +830,65 @@ function RushHourUnitStepExplorer() {
                         {grid.map((row, r) =>
                             row.map((ch, c) => {
                                 const isSel = sel && sel.r === r && sel.c === c;
-                                const bg = ch === "." && isSel ? "#fde68a" : colorForId(ch);
+                                const isAllowed = allowed.has(`${r}-${c}`);
+                                const bg =
+                                    ch === "." && isSel ? "#fde68a" :
+                                        ch === "." && isAllowed ? "#fef3c7" :
+                                            colorForId(ch);
+
                                 return (
                                     <div
                                         key={`${r}-${c}`}
-                                        onClick={() => onCellClick(r, c)}
+                                        onClick={() => {
+                                            // --- DELETE path: clicking a non-empty cell always triggers your handler immediately
+                                            if (grid[r][c] !== ".") {
+                                                onCellClick(r, c);          // your existing delete logic
+                                                // also clear any pending selection/highlights
+                                                setSel(null);
+                                                setAllowed(new Set());
+                                                return;
+                                            }
+
+                                            // --- PLACE path
+                                            // First click: start selection from an empty cell and compute allowed targets inline
+                                            if (!sel) {
+                                                const ok = new Set<string>();
+                                                // left
+                                                for (let cc = c - 1; cc >= 0; cc--) {
+                                                    if (grid[r][cc] !== ".") break;
+                                                    ok.add(`${r}-${cc}`);
+                                                }
+                                                // right
+                                                for (let cc = c + 1; cc < grid[0].length; cc++) {
+                                                    if (grid[r][cc] !== ".") break;
+                                                    ok.add(`${r}-${cc}`);
+                                                }
+                                                // up
+                                                for (let rr = r - 1; rr >= 0; rr--) {
+                                                    if (grid[rr][c] !== ".") break;
+                                                    ok.add(`${rr}-${c}`);
+                                                }
+                                                // down
+                                                for (let rr = r + 1; rr < grid.length; rr++) {
+                                                    if (grid[rr][c] !== ".") break;
+                                                    ok.add(`${rr}-${c}`);
+                                                }
+                                                setSel({ r, c });
+                                                setAllowed(ok);
+                                                return;
+                                            }
+
+                                            // Second click: place only if clicking a highlighted empty cell; otherwise cancel
+                                            if (allowed.has(`${r}-${c}`)) onCellClick(r, c);
+                                            setSel(null);
+                                            setAllowed(new Set());
+                                        }}
                                         className={`aspect-square rounded-md border flex items-center justify-center cursor-pointer ${
                                             ch === "." ? "border-dashed" : "border-solid"
-                                        }`}
-                                        style={{ background: bg }}
+                                        } ${isAllowed ? "ring-1 ring-amber-300/70" : ""}`}
+                                        style={{ background: bg, opacity: isAllowed? 0.3 : 1 }}
                                         title={`(${r},${c}) ${ch === "." ? "empty" : ch}`}
+                                        data-allowed={isAllowed ? "1" : "0"}
                                     >
                                         <span className="text-xs font-mono opacity-60">{ch === "." ? "" : ch}</span>
                                     </div>
@@ -842,11 +897,13 @@ function RushHourUnitStepExplorer() {
                         )}
                     </div>
 
+
+
                     {/* Text + Explore trigger */}
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Board text</label>
                         <textarea
-                            className="w-full h-40 font-mono text-sm p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring"
+                            className="w-full h-15 font-mono text-sm p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring"
                             value={boardText}
                             onChange={(e) => {
                                 const v = e.target.value;
@@ -867,7 +924,7 @@ function RushHourUnitStepExplorer() {
                             <button
                                 onClick={handleExplore}
                                 className="ml-auto inline-flex items-center gap-2 p-3 rounded-xl
-               bg-emerald-600 text-white font-semibold text-sm shadow-md
+              bg-emerald-600 text-white font-semibold text-sm shadow-md
                hover:bg-emerald-500 active:bg-emerald-700
                focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2
                transition-colors"
@@ -1034,24 +1091,23 @@ function RushHourUnitStepExplorer() {
                         {!result || selectedNode == null ? (
                             <div className="text-xs text-gray-500">No node selected.</div>
                         ) : (
-                            <div className="grid grid-cols-2 gap-2">
-                                {neighborsOf(selectedNode).slice(0, 12).map((nIdx) => (
-                                    <button
-                                        key={nIdx}
-                                        onClick={() => jumpToNode(nIdx, "extend")}
-                                        className="rounded-lg border hover:shadow-sm transition"
-                                        title={`Go to node ${nIdx}`}
-                                    >
-                                        <MiniBoard model={model!} state={result.states[nIdx]} />
-                                    </button>
-                                ))}
-                                {neighborsOf(selectedNode).length === 0 && (
-                                    <div className="text-xs text-gray-500 col-span-2">No outgoing moves.</div>
-                                )}
+                            <div className="max-h-114 overflow-y-auto">
+                                <div className="grid grid-cols-2 gap-2">
+                                    {neighborsOf(selectedNode).map((nIdx) => (
+                                        <button
+                                            key={nIdx}
+                                            onClick={() => jumpToNode(nIdx, "extend")}
+                                            className="rounded-lg border hover:shadow-sm transition"
+                                            title={`Go to node ${nIdx}`}
+                                        >
+                                            <MiniBoard model={model!} state={result.states[nIdx]} />
+                                        </button>
+                                    ))}
+                                    {neighborsOf(selectedNode).length === 0 && (
+                                        <div className="text-xs text-gray-500 col-span-2">No outgoing moves.</div>
+                                    )}
+                                </div>
                             </div>
-                        )}
-                        {result && neighborsOf(selectedNode ?? 0).length > 12 && (
-                            <div className="text-[11px] text-gray-500">…more neighbors not shown</div>
                         )}
                     </div>
                 </section>

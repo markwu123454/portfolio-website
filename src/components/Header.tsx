@@ -50,6 +50,7 @@ const NAV: NavItem[] = [
             heading: "OTHER PROJECTS",
             links: [
                 {label: "Portfolio website(this)", href: "/misc/portfolio"},
+                {label: "Random little things", href: "/misc/random"},
             ],
             blurb: "A list of other smaller projects or ones I contributed less."
         }
@@ -207,8 +208,8 @@ export function Header() {
                 {/* Logo */}
                 <Link href="/"
                       className="flex items-center gap-2 font-semibold flex-shrink-0 fill-anim pl-4 h-full self-stretch pr-6">
-                    <div
-                        className="relative h-6 w-6 rounded-md bg-gradient-to-tr from-cyan-400 via-fuchsia-400 to-emerald-300">
+                        <div
+                            className="relative h-6 w-6 rounded-md bg-gradient-to-tr from-cyan-400 via-fuchsia-400 to-emerald-300">
                         <span aria-hidden
                               className="absolute inset-0 rounded-md blur-sm opacity-70 bg-gradient-to-tr from-cyan-400 via-fuchsia-400 to-emerald-300"/>
                     </div>
@@ -323,7 +324,11 @@ export function Header() {
                 {/* corner bloom */}
                 <span
                     aria-hidden
-                    className="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-gradient-to-tr from-fuchsia-400 via-violet-400 to-cyan-400 blur-3xl opacity-20"
+                    className="pointer-events-none absolute -right-14 -top-24 h-48 w-48 rounded-full bg-gradient-to-tr from-fuchsia-400 via-violet-400 to-cyan-400 blur-3xl opacity-30"
+                />
+                <span
+                    aria-hidden
+                    className="pointer-events-none absolute -left-14 -bottom-4 h-48 w-48 rounded-full bg-gradient-to-tr from-blue-400 via-cyan-400 to-teal-400 blur-3xl opacity-30"
                 />
 
                 <div className="mx-auto max-w-7xl px-6 py-10">

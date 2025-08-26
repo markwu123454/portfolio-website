@@ -93,7 +93,6 @@ export function Footer() {
 
             {/* reduced motion: disable the effect */}
             <style
-                // eslint-disable-next-line react/no-danger
                 dangerouslySetInnerHTML={{
                     __html: `
           @media (prefers-reduced-motion: reduce) {

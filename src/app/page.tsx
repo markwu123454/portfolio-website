@@ -457,7 +457,7 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with
                                 offline-first PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing.
+                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing. Migrating database from local PostGre to Neon PostGre.
                             </p>
                             <p className="mt-1 text-xs text-white/50">Updated Aug 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">

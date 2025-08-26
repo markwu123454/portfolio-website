@@ -29,8 +29,8 @@ export default function ContactPage() {
                             className="mx-auto mb-4 h-10 w-10 rounded-xl bg-white/5 backdrop-blur-sm ring-1 ring-white/10 flex items-center justify-center">
                             {/* tiny neon accent bar */}
                             <span className="relative block h-3 w-3 rounded-[4px] bg-cyan-400">
-                <span className="absolute inset-0 rounded-[4px] blur-[6px] bg-cyan-400/70"/>
-                </span>
+                                <span className="absolute inset-0 rounded-[4px] blur-[6px] bg-cyan-400/70"/>
+                            </span>
                         </div>
                         <h1 className="text-4xl font-semibold tracking-tight">Let’s Connect</h1>
                         <p className="mt-2 text-zinc-400">
@@ -95,7 +95,7 @@ function ContactCard({
             {/* gradient top border accent */}
             <span
                 aria-hidden
-                className={`pointer-events-none absolute inset-x-0 top-0 h-px w-full bg-gradient-to-r ${accent} opacity-70`}
+                className={`pointer-events-none absolute inset-x-0 top-0 h-0.5 w-full bg-gradient-to-r ${accent} opacity-70`}
             />
 
             {/* neon corner sweep */}

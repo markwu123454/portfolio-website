@@ -294,7 +294,7 @@ function Stars() {
                     x: Math.random() * W,
                     y: Math.random() * H,
                     r,
-                    s: (r * (Math.random() * 0.6 + 0.8)) * 0.5,
+                    s: (r * (Math.random() * 0.4 + 1.0)) * 0.5,
                     tw: Math.random() * Math.PI * 2,
                 });
             }

@@ -2,29 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import UnderConstruction, { Stage } from "@/components/NotImplemented";
 import { demos, demoList, type DemoSlug } from "./registry";
 import type { DemoModule } from "./registry";
 
-export default function Notdone() {
-    const stages: Stage[] = [
-        { label: "Preparing", status: "in_progress" },
-        { label: "Drafting", status: "in_progress" },
-        { label: "Reviewing", status: "in_progress" },
-        { label: "Polishing", status: "todo" },
-    ];
-
-    return (
-        <UnderConstruction
-            name="Little Things"
-            stages={stages}
-            channelStatus="active"
-            preview={<Page />}
-        />
-    );
-}
-
-function Page() {
+export default function Page() {
     const [items, setItems] = useState<Array<{ slug: DemoSlug; mod: DemoModule }>>([]);
 
     useEffect(() => {

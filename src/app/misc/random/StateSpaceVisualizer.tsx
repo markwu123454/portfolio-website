@@ -1184,10 +1184,34 @@ function renderState(model: BoardModel, state: number[]): string[] {
 }
 
 
+const Preview1x1: React.FC = () => {
+    const g = textToGrid(SAMPLE);                 // or any board text you want
+    const H = g.length;
+    const W = g[0]?.length ?? 0;
 
+    return (
+        <div className="aspect-square w-full rounded-xl border overflow-hidden p-1">
+            <div
+                className="grid h-full w-full gap-[2px]"
+                style={{ gridTemplateColumns: `repeat(${W}, 1fr)`, gridTemplateRows: `repeat(${H}, 1fr)` }}
+            >
+                {g.map((row, r) =>
+                    row.map((ch, c) => (
+                        <div
+                            key={`${r}-${c}`}
+                            className={`rounded-[3px] border ${ch === "." ? "border-dashed" : "border-solid"}`}
+                            style={{ background: ch === "." ? "transparent" : colorForId(ch) }}
+                            aria-hidden
+                        />
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
 
 const Page: React.FC = () => <RushHourUnitStepExplorer/>;
-const preview = <span>State space preview</span>;
+const preview = <Preview1x1/>;
 
 export const title = "State Space Visualizer";
 export const description = "Explore state transitions in a board of a game of Rush Hour.";

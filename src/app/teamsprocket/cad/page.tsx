@@ -64,7 +64,7 @@ export default function CADPage() {
                         />
                     </div>
                     <h3 className="mt-4 text-lg font-semibold">Final assembly snapshot</h3>
-                    <p className="mt-1 text-sm text-white/70">Representative layout before late-season optimizations.</p>
+                    <p className="mt-1 text-sm text-white/70">Lastest cad of our robot before world championships.</p>
                 </Card>
 
                 <Card className="md:col-span-5">
@@ -159,6 +159,11 @@ export default function CADPage() {
                                 Long carbon arm, differentially driven via elevator (no dedicated pivot motor). Handles coral + algae.
                             </p>
                         </Subsys>
+                        <BadTake label="What's bad about this design" points={[
+                            "Intake geometry deviate a lot from the reference, thus making it untested.",
+                            "Elevator carriage and integration with arm not finished.",
+                            "No climb.",
+                        ]}/>
                     </PracticeBlock>
 
                     <PracticeBlock
@@ -190,6 +195,12 @@ export default function CADPage() {
                                 <InlineImg src="/solidworks/{C2655D9F-F9C1-43DC-A1BF-22620025D351}.png" alt="End effector" />
                             </div>
                         </Subsys>
+                        <BadTake label="What's bad about this design" points={[
+                            "Overreliance on programming to intake(requires manual indexing to take coral at all), which requires 4 beambreak and a fairly complex algorithm.",
+                            "Pivot's shaft is an unrealistic 0.5in hex shaft.",
+                            "No electronics apart from motors included.",
+                            "No climb.",
+                        ]}/>
                     </PracticeBlock>
                 </div>
             </section>

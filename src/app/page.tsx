@@ -23,10 +23,19 @@ const LOGOS = [
     "/logo/git.png",
     "/logo/fusion360.png",
     "/logo/fastapi.png",
+    "/logo/onshape.png",
 ] as const;
 
 // 2) Per-logo JSX detail (keys = filename sans extension)
 const detailByKey: Record<string, JSX.Element> = {
+    onshape: (
+        <div className="p-5">
+            <h3 className="font-semibold">Onshape</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Browser based CAD software, used in various smaller projects.
+            </p>
+        </div>
+    ),
     tensorflow: (
         <div className="p-5">
             <h3 className="font-semibold">TensorFlow</h3>
@@ -480,10 +489,10 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">Next.js serverless website, this one :D</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing documentation for projects, standardizing theme.</p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 24, 2025</p>
+                                className="text-white/70">Current:</span> Preparing documentation for projects.</p>
+                            <p className="mt-1 text-xs text-white/50">Updated Aug 30, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[23%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[26%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/misc/portfolio"

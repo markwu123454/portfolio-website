@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import JsonLd from "@/components/JsonLD";
 import {JSX, useEffect, useMemo, useRef, useState} from "react";
-import {ArrowDown} from "lucide-react"
+import {ArrowDown, ArrowRight} from "lucide-react"
 
 // 1) Hardcode your PNGs (filenames in /public/logo)
 const LOGOS = [
@@ -286,11 +286,22 @@ export default function HomePage() {
 
             {/* atmospherics */}
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-                <div className="absolute inset-0 opacity-[0.050] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]" />
+                {/* existing radial blobs */}
+                <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]" />
+                {/* aurora ribbons */}
+                <div className="absolute inset-0 mix-blend-screen opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]">
+                    <div className="absolute -inset-x-10 top-0 h-[120vh] blur-3xl
+      bg-[conic-gradient(from_90deg_at_50%_20%,#22d3ee33,transparent_30%,#a78bfa33,transparent_70%)]
+      animate-[slow-spin_60s_linear_infinite]"/>
+                </div>
+                {/* grid */}
                 <div className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
                     <div className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:48px_48px]" />
                 </div>
+                {/* noise */}
+                <div className="absolute inset-0 opacity-[0.04] [background-image:radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:3px_3px]" />
             </div>
+
 
             <main className="container mx-auto">
 
@@ -302,9 +313,14 @@ export default function HomePage() {
 
 
                     <div className="max-w-5xl">
-                        <h1 id="hero-heading" className="text-6xl md:text-7xl font-extrabold tracking-tight">
+                        <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight
+  bg-[linear-gradient(90deg,theme(colors.cyan.300),white,theme(colors.violet.300),white,theme(colors.cyan.300))]
+  bg-clip-text text-transparent
+  [background-size:200%_100%] animate-[bg-pan_8s_linear_infinite]
+  drop-shadow-[0_0_24px_rgba(167,139,250,0.25)]">
                             Hi! I&apos;m Mark.
                         </h1>
+
                         <p className="mt-4 text-lg text-white/80 max-w-prose">
                             I build robots and apps.
                         </p>
@@ -442,9 +458,8 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Waiting for fund allocation and hardware issue
-                                fixes.</p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 17, 2025</p>
+                                className="text-white/70">Current:</span> Fixing hardware issues and preparing for club rush display.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Aug 31, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[17%] rounded-full bg-white/60"/>
                             </div>
@@ -466,9 +481,9 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with
                                 offline-first PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing. Migrating database from local PostGre to Neon PostGre.
+                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing.
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 18, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Aug 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
@@ -487,10 +502,10 @@ export default function HomePage() {
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Next.js serverless website, this one :D</p>
+                            <p className="mt-1 text-sm text-white/75">Next.js website I use to document my projects, this one :D</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing documentation for projects.</p>
-                            <p className="mt-1 text-xs text-white/50">Updated Aug 30, 2025</p>
+                                className="text-white/70">Current:</span> Preparing documentation for FRC scouting app, preparing to start documenting dronescape.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Aug 30, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[26%] rounded-full bg-white/60"/>
                             </div>
@@ -549,24 +564,164 @@ function SectionTitle({children}: { children: React.ReactNode }) {
     );
 }
 
-function FeaturedCard({
-                          title,
-                          href,
-                          children,
-                      }: { title: string; href: string; children: React.ReactNode }) {
+type FeaturedCardProps = {
+    title: string;
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+};
+
+function FeaturedCard({ title, href, children, className }: FeaturedCardProps) {
+    const id = title.toLowerCase().replace(/\s+/g, "-");
     return (
-        <div className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10
-                    shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition
-                    hover:bg-white/[0.07] hover:shadow-[0_14px_40px_-18px_rgba(0,0,0,0.6)]">
-            <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-            <p className="mt-2 text-sm md:text-base text-white/75">{children}</p>
+        <article
+            className={[
+                "group relative rounded-2xl p-5 md:p-6 overflow-hidden",
+                // glass base
+                "bg-white/[0.04] backdrop-blur",
+                // gradient ring (outer)
+                "ring-1 ring-white/10",
+                // inner highlight ring
+                "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]",
+                // lift + scale
+                "transition-transform duration-300 will-change-transform",
+                "hover:-translate-y-0.5 hover:scale-[1.01]",
+                className ?? "",
+            ].join(" ")}
+            aria-labelledby={`${id}-title`}
+        >
+            {/* gradient border overlay */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-2xl opacity-90"
+                // subtle cyan→violet animated border via masked background
+                style={{
+                    background:
+                        "linear-gradient(135deg, rgba(34,211,238,0.25), rgba(167,139,250,0.25)) border-box",
+                    WebkitMask:
+                        "linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                    border: "1px solid transparent",
+                }}
+            />
+
+            {/* sheen sweep */}
+            <div
+                aria-hidden
+                className="absolute inset-0 -translate-x-full opacity-0 transition-transform duration-700 ease-out
+                   group-hover:translate-x-full group-hover:opacity-100"
+                style={{
+                    background:
+                        "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.08), transparent 70%)",
+                }}
+            />
+
+            {/* soft glow on hover */}
+            <div
+                aria-hidden
+                className="absolute -inset-8 rounded-[28px] opacity-0 blur-2xl transition
+                   group-hover:opacity-40"
+                style={{
+                    background:
+                        "radial-gradient(40% 40% at 50% 0%, rgba(167,139,250,0.20), transparent 60%), radial-gradient(40% 40% at 0% 100%, rgba(34,211,238,0.18), transparent 60%)",
+                }}
+            />
+
+            <h3 id={`${id}-title`} className="text-lg md:text-xl font-semibold tracking-tight">
+                {title}
+            </h3>
+
+            <p className="mt-2 text-sm md:text-base text-white/75 transition-transform duration-300 group-hover:-translate-y-0.5">
+                {children}
+            </p>
+
+            <div className="mt-4 flex items-center justify-between">
+                <Link
+                    href={href}
+                    aria-describedby={`${id}-title`}
+                    className="relative inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5
+                     border border-white/15 bg-black/40 hover:bg-white/15
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                >
+                    See more
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                </Link>
+
+                {/* optional tiny badge; remove if unwanted */}
+                <span className="text-[11px] px-2 py-1 rounded-lg bg-white/5 ring-1 ring-white/10 text-white/60">
+          Project
+        </span>
+            </div>
+
+            {/* make whole card clickable without duplicate focus targets */}
             <Link
                 href={href}
-                className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5
-                   border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                aria-label={title}
+                className="absolute inset-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                tabIndex={-1}
+            />
+        </article>
+    );
+}
+
+function SpiralBackground() {
+    // Spiral params: r = a * e^(bθ)
+    const arms = 3;            // 2–4 look best
+    const turns = 2.6;         // how many revolutions per arm
+    const a = 1.6;
+    const b = 0.22;
+    const steps = 900;
+
+    const makeSpiralPath = () => {
+        const T = 2 * Math.PI * turns;
+        const rMax = a * Math.exp(b * T);
+        const scale = 480 / rMax; // fit to viewBox 1000x1000
+        let d = "";
+        for (let i = 0; i <= steps; i++) {
+            const t = (i / steps) * T;
+            const r = a * Math.exp(b * t) * scale;
+            const x = 500 + r * Math.cos(t);
+            const y = 500 + r * Math.sin(t);
+            d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+        }
+        return d;
+    };
+
+    const pathD = makeSpiralPath();
+
+    return (
+        <div className="absolute inset-0 pointer-events-none mix-blend-screen opacity-65 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]">
+            <svg
+                viewBox="0 0 1000 1000"
+                className="absolute -inset-x-24 top-[-10%] h-[150vh] w-[130vw] animate-[spin_55s_linear_infinite]"
+                preserveAspectRatio="xMidYMid slice"
             >
-                See more →
-            </Link>
+                <defs>
+                    {/* soft glow */}
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="6" />
+                    </filter>
+
+                    {/* stroke gradient across the canvas */}
+                    <linearGradient id="armGrad" x1="0" y1="0" x2="1000" y2="1000" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%"  stopColor="#22d3ee" stopOpacity="0.85" />
+                        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.55" />
+                        <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.85" />
+                    </linearGradient>
+                </defs>
+
+                <g filter="url(#glow)">
+                    {Array.from({ length: arms }).map((_, i) => (
+                        <g key={i} transform={`rotate(${(360 / arms) * i} 500 500)`}>
+                            {/* wide, faint halo */}
+                            <path d={pathD} fill="none" stroke="url(#armGrad)" strokeWidth={24} strokeLinecap="round" opacity={0.25} />
+                            {/* crisp arm */}
+                            <path d={pathD} fill="none" stroke="url(#armGrad)" strokeWidth={10} strokeLinecap="round" opacity={0.9} />
+                        </g>
+                    ))}
+                </g>
+            </svg>
         </div>
     );
 }

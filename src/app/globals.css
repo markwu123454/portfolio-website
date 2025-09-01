@@ -52,3 +52,10 @@ body {
 
 
 
+@keyframes bg-pan { 0%{background-position:0% 50%} 100%{background-position:200% 50%} }
+
+@keyframes slow-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+    .group:hover { transform: none !important; }
+}

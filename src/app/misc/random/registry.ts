@@ -13,6 +13,8 @@ type DemoRegistry = Record<string, DemoLoader>;
 export const demos: DemoRegistry = {
     StateSpace: () =>
         import("./StateSpaceVisualizer").then((m: { default: DemoModule }) => m.default),
+    YoutubePlayer: () =>
+        import("./YoutubePlayer").then((m: { default: DemoModule }) => m.default),
 };
 
 export type DemoSlug = keyof typeof demos;

@@ -337,9 +337,8 @@ export default function HomePage() {
                                 planning, terrain mapping.
                             </FeaturedCard>
 
-                            <FeaturedCard title="FRC Scouting App" href="/teamsprocket/scouting">
-                                React + FastAPI platform for match data and analytics. Offline-first PWA, HTTPS sync,
-                                ML-powered data processor.
+                            <FeaturedCard title="FRC - Team Sprocket" href="/teamsprocket">
+                                A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do CAD and scouting app.
                             </FeaturedCard>
 
                             {/*<div className="rounded-2xl p-5 md:p-6 border border-dashed border-white/10 text-white/60">

@@ -2,6 +2,8 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Player = YT.Player;
+import type {DemoModule} from "@/app/misc/random/registry";
+import Image from "next/image"
 
 // --- helpers ---
 function parseYouTubeId(input: string): string | null {
@@ -110,7 +112,7 @@ declare global {
     }
 }
 
-export default function Page() {
+function YoutubePlayer() {
     const [playlist, setPlaylist] = useState<Item[]>([]);
     const [current, setCurrent] = useState(0);
     const [input, setInput] = useState("");
@@ -396,7 +398,7 @@ export default function Page() {
     return (
         <div className="min-h-[100dvh] bg-black text-gray-200 p-4 md:p-6 lg:p-8 flex flex-col gap-4 mt-24">
             <h1 className="text-2xl font-bold text-white">
-                YouTube Playlist <span className="text-xs text-gray-400 align-middle ml-2">[{mode}]</span>
+                YouTube Playlist
             </h1>
 
             <div className="flex flex-col gap-2 md:flex-row md:items-end md:gap-3">
@@ -533,9 +535,9 @@ export default function Page() {
             </div>
 
             <ul className="text-xs text-gray-500 list-disc pl-5">
-                <li>Autoplay respects per-item start/end; enforced by a PLAYING-state seek + end timer.</li>
-                <li>Manual controls: play/pause/stop, prev/next, seek, volume, mute.</li>
-                <li>Times accept seconds or mm:ss / hh:mm:ss formats.</li>
+                <li>A simple youtube playlist player.</li>
+                <li>Uses local storage so no data is collected whatsoever.</li>
+                <li>No ads.</li>
             </ul>
         </div>
     );
@@ -578,3 +580,13 @@ function EditRow({ item, onCancel, onSave }: { item: Item; onCancel: () => void;
         </div>
     );
 }
+
+
+const Page: React.FC = () => <YoutubePlayer/>;
+const preview = <Image src="/youtube.png" height="100" width="100" alt="youtube logo"/>;
+
+export const title = "Youtube Player";
+export const description = "A youtube video player because I can't find any good ones online.";
+
+const mod: DemoModule = { title, description, preview, Page };
+export default mod;

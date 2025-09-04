@@ -26,7 +26,7 @@ export default function SprocketPage() {
             <main className="mx-auto w-full max-w-7xl px-6 py-16 mt-16">
                 {/* Header */}
                 <header className="mb-10">
-                    <h1 className="mt-3 text-4xl font-bold tracking-tight">Team Sprocket</h1>
+                    <h1 className="mt-3 text-5xl font-bold tracking-tight">Team Sprocket</h1>
                     <p className="mt-3 max-w-2xl text-white/75">
                         A FIRST Robotics Competition team located in Diamond Bar High School, in LA.
                     </p>
@@ -42,7 +42,18 @@ export default function SprocketPage() {
                     </div>
                 </section>
 
+                <section aria-labelledby="summary" className="mb-12">
+                    <h2 id="summary" className="sr-only">My Roles</h2>
+                    <h2 className="p-3 font-bold text-3xl">My Responsibilities</h2>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <Stat label="CAD" value="Varsity Robot CAD"/>
+                        <Stat label="Programming" value="Scouting App"/>
+                    </div>
+                </section>
+
+                <h2 className="p-3 font-bold text-3xl">Seasons</h2>
                 <section className="mb-16 flex items-center gap-6">
+
                     <Image src="/2025_logo_animation.gif" alt="ReefScape logo animated" width="200" height="200"/>
                     <div>
                         <h2 className="text-4xl font-bold">ReefScape</h2>

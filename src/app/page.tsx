@@ -322,7 +322,7 @@ export default function HomePage() {
                         </h1>
 
                         <p className="mt-4 text-lg text-white/80 max-w-prose">
-                            I build robots and apps.
+                            I build robots and software.
                         </p>
                     </div>
 

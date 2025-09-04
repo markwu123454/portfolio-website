@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import {useId, useState} from "react";
+import {ChevronDown, ChevronRight} from "lucide-react";
 
 /**
  * CAD – Case Study Page (dark, card-driven, fast)
@@ -15,9 +15,12 @@ export default function SprocketPage() {
     return (
         <>
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-                <div className="absolute inset-0 opacity-[0.20] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]" />
-                <div className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
-                    <div className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.2)_1px,transparent_1px)] bg-[size:48px_48px]" />
+                <div
+                    className="absolute inset-0 opacity-[0.20] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]"/>
+                <div
+                    className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
+                    <div
+                        className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.2)_1px,transparent_1px)] bg-[size:48px_48px]"/>
                 </div>
             </div>
             <main className="mx-auto w-full max-w-7xl px-6 py-16 mt-16">
@@ -33,23 +36,45 @@ export default function SprocketPage() {
                 <section aria-labelledby="summary" className="mb-12">
                     <h2 id="summary" className="sr-only">Summary</h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <Stat label="My Role" value="CAD Subteam member" hint="Competition Robot CAD and Scouting App" />
-                        <Stat label="Seasons Survived Personally" value="1" hint="ReefScape" />
-                        <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds" />
+                        <Stat label="My Role" value="CAD Subteam member" hint="Competition Robot CAD and Scouting App"/>
+                        <Stat label="Seasons Survived Personally" value="1" hint="ReefScape"/>
+                        <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds"/>
                     </div>
                 </section>
 
-                <section className="mb-16">
-                    <h2 className="text-4xl font-bold">ReefScape</h2>
-                    <p className="mt-2 text-lg text-white/70">
-                        First Dive(2024-25)
-                    </p>
-                    <p className="mt-2 text-sm text-white/70">
-                        Competitions: Orange County Regional(3-9-0), Central Valley Regional(5-6-0), World Championships(6-4-0), SoCal ShowDown(Oct 11-12)
-                    </p>
+                <section className="mb-16 flex items-center gap-6">
+                    <Image src="/2025_logo_animation.gif" alt="ReefScape logo animated" width="200" height="200"/>
+                    <div>
+                        <h2 className="text-4xl font-bold">ReefScape</h2>
+                        <p className="mt-2 text-lg text-white/70">
+                            First Dive(2024-25)
+                        </p>
+                        <p className="mt-2 text-sm text-white/70">
+                            Competitions: Orange County Regional(3-9-0), Central Valley Regional(5-6-0), World
+                            Championships Hopper Division(6-4-0), SoCal ShowDown(Oct 11-12)
+                        </p>
+                        <p className="mt-2 text-sm text-white/70">
+                            Awards: Regional FIRST Impact Award @ OCR, Imagery Award in honor of Jack Kamen @ CVR
+                        </p>
+                    </div>
                 </section>
 
-
+                <section className="mb-16 flex items-center gap-6">
+                    <Image src="/2026_logo_animation.gif" alt="Rebuilt logo animated" width="200" height="200"
+                           className="bg-white rounded-2xl"/>
+                    <div>
+                        <h2 className="text-4xl font-bold">Rebuilt</h2>
+                        <p className="mt-2 text-lg text-white/70">
+                            First Age(2025-26)
+                        </p>
+                        <p className="mt-2 text-sm text-white/70">
+                            Competitions: TBD
+                        </p>
+                        <p className="mt-2 text-sm text-white/70">
+                            Awards: TBD
+                        </p>
+                    </div>
+                </section>
             </main>
         </>
     );
@@ -71,7 +96,7 @@ function Card({
     );
 }
 
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Stat({label, value, hint}: { label: string; value: string; hint?: string }) {
     return (
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <div className="text-xs uppercase tracking-wide text-white/60">{label}</div>
@@ -94,12 +119,12 @@ function Shot({
         ratio === "16/10" ? "aspect-[16/10]" : ratio === "4/5" ? "aspect-[4/5]" : "aspect-square";
     return (
         <div className={`relative overflow-hidden rounded-xl border border-white/10 ${ratioClass}`}>
-            <Image src={src} alt={alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+            <Image src={src} alt={alt} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover"/>
         </div>
     );
 }
 
-function InlineImg({ src, alt }: { src: string; alt: string }) {
+function InlineImg({src, alt}: { src: string; alt: string }) {
     return (
         <Image
             src={src}
@@ -111,11 +136,11 @@ function InlineImg({ src, alt }: { src: string; alt: string }) {
     );
 }
 
-function SpecList({ title, items }: { title: string; items: string[] }) {
+function SpecList({title, items}: { title: string; items: string[] }) {
     return (
         <div className="mt-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold">
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-4 w-4"/>
                 {title}
             </div>
             <ul className="space-y-1 text-sm text-white/75">
@@ -156,7 +181,7 @@ function PracticeBlock({
                         aria-controls={id}
                         className="mt-3 inline-flex items-center gap-2 rounded-md border border-white/15 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/20"
                     >
-                        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`} />
+                        <ChevronDown className={`h-4 w-4 transition-transform ${open ? "rotate-180" : ""}`}/>
                         {open ? "Hide details" : "Show details"}
                     </button>
                 </div>
@@ -164,7 +189,7 @@ function PracticeBlock({
                 <div className="md:w-1/2">
                     <div className="grid grid-cols-2 gap-3">
                         {gallery.map(([src, alt]) => (
-                            <Shot key={src} src={src} alt={alt} />
+                            <Shot key={src} src={src} alt={alt}/>
                         ))}
                     </div>
                 </div>
@@ -184,7 +209,7 @@ function PracticeBlock({
     );
 }
 
-function Subsys({ title, children }: { title: string; children: React.ReactNode }) {
+function Subsys({title, children}: { title: string; children: React.ReactNode }) {
     return (
         <section className="mt-4">
             <h4 className="text-base font-semibold">{title}</h4>
@@ -193,7 +218,7 @@ function Subsys({ title, children }: { title: string; children: React.ReactNode 
     );
 }
 
-function BadTake({ label, points }: { label: string; points: string[] }) {
+function BadTake({label, points}: { label: string; points: string[] }) {
     return (
         <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-red-400">

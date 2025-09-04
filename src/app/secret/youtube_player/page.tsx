@@ -53,7 +53,7 @@ function formatSeconds(n?: number) {
 }
 
 // --- storage keys ---
-const LS_KEY = "yt_playlist_v2";           // playlist + start/end + name
+const LS_KEY = "yt_playlist_v2";
 const LS_INDEX_KEY = "yt_playlist_index_v1";
 const LS_MODE_KEY = "yt_playlist_mode_v1";
 
@@ -61,13 +61,11 @@ const LS_MODE_KEY = "yt_playlist_mode_v1";
 type Item = {
     id: string;
     url: string;
-    name?: string;  // display name
-    start?: number; // seconds
-    end?: number;   // seconds
+    name?: string;
+    start?: number;
+    end?: number;
 };
-
 type PlaybackMode = "sequential" | "shuffle";
-
 
 // --- storage helpers ---
 function loadPlaylist(): Item[] {
@@ -84,9 +82,7 @@ function loadPlaylist(): Item[] {
     } catch {}
     return [];
 }
-function savePlaylist(list: Item[]) {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {}
-}
+function savePlaylist(list: Item[]) { try { localStorage.setItem(LS_KEY, JSON.stringify(list)); } catch {} }
 function loadIndex(): number {
     if (typeof window === "undefined") return 0;
     const raw = localStorage.getItem(LS_INDEX_KEY);
@@ -99,9 +95,7 @@ function loadMode(): PlaybackMode {
     const v = localStorage.getItem(LS_MODE_KEY);
     return v === "shuffle" ? "shuffle" : "sequential";
 }
-function saveMode(m: PlaybackMode) {
-    try { localStorage.setItem(LS_MODE_KEY, m); } catch {}
-}
+function saveMode(m: PlaybackMode) { try { localStorage.setItem(LS_MODE_KEY, m); } catch {} }
 function randIndex(n: number, exclude: number): number {
     if (n <= 1) return 0;
     let j = exclude;
@@ -112,7 +106,7 @@ function randIndex(n: number, exclude: number): number {
 declare global {
     interface Window {
         onYouTubeIframeAPIReady?: () => void;
-        YT?: typeof YT; // optional until script loads
+        YT?: typeof YT;
     }
 }
 
@@ -124,25 +118,30 @@ export default function Page() {
     const [editing, setEditing] = useState<Record<string, boolean>>({});
     const [mode, setMode] = useState<PlaybackMode>("sequential");
 
-    const playerRef = useRef<Player | null>(null);
+    // manual controls state
+    const [gotoStr, setGotoStr] = useState("");
+    const [vol, setVol] = useState<number>(100);
+    const [muted, setMuted] = useState<boolean>(false);
+
+        const playerRef = useRef<Player | null>(null);
     const ytReadyRef = useRef<boolean>(false);
     const containerRef = useRef<HTMLDivElement | null>(null);
     const endPollRef = useRef<number | null>(null);
+    const forceSeekRef = useRef<{ token: string|null; start: number; done: boolean }>({
+        token: null, start: 0, done: true
+    });
+
 
     const parsedInputId = useMemo(() => (input ? parseYouTubeId(input) : null), [input]);
     const currentItem = playlist[current] ?? null;
 
-// load & persist once
-    useEffect(() => {
-        setPlaylist(loadPlaylist());
-        setCurrent(loadIndex());
-        setMode(loadMode());
-    }, []);
+    // load & persist once
+    useEffect(() => { setPlaylist(loadPlaylist()); setCurrent(loadIndex()); setMode(loadMode()); }, []);
     useEffect(() => { savePlaylist(playlist); }, [playlist]);
     useEffect(() => { saveIndex(current); }, [current]);
     useEffect(() => { saveMode(mode); }, [mode]);
 
-// iframe api
+    // iframe api
     useEffect(() => {
         if (typeof window === "undefined") return;
         function onYouTubeIframeAPIReady() {
@@ -164,30 +163,26 @@ export default function Page() {
             document.body.appendChild(s);
         }
         return () => {
-            if (playerRef.current) {
-                try { playerRef.current.destroy(); } catch {}
-                playerRef.current = null;
-            }
-            if (endPollRef.current !== null) {
-                clearInterval(endPollRef.current);
-                endPollRef.current = null;
-            }
+            if (playerRef.current) { try { playerRef.current.destroy(); } catch {} playerRef.current = null; }
+            if (endPollRef.current !== null) { clearInterval(endPollRef.current); endPollRef.current = null; }
         };
-// eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // re-cue on item or bounds change
     useEffect(() => { createOrCuePlayer(); }, [currentItem?.id, currentItem?.start, currentItem?.end]);
 
     function createOrCuePlayer() {
         if (typeof window === "undefined" || !ytReadyRef.current || !containerRef.current) return;
-        const YTns = window.YT;
-        if (!YTns) return;
-
-        const vid = currentItem?.id;
-        if (!vid) return;
+        const YTns = window.YT; if (!YTns) return;
+        const vid = currentItem?.id; if (!vid) return;
 
         const startSeconds = currentItem?.start ?? 0;
         const endSeconds = currentItem?.end && currentItem.end > startSeconds ? currentItem.end : undefined;
+
+        // set one-shot token for this clip
+        const token = `${vid}:${startSeconds}`;
+        forceSeekRef.current = { token, start: startSeconds, done: false };
 
         if (playerRef.current) {
             try {
@@ -202,33 +197,46 @@ export default function Page() {
             playerRef.current = new YTns.Player(containerRef.current, {
                 videoId: vid,
                 playerVars: {
-                    modestbranding: 1,
-                    rel: 0,
-                    playsinline: 1,
-                    enablejsapi: 1,
-                    origin: window.location.origin,
-                    controls: 0,
-                    disablekb: 1,
-                    fs: 0,
+                    modestbranding: 1, rel: 0, playsinline: 1, enablejsapi: 1,
+                    origin: window.location.origin, controls: 0, disablekb: 1, fs: 0,
                 },
                 events: {
-                    onReady: (e) => { try { e.target.playVideo(); } catch {} },
+                    onReady: (e) => {
+                        // NO autoplay here; just apply volume/mute so first user click works.
+                        try {
+                            const p = e.target as Player; // YT.Player
+                            if (typeof p.setVolume === "function") p.setVolume(vol);
+                            if (muted) {
+                                if (typeof p.mute === "function") p.mute();
+                            } else {
+                                if (typeof p.unMute === "function") p.unMute();
+                            }
+                        } catch {}
+                    },
                     onStateChange: (e) => {
-                        if (e.data === 0) {
+                        const s = e.data;
+                        if (s === YTns.PlayerState.PLAYING) {
+                            // one-time force seek to clip start if needed
+                            const p = forceSeekRef.current;
+                            if (!p.done && p.token === token) {
+                                try {
+                                    const now = playerRef.current?.getCurrentTime?.() ?? 0;
+                                    if (Math.abs(now - p.start) > 0.5) playerRef.current?.seekTo(p.start, true);
+                                } finally {
+                                    p.done = true; // never interfere again for this clip
+                                }
+                            }
+                        } else if (s === YTns.PlayerState.ENDED) {
                             next();
-                        } else if (e.data === 2) {
-                            try { playerRef.current?.playVideo(); } catch {}
                         }
+                        // IMPORTANT: remove auto-resume on pause entirely.
                     },
                 },
             });
         }
 
-        // Fallback: poll for endSeconds where some platforms ignore endSeconds
-        if (endPollRef.current !== null) {
-            clearInterval(endPollRef.current);
-            endPollRef.current = null;
-        }
+        // (re)arm end poll every (re)cue
+        if (endPollRef.current !== null) { clearInterval(endPollRef.current); endPollRef.current = null; }
         if (endSeconds != null) {
             endPollRef.current = window.setInterval(() => {
                 try {
@@ -243,14 +251,13 @@ export default function Page() {
         }
     }
 
-
     // --- actions ---
     function add() {
         setError(null);
         const id = parseYouTubeId(input);
         if (!id) { setError("Invalid YouTube URL or ID"); return; }
 
-        // try to pull t= from URL for start
+        // pull t= / start=
         let start: number | undefined;
         try {
             const u = new URL(input);
@@ -271,11 +278,11 @@ export default function Page() {
 
     function removeAt(i: number) {
         setPlaylist((prev) => {
-            const next = prev.slice(0, i).concat(prev.slice(i + 1));
+            const nextList = prev.slice(0, i).concat(prev.slice(i + 1));
             if (i < current) setCurrent((c) => Math.max(0, c - 1));
-            else if (i === current) setCurrent((c) => Math.min(c, Math.max(0, next.length - 1)));
-            if (next.length === 0) setCurrent(0);
-            return next;
+            else if (i === current) setCurrent((c) => Math.min(c, Math.max(0, nextList.length - 1)));
+            if (nextList.length === 0) setCurrent(0);
+            return nextList;
         });
     }
 
@@ -283,11 +290,11 @@ export default function Page() {
         setPlaylist((prev) => {
             const j = i + dir;
             if (j < 0 || j >= prev.length) return prev;
-            const next = prev.slice();
-            [next[i], next[j]] = [next[j], next[i]];
+            const nextList = prev.slice();
+            [nextList[i], nextList[j]] = [nextList[j], nextList[i]];
             if (current === i) setCurrent(j);
             else if (current === j) setCurrent(i);
-            return next;
+            return nextList;
         });
     }
 
@@ -296,18 +303,14 @@ export default function Page() {
     function next() {
         setCurrent((c) => {
             if (!playlist.length) return 0;
-            return mode === "shuffle"
-                ? randIndex(playlist.length, c)                  // random, not the one just played
-                : (c + 1 < playlist.length ? c + 1 : 0);        // sequential loop
+            return mode === "shuffle" ? randIndex(playlist.length, c) : (c + 1 < playlist.length ? c + 1 : 0);
         });
     }
 
     function prev() {
         setCurrent((c) => {
             if (!playlist.length) return 0;
-            return mode === "shuffle"
-                ? randIndex(playlist.length, c)                  // random choice for prev in shuffle
-                : (c - 1 >= 0 ? c - 1 : Math.max(playlist.length - 1, 0));
+            return mode === "shuffle" ? randIndex(playlist.length, c) : (c - 1 >= 0 ? c - 1 : Math.max(playlist.length - 1, 0));
         });
     }
 
@@ -316,7 +319,78 @@ export default function Page() {
     function saveEdit(id: string, fields: Partial<Item>) {
         setPlaylist((prev) => prev.map((p) => (p.id === id ? { ...p, ...fields } : p)));
         setEditing((e) => ({ ...e, [id]: false }));
+        // if editing the current item’s bounds, re-cue immediately
+        if (currentItem && currentItem.id === id) createOrCuePlayer();
     }
+
+    // --- manual controls bindings ---
+    function ctrlPlay() {
+        const p = playerRef.current;
+        if (!p || !currentItem) return;
+        try {
+            const state = p.getPlayerState?.(); // -1 unstarted, 0 ended, 1 playing, 2 paused, 3 buffering, 5 cued
+            const videoData = p?.getVideoData?.();
+            const loadedId = videoData?.video_id as string | undefined;
+            const desiredId = currentItem.id;
+
+            // If wrong clip, unstarted, cued, or ended, re-load at bounds then play.
+            if (loadedId !== desiredId || state === -1 || state === 0 || state === 5) {
+                const startSeconds = currentItem.start ?? 0;
+                const endSeconds = currentItem.end && currentItem.end > startSeconds ? currentItem.end : undefined;
+                // reset one-shot token because we are explicitly (re)loading this clip
+                forceSeekRef.current = { token: `${desiredId}:${startSeconds}`, start: startSeconds, done: false };
+                p.loadVideoById({ videoId: desiredId, startSeconds, endSeconds, suggestedQuality: "large" });
+            }
+            // Ensure volume/mute are applied at user gesture time.
+            if (typeof p.setVolume === "function") p.setVolume(vol);
+            if (muted) {
+                if (typeof p.mute === "function") p.mute();
+            } else {
+                if (typeof p.unMute === "function") p.unMute();
+            }
+
+            p.playVideo?.();
+        } catch {}
+    }
+    function ctrlPause() { try { playerRef.current?.pauseVideo(); } catch {} }
+    function ctrlGoto() {
+        const secs = parseTimeToSeconds(gotoStr);
+        if (secs == null) return;
+        try {
+            // Seek should not re-arm force seek; do not modify forceSeekRef here.
+            playerRef.current?.seekTo(secs, true);
+            // keep end timer active
+            const startSeconds = currentItem?.start ?? 0;
+            const endSeconds = currentItem?.end && currentItem.end > startSeconds ? currentItem.end : undefined;
+            if (endPollRef.current !== null) { clearInterval(endPollRef.current); endPollRef.current = null; }
+            if (endSeconds != null) {
+                endPollRef.current = window.setInterval(() => {
+                    try {
+                        const t = playerRef.current?.getCurrentTime?.();
+                        if (typeof t === "number" && t >= endSeconds - 0.15) {
+                            if (endPollRef.current !== null) clearInterval(endPollRef.current);
+                            endPollRef.current = null;
+                            next();
+                        }
+                    } catch {}
+                }, 150);
+            }
+        } catch {}
+    }
+    function ctrlVol(v: number) {
+        setVol(v);
+        try { playerRef.current?.setVolume(v); } catch {}
+    }
+    function ctrlMuteToggle() {
+        setMuted((m) => {
+            try {
+                if (m) playerRef.current?.unMute();
+                else playerRef.current?.mute();
+            } catch {}
+            return !m;
+        });
+    }
+    function ctrlStop() { try { playerRef.current?.stopVideo(); } catch {} }
 
     // --- UI ---
     return (
@@ -344,11 +418,8 @@ export default function Page() {
 
             <div className="text-sm text-gray-400">
                 {input ? (
-                    parsedInputId ? (
-                        <span>Parsed ID from input: <code className="font-mono">{parsedInputId}</code></span>
-                    ) : (
-                        <span>Unable to parse a valid video ID from current input.</span>
-                    )
+                    parsedInputId ? <span>Parsed ID from input: <code className="font-mono">{parsedInputId}</code></span>
+                        : <span>Unable to parse a valid video ID from current input.</span>
                 ) : (
                     <span>Tip: paste any YouTube URL or raw 11-char ID. Start/end accept &#34;mm:ss&#34; or seconds.</span>
                 )}
@@ -356,9 +427,47 @@ export default function Page() {
             {error && <div className="text-sm text-red-400">{error}</div>}
 
             <div className="flex flex-col md:flex-row gap-4 flex-1">
-                {/* Player (controls disabled) */}
-                <div className="basis-1/2 aspect-video rounded-2xl border border-gray-600 overflow-hidden select-none">
-                    <div ref={containerRef} className="w-full h-full" />
+                {/* Player (manual controls added) */}
+                <div className="basis-1/2">
+                    <div className="aspect-video rounded-2xl border border-gray-600 overflow-hidden select-none">
+                        <div ref={containerRef} className="w-full h-full" />
+                    </div>
+
+                    {/* Manual Controls */}
+                    <div className="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                        <div className="col-span-2 md:col-span-1 flex gap-2">
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={ctrlPlay}>Play</button>
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={ctrlPause}>Pause</button>
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={ctrlStop}>Stop</button>
+                        </div>
+                        <div className="col-span-2 md:col-span-1 flex gap-2">
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={prev} disabled={!playlist.length}>Prev</button>
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={next} disabled={!playlist.length}>Next</button>
+                        </div>
+                        <div className="col-span-2 md:col-span-1 flex items-center gap-2">
+                            <label className="flex items-center gap-2 w-full">
+                                <span className="text-gray-400">Go to</span>
+                                <input
+                                    className="w-full rounded border border-gray-600 bg-gray-900 px-2 py-1"
+                                    placeholder="1:23 or 83"
+                                    value={gotoStr}
+                                    onChange={(e) => setGotoStr(e.target.value)}
+                                    onKeyDown={(e) => { if (e.key === "Enter") ctrlGoto(); }}
+                                />
+                            </label>
+                            <button className="rounded border border-blue-600 bg-blue-900/40 px-3 py-1" onClick={ctrlGoto}>Seek</button>
+                        </div>
+                        <div className="col-span-2 md:col-span-3 flex items-center gap-3">
+                            <button className="rounded border border-gray-600 px-3 py-1" onClick={ctrlMuteToggle}>{muted ? "Unmute" : "Mute"}</button>
+                            <input
+                                type="range" min={0} max={100} value={vol}
+                                onChange={(e) => ctrlVol(Number(e.target.value))}
+                                className="w-full"
+                                title={`Volume: ${vol}`}
+                            />
+                            <span className="text-xs text-gray-400 w-10 text-right">{vol}</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Playlist */}
@@ -368,6 +477,11 @@ export default function Page() {
                         {currentItem && (
                             <div className="text-xs text-gray-400">
                                 Now: <code className="font-mono">{currentItem.name || currentItem.id}</code>
+                                {(currentItem.start != null || currentItem.end != null) && (
+                                    <span className="ml-2 text-gray-500">
+                    [{formatSeconds(currentItem.start)}–{formatSeconds(currentItem.end)}]
+                  </span>
+                                )}
                             </div>
                         )}
                         <div className="ml-auto rounded-xl border border-gray-600 bg-gray-800 text-gray-100 px-2 font-medium flex items-center gap-2">
@@ -376,16 +490,12 @@ export default function Page() {
                                 className={`rounded px-2 py-1 text-xs border ${mode==="sequential" ? "border-blue-500 bg-blue-900/40 text-blue-100" : "border-gray-600"}`}
                                 onClick={() => setMode("sequential")}
                                 title="Play in order and loop"
-                            >
-                                Sequential
-                            </button>
+                            >Sequential</button>
                             <button
                                 className={`rounded px-2 py-1 text-xs border ${mode==="shuffle" ? "border-blue-500 bg-blue-900/40 text-blue-100" : "border-gray-600"}`}
                                 onClick={() => setMode("shuffle")}
                                 title="Shuffle without immediate repeats"
-                            >
-                                Shuffle
-                            </button>
+                            >Shuffle</button>
                         </div>
                     </div>
 
@@ -396,33 +506,17 @@ export default function Page() {
                             playlist.map((p, i) => (
                                 <div key={p.id} className={`p-3 ${i === current ? "bg-gray-800" : ""}`}>
                                     <div className="flex items-center gap-2">
-                                        <button
-                                            className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200"
-                                            onClick={() => move(i, -1)}
-                                            title="Move up"
-                                        >↑</button>
-                                        <button
-                                            className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200"
-                                            onClick={() => move(i, +1)}
-                                            title="Move down"
-                                        >↓</button>
-                                        <button
-                                            className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200"
-                                            onClick={() => removeAt(i)}
-                                            title="Remove"
-                                        >✕</button>
-                                        <button
-                                            className="rounded border border-blue-600 bg-blue-900/40 px-2 py-1 text-xs text-blue-100"
-                                            onClick={() => playAt(i)}
-                                            title="Play"
-                                        >Play</button>
+                                        <button className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200" onClick={() => move(i, -1)} title="Move up">↑</button>
+                                        <button className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200" onClick={() => move(i, +1)} title="Move down">↓</button>
+                                        <button className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200" onClick={() => removeAt(i)} title="Remove">✕</button>
+                                        <button className="rounded border border-blue-600 bg-blue-900/40 px-2 py-1 text-xs text-blue-100" onClick={() => playAt(i)} title="Play">Play</button>
                                         <div className="flex-1 truncate text-gray-100" title={p.url}>
                                             {i + 1}. {p.name || p.id}
+                                            {(p.start != null || p.end != null) && (
+                                                <span className="ml-2 text-xs text-gray-400">[{formatSeconds(p.start)}–{formatSeconds(p.end)}]</span>
+                                            )}
                                         </div>
-                                        <button
-                                            className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200"
-                                            onClick={() => setEditing((e) => ({ ...e, [p.id]: !e[p.id] }))}
-                                        >Edit</button>
+                                        <button className="rounded border border-gray-600 px-2 py-1 text-xs text-gray-200" onClick={() => setEditing((e) => ({ ...e, [p.id]: !e[p.id] }))}>Edit</button>
                                     </div>
                                     {editing[p.id] && (
                                         <EditRow
@@ -439,8 +533,8 @@ export default function Page() {
             </div>
 
             <ul className="text-xs text-gray-500 list-disc pl-5">
-                <li>Manual controls disabled: no UI, kb disabled; pauses auto-resume.</li>
-                <li>Each item supports display name, start and end times. End uses API endSeconds; timer fallback included.</li>
+                <li>Autoplay respects per-item start/end; enforced by a PLAYING-state seek + end timer.</li>
+                <li>Manual controls: play/pause/stop, prev/next, seek, volume, mute.</li>
                 <li>Times accept seconds or mm:ss / hh:mm:ss formats.</li>
             </ul>
         </div>
@@ -458,8 +552,7 @@ function EditRow({ item, onCancel, onSave }: { item: Item; onCancel: () => void;
         const e = parseTimeToSeconds(end);
         const fields: Partial<Item> = { name: name.trim() || undefined, start: s, end: e };
         if (s != null && e != null && e <= s) {
-            // ignore invalid end
-            fields.end = undefined;
+            fields.end = undefined; // invalid end ignored
         }
         onSave(fields);
     }
@@ -468,29 +561,15 @@ function EditRow({ item, onCancel, onSave }: { item: Item; onCancel: () => void;
         <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
             <label className="col-span-2">
                 <span className="block text-gray-400">Display name</span>
-                <input
-                    className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+                <input className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1" value={name} onChange={(e) => setName(e.target.value)} />
             </label>
             <label>
                 <span className="block text-gray-400">Start (s or mm:ss)</span>
-                <input
-                    className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                    placeholder="0:42"
-                />
+                <input className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1" value={start} onChange={(e) => setStart(e.target.value)} placeholder="0:42" />
             </label>
             <label>
                 <span className="block text-gray-400">End (s or mm:ss)</span>
-                <input
-                    className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1"
-                    value={end}
-                    onChange={(e) => setEnd(e.target.value)}
-                    placeholder="1:23"
-                />
+                <input className="mt-1 w-full rounded border border-gray-600 bg-gray-900 px-2 py-1" value={end} onChange={(e) => setEnd(e.target.value)} placeholder="1:23" />
             </label>
             <div className="col-span-2 flex gap-2 justify-end">
                 <button className="rounded border border-gray-600 px-3 py-1" onClick={onCancel}>Cancel</button>

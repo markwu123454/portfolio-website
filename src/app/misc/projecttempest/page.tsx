@@ -12,7 +12,7 @@ export default function Page() {
 
     return (
         <UnderConstruction
-            name="Team Infernope"
+            name="Project Tempest"
             stages={stages}
             channelStatus="inactive"
         />

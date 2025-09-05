@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {useId, useState} from "react";
 import {ChevronDown, ChevronRight} from "lucide-react";
+import Link from "next/link";
 
 /**
  * CAD – Case Study Page (dark, card-driven, fast)
@@ -36,7 +37,7 @@ export default function SprocketPage() {
                 <section aria-labelledby="summary" className="mb-12">
                     <h2 id="summary" className="sr-only">Summary</h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <Stat label="My Role" value="CAD Subteam member" hint="Competition Robot CAD and Scouting App"/>
+                        <Stat label="My Role" value="CAD Subteam member" hint="Resposible for various design needs of the team"/>
                         <Stat label="Seasons Survived Personally" value="1" hint="ReefScape"/>
                         <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds"/>
                     </div>
@@ -46,15 +47,20 @@ export default function SprocketPage() {
                     <h2 id="summary" className="sr-only">My Roles</h2>
                     <h2 className="p-3 font-bold text-3xl">My Responsibilities</h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <Stat label="CAD" value="Varsity Robot CAD"/>
+                        <Link href="teamsprocket/cad" className="hover:bg-white/10 rounded-2xl transition-colors duration-200">
+                            <Stat label="CAD" value="Competition Robot CAD"/>
+                        </Link>
+                        <Link href="teamsprocket/scouting" className="hover:bg-white/10 rounded-2xl transition-colors duration-200">
                         <Stat label="Programming" value="Scouting App"/>
+                        </Link>
                     </div>
                 </section>
 
                 <h2 className="p-3 font-bold text-3xl">Seasons</h2>
                 <section className="mb-16 flex items-center gap-6">
 
-                    <Image src="/2025_logo_animation.gif" alt="ReefScape logo animated" width="200" height="200"/>
+                    <Image src="/2025_logo_animation.gif" alt="ReefScape logo animated" width="200" height="200"
+                           className="bg-white rounded-2xl"/>
                     <div>
                         <h2 className="text-4xl font-bold">ReefScape</h2>
                         <p className="mt-2 text-lg text-white/70">

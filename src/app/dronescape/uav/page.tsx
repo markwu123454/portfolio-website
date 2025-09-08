@@ -242,7 +242,12 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
 
 function TechAndLinks({tech}: { tech: string[] }) {
     return (
-        <section className="mt-10">
+        <motion.section
+            initial={{opacity: 0, y: 8}}
+            whileInView={{opacity: 1, y: 0}}
+            viewport={{once: true, amount: 0.5}}
+            transition={{duration: 0.5}}
+            className="mt-10">
             <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent"/>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
                 <div className="mb-2 text-lg font-semibold">Tech Stack</div>
@@ -253,7 +258,7 @@ function TechAndLinks({tech}: { tech: string[] }) {
                     ))}
                 </div>
             </div>
-        </section>
+        </motion.section>
     );
 }
 

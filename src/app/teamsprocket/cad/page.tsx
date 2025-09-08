@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useId, useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import {ChevronDown, ChevronRight, TriangleAlert} from "lucide-react";
 
 /**
  * CAD – Case Study Page (dark, card-driven, fast)
@@ -64,7 +64,8 @@ export default function CADPage() {
                         />
                     </div>
                     <h3 className="mt-4 text-lg font-semibold">Final assembly snapshot</h3>
-                    <p className="mt-1 text-sm text-white/70">Lastest cad of our robot before world championships.</p>
+                    <p className="mt-1 text-sm text-white/70">Lastest cad of our
+                        robot before world championships.</p>
                 </Card>
 
                 <Card className="md:col-span-5">
@@ -378,7 +379,7 @@ function BadTake({ label, points }: { label: string; points: string[] }) {
     return (
         <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-red-400">
-                ⚠ {label}
+                <TriangleAlert className="scale-[0.75]" /> {label}
             </div>
             <ul className="space-y-1 text-sm text-red-200/80">
                 {points.map((p, i) => (

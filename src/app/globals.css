@@ -59,3 +59,4 @@ body {
 @media (prefers-reduced-motion: reduce) {
     .group:hover { transform: none !important; }
 }
+

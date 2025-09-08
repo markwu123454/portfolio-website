@@ -287,19 +287,20 @@ export default function HomePage() {
             {/* atmospherics */}
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
                 {/* existing radial blobs */}
-                <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]" />
-                {/* aurora ribbons */}
-                <div className="absolute inset-0 mix-blend-screen opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]">
-                    <div className="absolute -inset-x-10 top-0 h-[120vh] blur-3xl
-      bg-[conic-gradient(from_90deg_at_50%_20%,#22d3ee33,transparent_30%,#a78bfa33,transparent_70%)]
-      animate-[slow-spin_60s_linear_infinite]"/>
-                </div>
+                <div
+                    className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]"/>
+                {/* animated background effect */}
+                <ShootingStars className="absolute inset-0" rate={0.4}/>
+
                 {/* grid */}
-                <div className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
-                    <div className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:48px_48px]" />
+                <div
+                    className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
+                    <div
+                        className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:48px_48px]"/>
                 </div>
                 {/* noise */}
-                <div className="absolute inset-0 opacity-[0.04] [background-image:radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:3px_3px]" />
+                <div
+                    className="absolute inset-0 opacity-[0.04] [background-image:radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:3px_3px]"/>
             </div>
 
 
@@ -314,10 +315,10 @@ export default function HomePage() {
 
                     <div className="max-w-5xl">
                         <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight
-  bg-[linear-gradient(90deg,theme(colors.cyan.300),white,theme(colors.violet.300),white,theme(colors.cyan.300))]
-  bg-clip-text text-transparent
-  [background-size:200%_100%] animate-[bg-pan_8s_linear_infinite]
-  drop-shadow-[0_0_24px_rgba(167,139,250,0.25)]">
+                                       bg-[linear-gradient(90deg,theme(colors.cyan.300),white,theme(colors.violet.300),white,theme(colors.cyan.300))]
+                                       bg-clip-text text-transparent
+                                       [background-size:200%_100%] animate-[bg-pan_8s_linear_infinite]
+                                       drop-shadow-[0_0_24px_rgba(167,139,250,0.25)]">
                             Hi! I&apos;m Mark.
                         </h1>
 
@@ -338,7 +339,8 @@ export default function HomePage() {
                             </FeaturedCard>
 
                             <FeaturedCard title="FRC - Team Sprocket" href="/teamsprocket">
-                                A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do CAD and scouting app.
+                                A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do
+                                CAD and scouting app.
                             </FeaturedCard>
 
                             {/*<div className="rounded-2xl p-5 md:p-6 border border-dashed border-white/10 text-white/60">
@@ -361,7 +363,8 @@ export default function HomePage() {
                             {/* pulse ring */}
                             <span className="absolute inset-0 rounded-full border border-white/20 animate-pulse"/>
                             {/* chevron */}
-                            <ArrowDown className="h-5 w-5 text-white/70 transition group-hover:text-white/90 animate-bounce"/>
+                            <ArrowDown
+                                className="h-5 w-5 text-white/70 transition group-hover:text-white/90 animate-bounce"/>
                         </span>
                     </button>
 
@@ -457,7 +460,8 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing hardware issues and preparing for club rush display.</p>
+                                className="text-white/70">Current:</span> Fixing hardware issues and preparing for club
+                                rush display.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Aug 31, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[17%] rounded-full bg-white/60"/>
@@ -480,7 +484,8 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with
                                 offline-first PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing for off season competition end to end testing.
+                                className="text-white/70">Current:</span> Preparing for off season competition end to
+                                end testing.
                             </p>
                             <p className="mt-1 text-xs text-white/50">Last updated Aug 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
@@ -501,9 +506,11 @@ export default function HomePage() {
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Next.js website I use to document my projects, this one :D</p>
+                            <p className="mt-1 text-sm text-white/75">Next.js website I use to document my projects,
+                                this one :D</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing documentation for FRC scouting app, preparing to start documenting dronescape.</p>
+                                className="text-white/70">Current:</span> Preparing documentation for FRC scouting app,
+                                preparing to start documenting dronescape.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Aug 30, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[26%] rounded-full bg-white/60"/>
@@ -570,7 +577,7 @@ type FeaturedCardProps = {
     className?: string;
 };
 
-function FeaturedCard({ title, href, children, className }: FeaturedCardProps) {
+function FeaturedCard({title, href, children, className}: FeaturedCardProps) {
     const id = title.toLowerCase().replace(/\s+/g, "-");
     return (
         <article
@@ -644,7 +651,7 @@ function FeaturedCard({ title, href, children, className }: FeaturedCardProps) {
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                 >
                     See more
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5"/>
                 </Link>
 
                 {/* optional tiny badge; remove if unwanted */}
@@ -664,63 +671,225 @@ function FeaturedCard({ title, href, children, className }: FeaturedCardProps) {
     );
 }
 
-function SpiralBackground() {
-    // Spiral params: r = a * e^(bθ)
-    const arms = 3;            // 2–4 look best
-    const turns = 2.6;         // how many revolutions per arm
-    const a = 1.6;
-    const b = 0.22;
-    const steps = 900;
+interface Star {
+    id: number;
+    dur: number;
+    len: number;
+    thick: number;
+    delay: number;
+    path: string;
+    color: string;
+}
 
-    const makeSpiralPath = () => {
-        const T = 2 * Math.PI * turns;
-        const rMax = a * Math.exp(b * T);
-        const scale = 480 / rMax; // fit to viewBox 1000x1000
-        let d = "";
-        for (let i = 0; i <= steps; i++) {
-            const t = (i / steps) * T;
-            const r = a * Math.exp(b * t) * scale;
-            const x = 500 + r * Math.cos(t);
-            const y = 500 + r * Math.sin(t);
-            d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
-        }
-        return d;
+interface Props {
+    className?: string;
+    rate?: number; // Stars per second
+    duration?: [number, number]; // Min/max duration in seconds
+    length?: [number, number]; // Min/max length in pixels
+    thickness?: [number, number]; // Min/max thickness in pixels
+    spawnPadding?: number; // Offscreen spawn padding
+    maxConcurrent?: number; // Max stars on screen
+    colors?: string[]; // Array of possible star colors
+}
+
+// Utility function for random numbers
+const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+const ShootingStars: React.FC<Props> = ({
+                                            className = '',
+                                            rate = 0.8,
+                                            duration = [1.6, 2.8],
+                                            length = [90, 170],
+                                            thickness = [1, 2],
+                                            spawnPadding = 140,
+                                            maxConcurrent = 14,
+                                            colors = ['#ffffff', '#B090F0', '#87ceeb'],
+                                        }) => {
+    const [stars, setStars] = useState<Star[]>([]);
+    const boxRef = useRef<HTMLDivElement>(null);
+    const pathMap = useRef<Map<number, string>>(new Map());
+    const idRef = useRef(0);
+    const loopTimerRef = useRef<number | null>(null);
+    const isMountedRef = useRef(true);
+
+    // Memoize config to prevent unnecessary effect runs
+    const config = useMemo(
+        () => ({ duration, length, thickness, spawnPadding, maxConcurrent, colors }),
+        [duration, length, thickness, spawnPadding, maxConcurrent, colors.join(',')]
+    );
+
+    // Replace your generateStarPath with this:
+    const generateStarPath = (rect: DOMRect | DOMRectReadOnly, pad: number): string => {
+        const W = Math.max(1, rect.width);
+        const H = Math.max(1, rect.height);
+
+        // Offscreen endpoints: RIGHT -> LEFT (never visible)
+        const x0 = rand(W + pad, W + pad * 2);    // start offscreen right
+        const y0 = rand(-pad * 0.2, H * 0.35);    // near/above top edge
+
+        const x1 = rand(-pad * 2, -pad);          // end offscreen left
+        const y1 = rand(H * 0.55, H + pad * 0.2); // near/below bottom edge
+
+        // Two interior guide points to bend the path through the viewport
+        const g1x = rand(W * 0.55, W * 0.85);
+        const g1y = rand(H * 0.15, H * 0.40);
+        const g2x = rand(W * 0.15, W * 0.45);
+        const g2y = rand(H * 0.45, H * 0.75);
+
+        // Make control points “near” the guides (curve will be pulled inside)
+        const jitter = (v: number, j: number) => v + rand(-j, j);
+        const c1x = jitter(g1x, W * 0.05);
+        const c1y = jitter(g1y, H * 0.05);
+        const c2x = jitter(g2x, W * 0.05);
+        const c2y = jitter(g2y, H * 0.05);
+
+        return `M ${x0} ${y0} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
     };
 
-    const pathD = makeSpiralPath();
+// Optional: ensure path meaningfully crosses the viewport (retry up to N)
+    const generateCrossingPath = (rect: DOMRect | DOMRectReadOnly, pad: number, tries = 6): string => {
+        for (let i = 0; i < tries; i++) {
+            const p = generateStarPath(rect, pad);
+            if (roughlyCrossesViewport(p, rect)) return p;
+        }
+        // Fallback—last generated path
+        return generateStarPath(rect, pad);
+    };
+
+// Cheap viewport-crossing heuristic: sample at t=.3 and t=.7
+    const roughlyCrossesViewport = (d: string, rect: DOMRect | DOMRectReadOnly): boolean => {
+        const cmd = d.match(/[-\d.]+/g)?.map(Number) ?? [];
+        if (cmd.length < 12) return true;
+        const [x0, y0, c1x, c1y, c2x, c2y, x1, y1] = [cmd[0], cmd[1], cmd[2], cmd[3], cmd[4], cmd[5], cmd[6], cmd[7]];
+
+        // cubic Bezier point
+        const at = (t: number) => {
+            const mt = 1 - t;
+            const x = mt*mt*mt*x0 + 3*mt*mt*t*c1x + 3*mt*t*t*c2x + t*t*t*x1;
+            const y = mt*mt*mt*y0 + 3*mt*mt*t*c1y + 3*mt*t*t*c2y + t*t*t*y1;
+            return { x, y };
+        };
+
+        const p1 = at(0.3);
+        const p2 = at(0.7);
+        const inside = (p: {x:number;y:number}) =>
+            p.x >= 0 && p.x <= rect.width && p.y >= 0 && p.y <= rect.height;
+
+        // require at least one of the samples to be inside
+        return inside(p1) || inside(p2);
+    };
+
+    // Spawn a single star
+    const spawnStar = (rect: DOMRect) => {
+        if (!isMountedRef.current) return () => {};
+
+        const id = idRef.current++;
+        const path = generateCrossingPath(rect, config.spawnPadding);
+        const star: Star = {
+            id,
+            dur: rand(config.duration[0], config.duration[1]),
+            len: rand(config.length[0], config.length[1]),
+            thick: rand(config.thickness[0], config.thickness[1]),
+            delay: rand(0, 0.5),
+            path,
+            color: config.colors[Math.floor(rand(0, config.colors.length))],
+        };
+
+        pathMap.current.set(id, path);
+
+        // Update stars safely
+        setStars((prev) => {
+            if (prev.length >= config.maxConcurrent) {
+                const oldestId = prev[0]?.id;
+                if (oldestId !== undefined) pathMap.current.delete(oldestId);
+                return [...prev.slice(1), star];
+            }
+            return [...prev, star];
+        });
+
+        // Cleanup
+        const timeout = window.setTimeout(() => {
+            if (isMountedRef.current) {
+                pathMap.current.delete(id);
+                setStars((prev) => prev.filter((s) => s.id !== id));
+            }
+        }, (star.dur + star.delay) * 1000 + 200);
+
+        return () => clearTimeout(timeout);
+    };
+
+    useEffect(() => {
+        const box = boxRef.current;
+        if (!box) return;
+
+        isMountedRef.current = true;
+
+        const loop = () => {
+            if (!isMountedRef.current || !box) return;
+
+            const rect = box.getBoundingClientRect();
+            const cleanup = spawnStar(rect);
+            const intervalMs = rate > 0 ? 1000 / rate : 999999;
+            const skew = rand(0.7, 1.3);
+
+            loopTimerRef.current = window.setTimeout(() => {
+                cleanup?.();
+                loop();
+            }, intervalMs * skew) as unknown as number;
+        };
+
+        loop();
+
+        return () => {
+            isMountedRef.current = false;
+            if (loopTimerRef.current) {
+                clearTimeout(loopTimerRef.current);
+                loopTimerRef.current = null;
+            }
+            pathMap.current.clear();
+        };
+    }, [rate]); // Only depend on rate, as config is memoized
 
     return (
-        <div className="absolute inset-0 pointer-events-none mix-blend-screen opacity-65 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]">
-            <svg
-                viewBox="0 0 1000 1000"
-                className="absolute -inset-x-24 top-[-10%] h-[150vh] w-[130vw] animate-[spin_55s_linear_infinite]"
-                preserveAspectRatio="xMidYMid slice"
-            >
-                <defs>
-                    {/* soft glow */}
-                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="6" />
-                    </filter>
-
-                    {/* stroke gradient across the canvas */}
-                    <linearGradient id="armGrad" x1="0" y1="0" x2="1000" y2="1000" gradientUnits="userSpaceOnUse">
-                        <stop offset="0%"  stopColor="#22d3ee" stopOpacity="0.85" />
-                        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.55" />
-                        <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.85" />
-                    </linearGradient>
-                </defs>
-
-                <g filter="url(#glow)">
-                    {Array.from({ length: arms }).map((_, i) => (
-                        <g key={i} transform={`rotate(${(360 / arms) * i} 500 500)`}>
-                            {/* wide, faint halo */}
-                            <path d={pathD} fill="none" stroke="url(#armGrad)" strokeWidth={24} strokeLinecap="round" opacity={0.25} />
-                            {/* crisp arm */}
-                            <path d={pathD} fill="none" stroke="url(#armGrad)" strokeWidth={10} strokeLinecap="round" opacity={0.9} />
-                        </g>
-                    ))}
-                </g>
-            </svg>
+        <div
+            ref={boxRef}
+            className={`opacity-[0.3] pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+        >
+            {stars.map((star) => (
+                <div
+                    key={star.id}
+                    className="absolute will-change-transform"
+                    style={{
+                        width: `${star.len}px`,
+                        height: `${star.thick}px`,
+                        background: `linear-gradient(to right, transparent, ${star.color})`,
+                        borderRadius: `${star.thick}px`,
+                        filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.5))',
+                        offsetPath: `path('${pathMap.current.get(star.id) || 'M0 0'}')`,
+                        offsetRotate: 'auto',
+                        offsetAnchor: '100% 50%',
+                        animation: `shoot-path ${star.dur}s linear ${star.delay}s both`,
+                    }}
+                />
+            ))}
+            <style jsx global>{`
+                @keyframes shoot-path {
+                    0% {
+                        opacity: 0;
+                        offset-distance: 0%;
+                    }
+                    10% {
+                        opacity: 1;
+                    }
+                    90% {
+                        opacity: 1;
+                    }
+                    100% {
+                        opacity: 0;
+                        offset-distance: 100%;
+                    }
+                }
+            `}</style>
         </div>
     );
-}
+};

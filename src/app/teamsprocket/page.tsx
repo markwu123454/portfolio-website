@@ -17,11 +17,11 @@ export default function SprocketPage() {
         <>
             <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
                 <div
-                    className="absolute inset-0 opacity-[0.20] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]"/>
+                    className="absolute inset-0 opacity-[0.20] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_50%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_45%)]"/>
                 <div
                     className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
                     <div
-                        className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.2)_1px,transparent_1px)] bg-[size:48px_48px]"/>
+                        className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:48px_48px]"/>
                 </div>
             </div>
             <main className="mx-auto w-full max-w-7xl px-6 py-16 mt-16">

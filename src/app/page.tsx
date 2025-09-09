@@ -502,21 +502,19 @@ export default function HomePage() {
                         <div
                             className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">Portfolio Website</h3>
+                                <h3 className="text-lg font-semibold">Smaller Projects</h3>
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Next.js website I use to document my projects,
-                                this one :D</p>
+                            <p className="mt-1 text-sm text-white/75">Various small projects I made out of curiosity or need</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing documentation for FRC scouting app,
-                                preparing to start documenting dronescape.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Aug 30, 2025</p>
+                                className="text-white/70">Current:</span> Always working on new ones.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Sept 9, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[26%] rounded-full bg-white/60"/>
                             </div>
                             <Link
-                                href="/misc/portfolio"
+                                href="/misc/random"
                                 className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
                             >
                                 Open →

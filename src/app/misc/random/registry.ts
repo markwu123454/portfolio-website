@@ -15,6 +15,10 @@ export const demos: DemoRegistry = {
         import("./StateSpaceVisualizer").then((m: { default: DemoModule }) => m.default),
     YoutubePlayer: () =>
         import("./YoutubePlayer").then((m: { default: DemoModule }) => m.default),
+    CollatzConjecture: () =>
+        import("./CollatzConjecture").then((m: { default: DemoModule }) => m.default),
+    Calculator: () =>
+        import("./MathPad").then((m: { default: DemoModule }) => m.default),
 };
 
 export type DemoSlug = keyof typeof demos;

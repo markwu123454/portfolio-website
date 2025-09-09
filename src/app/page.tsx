@@ -290,7 +290,7 @@ export default function HomePage() {
                 <div
                     className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]"/>
                 {/* animated background effect */}
-                <ShootingStars className="absolute inset-0" rate={0.4}/>
+                <ShootingStars className="absolute inset-0 opacity-[0.3]" rate={0.5}/>
 
                 {/* grid */}
                 <div
@@ -853,7 +853,7 @@ const ShootingStars: React.FC<Props> = ({
     return (
         <div
             ref={boxRef}
-            className={`opacity-[0.3] pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+            className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
         >
             {stars.map((star) => (
                 <div

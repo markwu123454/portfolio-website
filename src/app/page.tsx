@@ -508,7 +508,7 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">Various small projects I made out of curiosity or need</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Always working on new ones.</p>
+                                className="text-white/70">Current:</span> Collatz Conjecture playground and MathPad.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Sept 9, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[26%] rounded-full bg-white/60"/>

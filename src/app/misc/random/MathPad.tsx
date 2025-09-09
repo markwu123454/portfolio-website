@@ -1,12 +1,12 @@
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
-import {all, create} from "mathjs";
-import type {DemoModule} from "@/app/misc/random/registry";
+import React, { useEffect, useRef, useState } from "react";
+import { all, create, MathNode, MathType, Matrix } from "mathjs";
+import type { DemoModule } from "@/app/misc/random/registry";
 
 // MathPad: math-like REPL; dark theme; auto-evaluates on input.
 
-const math = create(all, {number: "number"});
+const math = create(all, { number: "number" as const });
 
 // ---------- Chem formula parsing ----------
 function parseChemFormula(formula: string): number {
@@ -66,8 +66,8 @@ function parseChemFormula(formula: string): number {
 
         function readElement(): string {
             if (!isUpper(s[i])) throw new Error(`Expected element at ${i}`);
-            let sym = s[i++];
-            if (i < s.length && isLower(s[i])) sym += s[i++];
+            let sym = s[i++]!;
+            if (i < s.length && isLower(s[i])) sym += s[i++]!;
             return sym;
         }
 
@@ -84,16 +84,16 @@ function parseChemFormula(formula: string): number {
             if (i !== s.length) throw new Error(`Unexpected trailing content at ${i}`);
         }
 
-        function isUpper(ch: string) {
-            return ch >= "A" && ch <= "Z";
+        function isUpper(ch: string | undefined) {
+            return typeof ch === "string" && ch >= "A" && ch <= "Z";
         }
 
-        function isLower(ch: string) {
-            return ch >= "a" && ch <= "z";
+        function isLower(ch: string | undefined) {
+            return typeof ch === "string" && ch >= "a" && ch <= "z";
         }
 
-        function isDigit(ch: string) {
-            return ch >= "0" && ch <= "9";
+        function isDigit(ch: string | undefined) {
+            return typeof ch === "string" && ch >= "0" && ch <= "9";
         }
     }
 }
@@ -129,6 +129,18 @@ const CB_MASS: Record<string, number> = {
     Og: 294.00
 };
 
+// ---------- Types (no `any`) ----------
+type ScopeValue = MathType | ((x: string) => number);
+type Scope = Record<string, ScopeValue>;
+
+// Type guards to avoid `any`
+function isRecord(v: unknown): v is Record<string, unknown> {
+    return typeof v === "object" && v !== null;
+}
+function isMatrixLike(v: unknown): v is { isMatrix: boolean; toArray: () => unknown } {
+    return isRecord(v) && "isMatrix" in v && "toArray" in v && typeof (v as { toArray: unknown }).toArray === "function";
+}
+
 function MathPad() {
     const [code, setCode] = useState<string>([
         "# Examples:",
@@ -147,7 +159,7 @@ function MathPad() {
     const [result, setResult] = useState<string>("");
     const [diag, setDiag] = useState<string>("");
     const [pretty, setPretty] = useState<boolean>(true);
-    const scopeRef = useRef<Record<string, any>>({});
+    const scopeRef = useRef<Scope>({});
 
     // Re-render when pretty changes
     useEffect(() => {
@@ -155,14 +167,18 @@ function MathPad() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pretty]);
 
-    function toDisplay(val: any): string {
+    function toDisplay(val: unknown): string {
         try {
-            if (pretty) return math.format(val, {precision: 14});
-            return JSON.stringify(val, (_k, v) => {
-                if (v && v.isMatrix && typeof v.toArray === "function") return v.toArray();
-                if (typeof v === "number" && !Number.isFinite(v)) return String(v);
-                return v;
-            }, 2);
+            if (pretty) return math.format(val as MathType, { precision: 14 });
+            return JSON.stringify(
+                val,
+                (_k, v) => {
+                    if (isMatrixLike(v)) return v.toArray();
+                    if (typeof v === "number" && !Number.isFinite(v)) return String(v);
+                    return v;
+                },
+                2
+            );
         } catch {
             try {
                 return String(val);
@@ -175,7 +191,7 @@ function MathPad() {
     function stripComments(line: string): string {
         let inQuote = false, quoteChar = "";
         for (let i = 0; i < line.length; i++) {
-            const c = line[i];
+            const c = line[i]!;
             if ((c === '"' || c === "'") && (i === 0 || line[i - 1] !== "\\")) {
                 if (!inQuote) {
                     inQuote = true;
@@ -209,14 +225,17 @@ function MathPad() {
         return frame + caret;
     }
 
-    function verboseError(err: any, execLines: string[], execToIdx: number) {
-        const idx = typeof err.char === "number" ? err.char
-            : typeof err.index === "number" ? err.index
-                : undefined;
-        const summary = `Error at line ${execToIdx + 1}: ${err?.message ?? String(err)}`;
+    function verboseError(err: unknown, execLines: string[], execToIdx: number) {
+        const maybeErr = isRecord(err) ? err : {};
+        const idx =
+            typeof maybeErr.char === "number" ? (maybeErr.char as number)
+                : typeof maybeErr.index === "number" ? (maybeErr.index as number)
+                    : undefined;
+
+        const msg = String((isRecord(err) && "message" in err) ? (err as { message: unknown }).message : err ?? "");
+        const summary = `Error at line ${execToIdx + 1}: ${msg}`;
         const frame = codeFrame(execLines, execToIdx, idx);
         const hint = (() => {
-            const msg = String(err?.message ?? err ?? "");
             if (/Unknown element/.test(msg)) return "Add the element to CB_MASS if missing.";
             if (/Unmatched/.test(msg)) return "Check parentheses.";
             if (/Unexpected character/.test(msg)) return "Valid tokens: element symbols, (), integers.";
@@ -226,9 +245,6 @@ function MathPad() {
             return null;
         })();
 
-        // const srcBound = Object.keys(scopeRef.current).sort();
-        // const bindings = srcBound.length ? `bound: ${srcBound.join(", ")}` : "bound: (none)";
-        // [summary, "-----", frame, "-----", bindings, hint ? `Hint: ${hint}` : ""]
         return [summary, "-----", frame, "-----", hint ? `Hint: ${hint}` : ""]
             .filter(Boolean)
             .join("\n");
@@ -245,7 +261,7 @@ function MathPad() {
         for (const [el, mass] of Object.entries(CB_MASS)) scopeRef.current[el] = mass;
 
         // Bind chem() into scope
-        scopeRef.current["chem"] = (x: any) => {
+        scopeRef.current["chem"] = (x: string): number => {
             if (typeof x !== "string") throw new Error("chem() expects a formula string");
             return parseChemFormula(x);
         };
@@ -256,48 +272,36 @@ function MathPad() {
         }
 
         try {
-            let lastVal: any = undefined;
+            let lastVal: MathType | undefined = undefined;
             for (let i = 0; i < prepped.length; i++) {
-                const stmt = prepped[i];
-                const node = math.parse(stmt);
-                lastVal = node.compile().evaluate(scopeRef.current);
+                const stmt = prepped[i]!;
+                const node: MathNode = math.parse(stmt);
+                lastVal = node.compile().evaluate(scopeRef.current as Record<string, unknown>) as MathType;
             }
             setResult(toDisplay(lastVal));
-        } catch (err: any) {
+        } catch (err: unknown) {
             // Find failing line
             let failingIdx = -1;
-            try {
-                scopeRef.current = {};
-                for (const [el, mass] of Object.entries(CB_MASS)) scopeRef.current[el] = mass;
-                scopeRef.current["chem"] = (x: any) => {
-                    if (typeof x !== "string") throw new Error("chem() expects a formula string");
-                    return parseChemFormula(x);
-                };
-                for (let i = 0; i < prepped.length; i++) {
-                    const node = math.parse(prepped[i]);
-                    node.compile().evaluate(scopeRef.current);
+
+            // Retry to locate the failing statement precisely
+            scopeRef.current = {};
+            for (const [el, mass] of Object.entries(CB_MASS)) scopeRef.current[el] = mass;
+            scopeRef.current["chem"] = (x: string): number => {
+                if (typeof x !== "string") throw new Error("chem() expects a formula string");
+                return parseChemFormula(x);
+            };
+
+            for (let i = 0; i < prepped.length; i++) {
+                try {
+                    const node: MathNode = math.parse(prepped[i]!);
+                    node.compile().evaluate(scopeRef.current as Record<string, unknown>);
+                } catch {
+                    failingIdx = i;
+                    break;
                 }
-            } catch {
-                // fall through
             }
-            if (failingIdx < 0) {
-                scopeRef.current = {};
-                for (const [el, mass] of Object.entries(CB_MASS)) scopeRef.current[el] = mass;
-                scopeRef.current["chem"] = (x: any) => {
-                    if (typeof x !== "string") throw new Error("chem() expects a formula string");
-                    return parseChemFormula(x);
-                };
-                for (let i = 0; i < prepped.length; i++) {
-                    try {
-                        const node = math.parse(prepped[i]);
-                        node.compile().evaluate(scopeRef.current);
-                    } catch {
-                        failingIdx = i;
-                        break;
-                    }
-                }
-                if (failingIdx < 0) failingIdx = 0;
-            }
+            if (failingIdx < 0) failingIdx = 0;
+
             setResult("");
             setDiag(verboseError(err, prepped, failingIdx));
         }
@@ -320,27 +324,27 @@ function MathPad() {
 
             <div className="mb-3">
                 <div className="rounded-md border border-white/10 bg-white/5">
-                    <textarea
-                        value={code}
-                        onChange={e => {
-                            const v = e.target.value;
-                            setCode(v);
-                            evaluateAll(v);
-                        }}
-                        onKeyDown={handleKeyDown}
-                        spellCheck={false}
-                        className="min-h-[500px] w-full resize-y rounded-md bg-transparent p-3 font-mono text-sm text-gray-100 outline-none focus:ring-0"
-                        placeholder={[
-                            "# Examples:",
-                            "f(x) = sin(x)^2 + cos(x)^2",
-                            "a = 5",
-                            "A = [[1,2],[3,4]]",
-                            "A * [5,6]",
-                            "det(A)",
-                            "chem(Ca(OH)2)",
-                            "chem(CuSO4·5H2O)"
-                        ].join("\n")}
-                    />
+          <textarea
+              value={code}
+              onChange={e => {
+                  const v = e.target.value;
+                  setCode(v);
+                  evaluateAll(v);
+              }}
+              onKeyDown={handleKeyDown}
+              spellCheck={false}
+              className="min-h-[500px] w-full resize-y rounded-md bg-transparent p-3 font-mono text-sm text-gray-100 outline-none focus:ring-0"
+              placeholder={[
+                  "# Examples:",
+                  "f(x) = sin(x)^2 + cos(x)^2",
+                  "a = 5",
+                  "A = [[1,2],[3,4]]",
+                  "A * [5,6]",
+                  "det(A)",
+                  "chem(Ca(OH)2)",
+                  "chem(CuSO4·5H2O)"
+              ].join("\n")}
+          />
                 </div>
             </div>
 
@@ -359,13 +363,11 @@ function MathPad() {
             <div className="rounded-md border border-white/10 bg-white/5">
                 <div className="p-4">
                     <div className="text-xs uppercase tracking-wide text-gray-400">Result (last line)</div>
-                    <pre
-                        className="mt-1 overflow-x-auto rounded-md bg-black/30 p-3 font-mono text-sm">{result || ""}</pre>
+                    <pre className="mt-1 overflow-x-auto rounded-md bg-black/30 p-3 font-mono text-sm">{result || ""}</pre>
                     {diag && (
                         <div className="mt-3">
                             <div className="mb-1 text-xs uppercase tracking-wide text-gray-400">Diagnostics</div>
-                            <pre
-                                className="overflow-x-auto rounded-md bg-black/30 p-3 font-mono text-xs leading-relaxed">{diag}</pre>
+                            <pre className="overflow-x-auto rounded-md bg-black/30 p-3 font-mono text-xs leading-relaxed">{diag}</pre>
                         </div>
                     )}
                 </div>
@@ -378,14 +380,10 @@ function MathPad() {
                         <li><code>f(x) = x^2 + 2x + 1</code> — define a function</li>
                         <li><code>A = [[1,2],[3,4]]</code> — 2×2 matrix; vectors: <code>[1,2,3]</code></li>
                         <li>Element-wise: <code>A .+ 1</code>, <code>A .* A</code>, <code>A ./ 2</code></li>
-                        <li>Matrix ops: <code>A *
-                            B</code>, <code>det(A)</code>, <code>inv(A)</code>, <code>transpose(A)</code></li>
+                        <li>Matrix ops: <code>A * B</code>, <code>det(A)</code>, <code>inv(A)</code>, <code>transpose(A)</code></li>
                         <li>Ranges: <code>1:5</code> → <code>[1,2,3,4,5]</code>; <code>linspace(0,1,5)</code></li>
-                        <li>Chem: <code>chem(Al2O3)</code>, <code>chem(Ca(OH)2)</code>, <code>chem(CuSO4·5H2O)</code>
-                        </li>
-                        <li>Each element symbol (e.g., <code>Na</code>, <code>Cl</code>, <code>O</code>) is bound to its
-                            molar mass.
-                        </li>
+                        <li>Chem: <code>chem(Al2O3)</code>, <code>chem(Ca(OH)2)</code>, <code>chem(CuSO4·5H2O)</code></li>
+                        <li>Each element symbol (e.g., <code>Na</code>, <code>Cl</code>, <code>O</code>) is bound to its molar mass.</li>
                     </ul>
                 </details>
             </div>
@@ -393,8 +391,8 @@ function MathPad() {
     );
 }
 
-const Page: React.FC = () => <MathPad/>;
-const preview = <div/>;
+const Page: React.FC = () => <MathPad />;
+const preview = <div />;
 
 export const title = "MathPad";
 export const description = "WORK IN PROGRESS. a math calculator that's like coding, support algebra, statistics, linear algebra, chemistry";

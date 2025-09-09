@@ -129,11 +129,10 @@ const CB_MASS: Record<string, number> = {
     Og: 294.00
 };
 
-// ---------- Types (no `any`) ----------
+// ---------- Types ----------
 type ScopeValue = MathType | ((x: string) => number);
 type Scope = Record<string, ScopeValue>;
 
-// Type guards to avoid `any`
 function isRecord(v: unknown): v is Record<string, unknown> {
     return typeof v === "object" && v !== null;
 }

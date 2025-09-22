@@ -4,6 +4,7 @@ import type {Metadata} from "next";
 import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import React from "react";
+import {SpeedInsights} from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://markwu.org"),
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" className="h-dvh">
         <body className="h-dvh overflow-hidden">
+        <SpeedInsights/>
         {/* Fixed header overlays content; controls its own hide/show */}
         <Header/>
 

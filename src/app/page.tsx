@@ -513,7 +513,7 @@ export default function HomePage() {
                                 <div className="h-full w-[20%] rounded-full bg-white/60"/>
                             </div>
                             <Link
-                                href="/misc/random"
+                                href="/misc/scavenger"
                                 className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
                             >
                                 Open →

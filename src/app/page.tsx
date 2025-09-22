@@ -333,10 +333,10 @@ export default function HomePage() {
                             Featured Projects
                         </h2>
                         <div className="mt-4 grid gap-6 md:grid-cols-3">
-                            <FeaturedCard title="Aetherius UAV" href="/dronescape/uav">
+                            {/*<FeaturedCard title="Aetherius UAV" href="/dronescape/uav">
                                 Fixed-wing UAV with Raspberry Pi avionics and a custom GCS. MAVLink telemetry, offline
                                 planning, terrain mapping.
-                            </FeaturedCard>
+                            </FeaturedCard>*/}
 
                             <FeaturedCard title="FRC - Team Sprocket" href="/teamsprocket">
                                 A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do
@@ -455,14 +455,13 @@ export default function HomePage() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-semibold">Aetherius UAV</h3>
                                 <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-amber-500/20 text-amber-300 border-amber-400/30">On Hold</span>
+                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing hardware issues and preparing for club
-                                rush display.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Aug 31, 2025</p>
+                                className="text-white/70">Current:</span> Fixing electronic issues and preparing for homecoming air show.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Sept 21, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[17%] rounded-full bg-white/60"/>
                             </div>
@@ -502,16 +501,16 @@ export default function HomePage() {
                         <div
                             className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">Smaller Projects</h3>
+                                <h3 className="text-lg font-semibold">The Scavengers</h3>
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Various small projects I made out of curiosity or need</p>
+                            <p className="mt-1 text-sm text-white/75">A JPL invention challenge team I captain.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Collatz Conjecture playground and MathPad.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Sept 9, 2025</p>
+                                className="text-white/70">Current:</span>Finalizing CAD, finding electronics, and preparing manufacturing.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Sept 21, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[26%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[20%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/misc/random"
@@ -721,28 +720,33 @@ const ShootingStars: React.FC<Props> = ({
         const W = Math.max(1, rect.width);
         const H = Math.max(1, rect.height);
 
-        // Offscreen endpoints: RIGHT -> LEFT (never visible)
+        // Upward shift by ~1/3 screen height
+        const yShift = -H / 3;
+
+        // Offscreen endpoints: RIGHT -> LEFT
         const x0 = rand(W + pad, W + pad * 2);    // start offscreen right
-        const y0 = rand(-pad * 0.2, H * 0.35);    // near/above top edge
+        const y0 = rand(-pad * 0.2, H * 0.35);
 
         const x1 = rand(-pad * 2, -pad);          // end offscreen left
-        const y1 = rand(H * 0.55, H + pad * 0.2); // near/below bottom edge
+        const y1 = rand(H * 0.55, H + pad * 0.2);
 
-        // Two interior guide points to bend the path through the viewport
+        // Interior guide points (before shift)
         const g1x = rand(W * 0.55, W * 0.85);
         const g1y = rand(H * 0.15, H * 0.40);
         const g2x = rand(W * 0.15, W * 0.45);
         const g2y = rand(H * 0.45, H * 0.75);
 
-        // Make control points “near” the guides (curve will be pulled inside)
+        // Jitter near the guides
         const jitter = (v: number, j: number) => v + rand(-j, j);
         const c1x = jitter(g1x, W * 0.05);
         const c1y = jitter(g1y, H * 0.05);
         const c2x = jitter(g2x, W * 0.05);
         const c2y = jitter(g2y, H * 0.05);
 
-        return `M ${x0} ${y0} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x1} ${y1}`;
+        // Apply linear upward shift to all Y's
+        return `M ${x0} ${y0 + yShift} C ${c1x} ${c1y + yShift}, ${c2x} ${c2y + yShift}, ${x1} ${y1 + yShift}`;
     };
+
 
 // Optional: ensure path meaningfully crosses the viewport (retry up to N)
     const generateCrossingPath = (rect: DOMRect | DOMRectReadOnly, pad: number, tries = 6): string => {

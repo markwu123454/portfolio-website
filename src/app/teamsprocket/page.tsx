@@ -39,8 +39,8 @@ export default function SprocketPage() {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <Stat label="My Role" value="CAD Subteam member"
                               hint="Resposible for various design needs of the team"/>
-                        <Stat label="Seasons Survived Personally" value="1" hint="ReefScape"/>
-                        <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds"/>
+                        <Stat label="FIRST Seasons Survived" value="2" hint="FLL - City Shaper, FRC - ReefScape"/>
+                        <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds, 2025 SoCal Showdown"/>
                     </div>
                 </section>
 

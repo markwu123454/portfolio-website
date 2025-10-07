@@ -102,7 +102,7 @@ export default function SprocketPage() {
                             First Age(2025-26)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
-                            Competitions: TBD
+                            Competitions: CA District San Gabriel Valley Event(Mar 27-29)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
                             Awards: TBD

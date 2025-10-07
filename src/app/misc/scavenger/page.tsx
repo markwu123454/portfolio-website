@@ -22,11 +22,11 @@ export default function Page() {
                 <section className="mb-6 rounded-2xl border border-white/10 bg-black/30 p-6">
                     <h2 className="text-lg font-semibold">Leadership</h2>
                     <ul className="mt-3 grid grid-cols-1 gap-2 text-sm text-white/70 sm:grid-cols-2">
-                        <li>Captain — <span className="font-medium text-white">Mark Wu</span></li>
-                        <li>CAD Lead — <span className="font-medium text-white">Mark Wu</span></li>
+                        <li>Captain — <span className="font-medium text-white">Mark, Adam</span></li>
+                        <li>CAD Lead — <span className="font-medium text-white">Mark</span></li>
                         <li>Mechanical Lead — <span className="font-medium text-white">Kyle</span></li>
                         <li>Electrical Lead — <span className="font-medium text-white">Adam</span></li>
-                        <li>Programming Lead — <span className="font-medium text-white">Joshua</span></li>
+                        <li>Programming Lead — <span className="font-medium text-white">Andrew</span></li>
                         <li>Publicity Lead — <span className="font-medium text-white">Brista</span></li>
                     </ul>
                 </section>

@@ -49,7 +49,7 @@ export default function SprocketPage() {
                     <h2 className="p-3 font-bold text-3xl">My Responsibilities</h2>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <Link href="teamsprocket/cad" className="group block">
+                        <Link href="/teamsprocket/cad" className="group block">
                             <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 pr-10 backdrop-blur transition-colors duration-200 group-hover:bg-white/10">
                                 <div className="text-xs uppercase tracking-wide text-white/60">CAD</div>
                                 <div className="mt-1 text-2xl font-semibold">Competition Robot CAD</div>
@@ -60,7 +60,7 @@ export default function SprocketPage() {
                             </div>
                         </Link>
 
-                        <Link href="teamsprocket/scouting" className="group block">
+                        <Link href="/teamsprocket/scouting" className="group block">
                             <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 pr-10 backdrop-blur transition-colors duration-200 group-hover:bg-white/10">
                                 <div className="text-xs uppercase tracking-wide text-white/60">Programming</div>
                                 <div className="mt-1 text-2xl font-semibold">Scouting App</div>
@@ -84,8 +84,9 @@ export default function SprocketPage() {
                             First Dive(2024-25)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
-                            Competitions: Orange County Regional(3-9-0), Central Valley Regional(5-6-0), World
-                            Championships Hopper Division(6-4-0), SoCal ShowDown(Oct 11-12)
+                            Competitions: Orange County Regional(3-9-0, rank 38 out of 47), Central Valley Regional(5-6-0, rank 24 out of 42), World
+                            Championships Hopper Division(6-4-0, rank 28 out of 75) <br/>
+                            Off-season competitions: SoCal Showdown(5-6-0, rank 28 out of 42)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
                             Awards: Regional FIRST Impact Award @ OCR, Imagery Award in honor of Jack Kamen @ CVR

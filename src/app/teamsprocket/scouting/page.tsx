@@ -150,7 +150,7 @@ export default function ScoutingPortfolioPage() {
             <section className="px-6 py-24 bg-white/5 border-t border-white/10">
                 <div className="mx-auto max-w-5xl">
                     <h2 className="text-3xl font-bold mb-6">Engineering Highlights</h2>
-                    <ul className="grid md:grid-cols-2 gap-4 text-white/85 list-disc ml-5">
+                    <ul className="grid md:grid-cols-2 gap-4 text-white/85 list-disc ml-5 space-x-5">
                         <li>Asynchronous Python backend with FastAPI + asyncpg.</li>
                         <li>Typed React/TypeScript frontend with IndexedDB queueing.</li>
                         <li>Deterministic sync and conflict-free replication.</li>

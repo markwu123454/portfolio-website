@@ -480,13 +480,11 @@ export default function HomePage() {
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-blue-500/20 text-blue-300 border-blue-400/30">Testing</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with
-                                offline-first PWA</p>
+                            <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Preparing for off season competition end to
-                                end testing.
+                                className="text-white/70">Current:</span> Analyzing results from testing
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Aug 18, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 17, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
@@ -507,10 +505,10 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">A JPL invention challenge team I captain.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Finalizing CAD, finding electronics, and preparing manufacturing.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Sept 21, 2025</p>
+                                className="text-white/70">Current:</span>Finished manufacturing, programming and iterating.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 17, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[20%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[60%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/misc/scavenger"

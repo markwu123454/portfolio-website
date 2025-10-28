@@ -2,7 +2,7 @@
 
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {useRouter} from "next/navigation";
-import {Wrench, ArrowLeft, Rocket, Mail, House, EyeOff, Eye} from "lucide-react";
+import {Wrench, ArrowLeft, Rocket, Mail, House, EyeOff, Eye, PocketKnife, Plane, Boxes} from "lucide-react";
 import Link from "next/link";
 
 export type StageStatus = "done" | "in_progress" | "todo";
@@ -223,6 +223,34 @@ export default function UnderConstruction({
                         </div>
                     </div>
                 )}
+
+                {/* Suggest other completed pages */}
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur md:p-6">
+                    <p className="mb-3 text-sm text-white/80">
+                        This page is still being built — but others are ready. Explore the finished sections below:
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                        <Link
+                            href="/teamsprocket/cad"
+                            className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-black transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/60 disabled:opacity-50 disabled:pointer-events-none bg-gradient-to-tr from-emerald-400 via-cyan-300 to-blue-300 hover:brightness-110"
+                        >
+                            <Boxes className="mr-2 h-4 w-4" /> FRC CAD
+                        </Link>
+                        <Link
+                            href="/legacy/teaminfernope"
+                            className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-sm backdrop-blur transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                        >
+                            <PocketKnife className="mr-2 h-4 w-4" /> Combat Robotics
+                        </Link>
+                        <Link
+                            href="/dronescape/uav"
+                            className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-sm backdrop-blur transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                        >
+                            <Plane className="mr-2 h-4 w-4" /> UAV
+                        </Link>
+                    </div>
+                </div>
+
 
 
             </section>

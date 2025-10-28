@@ -46,7 +46,9 @@ export default function CADPage() {
                     First Dive(2024-25)
                 </p>
                 <p className="mt-2 text-sm text-white/70">
-                Competitions: Orange County Regional(3-9-0), Central Valley Regional(5-6-0), World Championships(6-4-0), SoCal ShowDown(Oct 11-12)
+                    Competitions: Orange County Regional(3-9-0, rank 38 out of 47), Central Valley Regional(5-6-0, rank 24 out of 42), World
+                    Championships Hopper Division(6-4-0, rank 28 out of 75) <br/>
+                    Off-season competitions: SoCal Showdown(5-6-0, rank 28 out of 42)
                 </p>
             </section>
 

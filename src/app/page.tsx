@@ -460,10 +460,10 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing electronic issues and preparing for homecoming air show.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Sept 21, 2025</p>
+                                className="text-white/70">Current:</span> Fixing electronic issues and preparing hardware-software testing.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[17%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[19%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/dronescape/uav"
@@ -482,9 +482,9 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Analyzing results from testing
+                                className="text-white/70">Current:</span> Working on data presentation and integration. Starting to prepare for season rollover and kickoff into FRC Rebuilt.
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 17, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
@@ -505,10 +505,10 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">A JPL invention challenge team I captain.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Finished manufacturing, programming and iterating.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 17, 2025</p>
+                                className="text-white/70">Current:</span>Reflection on internal competition result, regrouping after finals got canceled, planning for regional on Nov 8.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[60%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[65%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/misc/scavenger"

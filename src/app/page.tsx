@@ -323,7 +323,7 @@ export default function HomePage() {
                         </h1>
 
                         <p className="mt-4 text-lg text-white/80 max-w-prose">
-                            I build robots and software.
+                            I build robots and make apps.
                         </p>
                     </div>
 
@@ -455,13 +455,13 @@ export default function HomePage() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-semibold">Aetherius UAV</h3>
                                 <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
+                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-amber-500/20 text-amber-300 border-amber-400/30">On Hold</span>
                             </div>
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
                                 className="text-white/70">Current:</span> Fixing electronic issues and preparing hardware-software testing.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[19%] rounded-full bg-white/60"/>
                             </div>
@@ -478,13 +478,13 @@ export default function HomePage() {
                             <div className="flex items-center justify-between">
                                 <h3 className="text-lg font-semibold">FRC Scouting</h3>
                                 <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-blue-500/20 text-blue-300 border-blue-400/30">Testing</span>
+                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
                                 className="text-white/70">Current:</span> Working on data presentation and integration. Starting to prepare for season rollover and kickoff into FRC Rebuilt.
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
@@ -519,6 +519,83 @@ export default function HomePage() {
                         </div>
                     </div>
                 </section>
+
+                {/* Activity List */}
+                <section className="py-16 md:py-2">
+                    <div className="flex items-baseline justify-between mb-6">
+                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                            Activities & Contributions
+                            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
+                        </h2>
+                    </div>
+
+                    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
+                        <table className="w-full text-sm md:text-base text-left border-collapse">
+                            <thead className="bg-white/10 text-white/80">
+                            <tr>
+                                <th className="px-4 py-3 font-medium w-[28%]">Title</th>
+                                <th className="px-4 py-3 font-medium w-[42%]">My Contribution</th>
+                                <th className="px-4 py-3 font-medium w-[20%]">Awards / Recognition</th>
+                                <th className="px-4 py-3 font-medium w-[10%]">Link</th>
+                            </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/10">
+                            {[
+                                {
+                                    title: "FRC – Team Sprocket",
+                                    contribution:
+                                        "Competition robot CAD, scouting app, various outreach project",
+                                    awards: "2025 Impact Award, 2025 Imagery Award",
+                                    link: "/teamsprocket",
+                                },
+                                {
+                                    title: "Aetherius UAV",
+                                    contribution:
+                                        "Lead developer for UAV avionics software and custom Ground Control Station.",
+                                    awards: "N/A",
+                                    link: "/dronescape/uav",
+                                },
+                                {
+                                    title: "The Scavengers – JPL Challenge",
+                                    contribution:
+                                        "Captain and CAD lead.",
+                                    awards: "Qualified for Regionals(Finals are canceled)",
+                                    link: "/misc/scavenger",
+                                },
+                                {
+                                    title: "Team Infernope",
+                                    contribution:
+                                        "Founded and led a combat robotics team for 3 years. ",
+                                    awards: "2024 End of year tornament champion",
+                                    link: "/legacy/teaminfernope",
+                                },
+                                {
+                                    title: "Projects pending documentation",
+                                    contribution:
+                                        "Portfolio website, Dronecape overview, SigmaCat Robotics, Project Temptest",
+                                    awards: "",
+                                    link: "/",
+                                },
+                            ].map((a) => (
+                                <tr key={a.title} className="hover:bg-white/[0.04] transition">
+                                    <td className="px-4 py-3 font-medium text-white">{a.title}</td>
+                                    <td className="px-4 py-3 text-white/80">{a.contribution}</td>
+                                    <td className="px-4 py-3 text-white/70">{a.awards}</td>
+                                    <td className="px-4 py-3">
+                                        <Link
+                                            href={a.link}
+                                            className="inline-flex items-center gap-1 text-sm text-cyan-300 hover:text-cyan-200 font-medium"
+                                        >
+                                            Open →
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
 
                 {/* Contact / Links */}
                 <section className="max-w-4xl pb-10">

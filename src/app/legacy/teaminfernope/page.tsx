@@ -3,6 +3,7 @@
 
 import {motion} from "framer-motion"
 import {AlertCircle, Wrench, Lightbulb, Sword, Trophy} from "lucide-react"
+import {useState} from "react";
 
 // ------------------- ANIMATION VARIANTS -------------------
 const fadeUp = {
@@ -19,14 +20,13 @@ function Divider({thick = false}: { thick?: boolean }) {
             transition={{duration: 0.6}}
             className={`origin-left mx-auto ${
                 thick ? "h-[4px]" : "h-[2px]"
-            } bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 my-24`}
+            } bg-gradient-to-r from-zinc-800 via-zinc-700 to-zinc-800 my-12`}
         />
     )
 }
 
 // ------------------- COMPONENT: ROBOT SECTION -------------------
 function RobotSection({
-                          id,
                           title,
                           type,
                           result,
@@ -37,11 +37,10 @@ function RobotSection({
                           notes,
                           reverse,
                       }: {
-    id?: string
     title: string
     type?: string
     result?: string
-    image: string | string[] // 🔹 can be a single or multiple image paths
+    image: string | string[]
     description: string
     downsides: string
     lessons: string
@@ -49,17 +48,16 @@ function RobotSection({
     reverse?: boolean
 }) {
     const images = Array.isArray(image) ? image : [image]
+    const [openIndex, setOpenIndex] = useState<number | null>(null)
 
     return (
-        <section id={id} className="max-w-6xl mx-auto px-6 py-24">
+        <section className="max-w-6xl mx-auto px-6 py-24">
             <motion.div
                 initial="hidden"
                 whileInView="show"
-                viewport={{once: true}}
+                viewport={{ once: true }}
                 variants={fadeUp}
-                className={`flex flex-col ${
-                    reverse ? "md:flex-row-reverse" : "md:flex-row"
-                } items-center gap-10`}
+                className={`flex flex-col ${reverse ? "md:flex-row-reverse" : "md:flex-row"} items-center gap-10`}
             >
                 {/* ---------- IMAGES ---------- */}
                 <div className="w-full md:w-1/2 flex flex-col items-center gap-4">
@@ -67,8 +65,9 @@ function RobotSection({
                         <motion.img
                             src={images[0]}
                             alt={title}
-                            whileHover={{scale: 1.03}}
-                            className="rounded-2xl w-full border border-zinc-800 shadow-lg"
+                            whileHover={{ scale: 1.03 }}
+                            onClick={() => setOpenIndex(0)}
+                            className="rounded-2xl w-full border border-zinc-800 shadow-lg cursor-pointer"
                         />
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
@@ -77,8 +76,9 @@ function RobotSection({
                                     key={i}
                                     src={src}
                                     alt={`${title} ${i + 1}`}
-                                    whileHover={{scale: 1.03}}
-                                    className="rounded-2xl w-full border border-zinc-800 shadow-lg"
+                                    whileHover={{ scale: 1.03 }}
+                                    onClick={() => setOpenIndex(i)}
+                                    className="rounded-2xl w-full border border-zinc-800 shadow-lg cursor-pointer"
                                 />
                             ))}
                         </div>
@@ -91,12 +91,12 @@ function RobotSection({
                         <h3 className="text-3xl font-semibold text-white">{title}</h3>
                         {type && (
                             <p className="flex items-center gap-1 text-zinc-400 text-sm">
-                                <Sword className="h-4 w-4 text-zinc-500"/> <strong>Type:</strong> {type}
+                                <Sword className="h-4 w-4 text-zinc-500" /> <strong>Type:</strong> {type}
                             </p>
                         )}
                         {result && (
                             <p className="flex items-center gap-1 text-zinc-500 text-sm">
-                                <Trophy className="h-4 w-4 text-amber-400"/> <strong>Result:</strong> {result}
+                                <Trophy className="h-4 w-4 text-amber-400" /> <strong>Result:</strong> {result}
                             </p>
                         )}
                     </div>
@@ -105,7 +105,7 @@ function RobotSection({
 
                     {notes && (
                         <div className="flex items-start gap-2">
-                            <Wrench className="text-zinc-400 mt-1 h-5 w-5 shrink-0"/>
+                            <Wrench className="text-zinc-400 mt-1 h-5 w-5 shrink-0" />
                             <p className="text-zinc-400 text-sm">
                                 <strong>Notes:</strong> {notes}
                             </p>
@@ -113,24 +113,62 @@ function RobotSection({
                     )}
 
                     <div className="flex items-start gap-2">
-                        <AlertCircle className="text-rose-400 mt-1 h-5 w-5 shrink-0"/>
+                        <AlertCircle className="text-rose-400 mt-1 h-5 w-5 shrink-0" />
                         <p className="text-rose-400 text-sm">
                             <strong>Downsides:</strong> {downsides}
                         </p>
                     </div>
 
                     <div className="flex items-start gap-2">
-                        <Lightbulb className="text-emerald-400 mt-1 h-5 w-5 shrink-0"/>
+                        <Lightbulb className="text-emerald-400 mt-1 h-5 w-5 shrink-0" />
                         <p className="text-emerald-400 text-sm">
                             <strong>Lessons Learned:</strong> {lessons}
                         </p>
                     </div>
                 </div>
             </motion.div>
+
+            {/* ---------- FULLSCREEN OVERLAY ---------- */}
+            {openIndex !== null && (
+                <motion.div
+                    key="overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setOpenIndex(null)}
+                    className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center cursor-zoom-out"
+                >
+                    <motion.img
+                        src={images[openIndex]}
+                        alt={`${title} enlarged`}
+                        initial={{ scale: 0.9 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0.9 }}
+                        transition={{ duration: 0.3 }}
+                        className="max-h-[90vh] max-w-[90vw] rounded-2xl border border-zinc-700 shadow-2xl object-contain"
+                    />
+                </motion.div>
+            )}
         </section>
     )
 }
 
+
+// ------------------- COMPONENT: SECTION TITLE -------------------
+function SectionTitle({title, id}: { title: string, id: string }) {
+    return (
+        <motion.h2
+            id={id}
+            initial="hidden"
+            whileInView="show"
+            viewport={{once: true}}
+            variants={fadeUp}
+            className="scroll-mt-24 text-4xl font-bold text-center mt-6 mb-5 tracking-tight text-zinc-100"
+        >
+            {title}
+        </motion.h2>
+    )
+}
 
 // ------------------- COMPONENT: TIMELINE -------------------
 function Timeline() {
@@ -186,31 +224,33 @@ function Hero() {
             >
                 {/* ---------- LOGO ---------- */}
                 <motion.img
-                    src="/infernope/image (3).png" // ⬅️ change this path to your actual logo file
+                    src="/infernope/image (3).png"
                     alt="Team Infernope Logo"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    whileHover={{ scale: 1.05 }}
+                    initial={{opacity: 0, y: -20}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{duration: 0.8}}
+                    whileHover={{scale: 1.05}}
                     className="mx-auto w-40 h-40 object-contain rounded-xl shadow-lg border border-zinc-800"
                 />
 
                 {/* ---------- TITLE + DESCRIPTION ---------- */}
                 <h1 className="text-5xl font-bold tracking-tight mt-6">Team Infernope</h1>
                 <p className="text-zinc-400 max-w-3xl mx-auto leading-relaxed">
-                    A three-year evolution of combat robots, each testing new engineering principles—from voltage scaling to
-                    modular chassis and energy efficiency. Every robot was a deliberate step in mechanical and electrical design.
+                    A three-year evolution of combat robots, each testing new engineering principles—from voltage
+                    scaling to
+                    modular chassis and energy efficiency. Every robot was a deliberate step in mechanical and
+                    electrical design.
                 </p>
 
                 {/* ---------- TIMELINE ---------- */}
-                <Timeline />
+                <Timeline/>
 
                 {/* ---------- LINKS ---------- */}
                 <motion.a
                     href="https://teaminfernope.wordpress.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{scale: 1.05}}
                     className="inline-block px-8 py-4 border border-zinc-700 rounded-xl text-lg font-medium text-zinc-200 hover:bg-zinc-900 hover:border-zinc-500 transition mt-16"
                 >
                     Official Website (Legacy)
@@ -220,7 +260,7 @@ function Hero() {
                     href="https://www.youtube.com/@TeamInfernope/featured"
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{scale: 1.05}}
                     className="inline-block px-8 py-4 ml-10 border border-zinc-700 rounded-xl text-lg font-medium text-zinc-200 hover:bg-zinc-900 hover:border-zinc-500 transition mt-4"
                 >
                     YouTube Channel
@@ -238,8 +278,8 @@ export default function TeamInfernope() {
             <Hero/>
 
             {/* YEAR 1 */}
+            <SectionTitle title="Year 1" id="year1"/>
             <RobotSection
-                id="year1"
                 title="Horizontal Spinner"
                 type="Horizontal Spinner"
                 image="/infernope/Screenshot 2025-10-27 201510.png"
@@ -251,8 +291,8 @@ export default function TeamInfernope() {
             <Divider/>
 
             {/* BETWEEN 1 & 2 */}
+            <SectionTitle title="Between Year 1 & 2" id="between1and2"/>
             <RobotSection
-                id="between1and2"
                 title="Experimental Shell Spinners"
                 type="Shell Spinner"
                 image={["/infernope/Screenshot 2025-10-27 210335.png", "/infernope/Screenshot 2025-10-27 205318.png"]}
@@ -265,8 +305,8 @@ export default function TeamInfernope() {
             <Divider thick/>
 
             {/* YEAR 2 */}
+            <SectionTitle title="Year 2" id="year2"/>
             <RobotSection
-                id="year2"
                 title="Thwack!"
                 type="Thwack Bot"
                 image={["/infernope/Screenshot 2025-10-27 220111.png", "/infernope/Screenshot 2025-10-27 220153.png"]}
@@ -278,8 +318,8 @@ export default function TeamInfernope() {
             <Divider/>
 
             {/* BETWEEN 2 & 3 */}
+            <SectionTitle title="Between Year 2 & 3" id="between2and3"/>
             <RobotSection
-                id="between2and3"
                 title="Doomstone"
                 type="Horizontal Bar Spinner"
                 image="/infernope/Screenshot 2025-10-27 215736.png"
@@ -301,10 +341,10 @@ export default function TeamInfernope() {
             <Divider thick/>
 
             {/* YEAR 3A */}
+            <SectionTitle title="Year 3 Semster 1" id="year3a"/>
             <RobotSection
-                id="year3a"
                 title="300g Bot"
-                type="Vertical Beater Bar"
+                type="Vertical Beater Bar(300g)"
                 image={["/infernope/Screenshot 2025-10-27 202823.png", "/infernope/Screenshot 2025-10-27 222440.png"]}
                 description="A 300g beater bar bot designed for weight efficiency while maintaining striking capability."
                 downsides="Strong design but unlucky tournament placement."
@@ -314,7 +354,7 @@ export default function TeamInfernope() {
             />
             <RobotSection
                 title="90 Degrees"
-                type="Bristledrive Horizontal Disk Spinner"
+                type="Bristledrive Horizontal Disk Spinner(300g)"
                 image="/infernope/Screenshot 2025-10-27 202504.png"
                 description="A bristle-drive horizontal spinner without wheels, relying on vibrations for movement. Exploited weight bonus for a heavier weapon."
                 downsides="Extremely slow and hard to control; excessive vibration caused instability."
@@ -324,11 +364,11 @@ export default function TeamInfernope() {
             <Divider thick/>
 
             {/* YEAR 3B */}
+            <SectionTitle title="Year 3 Semster 2" id="year3b"/>
             <RobotSection
-                id="year3b"
                 title="MAD"
                 type="Horizontal Bar Spinner"
-                image={["/infernope/Screenshot 2025-10-27 215322.png", "/infernope/Weixin Image_20251027221940_87_27.jpg",  "/infernope/Screenshot 2025-10-27 222312.png"]}
+                image={["/infernope/Screenshot 2025-10-27 215322.png", "/infernope/Weixin Image_20251027221940_87_27.jpg", "/infernope/Screenshot 2025-10-27 222312.png", "/infernope/Screenshot 2025-10-27 215647.png"]}
                 description="An upgraded horizontal spinner running a 6S system instead of 3S, doubling voltage for higher energy output."
                 downsides="Faulty belt system limited weapon to 30% power."
                 lessons="Learned multi-voltage integration: 12V drive and 24V weapon systems."
@@ -339,7 +379,7 @@ export default function TeamInfernope() {
                 title="Good Game"
                 type="Vertical Disk/Bar Spinner"
                 image={["/infernope/Screenshot 2025-10-27 221114.png", "/infernope/Screenshot 2025-10-27 221553.png", "/infernope/Weixin Image_20251027221936_84_27.jpg", "/infernope/Weixin Image_20251027221938_85_27.jpg"]}
-                description="A flagship vertical disk spinner with swappable wheels, weapons, and attachments for opponent-specific optimization."
+                description="My flagship vertical disk spinner with swappable wheels, weapons, and attachments for opponent-specific optimization."
                 downsides="Underestimated weapon forces led to broken bolts and bearings."
                 lessons="Discovered modular part design and belt-driven isolation for motor protection."
                 result="1st place @ End-of-Year Tournament"
@@ -364,20 +404,29 @@ export default function TeamInfernope() {
                 result="4th place @ End-of-Year Tournament"
             />
             <RobotSection
+                title="One and Two"
+                type="Multibot Wedge"
+                image="/infernope/Screenshot 2025-10-28 124532.png"
+                description="2 smaller 225g wedge robot in a multi-bot configuration."
+                downsides="No active weapon."
+                lessons="Designing multiple independent systems."
+                result="6th place @ End-of-Year Tournament"
+                reverse
+            />
+            <RobotSection
                 title="Riptide"
-                type="Egg Beater"
+                type="Egg Beater(3lb)"
                 image="/infernope/Screenshot 2025-10-27 223235.png"
                 description="A 3lb egg-beater inspired by Riptide (BattleBots) and Ares (NHRL)."
                 downsides="Never manufactured due to time constraints."
                 lessons="First robot fully designed in Fusion 360 using mixed materials: UHMW and carbon fiber."
                 result="CAD Practice"
-                reverse
             />
             <Divider thick/>
 
             {/* AFTER 3 */}
+            <SectionTitle title="After year 3" id="after3"/>
             <RobotSection
-                id="after3"
                 title="OP"
                 type="Vertical Disk Spinner"
                 image={["/infernope/Screenshot 2025-10-27 203121.png"]}
@@ -385,6 +434,7 @@ export default function TeamInfernope() {
                 downsides="Never competed; gyroscopic forces disabled turning at >50% speed."
                 lessons="Learned to use hub motors for drive and implemented rubber band–linked 4WD system."
                 result="Practice Build"
+                reverse
             />
         </main>
     )

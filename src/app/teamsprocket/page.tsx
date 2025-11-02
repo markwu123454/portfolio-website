@@ -70,6 +70,13 @@ export default function SprocketPage() {
                                 />
                             </div>
                         </Link>
+
+                        <div className="group block">
+                            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 pr-10 backdrop-blur transition-colors duration-200 group-hover:bg-white/10">
+                                <div className="text-xs uppercase tracking-wide text-white/60">Business</div>
+                                <div className="mt-1 text-2xl font-semibold">Outreach Initiatives</div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 

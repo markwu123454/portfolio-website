@@ -24,6 +24,7 @@ const LOGOS = [
     "/logo/fusion360.png",
     "/logo/fastapi.png",
     "/logo/onshape.png",
+    "/logo/tauri.png",
 ] as const;
 
 // 2) Per-logo JSX detail (keys = filename sans extension)
@@ -340,7 +341,7 @@ export default function HomePage() {
 
                             <FeaturedCard title="FRC - Team Sprocket" href="/teamsprocket">
                                 A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do
-                                CAD and scouting app.
+                                CAD, scouting app, and outreach initiatives.
                             </FeaturedCard>
 
                             {/*<div className="rounded-2xl p-5 md:p-6 border border-dashed border-white/10 text-white/60">

@@ -84,7 +84,7 @@ export default function SprocketPage() {
                 <section className="mb-16 flex items-center gap-6">
 
                     <Image src="/2025_logo_animation.gif" alt="ReefScape logo animated" width="200" height="200"
-                           className="bg-white rounded-2xl"/>
+                           className="bg-white rounded-2xl" unoptimized/>
                     <div>
                         <h2 className="text-4xl font-bold">ReefScape</h2>
                         <p className="mt-2 text-lg text-white/70">
@@ -103,14 +103,14 @@ export default function SprocketPage() {
 
                 <section className="mb-16 flex items-center gap-6">
                     <Image src="/2026_logo_animation.gif" alt="Rebuilt logo animated" width="200" height="200"
-                           className="bg-white rounded-2xl"/>
+                           className="bg-white rounded-2xl" unoptimized/>
                     <div>
                         <h2 className="text-4xl font-bold">Rebuilt</h2>
                         <p className="mt-2 text-lg text-white/70">
                             First Age(2025-26)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
-                            Competitions: CA District San Gabriel Valley Event(Mar 27-29)
+                            Competitions: CA District Hueneme Port Event(Mar 6-8), CA District San Gabriel Valley Event(Mar 27-29)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
                             Awards: TBD

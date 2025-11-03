@@ -52,12 +52,12 @@ export default function AboutPage() {
                             <p className="mt-2 text-neutral-300">SolidWorks, Fusion 360, OnShape</p>
                         </div>
                         <div className="rounded-2xl border border-neutral-800 p-5">
-                            <h3 className="text-sm uppercase tracking-wide text-neutral-500">CAD & Hardware</h3>
+                            <h3 className="text-sm uppercase tracking-wide text-neutral-500">Hardware</h3>
                             <p className="mt-2 text-neutral-300">Pixhawk 6X, Raspberry Pi, Arduino</p>
                         </div>
                         <div className="rounded-2xl border border-neutral-800 p-5">
                             <h3 className="text-sm uppercase tracking-wide text-neutral-500">Tooling</h3>
-                            <p className="mt-2 text-neutral-300">JetBrains IDEs, Bambu Studio, Git</p>
+                            <p className="mt-2 text-neutral-300">JetBrains IDEs, Bambu Studio, Git, QGroundControl</p>
                         </div>
                     </div>
                 </section>

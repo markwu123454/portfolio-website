@@ -461,7 +461,8 @@ export default function HomePage() {
                             <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
                                 custom GCS</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing electronic issues and preparing hardware-software testing.</p>
+                                className="text-white/70">Current:</span> Fixing electronic issues and preparing
+                                hardware-software testing.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[19%] rounded-full bg-white/60"/>
@@ -483,7 +484,8 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Working on data presentation and integration. Starting to prepare for season rollover and kickoff into FRC Rebuilt.
+                                className="text-white/70">Current:</span> Working on data presentation and integration.
+                                Starting to prepare for season rollover and kickoff into FRC Rebuilt.
                             </p>
                             <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
@@ -506,7 +508,8 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">A JPL invention challenge team I captain.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Reflection on internal competition result, regrouping after finals got canceled, planning for regional on Nov 8.</p>
+                                className="text-white/70">Current:</span>Reflection on internal competition result,
+                                regrouping after finals got canceled, planning for regional on Nov 8.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[65%] rounded-full bg-white/60"/>
@@ -522,10 +525,10 @@ export default function HomePage() {
                 </section>
 
                 {/* Activity List */}
-                <section className="py-16 md:py-2">
+                <section className="py-16 md:py-2" id="catalog">
                     <div className="flex items-baseline justify-between mb-6">
                         <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                            Activities & Contributions
+                            Catalog
                             <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
                         </h2>
                     </div>
@@ -534,61 +537,105 @@ export default function HomePage() {
                         <table className="w-full text-sm md:text-base text-left border-collapse">
                             <thead className="bg-white/10 text-white/80">
                             <tr>
-                                <th className="px-4 py-3 font-medium w-[28%]">Title</th>
-                                <th className="px-4 py-3 font-medium w-[42%]">My Contribution</th>
-                                <th className="px-4 py-3 font-medium w-[20%]">Awards / Recognition</th>
+                                <th className="px-4 py-3 font-medium w-[25%]">Title</th>
+                                <th className="px-4 py-3 font-medium w-[15%]">Competition</th>
+                                <th className="px-4 py-3 font-medium w-[35%]">My Contribution</th>
+                                <th className="px-4 py-3 font-medium w-[15%]">Awards / Recognition</th>
                                 <th className="px-4 py-3 font-medium w-[10%]">Link</th>
                             </tr>
                             </thead>
                             <tbody className="divide-y divide-white/10">
                             {[
                                 {
-                                    title: "FRC – Team Sprocket",
-                                    contribution:
-                                        "Competition robot CAD, scouting app, various outreach project",
+                                    title: "Team Sprocket (Robot Design)",
+                                    competition: "FRC",
+                                    contribution: "Lead CAD design and mechanical system integration for competition robot.",
+                                    awards: "",
+                                    link: "/teamsprocket/cad",
+                                },
+                                {
+                                    title: "Team Sprocket (Scouting App)",
+                                    competition: "FRC",
+                                    contribution: "Designed and implemented full-stack scouting and analytics platform.",
+                                    awards: "",
+                                    link: "/teamsprocket/scouting",
+                                },
+                                {
+                                    title: "Team Sprocket (Outreach)",
+                                    competition: "FRC",
+                                    contribution: "Led development of STEM demos and assisted others in various community outreaches.",
                                     awards: "2025 Impact Award, 2025 Imagery Award",
-                                    link: "/teamsprocket",
+                                    link: null,
                                 },
                                 {
                                     title: "Aetherius UAV",
-                                    contribution:
-                                        "Lead developer for UAV avionics software and custom Ground Control Station.",
-                                    awards: "N/A",
+                                    competition: "",
+                                    contribution: "Lead engineer for a fixed wing UAV.",
+                                    awards: "",
                                     link: "/dronescape/uav",
                                 },
                                 {
+                                    title: "Aetherius GCS",
+                                    competition: "",
+                                    contribution: "Lead developer for UAV avionics software and custom Ground Control Station.",
+                                    awards: "",
+                                    link: "/dronescape/gcs",
+                                },
+                                {
                                     title: "The Scavengers – JPL Challenge",
-                                    contribution:
-                                        "Captain and CAD lead.",
-                                    awards: "Qualified for Regionals(Finals are canceled)",
-                                    link: "/misc/scavenger",
+                                    competition: "JPL Invention Challenge",
+                                    contribution: "Captain and CAD lead.",
+                                    awards: "Qualified for Regionals (Finals canceled)",
+                                    link: null,
                                 },
                                 {
                                     title: "Team Infernope",
-                                    contribution:
-                                        "Founded and led a combat robotics team for 3 years. ",
-                                    awards: "2024 End of year tornament champion",
+                                    competition: "Combat Robotics",
+                                    contribution: "Founded and led a combat robotics team for 3 years.",
+                                    awards: "2024 End-of-Year Tournament Champion",
                                     link: "/legacy/teaminfernope",
                                 },
                                 {
-                                    title: "Projects pending documentation",
-                                    contribution:
-                                        "Portfolio website, Dronecape overview, SigmaCat Robotics, Project Temptest",
+                                    title: "Portfolio Website",
+                                    competition: "",
+                                    contribution: "This website where I keep track of and document projects.",
                                     awards: "",
-                                    link: "/",
+                                    link: null,
+                                },
+                                {
+                                    title: "SigmaCat Robotics",
+                                    competition: "RIVAL Robotics",
+                                    contribution: "Designed the robot and created vision and path planning software.",
+                                    awards: "",
+                                    link: null,
+                                },
+                                {
+                                    title: "Project Temptest",
+                                    competition: "",
+                                    contribution: "A heavy-lift drone project I mentor.",
+                                    awards: "",
+                                    link: null,
                                 },
                             ].map((a) => (
-                                <tr key={a.title} className="hover:bg-white/[0.04] transition">
-                                    <td className="px-4 py-3 font-medium text-white">{a.title}</td>
-                                    <td className="px-4 py-3 text-white/80">{a.contribution}</td>
-                                    <td className="px-4 py-3 text-white/70">{a.awards}</td>
-                                    <td className="px-4 py-3">
-                                        <Link
-                                            href={a.link}
-                                            className="inline-flex items-center gap-1 text-sm text-cyan-300 hover:text-cyan-200 font-medium"
-                                        >
-                                            Open →
-                                        </Link>
+                                <tr
+                                    key={a.title}
+                                    className="group transition hover:bg-white/[0.04] cursor-default"
+                                >
+                                    <td className="px-4 py-4 font-medium text-white text-base">{a.title}</td>
+                                    <td className="px-4 py-4 text-white/70">{a.competition || "—"}</td>
+                                    <td className="px-4 py-4 text-white/80">{a.contribution}</td>
+                                    <td className="px-4 py-4 text-white/70">{a.awards || "—"}</td>
+                                    <td className="px-4 py-4">
+                                        {a.link ? (
+                                            <Link
+                                                href={a.link}
+                                                className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 font-medium transition"
+                                            >
+                                                Open →
+                                            </Link>
+                                        ) : (
+                                            <span className="text-white/40 italic">Not yet documented</span>
+                                        )}
                                     </td>
                                 </tr>
                             ))}
@@ -596,7 +643,6 @@ export default function HomePage() {
                         </table>
                     </div>
                 </section>
-
 
                 {/* Contact / Links */}
                 <section className="max-w-4xl pb-10">
@@ -787,7 +833,7 @@ const ShootingStars: React.FC<Props> = ({
 
     // Memoize config to prevent unnecessary effect runs
     const config = useMemo(
-        () => ({ duration, length, thickness, spawnPadding, maxConcurrent, colors }),
+        () => ({duration, length, thickness, spawnPadding, maxConcurrent, colors}),
         [duration, length, thickness, spawnPadding, maxConcurrent, colors.join(',')]
     );
 
@@ -843,14 +889,14 @@ const ShootingStars: React.FC<Props> = ({
         // cubic Bezier point
         const at = (t: number) => {
             const mt = 1 - t;
-            const x = mt*mt*mt*x0 + 3*mt*mt*t*c1x + 3*mt*t*t*c2x + t*t*t*x1;
-            const y = mt*mt*mt*y0 + 3*mt*mt*t*c1y + 3*mt*t*t*c2y + t*t*t*y1;
-            return { x, y };
+            const x = mt * mt * mt * x0 + 3 * mt * mt * t * c1x + 3 * mt * t * t * c2x + t * t * t * x1;
+            const y = mt * mt * mt * y0 + 3 * mt * mt * t * c1y + 3 * mt * t * t * c2y + t * t * t * y1;
+            return {x, y};
         };
 
         const p1 = at(0.3);
         const p2 = at(0.7);
-        const inside = (p: {x:number;y:number}) =>
+        const inside = (p: { x: number; y: number }) =>
             p.x >= 0 && p.x <= rect.width && p.y >= 0 && p.y <= rect.height;
 
         // require at least one of the samples to be inside
@@ -859,7 +905,8 @@ const ShootingStars: React.FC<Props> = ({
 
     // Spawn a single star
     const spawnStar = (rect: DOMRect) => {
-        if (!isMountedRef.current) return () => {};
+        if (!isMountedRef.current) return () => {
+        };
 
         const id = idRef.current++;
         const path = generateCrossingPath(rect, config.spawnPadding);

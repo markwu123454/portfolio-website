@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import {motion} from "framer-motion"
+import React, {useState} from "react"
+import {AnimatePresence, motion} from "framer-motion"
 import {
     Map,
     Gauge,
@@ -10,7 +10,7 @@ import {
     Wrench,
     LineChart,
     Image as ImageIcon,
-    ArrowRight,
+    ArrowRight, X,
 } from "lucide-react"
 
 export default function AetheriusGCSPage() {
@@ -152,7 +152,7 @@ export default function AetheriusGCSPage() {
                         title="GCS Interface Previews"
                         images={[
                             {alt: "Mission planner UI", src: "/aetherius/Screenshot_2025-11-02_164907.png"},
-                            {alt: "Driver station bar", src: "/images/aetherius/gcs-driver.jpg"},
+                            {alt: "Raspberry Pi Sync", src: "/aetherius/8094f91330b25fa234de7f78a18b714c.jpg"},
                             {alt: "Validation overlays", src: "/images/aetherius/gcs-validate.jpg"},
                         ]}
                     />
@@ -208,6 +208,9 @@ function GlassCard({title, icon, children}: { title: string; icon?: React.ReactN
 }
 
 function Gallery({title, images}: { title: string; images: { alt: string; src: string }[] }) {
+    const [selected, setSelected] = useState<string | null>(null)
+    const [errorSet, setErrorSet] = useState<Set<number>>(new Set())
+
     return (
         <section className="mt-8">
             <h3 className="mb-3 text-lg font-semibold">{title}</h3>
@@ -219,22 +222,53 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
                         whileInView={{opacity: 1, scale: 1}}
                         viewport={{once: true, amount: 0.5}}
                         transition={{duration: 0.4, delay: i * 0.1}}
-                        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
+                        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl cursor-pointer"
+                        onClick={() => setSelected(img.src)}
                     >
-                        <div
-                            className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center"
-                            style={{
-                                backgroundImage: `url(${img.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center"
-                            }}
-                        >
-                            <ImageIcon className="h-8 w-8 text-muted-foreground/60"/>
+                        <div className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
+                            <img
+                                src={img.src}
+                                alt={img.alt}
+                                onError={() => setErrorSet(prev => new Set([...prev, i]))}
+                                className={`h-full w-full object-cover transition-transform duration-300 hover:scale-105 ${
+                                    errorSet.has(i) ? "hidden" : ""
+                                }`}
+                            />
+                            {errorSet.has(i) && (
+                                <ImageIcon className="h-8 w-8 text-muted-foreground/60"/>
+                            )}
                         </div>
                         <figcaption className="p-2 text-xs text-muted-foreground">{img.alt}</figcaption>
                     </motion.figure>
                 ))}
             </div>
+
+            {/* Fullscreen viewer */}
+            <AnimatePresence>
+                {selected && (
+                    <motion.div
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm"
+                        onClick={() => setSelected(null)}
+                    >
+                        <div className="relative max-w-5xl w-full">
+                            <img
+                                src={selected}
+                                alt="Expanded view"
+                                className="w-full h-auto max-h-[90vh] rounded-xl object-contain mx-auto"
+                            />
+                            <button
+                                className="absolute top-3 right-3 rounded-full bg-black/60 p-2 hover:bg-black/80 transition"
+                                onClick={() => setSelected(null)}
+                            >
+                                <X className="h-5 w-5 text-white"/>
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     )
 }

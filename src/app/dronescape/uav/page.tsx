@@ -1,7 +1,7 @@
 "use client"
 
-import React from "react"
-import {motion} from "framer-motion"
+import React, {useState} from "react"
+import {AnimatePresence, motion} from "framer-motion"
 import {
     Plane,
     Workflow,
@@ -12,7 +12,7 @@ import {
     ArrowRight,
     Cpu,
     RulerDimensionLine,
-    Microchip,
+    Microchip, X,
 } from "lucide-react"
 
 export default function AetheriusUAVPage() {
@@ -22,7 +22,7 @@ export default function AetheriusUAVPage() {
             <section className="relative min-h-screen flex items-center overflow-hidden border-b border-white/10 bg-background/50 backdrop-blur-xl">
                 {/* Background visual anchor */}
                 <div className="absolute inset-0 -z-10">
-                    <div className="absolute inset-0 bg-[url('/images/aetherius/bench.jpg')] bg-cover bg-center opacity-20" />
+                    <div className="absolute inset-0 bg-[url('/aetherius/dd2f2ce996d5ddd75e8cf7fc5e3e01f1.jpg')] bg-cover bg-center opacity-60" />
                     <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-background/60 to-background" />
                 </div>
 
@@ -50,8 +50,6 @@ export default function AetheriusUAVPage() {
                             transition={{ duration: 0.6, delay: 0.15 }}
                             className="mt-6 flex flex-wrap gap-2"
                         >
-                            <BadgePill label="Avionics-first" icon={<CircuitBoard className="h-3.5 w-3.5" />} />
-                            <BadgePill label="Data-oriented" icon={<LineChart className="h-3.5 w-3.5" />} />
                         </motion.div>
                     </div>
 
@@ -270,9 +268,12 @@ function ProgressBar({value}: {value: number}) {
     )
 }
 
-function Gallery({title, images}: {title: string; images: {alt: string; src: string}[]}) {
+function Gallery({title, images}: { title: string; images: { alt: string; src: string }[] }) {
+    const [selected, setSelected] = useState<string | null>(null)
+    const [errorSet, setErrorSet] = useState<Set<number>>(new Set())
+
     return (
-        <section className="mt-10">
+        <section className="mt-8">
             <h3 className="mb-3 text-lg font-semibold">{title}</h3>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {images.map((img, i) => (
@@ -282,22 +283,53 @@ function Gallery({title, images}: {title: string; images: {alt: string; src: str
                         whileInView={{opacity: 1, scale: 1}}
                         viewport={{once: true, amount: 0.5}}
                         transition={{duration: 0.4, delay: i * 0.1}}
-                        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl"
+                        className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl cursor-pointer"
+                        onClick={() => setSelected(img.src)}
                     >
-                        <div
-                            className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center"
-                            style={{
-                                backgroundImage: `url(${img.src})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                            }}
-                        >
-                            <ImageIcon className="h-8 w-8 text-muted-foreground/60" />
+                        <div className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
+                            <img
+                                src={img.src}
+                                alt={img.alt}
+                                onError={() => setErrorSet(prev => new Set([...prev, i]))}
+                                className={`h-full w-full object-cover transition-transform duration-300 hover:scale-105 ${
+                                    errorSet.has(i) ? "hidden" : ""
+                                }`}
+                            />
+                            {errorSet.has(i) && (
+                                <ImageIcon className="h-8 w-8 text-muted-foreground/60"/>
+                            )}
                         </div>
                         <figcaption className="p-2 text-xs text-muted-foreground">{img.alt}</figcaption>
                     </motion.figure>
                 ))}
             </div>
+
+            {/* Fullscreen viewer */}
+            <AnimatePresence>
+                {selected && (
+                    <motion.div
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm"
+                        onClick={() => setSelected(null)}
+                    >
+                        <div className="relative max-w-5xl w-full">
+                            <img
+                                src={selected}
+                                alt="Expanded view"
+                                className="w-full h-auto max-h-[90vh] rounded-xl object-contain mx-auto"
+                            />
+                            <button
+                                className="absolute top-3 right-3 rounded-full bg-black/60 p-2 hover:bg-black/80 transition"
+                                onClick={() => setSelected(null)}
+                            >
+                                <X className="h-5 w-5 text-white"/>
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     )
 }

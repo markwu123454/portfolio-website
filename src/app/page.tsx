@@ -399,7 +399,7 @@ export default function HomePage() {
                                 {
                                     title: "Team Sprocket (Robot Design)",
                                     competition: "FRC",
-                                    contribution: "Responsible CAD design and mechanical system integration for competition robot.",
+                                    contribution: "Responsible for CAD design and mechanical system integration for competition robot.",
                                     awards: "",
                                     link: "/teamsprocket/cad",
                                 },

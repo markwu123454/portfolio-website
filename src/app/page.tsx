@@ -374,6 +374,126 @@ export default function HomePage() {
                 {/* Anchor target for scroll hint */}
                 <div id="next" className="pt-16 md:pt-24"/>
 
+                {/* Activity List */}
+                <section className="py-16 md:py-2" id="catalog">
+                    <div className="flex items-baseline justify-between mb-6">
+                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+                            Catalog
+                            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
+                        </h2>
+                    </div>
+
+                    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
+                        <table className="w-full text-sm md:text-base text-left border-collapse">
+                            <thead className="bg-white/10 text-white/80">
+                            <tr>
+                                <th className="px-4 py-3 font-medium w-[25%]">Title</th>
+                                <th className="px-4 py-3 font-medium w-[15%]">Competition</th>
+                                <th className="px-4 py-3 font-medium w-[35%]">My Contribution</th>
+                                <th className="px-4 py-3 font-medium w-[15%]">Awards / Recognition</th>
+                                <th className="px-4 py-3 font-medium w-[10%]">Link</th>
+                            </tr>
+                            </thead>
+                            <tbody className="divide-y divide-white/10">
+                            {[
+                                {
+                                    title: "Team Sprocket (Robot Design)",
+                                    competition: "FRC",
+                                    contribution: "Responsible CAD design and mechanical system integration for competition robot.",
+                                    awards: "",
+                                    link: "/teamsprocket/cad",
+                                },
+                                {
+                                    title: "Team Sprocket (Scouting App)",
+                                    competition: "FRC",
+                                    contribution: "Designed and implemented full-stack scouting and analytics platform.",
+                                    awards: "",
+                                    link: "/teamsprocket/scouting",
+                                },
+                                {
+                                    title: "Team Sprocket (Outreach)",
+                                    competition: "FRC",
+                                    contribution: "Led development of STEM demos and assisted others in various community outreaches.",
+                                    awards: "2025 Impact Award, 2025 Imagery Award",
+                                    link: null,
+                                },
+                                {
+                                    title: "Aetherius UAV",
+                                    competition: "",
+                                    contribution: "Lead engineer for a fixed wing UAV.",
+                                    awards: "",
+                                    link: "/dronescape/uav",
+                                },
+                                {
+                                    title: "Aetherius GCS",
+                                    competition: "",
+                                    contribution: "Lead developer for UAV avionics software and custom Ground Control Station.",
+                                    awards: "",
+                                    link: "/dronescape/gcs",
+                                },
+                                {
+                                    title: "The Scavengers – JPL Challenge",
+                                    competition: "JPL Invention Challenge",
+                                    contribution: "Captain and CAD lead.",
+                                    awards: "Qualified for Regionals (Finals canceled)",
+                                    link: null,
+                                },
+                                {
+                                    title: "Team Infernope",
+                                    competition: "Combat Robotics",
+                                    contribution: "Founded and led a combat robotics team for 3 years.",
+                                    awards: "2024 End-of-Year Tournament Champion",
+                                    link: "/legacy/teaminfernope",
+                                },
+                                {
+                                    title: "Portfolio Website",
+                                    competition: "",
+                                    contribution: "This website where I keep track of and document projects.",
+                                    awards: "",
+                                    link: null,
+                                },
+                                {
+                                    title: "SigmaCat Robotics",
+                                    competition: "RIVAL Robotics",
+                                    contribution: "Designed the robot and created vision and path planning software.",
+                                    awards: "",
+                                    link: null,
+                                },
+                                {
+                                    title: "Project Temptest",
+                                    competition: "",
+                                    contribution: "A heavy-lift drone project I mentor.",
+                                    awards: "",
+                                    link: null,
+                                },
+                            ].map((a) => (
+                                <tr
+                                    key={a.title}
+                                    className="group transition hover:bg-white/[0.04] cursor-default"
+                                >
+                                    <td className="px-4 py-4 font-medium text-white text-base">{a.title}</td>
+                                    <td className="px-4 py-4 text-white/70">{a.competition || "—"}</td>
+                                    <td className="px-4 py-4 text-white/80">{a.contribution}</td>
+                                    <td className="px-4 py-4 text-white/70">{a.awards || "—"}</td>
+                                    <td className="px-4 py-4">
+                                        {a.link ? (
+                                            <Link
+                                                href={a.link}
+                                                className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 font-medium transition"
+                                            >
+                                                Open →
+                                            </Link>
+                                        ) : (
+                                            <span className="text-white/40 italic">Not yet documented</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 {/* Logos + Details — keeps YOUR marquee loop, only styling/layout changed */}
                 <section
                     className="select-none"
@@ -521,126 +641,6 @@ export default function HomePage() {
                                 Open →
                             </Link>
                         </div>
-                    </div>
-                </section>
-
-                {/* Activity List */}
-                <section className="py-16 md:py-2" id="catalog">
-                    <div className="flex items-baseline justify-between mb-6">
-                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                            Catalog
-                            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
-                        </h2>
-                    </div>
-
-                    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
-                        <table className="w-full text-sm md:text-base text-left border-collapse">
-                            <thead className="bg-white/10 text-white/80">
-                            <tr>
-                                <th className="px-4 py-3 font-medium w-[25%]">Title</th>
-                                <th className="px-4 py-3 font-medium w-[15%]">Competition</th>
-                                <th className="px-4 py-3 font-medium w-[35%]">My Contribution</th>
-                                <th className="px-4 py-3 font-medium w-[15%]">Awards / Recognition</th>
-                                <th className="px-4 py-3 font-medium w-[10%]">Link</th>
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/10">
-                            {[
-                                {
-                                    title: "Team Sprocket (Robot Design)",
-                                    competition: "FRC",
-                                    contribution: "Lead CAD design and mechanical system integration for competition robot.",
-                                    awards: "",
-                                    link: "/teamsprocket/cad",
-                                },
-                                {
-                                    title: "Team Sprocket (Scouting App)",
-                                    competition: "FRC",
-                                    contribution: "Designed and implemented full-stack scouting and analytics platform.",
-                                    awards: "",
-                                    link: "/teamsprocket/scouting",
-                                },
-                                {
-                                    title: "Team Sprocket (Outreach)",
-                                    competition: "FRC",
-                                    contribution: "Led development of STEM demos and assisted others in various community outreaches.",
-                                    awards: "2025 Impact Award, 2025 Imagery Award",
-                                    link: null,
-                                },
-                                {
-                                    title: "Aetherius UAV",
-                                    competition: "",
-                                    contribution: "Lead engineer for a fixed wing UAV.",
-                                    awards: "",
-                                    link: "/dronescape/uav",
-                                },
-                                {
-                                    title: "Aetherius GCS",
-                                    competition: "",
-                                    contribution: "Lead developer for UAV avionics software and custom Ground Control Station.",
-                                    awards: "",
-                                    link: "/dronescape/gcs",
-                                },
-                                {
-                                    title: "The Scavengers – JPL Challenge",
-                                    competition: "JPL Invention Challenge",
-                                    contribution: "Captain and CAD lead.",
-                                    awards: "Qualified for Regionals (Finals canceled)",
-                                    link: null,
-                                },
-                                {
-                                    title: "Team Infernope",
-                                    competition: "Combat Robotics",
-                                    contribution: "Founded and led a combat robotics team for 3 years.",
-                                    awards: "2024 End-of-Year Tournament Champion",
-                                    link: "/legacy/teaminfernope",
-                                },
-                                {
-                                    title: "Portfolio Website",
-                                    competition: "",
-                                    contribution: "This website where I keep track of and document projects.",
-                                    awards: "",
-                                    link: null,
-                                },
-                                {
-                                    title: "SigmaCat Robotics",
-                                    competition: "RIVAL Robotics",
-                                    contribution: "Designed the robot and created vision and path planning software.",
-                                    awards: "",
-                                    link: null,
-                                },
-                                {
-                                    title: "Project Temptest",
-                                    competition: "",
-                                    contribution: "A heavy-lift drone project I mentor.",
-                                    awards: "",
-                                    link: null,
-                                },
-                            ].map((a) => (
-                                <tr
-                                    key={a.title}
-                                    className="group transition hover:bg-white/[0.04] cursor-default"
-                                >
-                                    <td className="px-4 py-4 font-medium text-white text-base">{a.title}</td>
-                                    <td className="px-4 py-4 text-white/70">{a.competition || "—"}</td>
-                                    <td className="px-4 py-4 text-white/80">{a.contribution}</td>
-                                    <td className="px-4 py-4 text-white/70">{a.awards || "—"}</td>
-                                    <td className="px-4 py-4">
-                                        {a.link ? (
-                                            <Link
-                                                href={a.link}
-                                                className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 font-medium transition"
-                                            >
-                                                Open →
-                                            </Link>
-                                        ) : (
-                                            <span className="text-white/40 italic">Not yet documented</span>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
                     </div>
                 </section>
 

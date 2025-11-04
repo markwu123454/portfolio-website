@@ -1,4 +1,6 @@
-export const metadata = {
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
     title: "JPL Team — Portfolio",
     description: "Quick status page for the JPL team with the upcoming competition date.",
 };

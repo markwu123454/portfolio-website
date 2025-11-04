@@ -1,13 +1,12 @@
 "use client"
 
 import React, {useState} from "react"
+import Image from "next/image"
 import {AnimatePresence, motion} from "framer-motion"
 import {
     Plane,
     Workflow,
     CalendarClock,
-    LineChart,
-    CircuitBoard,
     Image as ImageIcon,
     ArrowRight,
     Cpu,
@@ -287,7 +286,7 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
                         onClick={() => setSelected(img.src)}
                     >
                         <div className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
-                            <img
+                            <Image
                                 src={img.src}
                                 alt={img.alt}
                                 onError={() => setErrorSet(prev => new Set([...prev, i]))}
@@ -315,7 +314,7 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
                         onClick={() => setSelected(null)}
                     >
                         <div className="relative max-w-5xl w-full">
-                            <img
+                            <Image
                                 src={selected}
                                 alt="Expanded view"
                                 className="w-full h-auto max-h-[90vh] rounded-xl object-contain mx-auto"
@@ -358,14 +357,6 @@ function TechAndLinks({tech}: {tech: string[]}) {
                 </div>
             </div>
         </motion.section>
-    )
-}
-
-function BadgePill({label, icon}: {label: string; icon?: React.ReactNode}) {
-    return (
-        <span className="flex items-center gap-1 rounded-md border border-white/10 bg-white/5 px-2 py-1 text-xs text-muted-foreground backdrop-blur">
-      {icon} {label}
-    </span>
     )
 }
 

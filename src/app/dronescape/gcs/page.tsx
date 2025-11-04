@@ -12,6 +12,7 @@ import {
     Image as ImageIcon,
     ArrowRight, X,
 } from "lucide-react"
+import Image from "next/image";
 
 export default function AetheriusGCSPage() {
     return (
@@ -226,7 +227,7 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
                         onClick={() => setSelected(img.src)}
                     >
                         <div className="aspect-video w-full bg-gradient-to-br from-muted to-background flex items-center justify-center">
-                            <img
+                            <Image
                                 src={img.src}
                                 alt={img.alt}
                                 onError={() => setErrorSet(prev => new Set([...prev, i]))}
@@ -254,7 +255,7 @@ function Gallery({title, images}: { title: string; images: { alt: string; src: s
                         onClick={() => setSelected(null)}
                     >
                         <div className="relative max-w-5xl w-full">
-                            <img
+                            <Image
                                 src={selected}
                                 alt="Expanded view"
                                 className="w-full h-auto max-h-[90vh] rounded-xl object-contain mx-auto"

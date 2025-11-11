@@ -29,7 +29,7 @@ export default function SprocketPage() {
                 <header className="mb-10">
                     <h1 className="mt-3 text-5xl font-bold tracking-tight">Team Sprocket</h1>
                     <p className="mt-3 max-w-2xl text-white/75">
-                        A FIRST Robotics Competition team located in Diamond Bar High School, in LA.
+                        A FIRST Robotics Competition(FRC) team located in Diamond Bar High School, in LA.
                     </p>
                 </header>
 
@@ -38,9 +38,9 @@ export default function SprocketPage() {
                     <h2 id="summary" className="sr-only">Summary</h2>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <Stat label="My Role" value="CAD Subteam member"
-                              hint="Resposible for various design needs of the team"/>
+                              hint="Mainly resposible for competition robot design"/>
                         <Stat label="FIRST Seasons Survived" value="2" hint="FLL - City Shaper, FRC - ReefScape"/>
-                        <Stat label="Competitions" value="3" hint="2025 OCR, 2025 CVR, 2025 Worlds, 2025 SoCal Showdown"/>
+                        <Stat label="Competitions" value="4" hint="2025 OCR, 2025 CVR, 2025 Worlds, 2025 SoCal Showdown"/>
                     </div>
                 </section>
 
@@ -52,7 +52,7 @@ export default function SprocketPage() {
                         <Link href="/teamsprocket/cad" className="group block">
                             <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 pr-10 backdrop-blur transition-colors duration-200 group-hover:bg-white/10">
                                 <div className="text-xs uppercase tracking-wide text-white/60">CAD</div>
-                                <div className="mt-1 text-2xl font-semibold">Competition Robot CAD</div>
+                                <div className="mt-1 text-2xl font-semibold">Robot Design</div>
                                 <ArrowUpRight
                                     className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/70"
                                     aria-hidden="true"

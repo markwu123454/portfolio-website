@@ -157,6 +157,14 @@ const detailByKey: Record<string, JSX.Element> = {
             </p>
         </div>
     ),
+    tauri: (
+        <div className="p-5">
+            <h3 className="font-semibold">Tauri</h3>
+            <p className="mt-1 text-sm text-white/80">
+                A cross-platform web framework I used in some smaller prototypes and projects.
+            </p>
+        </div>
+    ),
 };
 
 function keyFromPath(p: string) {
@@ -375,7 +383,7 @@ export default function HomePage() {
                 <div id="next" className="pt-16 md:pt-24"/>
 
                 {/* Activity List */}
-                <section className="py-16 md:py-2" id="catalog">
+                <section className="py-16" id="catalog">
                     <div className="flex items-baseline justify-between mb-6">
                         <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
                             Catalog

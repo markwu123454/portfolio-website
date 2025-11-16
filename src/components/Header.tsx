@@ -53,6 +53,7 @@ const NAV: NavItem[] = [
                 {label: "Project Tempest", href: "/misc/projecttempest"},
                 {label: "Smaller Projects", href: "/misc/random"},
                 {label: "The Scavengers", href: "/misc/scavenger"},
+                {label: "Musical Compositions", href: "/misc/music"},
             ],
             blurb: "A list of other smaller projects or ones I contributed less."
         }

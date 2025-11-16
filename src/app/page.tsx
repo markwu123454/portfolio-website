@@ -474,6 +474,13 @@ export default function HomePage() {
                                     awards: "",
                                     link: null,
                                 },
+                                {
+                                    title: "Music composition",
+                                    competition: "",
+                                    contribution: "Played in rock bands, concert bands, ensembles, and musical productions",
+                                    awards: "SWIS ARTS - Secondary Music Dedicated Service (22-23)",
+                                    link: "/misc/music",
+                                },
                             ].map((a) => (
                                 <tr
                                     key={a.title}

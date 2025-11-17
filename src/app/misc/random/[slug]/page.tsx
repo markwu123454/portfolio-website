@@ -13,7 +13,7 @@ export default async function DemoPage({
     if (!(s in demos)) notFound();
 
     return (
-        <main className="min-h-screen bg-black text-white">
+        <main className="min-h-[calc(100dvh-209px)] bg-black text-white">
             <DemoClient slug={s} />
         </main>
     );

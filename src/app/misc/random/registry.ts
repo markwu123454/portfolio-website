@@ -19,6 +19,8 @@ export const demos: DemoRegistry = {
         import("./CollatzConjecture").then((m: { default: DemoModule }) => m.default),
     Calculator: () =>
         import("./MathPad").then((m: { default: DemoModule }) => m.default),
+    ThreeDExperiment: () =>
+        import("./ThreeDExperiments").then((m: { default: DemoModule }) => m.default),
 };
 
 export type DemoSlug = keyof typeof demos;

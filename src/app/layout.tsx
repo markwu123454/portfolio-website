@@ -5,6 +5,7 @@ import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import React from "react";
 import {SpeedInsights} from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://markwu.org"),
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Push content below header height */}
             <main className="mx-auto w-screen max-w-none text-white">
                 {children}
+                <Analytics />
             </main>
             <Footer />
         </div>

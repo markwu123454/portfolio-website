@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" className="h-dvh">
         <body className="h-dvh overflow-hidden">
         <SpeedInsights/>
+        <Analytics />
         {/* Fixed header overlays content; controls its own hide/show */}
         <Header/>
 
@@ -31,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Push content below header height */}
             <main className="mx-auto w-screen max-w-none text-white">
                 {children}
-                <Analytics />
             </main>
             <Footer />
         </div>

@@ -598,7 +598,7 @@ export default function HomePage() {
                             <p className="mt-2 text-xs text-white/60"><span
                                 className="text-white/70">Current:</span> Fixing electronic issues and preparing
                                 hardware-software testing.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[19%] rounded-full bg-white/60"/>
                             </div>
@@ -622,7 +622,7 @@ export default function HomePage() {
                                 className="text-white/70">Current:</span> Working on data presentation and integration.
                                 Starting to prepare for season rollover and kickoff into FRC Rebuilt.
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 28, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Nov 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[74%] rounded-full bg-white/60"/>
                             </div>
@@ -637,15 +637,14 @@ export default function HomePage() {
                         <div
                             className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">The Scavengers</h3>
+                                <h3 className="text-lg font-semibold">FRC Outreach Project</h3>
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">A JPL invention challenge team I captain.</p>
+                            <p className="mt-1 text-sm text-white/75">An outreach project for my FRC Team.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Reflection on internal competition result,
-                                regrouping after finals got canceled, planning for regional on Nov 8.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Oct 27, 2025</p>
+                                className="text-white/70">Current:</span>Brainstorming and designing illustrations, preparing pitch to mentors for green lighting.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[65%] rounded-full bg-white/60"/>
                             </div>

@@ -366,16 +366,6 @@ export default function TeamInfernope() {
             {/* YEAR 3B */}
             <SectionTitle title="Year 3 Semster 2" id="year3b"/>
             <RobotSection
-                title="MAD"
-                type="Horizontal Bar Spinner"
-                image={["/infernope/Screenshot 2025-10-27 215322.png", "/infernope/Weixin Image_20251027221940_87_27.jpg", "/infernope/Screenshot 2025-10-27 222312.png", "/infernope/Screenshot 2025-10-27 215647.png"]}
-                description="An upgraded horizontal spinner running a 6S system instead of 3S, doubling voltage for higher energy output."
-                downsides="Faulty belt system limited weapon to 30% power."
-                lessons="Learned multi-voltage integration: 12V drive and 24V weapon systems."
-                result="2nd place @ End-of-Year Tournament"
-                reverse
-            />
-            <RobotSection
                 title="Good Game"
                 type="Vertical Disk/Bar Spinner"
                 image={["/infernope/Screenshot 2025-10-27 221114.png", "/infernope/Screenshot 2025-10-27 221553.png", "/infernope/Weixin Image_20251027221936_84_27.jpg", "/infernope/Weixin Image_20251027221938_85_27.jpg"]}
@@ -383,6 +373,16 @@ export default function TeamInfernope() {
                 downsides="Underestimated weapon forces led to broken bolts and bearings."
                 lessons="Discovered modular part design and belt-driven isolation for motor protection."
                 result="1st place @ End-of-Year Tournament"
+                reverse
+            />
+            <RobotSection
+                title="MAD"
+                type="Horizontal Bar Spinner"
+                image={["/infernope/Screenshot 2025-10-27 215322.png", "/infernope/Weixin Image_20251027221940_87_27.jpg", "/infernope/Screenshot 2025-10-27 222312.png", "/infernope/Screenshot 2025-10-27 215647.png"]}
+                description="An upgraded horizontal spinner running a 6S system instead of 3S, doubling voltage for higher energy output."
+                downsides="Faulty belt system limited weapon to 30% power."
+                lessons="Learned multi-voltage integration: 12V drive and 24V weapon systems."
+                result="2nd place @ End-of-Year Tournament"
             />
             <RobotSection
                 title="Hello Kitty"
@@ -429,9 +429,9 @@ export default function TeamInfernope() {
             <RobotSection
                 title="OP"
                 type="Vertical Disk Spinner"
-                image={["/infernope/Screenshot 2025-10-27 203121.png"]}
-                description="A final post-transfer project. Optimized for rotational inertia, storing 300J of kinetic energy in the weapon."
-                downsides="Never competed; gyroscopic forces disabled turning at >50% speed."
+                image={["/infernope/Screenshot 2025-10-27 203121.png", "/infernope/img.png"]}
+                description="A final post-transfer project. Optimized for rotational inertia, storing 200+J of kinetic energy in the weapon."
+                downsides="Never competed; gyroscopic forces effectively prevents turning at >50% weapon speed."
                 lessons="Learned to use hub motors for drive and implemented rubber band–linked 4WD system."
                 result="Practice Build"
                 reverse

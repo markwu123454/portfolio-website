@@ -624,7 +624,7 @@ export default function HomePage() {
                             </p>
                             <p className="mt-1 text-xs text-white/50">Last updated Nov 18, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[74%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[78%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket/scouting"
@@ -646,7 +646,7 @@ export default function HomePage() {
                                 className="text-white/70">Current:</span>Brainstorming and designing illustrations, preparing pitch to mentors for green lighting.</p>
                             <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[65%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[5%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket"

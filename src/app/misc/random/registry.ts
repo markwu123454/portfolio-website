@@ -21,6 +21,8 @@ export const demos: DemoRegistry = {
         import("./MathPad").then((m: { default: DemoModule }) => m.default),
     ThreeDExperiment: () =>
         import("./ThreeDExperiments").then((m: { default: DemoModule }) => m.default),
+    GatchaSimulator: () =>
+        import("./GatchaSimulator").then((m: { default: DemoModule }) => m.default),
 };
 
 export type DemoSlug = keyof typeof demos;

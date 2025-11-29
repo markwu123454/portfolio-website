@@ -4,13 +4,10 @@ import React, {useEffect, useRef, useState} from "react";
 import type {DemoModule} from "@/app/misc/random/registry";
 
 
-function Preview3D() {
-    return <></>
-}
 
 
 const Page: React.FC = () => <NeonDriveScene/>;
-const preview = <Preview3D/>;
+const preview = <Image src="/threejs.png" height="300" width="300" alt="3.js logo"/>;
 
 export const title = "Experimental three.js element";
 export const description = "inspired by https://bruno-simon.com/";
@@ -23,6 +20,7 @@ import {Canvas, useFrame} from "@react-three/fiber";
 import {OrbitControls, Instances, Instance} from "@react-three/drei";
 import * as THREE from "three";
 import {Physics, RigidBody, RapierRigidBody, CuboidCollider} from "@react-three/rapier";
+import Image from "next/image";
 
 /* ---------------- KEYBOARD ---------------- */
 

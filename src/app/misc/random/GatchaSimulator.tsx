@@ -25,6 +25,14 @@ interface ProgressRow {
     any: number[];
 }
 
+type ChartDatumKey = `limited${number}` | `any${number}`;
+
+type ChartDatum = {
+    pull: number;
+} & {
+    [K in ChartDatumKey]?: number;
+};
+
 const HARD_PITY: Record<BannerType, number> = {
     agent: 90,
     weapon: 80,
@@ -100,8 +108,8 @@ function computeDistribution(
 
     for (let totalPulls = 1; totalPulls <= maxPulls; totalPulls++) {
         const nextState = new Map<StateKey, number>();
-        const cumLimited = new Array(maxCopies + 1).fill(0);
-        const cumAny = new Array(maxCopies + 1).fill(0);
+        const cumLimited = new Array<number>(maxCopies + 1).fill(0);
+        const cumAny = new Array<number>(maxCopies + 1).fill(0);
 
         for (const [key, mass] of state.entries()) {
             if (mass === 0) continue;
@@ -199,9 +207,9 @@ function GatchaSimulator() {
         [bannerType, startPullIndex, onGuarantee, maxCopiesDisplay, mode, targetCopies, availablePulls]
     );
 
-    const chartData = useMemo(() => {
+    const chartData: ChartDatum[] = useMemo(() => {
         return rows.map((row) => {
-            const obj: any = { pull: row.pull };
+            const obj: ChartDatum = { pull: row.pull };
             for (let k = 1; k <= maxCopiesDisplay; k++) {
                 obj[`limited${k}`] = row.limited[k] ?? 0;
                 obj[`any${k}`] = row.any[k] ?? 0;
@@ -373,7 +381,11 @@ function GatchaSimulator() {
                             />
                             <Tooltip
                                 contentStyle={{ background: "#222", border: "1px solid #444", color: "#eee" }}
-                                formatter={(value: any) => `${(value as number * 100).toFixed(2)}%`}
+                                formatter={(value: number | string) => {
+                                    const numeric =
+                                        typeof value === "number" ? value : Number(value);
+                                    return `${(numeric * 100).toFixed(2)}%`;
+                                }}
                                 labelFormatter={(label) => `Pulls: ${label}`}
                             />
                             <Legend wrapperStyle={{ color: "#ddd" }} />
@@ -411,7 +423,7 @@ function GatchaSimulator() {
 }
 
 const Page: React.FC = () => <GatchaSimulator />;
-const preview = <Image src="/zzz.png" height="300" width="300" alt="zzz logo"/>;
+const preview = <Image src="/zzz.png" height={300} width={300} alt="zzz logo" />;
 
 export const title = "Zenless Zone Zero gatcha calculator";
 export const description = "Deterministically calculate pull outcomes.";

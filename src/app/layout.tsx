@@ -1,11 +1,7 @@
-// src/app/layout.tsx
-import "./globals.css"
-import type {Metadata} from "next";
-import {Header} from "@/components/Header";
-import {Footer} from "@/components/Footer";
+import "./globals.css";
+import type { Metadata } from "next";
 import React from "react";
-import {SpeedInsights} from "@vercel/speed-insights/next";
-import AnalyticsWrapper from "@/components/Analytics";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://markwu.org"),
@@ -16,30 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en" className="h-dvh">
-        <body className="h-dvh overflow-hidden">
-        <SpeedInsights/>
-        <AnalyticsWrapper />
-        {/* Fixed header overlays content; controls its own hide/show */}
-        <Header/>
-
-        {/* Single full-height scroll container (gutter = full viewport) */}
-        <div
-            id="content-scroll"
-            className="h-dvh overflow-y-auto [scrollbar-gutter:auto]"
-        >
-            {/* Push content below header height */}
-            <main className="mx-auto w-screen max-w-none text-white">
-                {children}
-            </main>
-            <Footer />
-        </div>
-        </body>
-        </html>
-    );
+    // ✅ remains server, still supports metadata
+    return <LayoutWrapper>{children}</LayoutWrapper>;
 }
-
-
-
-

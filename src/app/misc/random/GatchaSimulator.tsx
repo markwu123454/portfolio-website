@@ -428,5 +428,5 @@ const preview = <Image src="/zzz.png" height={300} width={300} alt="zzz logo" />
 export const title = "Zenless Zone Zero gatcha calculator";
 export const description = "Deterministically calculate pull outcomes.";
 
-const mod: DemoModule = { title, description, preview, Page };
+const mod: DemoModule = { title, description, preview, Page, presentable: false };
 export default mod;

@@ -588,5 +588,5 @@ const preview = <Image src="/youtube.png" height="100" width="100" alt="youtube 
 export const title = "Youtube Player";
 export const description = "A youtube video player because I can't find any good ones online.";
 
-const mod: DemoModule = { title, description, preview, Page };
+const mod: DemoModule = { title, description, preview, Page, presentable: false };
 export default mod;

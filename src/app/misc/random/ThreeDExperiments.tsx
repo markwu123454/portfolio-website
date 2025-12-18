@@ -12,7 +12,7 @@ const preview = <Image src="/threejs.png" height="300" width="300" alt="3.js log
 export const title = "Experimental three.js element";
 export const description = "inspired by https://bruno-simon.com/";
 
-const mod: DemoModule = {title, description, preview, Page};
+const mod: DemoModule = {title, description, preview, Page, presentable: false };
 export default mod;
 
 

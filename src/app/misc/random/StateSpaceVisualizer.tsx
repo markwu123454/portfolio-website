@@ -1185,12 +1185,72 @@ function renderState(model: BoardModel, state: number[]): string[] {
 
 
 const Preview1x1: React.FC = () => {
-    const g = textToGrid(SAMPLE);                 // or any board text you want
+    const BOARDS = [
+        [
+            "......",
+            "......",
+            "......",
+            "..AA..",
+            "..CB..",
+            "..CB..",
+        ].join("\n"),
+
+        [
+            "......",
+            "..BB..",
+            "..AA..",
+            "..CC..",
+            "......",
+            "......",
+        ].join("\n"),
+
+        [
+            ".......",
+            "..AA..",
+            "..BCDD",
+            "..BC..",
+            "....EE",
+            "......",
+        ].join("\n"),
+
+        [
+            "......",
+            ".BB...",
+            ".AACC.",
+            "......",
+            "..DDDE",
+            ".....E",
+        ].join("\n"),
+
+        [
+            "......",
+            "..AA..",
+            ".BBC..",
+            "...CDD",
+            "......",
+            "......",
+        ].join("\n"),
+
+        [
+            "........",
+            "..AA....",
+            "..BB.CC.",
+            "....EE..",
+            "..DDD...",
+            "........",
+        ].join("\n"),
+    ];
+
+    const boardText = React.useMemo(
+        () => BOARDS[Math.floor(Math.random() * BOARDS.length)],
+        []
+    );
+    const g = textToGrid(boardText);                 // or any board text you want
     const H = g.length;
     const W = g[0]?.length ?? 0;
 
     return (
-        <div className="aspect-square w-full rounded-xl border overflow-hidden p-1">
+        <div className="aspect-square w-full rounded-xl overflow-hidden p-1">
             <div
                 className="grid h-full w-full gap-[2px]"
                 style={{ gridTemplateColumns: `repeat(${W}, 1fr)`, gridTemplateRows: `repeat(${H}, 1fr)` }}
@@ -1199,7 +1259,7 @@ const Preview1x1: React.FC = () => {
                     row.map((ch, c) => (
                         <div
                             key={`${r}-${c}`}
-                            className={`rounded-[3px] border ${ch === "." ? "border-dashed" : "border-solid"}`}
+                            className={`rounded-[3px] border ${ch === "." ? "border-dashed border-zinc-500" : "border-solid border-zinc-300"}`}
                             style={{ background: ch === "." ? "transparent" : colorForId(ch) }}
                             aria-hidden
                         />
@@ -1216,5 +1276,5 @@ const preview = <Preview1x1/>;
 export const title = "State Space Visualizer";
 export const description = "Explore state transitions in a board of a game of Rush Hour.";
 
-const mod: DemoModule = { title, description, preview, Page };
+const mod: DemoModule = { title, description, preview, Page, presentable: true };
 export default mod;

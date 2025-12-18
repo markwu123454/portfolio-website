@@ -88,7 +88,7 @@ export default function SprocketPage() {
                     <div>
                         <h2 className="text-4xl font-bold">ReefScape</h2>
                         <p className="mt-2 text-lg text-white/70">
-                            First Dive(2024-25)
+                            FIRST Dive(2024-25)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
                             Competitions: Orange County Regional(3-9-0, rank 38 out of 47), Central Valley Regional(5-6-0, rank 24 out of 42), World
@@ -107,7 +107,7 @@ export default function SprocketPage() {
                     <div>
                         <h2 className="text-4xl font-bold">Rebuilt</h2>
                         <p className="mt-2 text-lg text-white/70">
-                            First Age(2025-26)
+                            FIRST Age(2025-26)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
                             Competitions: CA District Hueneme Port Event(Mar 6-8), CA District San Gabriel Valley Event(Mar 27-29)

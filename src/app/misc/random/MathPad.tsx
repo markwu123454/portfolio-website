@@ -396,5 +396,5 @@ const preview = <div />;
 export const title = "MathPad";
 export const description = "WORK IN PROGRESS. a math calculator that's like coding, support algebra, statistics, linear algebra, chemistry";
 
-const mod: DemoModule = { title, description, preview, Page };
+const mod: DemoModule = { title, description, preview, Page, presentable: false };
 export default mod;

@@ -356,5 +356,5 @@ const preview = <div />;
 export const title = 'Collatz Conjecture Visualizer';
 export const description = 'WORK IN PROGRESS. Explore different versions of the Collatz conjecture.';
 
-const mod: DemoModule = { title, description, preview, Page };
+const mod: DemoModule = { title, description, preview, Page, presentable: false };
 export default mod;

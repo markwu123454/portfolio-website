@@ -1,6 +1,7 @@
 "use client";
 
 import {useCallback, useEffect, useRef, useState} from "react";
+import {InlineMath, BlockMath} from 'react-katex';
 import {DemoModule} from "@/app/misc/random/registry";
 
 
@@ -10,20 +11,44 @@ type Cell = { r: number; c: number };
 function generateHamiltonianBasic(rows: number, cols: number): Cell[] {
     const path: Cell[] = [];
 
-    for (let c = 0; c < cols; c++) {
-        if (c % 2 === 0) {
-            for (let r = 1; r < rows; r++) {
-                path.push({r, c});
-            }
-        } else {
-            for (let r = rows - 1; r >= 1; r--) {
-                path.push({r, c});
+    // Prefer vertical serpentine if columns are even
+    if (cols % 2 === 0) {
+        // Vertical serpentine (column by column, skip row 0)
+        for (let c = 0; c < cols; c++) {
+            if (c % 2 === 0) {
+                for (let r = 1; r < rows; r++) {
+                    path.push({ r, c });
+                }
+            } else {
+                for (let r = rows - 1; r >= 1; r--) {
+                    path.push({ r, c });
+                }
             }
         }
-    }
 
-    for (let c = cols - 1; c >= 0; c--) {
-        path.push({r: 0, c});
+        // Close the loop along the top row
+        for (let c = cols - 1; c >= 0; c--) {
+            path.push({ r: 0, c });
+        }
+
+    } else {
+        // Horizontal serpentine (row by row, skip col 0)
+        for (let r = 0; r < rows; r++) {
+            if (r % 2 === 0) {
+                for (let c = 1; c < cols; c++) {
+                    path.push({ r, c });
+                }
+            } else {
+                for (let c = cols - 1; c >= 1; c--) {
+                    path.push({ r, c });
+                }
+            }
+        }
+
+        // Close the loop along the left column
+        for (let r = rows - 1; r >= 0; r--) {
+            path.push({ r, c: 0 });
+        }
     }
 
     return path;
@@ -36,7 +61,6 @@ function distanceToApple(path: Cell[], apple: Cell): number {
     )
     return idx === -1 ? Infinity : idx
 }
-
 
 
 function zipsToApple(
@@ -374,6 +398,51 @@ function pathFromHeadToApple(
 }
 
 
+function sliderToSteps(slider: number) {
+    if (slider >= 100) return Infinity;
+
+    const min = 1;
+    const max = 30;
+
+    const gamma = 0.6; // <— tweakable
+    const t = Math.pow(slider / 100, gamma);
+
+    return Math.round(
+        min * Math.pow(max / min, t)
+    );
+}
+
+
+function digitsOnly(value: string) {
+    return value.replace(/\D+/g, "");
+}
+
+function snapEven(n: number) {
+    if (n <= 2) return 2;
+    return n % 2 === 0 ? n : n - 1;
+}
+
+function enforceGridRules(
+    r: number,
+    c: number,
+    changed: "rows" | "cols"
+) {
+    // at least one dimension must be even
+    if (r % 2 === 0 || c % 2 === 0) {
+        return { rows: r, cols: c };
+    }
+
+    // snap the field the user just edited
+    if (changed === "rows") {
+        return { rows: snapEven(r), cols: c };
+    } else {
+        return { rows: r, cols: snapEven(c) };
+    }
+}
+
+
+
+
 function SnakePage() {
     const [rows, setRows] = useState(18);
     const [cols, setCols] = useState(22);
@@ -381,6 +450,7 @@ function SnakePage() {
 
     const hamiltonian = useRef<Cell[]>(generateHamiltonianBasic(rows, cols));
     const nextMap = useRef<Map<string, Cell>>(buildNextMap(hamiltonian.current));
+    const finishedRef = useRef(false);
 
     const [snake, setSnake] = useState<Cell[]>([
         hamiltonian.current[0], hamiltonian.current[1]
@@ -399,15 +469,50 @@ function SnakePage() {
     const [highlightPath, setHighlightPath] = useState(true);
     const [stepsPerSecond, setStepsPerSecond] = useState(3);
 
+    const [rowsInput, setRowsInput] = useState(String(rows));
+    const [colsInput, setColsInput] = useState(String(cols));
+    const [techMode, setTechMode] = useState<"casual" | "formal">("casual");
+
     useEffect(() => {
         console.log("Apple updated:", apple);
     }, [apple]);
 
 
+    const stepsPerSecondCalculated =
+        stepsPerSecond >= 100 ? Infinity : sliderToSteps(stepsPerSecond);
+
+
     const stepOnce = useCallback(() => {
-        let shouldStop = false;
+        // 🛑 hard synchronous stop
+        if (finishedRef.current) {
+            setRunning(false);
+            return;
+        }
 
         setSnake(prev => {
+            const total = rows * cols;
+
+            // Safety
+            if (prev.length === total) {
+                finishedRef.current = true;
+                return prev;
+            }
+
+            const head = prev[0];
+            const nextOnCurrent =
+                nextMap.current.get(`${head.r},${head.c}`)!;
+
+            // ✅ FINAL MOVE — detected ONE STEP EARLY
+            if (
+                prev.length === total - 1 &&
+                nextOnCurrent.r === apple.r &&
+                nextOnCurrent.c === apple.c
+            ) {
+                finishedRef.current = true;
+                return [nextOnCurrent, ...prev]; // grow to full grid
+            }
+
+            // --- normal planning ---
             const newHamiltonian = generateHamiltonianBest(
                 rows,
                 cols,
@@ -420,14 +525,8 @@ function SnakePage() {
             hamiltonian.current = newHamiltonian;
             nextMap.current = buildNextMap(newHamiltonian);
 
-            const head = prev[0];
-            const next = nextMap.current.get(`${head.r},${head.c}`)!;
-            const tail = prev[prev.length - 1];
-
-            if (next.r === tail.r && next.c === tail.c) {
-                shouldStop = true;
-                return prev;
-            }
+            const next =
+                nextMap.current.get(`${head.r},${head.c}`)!;
 
             const eats =
                 next.r === apple.r &&
@@ -437,18 +536,34 @@ function SnakePage() {
             if (!eats) nextSnake.pop();
             else spawnApple(nextSnake);
 
+            if (nextSnake.length === total) {
+                finishedRef.current = true;
+            }
+
             return nextSnake;
         });
-
-        if (shouldStop) setRunning(false);
     }, [apple, rows, cols, tries]);
-
 
     useEffect(() => {
         if (!running) return;
 
+        // 🔥 Max speed mode
+        if (stepsPerSecondCalculated === Infinity) {
+            let rafId: number;
+
+            const loop = () => {
+                if (finishedRef.current) return;
+                stepOnce();
+                rafId = requestAnimationFrame(loop);
+            };
+
+            rafId = requestAnimationFrame(loop);
+            return () => cancelAnimationFrame(rafId);
+        }
+
+        // ⏱️ Normal timed mode
         let cancelled = false;
-        const interval = 1000 / stepsPerSecond;
+        const interval = 1000 / stepsPerSecondCalculated;
         let nextTime = performance.now();
 
         const tick = () => {
@@ -460,7 +575,7 @@ function SnakePage() {
                 stepOnce();
                 nextTime += interval;
 
-                // catch up if we're very behind
+                // catch up if behind
                 if (now > nextTime + interval) {
                     nextTime = now + interval;
                 }
@@ -475,11 +590,11 @@ function SnakePage() {
         return () => {
             cancelled = true;
         };
-    }, [running, stepsPerSecond, stepOnce]);
-
+    }, [running, stepsPerSecondCalculated, stepOnce]);
 
 
     useEffect(() => {
+        finishedRef.current = false; // ← REQUIRED
         setRunning(false);
 
         const newHamiltonian = generateHamiltonianBasic(rows, cols);
@@ -496,6 +611,16 @@ function SnakePage() {
     }, [rows, cols]);
 
 
+    useEffect(() => {
+        setRowsInput(String(rows));
+    }, [rows]);
+
+    useEffect(() => {
+        setColsInput(String(cols));
+    }, [cols]);
+
+
+
     function spawnApple(currentSnake: Cell[]) {
         const occupied = new Set(
             currentSnake.map(c => `${c.r},${c.c}`)
@@ -509,6 +634,7 @@ function SnakePage() {
 
     function reset() {
         setRunning(false);
+        finishedRef.current = false;
         const initialSnake = [
             hamiltonian.current[0],
             hamiltonian.current[1],
@@ -529,108 +655,162 @@ function SnakePage() {
 
     return (
         <div className="bg-black text-white flex flex-col mt-24 pb-4">
-            {/* Controls */}
-            <div className="flex items-center gap-4 px-6 py-4 border-b border-zinc-800">
-                <button
-                    onClick={() => setRunning((r) => !r)}
-                    className="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700"
-                >
-                    {running ? "Pause" : "Run"}
-                </button>
+            {/* Control Panel */}
+            <div className="sticky top-0 z-20 bg-zinc-950/95 backdrop-blur border-b border-zinc-800">
+                <div className="max-w-7xl mx-auto px-6 py-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
 
-                <button
-                    onClick={stepOnce}
-                    className="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700"
-                >
-                    Step
-                </button>
+                    {/* Playback */}
+                    <div className="flex items-center gap-2 bg-zinc-900 rounded-lg p-3">
+                        <button
+                            onClick={() => setRunning(r => !r)}
+                            className="px-4 py-2 rounded-md bg-emerald-600 hover:bg-emerald-500 text-sm font-medium"
+                        >
+                            {running ? "Pause" : "Run"}
+                        </button>
 
-                <button
-                    onClick={reset}
-                    className="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700"
-                >
-                    Reset
-                </button>
+                        <button
+                            onClick={stepOnce}
+                            className="px-3 py-2 rounded-md bg-zinc-800 hover:bg-zinc-700 text-sm"
+                        >
+                            Step
+                        </button>
 
-                {/* Steps/sec */}
-                <div className="flex items-center gap-2 ml-6">
-                    <span className="text-sm text-zinc-400">Steps/sec</span>
-                    <input
-                        type="range"
-                        min={1}
-                        max={180}
-                        value={stepsPerSecond}
-                        onChange={(e) => setStepsPerSecond(Number(e.target.value))}
-                    />
-                    <span className="w-10 text-right">{stepsPerSecond}</span>
-                </div>
+                        <button
+                            onClick={reset}
+                            className="px-3 py-2 rounded-md bg-zinc-800 hover:bg-zinc-700 text-sm"
+                        >
+                            Reset
+                        </button>
+                    </div>
 
-                <button
-                    onClick={toggleShowPath}
-                    className="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700"
-                >
-                    {showPath ? "Hide path" : "Show path"}
-                </button>
-                <button
-                    onClick={toggleHighlightPath}
-                    className="px-4 py-2 rounded bg-zinc-800 hover:bg-zinc-700"
-                >
-                    {highlightPath ? "hide highlight" : "Show highlight"}
-                </button>
+                    {/* Speed */}
+                    <div className="bg-zinc-900 rounded-lg p-3 flex flex-col justify-center">
+                        <div className="flex justify-between text-xs text-zinc-400 mb-1">
+                            <span>Simulation speed</span>
+                            <span>
+                                {stepsPerSecondCalculated === Infinity
+                                    ? "Max "
+                                    : `${stepsPerSecondCalculated} `}steps/sec
+                            </span>
+                        </div>
 
-                {/* Grid / Algorithm controls */}
-                <div className="flex items-center gap-3 ml-6">
-                    <label className="flex items-center gap-1 text-sm text-zinc-400">
-                        Rows
                         <input
-                            type="number"
-                            min={2}
-                            max={50}
-                            value={rows}
-                            onChange={(e) => setRows(Number(e.target.value))}
-                            className="w-14 px-1 bg-zinc-900 border border-zinc-700 rounded"
+                            type="range"
+                            min={0}
+                            max={100}
+                            value={stepsPerSecond}
+                            onChange={(e) => setStepsPerSecond(Number(e.target.value))}
+                            className="accent-emerald-500"
                         />
-                    </label>
+                    </div>
 
-                    <label className="flex items-center gap-1 text-sm text-zinc-400">
-                        Cols
-                        <input
-                            type="number"
-                            min={2}
-                            max={50}
-                            value={cols}
-                            onChange={(e) => setCols(Number(e.target.value))}
-                            className="w-14 px-1 bg-zinc-900 border border-zinc-700 rounded"
-                        />
-                    </label>
 
-                    <label className="flex items-center gap-1 text-sm text-zinc-400">
-                        Tries
-                        <input
-                            type="number"
-                            min={1}
-                            max={50}
-                            value={tries}
-                            onChange={(e) => setTries(Number(e.target.value))}
-                            className="w-14 px-1 bg-zinc-900 border border-zinc-700 rounded"
-                        />
-                    </label>
+                    {/* View Options */}
+                    <div className="bg-zinc-900 rounded-lg p-3 flex gap-2">
+                        <button
+                            onClick={toggleShowPath}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                                showPath
+                                    ? "bg-indigo-600 hover:bg-indigo-500"
+                                    : "bg-zinc-800 hover:bg-zinc-700"
+                            }`}
+                        >
+                            Hamiltonian Path
+                        </button>
+
+                        <button
+                            onClick={toggleHighlightPath}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                                highlightPath
+                                    ? "bg-yellow-500 text-black hover:bg-yellow-400"
+                                    : "bg-zinc-800 hover:bg-zinc-700"
+                            }`}
+                        >
+                            Head → Apple
+                        </button>
+                    </div>
+
+                    {/* Grid / Algorithm */}
+                    <div className="bg-zinc-900 rounded-lg p-3 grid grid-cols-3 gap-2 text-sm">
+                        <label className="flex flex-col gap-1 text-zinc-400">
+                            Rows
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                disabled={running}
+                                value={rowsInput}
+                                onChange={(e) => {
+                                    setRowsInput(digitsOnly(e.target.value));
+                                }}
+                                onBlur={() => {
+                                    const parsed = Number(rowsInput || rows); // fallback to last valid
+                                    const r = Math.max(2, parsed);
+
+                                    const { rows: newRows, cols: newCols } =
+                                        enforceGridRules(r, cols, "rows");
+
+                                    setRows(newRows);
+                                    setCols(newCols);
+                                }}
+                                className="px-2 py-1 bg-zinc-950 border border-zinc-700 rounded disabled:opacity-50"
+                            />
+                        </label>
+
+                        <label className="flex flex-col gap-1 text-zinc-400">
+                            Cols
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
+                                disabled={running}
+                                value={colsInput}
+                                onChange={(e) => {
+                                    setColsInput(digitsOnly(e.target.value));
+                                }}
+                                onBlur={() => {
+                                    const parsed = Number(colsInput || cols);
+                                    const c = Math.max(2, parsed);
+
+                                    const { rows: newRows, cols: newCols } =
+                                        enforceGridRules(rows, c, "cols");
+
+                                    setRows(newRows);
+                                    setCols(newCols);
+                                }}
+                                className="px-2 py-1 bg-zinc-950 border border-zinc-700 rounded disabled:opacity-50"
+                            />
+                        </label>
+
+                        <label className="flex flex-col gap-1 text-zinc-400">
+                            Tries
+                            <input
+                                type="text"
+                                inputMode="numeric"
+                                min={0}
+                                max={50}
+                                value={tries}
+                                onChange={(e) => setTries(Number(e.target.value))}
+                                className="px-2 py-1 bg-zinc-950 border border-zinc-700 rounded"
+                            />
+                        </label>
+                    </div>
                 </div>
             </div>
 
             {/* Grid */}
-            <div className="flex-1 grid place-items-center">
+            <div className="flex-1 grid place-items-center mt-2">
                 <div
                     className="relative grid"
                     style={{
                         gridTemplateRows: `repeat(${rows}, 1fr)`,
                         gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                        width: "min(90vw, 90vh)",
+                        height: "min(75vw, 75vh)",
                         aspectRatio: `${cols} / ${rows}`,
                     }}
                 >
                     {/* Grid background */}
-                    {Array.from({ length: rows * cols }).map((_, idx) => {
+                    {Array.from({length: rows * cols}).map((_, idx) => {
                         const r = Math.floor(idx / cols);
                         const c = idx % cols;
 
@@ -692,6 +872,14 @@ function SnakePage() {
                                 .join(" ")}
                         />
 
+                        {/* Apple */}
+                        <circle
+                            cx={apple.c * 100 + 50}
+                            cy={apple.r * 100 + 50}
+                            r="26"
+                            fill="#dc2626"
+                        />
+
                         {/* Snake head */}
                         {snake.length > 0 && (
                             <circle
@@ -711,19 +899,212 @@ function SnakePage() {
                                 fill="#15803d"
                             />
                         )}
-
-                        {/* Apple */}
-                        <circle
-                            cx={apple.c * 100 + 50}
-                            cy={apple.r * 100 + 50}
-                            r="26"
-                            fill="#dc2626"
-                        />
                     </svg>
-
-
                 </div>
             </div>
+
+            {/* Info / Documentation */}
+            <div className="max-w-4xl mx-auto px-6 py-10 text-zinc-300 space-y-6">
+                <section>
+                    <h2 className="text-xl font-semibold text-white mb-2">
+                        Overview
+                    </h2>
+                    <p className="leading-relaxed">
+                        This visualization demonstrates a Snake agent that uses Hamiltonian
+                        cycles to guarantee survival, while dynamically searching for faster
+                        routes instead of following a single fixed cycle.
+                    </p>
+                    <p className="leading-relaxed mt-3">
+                        Rather than committing to one precomputed Hamiltonian cycle, the
+                        algorithm continuously generates alternative cycles that are compatible
+                        with the snake’s current position. Because the snake always remains on a
+                        valid Hamiltonian cycle, it can never trap itself or reach an unwinnable
+                        state.
+                    </p>
+                    <p className="leading-relaxed mt-3">
+                        By evaluating multiple candidate cycles and selecting the one that
+                        reaches the apple in the fewest steps, the snake often outperforms
+                        traditional “static” Hamiltonian strategies, which blindly traverse the
+                        entire grid.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 className="text-xl font-semibold text-white mb-2">
+                        Controls
+                    </h2>
+                    <ul className="list-disc list-inside space-y-1 text-zinc-400">
+                        <li><strong>Run / Pause</strong> — start or halt the simulation</li>
+                        <li><strong>Step</strong> — advance the simulation by one tick</li>
+                        <li>
+                            <strong>Speed</strong> — control steps per second
+                            (bounded by computation time)
+                        </li>
+                        <li><strong>Hamiltonian Path</strong> — toggle the full cycle view</li>
+                        <li><strong>Head → Apple</strong> — show the currently selected path</li>
+                        <li>
+                            <strong>Rows / Cols</strong> — change grid dimensions
+                            <em> (resets the simulation)</em>
+                        </li>
+                        <li>
+                            <strong>Tries</strong> — number of candidate Hamiltonian cycles
+                            evaluated per step
+                        </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <div className="flex gap-2 mb-4">
+                        <button
+                            onClick={() => setTechMode("casual")}
+                            className={`px-3 py-1 rounded text-sm ${
+                                techMode === "casual"
+                                    ? "bg-emerald-600 text-white"
+                                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                            }`}
+                        >
+                            Intuition
+                        </button>
+
+                        <button
+                            onClick={() => setTechMode("formal")}
+                            className={`px-3 py-1 rounded text-sm ${
+                                techMode === "formal"
+                                    ? "bg-indigo-600 text-white"
+                                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                            }`}
+                        >
+                            Formal / Math
+                        </button>
+                    </div>
+
+                    <h2 className="text-xl font-semibold text-white mb-2">
+                        Technical Notes
+                    </h2>
+
+                    {techMode === "casual" && (
+                        <>
+                            <p className="leading-relaxed text-zinc-400">
+                                The core idea of using a hamiltonian cycle is to force the snake to always move along a
+                                path that visits every grid cell exactly once.
+                                Because as long as the snake never leaves this cycle, the head can always every square before looping, which makes failure impossible
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                At each time step, the current snake body is treated as a
+                                locked-in segment of the cycle. The algorithm then attempts to
+                                complete the rest of the cycle around this fixed segment using
+                                randomized backbite operations that only modify the free tail
+                                of the path. Any construction that would disturb the snake’s
+                                ordering is rejected immediately.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                Since many valid Hamiltonian cycles are possible, the algorithm
+                                samples several candidates per step (controlled by the Tries
+                                parameter). Each candidate represents a different way of
+                                threading the remaining free cells around the snake without
+                                breaking safety.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                Among all valid candidates, the cycle that brings the apple
+                                closest in forward cycle distance is selected. This allows the
+                                snake to take short, direct routes to the apple when possible,
+                                while still falling back to a slower but still safe cycle if
+                                no improvement exists.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                The result is a strategy that behaves greedily when it is safe
+                                to do so, but defaults to a conservative traversal of the grid
+                                whenever risk would be introduced. This balance makes the
+                                snake appear intelligent without ever entering a losing state.
+                            </p>
+                        </>
+                    )}
+
+                    {techMode === "formal" && (
+                        <>
+                            <p className="leading-relaxed text-zinc-400">
+                                The board is modeled as a rectangular grid graph
+                                <InlineMath math="G = (V, E)"/>, where
+                                <InlineMath math="|V| = N = \text{rows} \times \text{cols}"/> and
+                                edges connect orthogonally adjacent cells.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                At time step <InlineMath math="t"/>, the snake configuration
+                                <InlineMath math="S_t = (v_0, \dots, v_k)"/> is a contiguous
+                                subsequence of a Hamiltonian cycle
+                                <InlineMath math="H_t = (h_0, \dots, h_{N-1})"/> over
+                                <InlineMath math="G"/>:
+                            </p>
+
+                            <BlockMath math="S_t \subseteq H_t"/>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                The cycle ordering induces a directed successor relation,
+                                allowing the snake to advance by replacing its head with the
+                                next vertex along <InlineMath math="H_t"/>.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                At each step, the algorithm samples a finite set of candidate
+                                Hamiltonian cycles:
+                            </p>
+
+                            <BlockMath math="\mathcal{C}_t = \{ H_t^{(1)}, \dots, H_t^{(k)} \}"/>
+
+                            <p className="leading-relaxed text-zinc-400">
+                                Each candidate cycle preserves the ordering of
+                                <InlineMath math="S_t"/> and is generated by completing the
+                                remaining vertices using randomized tail-restricted backbite
+                                operations, ensuring that the fixed snake prefix is never
+                                modified.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                For any Hamiltonian cycle
+                                <InlineMath math="H"/>, define the forward cycle distance
+                                <InlineMath math="d_H(u, v)"/> as the number of edges traversed
+                                when moving forward along <InlineMath math="H"/> from
+                                <InlineMath math="u"/> to <InlineMath math="v"/>.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                The selected cycle minimizes the distance from the snake’s head
+                                to the apple:
+                            </p>
+
+                            <BlockMath math="
+            H_t \;=\;
+            \arg\min_{H \in \mathcal{C}_t \cup \{H_{t-1}\}}
+            d_H(\text{head}_t, \text{apple}_t)
+            "/>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                Because the snake always advances along a Hamiltonian cycle,
+                                the tail remains reachable from the head at all times. As long
+                                as a Hamiltonian cycle exists for the grid, the snake can never
+                                enter a dead-end configuration.
+                            </p>
+
+                            <p className="leading-relaxed text-zinc-400 mt-3">
+                                The expected runtime for generating a single candidate cycle
+                                using randomized backbite operations is
+                                <InlineMath math="\mathcal{O}(N \log^2 N)"/>, with a pessimistic
+                                upper bound of
+                                <InlineMath math="\mathcal{O}(N^2 \log^2 N)"/> under repeated
+                                restarts.
+                            </p>
+                        </>
+                    )}
+                </section>
+
+
+            </div>
+
         </div>
     );
 }
@@ -738,128 +1119,127 @@ const preview = (() => {
     const H6_VARIANTS: Cell[][] = [
         // Variant 0
         [
-            { c: 0, r: 1 },
-            { c: 0, r: 2 },
-            { c: 0, r: 3 },
-            { c: 0, r: 4 },
-            { c: 0, r: 5 },
-            { c: 1, r: 5 },
-            { c: 1, r: 4 },
-            { c: 1, r: 3 },
-            { c: 1, r: 2 },
-            { c: 1, r: 1 },
-            { c: 2, r: 1 },
-            { c: 2, r: 2 },
-            { c: 2, r: 3 },
-            { c: 2, r: 4 },
-            { c: 2, r: 5 },
-            { c: 3, r: 5 },
-            { c: 3, r: 4 },
-            { c: 3, r: 3 },
-            { c: 3, r: 2 },
-            { c: 3, r: 1 },
-            { c: 4, r: 1 },
-            { c: 4, r: 2 },
-            { c: 4, r: 3 },
-            { c: 4, r: 4 },
-            { c: 4, r: 5 },
-            { c: 5, r: 5 },
-            { c: 5, r: 4 },
-            { c: 5, r: 3 },
-            { c: 5, r: 2 },
-            { c: 5, r: 1 },
-            { c: 5, r: 0 },
-            { c: 4, r: 0 },
-            { c: 3, r: 0 },
-            { c: 2, r: 0 },
-            { c: 1, r: 0 },
-            { c: 0, r: 0 },
+            {c: 0, r: 1},
+            {c: 0, r: 2},
+            {c: 0, r: 3},
+            {c: 0, r: 4},
+            {c: 0, r: 5},
+            {c: 1, r: 5},
+            {c: 1, r: 4},
+            {c: 1, r: 3},
+            {c: 1, r: 2},
+            {c: 1, r: 1},
+            {c: 2, r: 1},
+            {c: 2, r: 2},
+            {c: 2, r: 3},
+            {c: 2, r: 4},
+            {c: 2, r: 5},
+            {c: 3, r: 5},
+            {c: 3, r: 4},
+            {c: 3, r: 3},
+            {c: 3, r: 2},
+            {c: 3, r: 1},
+            {c: 4, r: 1},
+            {c: 4, r: 2},
+            {c: 4, r: 3},
+            {c: 4, r: 4},
+            {c: 4, r: 5},
+            {c: 5, r: 5},
+            {c: 5, r: 4},
+            {c: 5, r: 3},
+            {c: 5, r: 2},
+            {c: 5, r: 1},
+            {c: 5, r: 0},
+            {c: 4, r: 0},
+            {c: 3, r: 0},
+            {c: 2, r: 0},
+            {c: 1, r: 0},
+            {c: 0, r: 0},
         ],
 
         // Variant 1
         [
-            { c: 2, r: 4 },
-            { c: 2, r: 5 },
-            { c: 3, r: 5 },
-            { c: 4, r: 5 },
-            { c: 5, r: 5 },
-            { c: 5, r: 4 },
-            { c: 4, r: 4 },
-            { c: 3, r: 4 },
-            { c: 3, r: 3 },
-            { c: 4, r: 3 },
-            { c: 5, r: 3 },
-            { c: 5, r: 2 },
-            { c: 5, r: 1 },
-            { c: 5, r: 0 },
-            { c: 4, r: 0 },
-            { c: 3, r: 0 },
-            { c: 3, r: 1 },
-            { c: 4, r: 1 },
-            { c: 4, r: 2 },
-            { c: 3, r: 2 },
-            { c: 2, r: 2 },
-            { c: 1, r: 2 },
-            { c: 1, r: 1 },
-            { c: 2, r: 1 },
-            { c: 2, r: 0 },
-            { c: 1, r: 0 },
-            { c: 0, r: 0 },
-            { c: 0, r: 1 },
-            { c: 0, r: 2 },
-            { c: 0, r: 3 },
-            { c: 0, r: 4 },
-            { c: 0, r: 5 },
-            { c: 1, r: 5 },
-            { c: 1, r: 4 },
-            { c: 1, r: 3 },
-            { c: 2, r: 3 },
+            {c: 2, r: 4},
+            {c: 2, r: 5},
+            {c: 3, r: 5},
+            {c: 4, r: 5},
+            {c: 5, r: 5},
+            {c: 5, r: 4},
+            {c: 4, r: 4},
+            {c: 3, r: 4},
+            {c: 3, r: 3},
+            {c: 4, r: 3},
+            {c: 5, r: 3},
+            {c: 5, r: 2},
+            {c: 5, r: 1},
+            {c: 5, r: 0},
+            {c: 4, r: 0},
+            {c: 3, r: 0},
+            {c: 3, r: 1},
+            {c: 4, r: 1},
+            {c: 4, r: 2},
+            {c: 3, r: 2},
+            {c: 2, r: 2},
+            {c: 1, r: 2},
+            {c: 1, r: 1},
+            {c: 2, r: 1},
+            {c: 2, r: 0},
+            {c: 1, r: 0},
+            {c: 0, r: 0},
+            {c: 0, r: 1},
+            {c: 0, r: 2},
+            {c: 0, r: 3},
+            {c: 0, r: 4},
+            {c: 0, r: 5},
+            {c: 1, r: 5},
+            {c: 1, r: 4},
+            {c: 1, r: 3},
+            {c: 2, r: 3},
         ],
 
         // Variant 2
         [
-            { c: 5, r: 2 },
-            { c: 5, r: 1 },
-            { c: 5, r: 0 },
-            { c: 4, r: 0 },
-            { c: 3, r: 0 },
-            { c: 2, r: 0 },
-            { c: 1, r: 0 },
-            { c: 0, r: 0 },
-            { c: 0, r: 1 },
-            { c: 0, r: 2 },
-            { c: 1, r: 2 },
-            { c: 1, r: 1 },
-            { c: 2, r: 1 },
-            { c: 2, r: 2 },
-            { c: 3, r: 2 },
-            { c: 3, r: 1 },
-            { c: 4, r: 1 },
-            { c: 4, r: 2 },
-            { c: 4, r: 3 },
-            { c: 3, r: 3 },
-            { c: 2, r: 3 },
-            { c: 2, r: 4 },
-            { c: 1, r: 4 },
-            { c: 1, r: 3 },
-            { c: 0, r: 3 },
-            { c: 0, r: 4 },
-            { c: 0, r: 5 },
-            { c: 1, r: 5 },
-            { c: 2, r: 5 },
-            { c: 3, r: 5 },
-            { c: 3, r: 4 },
-            { c: 4, r: 4 },
-            { c: 4, r: 5 },
-            { c: 5, r: 5 },
-            { c: 5, r: 4 },
-            { c: 5, r: 3 },
+            {c: 5, r: 2},
+            {c: 5, r: 1},
+            {c: 5, r: 0},
+            {c: 4, r: 0},
+            {c: 3, r: 0},
+            {c: 2, r: 0},
+            {c: 1, r: 0},
+            {c: 0, r: 0},
+            {c: 0, r: 1},
+            {c: 0, r: 2},
+            {c: 1, r: 2},
+            {c: 1, r: 1},
+            {c: 2, r: 1},
+            {c: 2, r: 2},
+            {c: 3, r: 2},
+            {c: 3, r: 1},
+            {c: 4, r: 1},
+            {c: 4, r: 2},
+            {c: 4, r: 3},
+            {c: 3, r: 3},
+            {c: 2, r: 3},
+            {c: 2, r: 4},
+            {c: 1, r: 4},
+            {c: 1, r: 3},
+            {c: 0, r: 3},
+            {c: 0, r: 4},
+            {c: 0, r: 5},
+            {c: 1, r: 5},
+            {c: 2, r: 5},
+            {c: 3, r: 5},
+            {c: 3, r: 4},
+            {c: 4, r: 4},
+            {c: 4, r: 5},
+            {c: 5, r: 5},
+            {c: 5, r: 4},
+            {c: 5, r: 3},
         ],
     ];
 
 
     const path = H6_VARIANTS[Math.floor(Math.random() * H6_VARIANTS.length)];
-
 
 
     // Random snake length 3–5
@@ -885,8 +1265,8 @@ const preview = (() => {
             preserveAspectRatio="xMidYMid meet"
             className="w-full h-full rounded bg-zinc-950 border border-zinc-800"
         >
-        {/* Grid */}
-            {Array.from({ length: rows * cols }).map((_, i) => {
+            {/* Grid */}
+            {Array.from({length: rows * cols}).map((_, i) => {
                 const r = Math.floor(i / cols);
                 const c = i % cols;
                 return (
@@ -948,7 +1328,6 @@ const preview = (() => {
         </svg>
     );
 })();
-
 
 export const title = "Snake";
 export const description = "A snake game that uses an optimised hamiltonian cycle algorithm.";

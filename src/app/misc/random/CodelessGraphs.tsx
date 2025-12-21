@@ -393,14 +393,14 @@ function GraphBuilderPage() {
         setTableData((prev) => {
             if (!prev) return prev;
 
-            const newOrder = e.api
+            const newOrder: string[] = e.api
                 .getAllGridColumns()
                 .map((c: any) => c.getColId());
 
             return {
                 ...prev,
-                columns: newOrder.map(
-                    (id) => prev.columns.find((c) => c.id === id)!
+                columns: newOrder.map(id =>
+                    prev.columns.find(c => c.id === id)!
                 ),
             };
         });

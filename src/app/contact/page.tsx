@@ -1,5 +1,5 @@
 // app/contact/page.tsx
-import {Mail, Github, ArrowUpRight} from "lucide-react";
+import {Mail, Github, ArrowUpRight, Linkedin} from "lucide-react";
 
 export default function ContactPage() {
     return (
@@ -42,8 +42,8 @@ export default function ContactPage() {
                     <div className="grid gap-6 sm:grid-cols-2">
                         <ContactCard
                             href="mailto:me@markwu.org"
-                            title="Email"
-                            subtitle="Send me a direct email"
+                            title="Professional Email"
+                            subtitle="Send me a professional email"
                             Icon={Mail}
                             accent="from-cyan-400 via-teal-300 to-emerald-300"
                         />
@@ -54,6 +54,21 @@ export default function ContactPage() {
                             Icon={Github}
                             external
                             accent="from-fuchsia-400 via-violet-400 to-cyan-400"
+                        />
+                        <ContactCard
+                            href="https://www.linkedin.com/in/mark-mai-wu/"
+                            title="LinkedIn"
+                            subtitle="Professional profile and experience"
+                            Icon={Linkedin}
+                            external
+                            accent="from-sky-400 via-blue-500 to-indigo-500"
+                        />
+                        <ContactCard
+                            href="mailto:mark.wu123454@gmail.com"
+                            title="Personal Email"
+                            subtitle="Reach me on Gmail"
+                            Icon={Mail}
+                            accent="from-rose-400 via-orange-400 to-amber-300"
                         />
                     </div>
                 </div>

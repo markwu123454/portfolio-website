@@ -589,21 +589,19 @@ export default function HomePage() {
                         <div
                             className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">Aetherius UAV</h3>
+                                <h3 className="text-lg font-semibold">Smaller Projects</h3>
                                 <span
                                     className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-amber-500/20 text-amber-300 border-amber-400/30">On Hold</span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
-                                custom GCS</p>
+                            <p className="mt-1 text-sm text-white/75">Smaller projects and sidequests I partake on</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing electronic issues and preparing
-                                hardware-software testing.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
+                                className="text-white/70">Current:</span> Improving the snake hamiltonian cycle algorithm.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Jan 5, 2026</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[19%] rounded-full bg-white/60"/>
                             </div>
                             <Link
-                                href="/dronescape/uav"
+                                href="/misc/random"
                                 className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
                             >
                                 Open →
@@ -619,12 +617,11 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Working on data presentation and integration.
-                                Starting to prepare for season rollover and kickoff into FRC Rebuilt.
+                                className="text-white/70">Current:</span> Finalizing stable release for new season
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 18, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Jan 1, 2026</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[78%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[84%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket/scouting"
@@ -643,10 +640,10 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">An outreach project for my FRC Team.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Brainstorming and designing illustrations, preparing pitch to mentors for green lighting.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
+                                className="text-white/70">Current:</span>CADing and prototyping mechanisms.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Jan 3, 2026</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[5%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[35%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket"

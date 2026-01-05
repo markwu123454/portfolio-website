@@ -12,7 +12,7 @@ import {themeQuartz, IHeaderParams, colorSchemeDark} from "ag-grid-community";
 import {ResponsiveBar} from "@nivo/bar";
 import {ResponsiveLine} from "@nivo/line";
 import {ResponsiveScatterPlot} from "@nivo/scatterplot";
-import { ResponsiveRadar } from "@nivo/radar";
+import {ResponsiveRadar} from "@nivo/radar";
 
 const myTheme = themeQuartz.withPart(colorSchemeDark);
 
@@ -49,6 +49,39 @@ type PointListMapping = {
 type ChartMapping =
     | { kind: "columnList"; value: ColumnListMapping }
     | { kind: "pointList"; value: PointListMapping };
+
+
+type BaseChartSettings = {
+    title?: string;
+    showLegend: boolean;
+    legendPosition: "top" | "right" | "bottom" | "left";
+    colorScheme: "nivo" | "category10" | "accent" | "dark2";
+    mode: "light" | "dark";
+};
+
+type ChartSettings =
+    | { type: "bar"; value: BarChartSettings }
+    | { type: "line"; value: LineChartSettings }
+    | { type: "scatter"; value: ScatterChartSettings };
+
+type BarChartSettings = BaseChartSettings & {
+    orientation: "vertical" | "horizontal";
+    stacked: boolean;
+    groupPadding: number; // 0–1
+};
+
+type LineChartSettings = BaseChartSettings & {
+    curve: "linear" | "monotoneX" | "step";
+    showPoints: boolean;
+    lineWidth: number;
+};
+
+type ScatterChartSettings = BaseChartSettings & {
+    pointSize: number;
+    showGrid: boolean;
+    regressionLine: boolean; // future
+};
+
 
 /* ---------- Graph creation ---------- */
 
@@ -270,6 +303,56 @@ const PointListMappingPanel: React.FC<PointListMappingPanelProps> = ({
 };
 
 
+function createDefaultSettings(type: ChartType): ChartSettings {
+    const base = {
+        showLegend: true,
+        legendPosition: "top" as const,
+        colorScheme: "nivo" as const,
+        mode: "dark" as const,
+    };
+
+    switch (type) {
+        case "bar":
+            return {
+                type: "bar",
+                value: {
+                    ...base,
+                    orientation: "vertical",
+                    stacked: false,
+                    groupPadding: 0.3,
+                },
+            };
+
+        case "line":
+            return {
+                type: "line",
+                value: {
+                    ...base,
+                    curve: "linear",
+                    showPoints: true,
+                    lineWidth: 2,
+                },
+            };
+
+        case "scatter":
+            return {
+                type: "scatter",
+                value: {
+                    ...base,
+                    pointSize: 8,
+                    showGrid: true,
+                    regressionLine: false,
+                },
+            };
+
+        default:
+            // Exhaustiveness check
+            const _exhaustive: never = type;
+            return _exhaustive;
+    }
+}
+
+
 /* ---------- AG Grid ---------- */
 
 type ColumnDef = {
@@ -357,6 +440,22 @@ function GraphBuilderPage() {
         value: {x: null, y: []},
     });
 
+    const [settings, setSettings] = useState<ChartSettings>({
+        type: "bar",
+        value: {
+            mode: "dark",
+            showLegend: true,
+            legendPosition: "top",
+            colorScheme: "nivo",
+            orientation: "vertical",
+            stacked: false,
+            groupPadding: 0.3,
+        },
+    });
+
+    useEffect(() => {
+        setSettings(createDefaultSettings(chartType));
+    }, [chartType]);
 
     const previewRows = tableData?.rows.slice(0, 5) ?? [];
 
@@ -873,6 +972,12 @@ function GraphBuilderPage() {
                 </section>
 
 
+                <section className="border border-neutral-800 rounded-lg p-6 space-y-6">
+                    <div className="text-sm text-neutral-400">Chart setting</div>
+
+                </section>
+
+
                 {/* Customization panel */}
                 <section className="border border-neutral-800 rounded-lg p-6">
                     <div className="mb-2 text-sm text-neutral-400">Chart preview</div>
@@ -1124,10 +1229,10 @@ const preview = (
             data={previewAreaBumpData}
             keys={['chardonay', 'carmenere', 'syrah']}
             indexBy="taste"
-            margin={{ top: 70, right: 80, bottom: 40, left: 80 }}
+            margin={{top: 70, right: 80, bottom: 40, left: 80}}
             gridLabelOffset={36}
             dotSize={10}
-            dotColor={{ theme: 'background' }}
+            dotColor={{theme: 'background'}}
             dotBorderWidth={2}
             blendMode="multiply"
             legends={[
@@ -1144,7 +1249,6 @@ const preview = (
         />
     </div>
 );
-
 
 
 export const title = "Graph Studio";

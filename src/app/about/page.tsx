@@ -124,6 +124,10 @@ export default function AboutPage() {
                             <div className="text-white">GitHub</div>
                             <div className="text-neutral-400 text-sm mt-1">github.com/markwu123454</div>
                         </a>
+                        <a href="https://www.linkedin.com/in/mark-mai-wu/" className="rounded-2xl border border-neutral-800 p-5 hover:bg-neutral-950 transition">
+                            <div className="text-white">LinkedIn</div>
+                            <div className="text-neutral-400 text-sm mt-1">linkedin.com/in/mark-mai-wu</div>
+                        </a>
                     </div>
                 </section>
             </div>

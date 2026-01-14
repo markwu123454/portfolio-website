@@ -55,14 +55,6 @@ function generateHamiltonianBasic(rows: number, cols: number): Cell[] {
 }
 
 
-function distanceToApple(path: Cell[], apple: Cell): number {
-    const idx = path.findIndex(
-        c => c.r === apple.r && c.c === apple.c
-    )
-    return idx === -1 ? Infinity : idx
-}
-
-
 function zipsToApple(
     path: Cell[],
     snake: Cell[],
@@ -116,74 +108,47 @@ function generateHamiltonianBest(
     tries: number
 ): Cell[] {
 
-    // Early exit if current path already zips to apple
-    if (lastPath.length > 0 && zipsToApple(lastPath, snake, apple)) {
-        return lastPath
-    }
+    let bestPath: Cell[] | null = null;
+    let bestScore = Infinity;
 
-    let bestPath: Cell[] | null = null
-    let bestScore = Infinity
+    function consider(rawPath: Cell[]) {
+        if (rawPath.length === 0) return;
 
-    function consider(path: Cell[]) {
-        // Ignore failed generations
-        if (path.length === 0) return
+        // Normalize so head is index 0 and direction is correct
+        let path = normalizeHamiltonian(rawPath, snake);
 
-        const normalized = normalizeHamiltonian(path, snake)
-        const score = distanceToApple(normalized, apple)
+        // 🔹 Local optimization (unchanged)
+        path = optimizeHamiltonianByBumps(path, snake, apple);
 
+        const score = patternDistance(path, apple);
         if (score < bestScore) {
-            bestScore = score
-            bestPath = normalized
+            bestScore = score;
+            bestPath = path;
         }
     }
 
-    // Only consider lastPath if it exists
-    consider(lastPath)
+    // --- FIRST: check current path ---
+    if (lastPath.length > 0) {
+        const normalized = normalizeHamiltonian(lastPath, snake);
 
+        // 🔥 SHORT-CIRCUIT: already optimal
+        if (zipsToApple(normalized, snake, apple)) {
+            return normalized;
+        }
+
+        consider(normalized);
+    }
+
+    // --- Otherwise, search ---
     for (let i = 0; i < tries; i++) {
-        const raw = generateHamiltonian(rows, cols, snake)
-
-        // raw may be []
-        consider(raw)
+        const raw = generateHamiltonian(rows, cols, snake);
+        consider(raw);
     }
 
-    // Guaranteed safe fallback
-    return bestPath ?? lastPath
+    // Safe fallback
+    return bestPath ?? lastPath;
 }
 
-
-function normalizeHamiltonian(
-    path: Cell[],
-    snake: Cell[] // [head ... tail]
-): Cell[] {
-    const head = snake[0]
-    const neck = snake.length > 1 ? snake[1] : null
-
-    // rotate so head is at index 0
-    const idx = path.findIndex(
-        c => c.r === head.r && c.c === head.c
-    )
-    if (idx === -1) return path
-
-    let rotated = [
-        ...path.slice(idx),
-        ...path.slice(0, idx),
-    ]
-
-    // if next step goes into the neck, reverse direction
-    if (
-        neck &&
-        rotated[1].r === neck.r &&
-        rotated[1].c === neck.c
-    ) {
-        rotated = [
-            rotated[0],
-            ...rotated.slice(1).reverse(),
-        ]
-    }
-
-    return rotated
-}
 
 
 function generateHamiltonian(
@@ -207,7 +172,7 @@ function generateHamiltonian(
     ] as const
 
     const inBounds = (r: number, c: number) => r >= 0 && r < rows && c >= 0 && c < cols
-    const isAdj = (a: Cell, b: Cell) => Math.abs(a.r - b.r) + Math.abs(a.c - b.c) + 0 === 1
+    const isAdj = (a: Cell, b: Cell) => Math.abs(a.r - b.r) + Math.abs(a.c - b.c) === 1
     const idx = (c: Cell) => c.r * cols + c.c
 
     // --- Seedable RNG (xorshift32) ---
@@ -256,13 +221,12 @@ function generateHamiltonian(
         // Helper: reverse suffix segment [i1..i2] in place (updates pos)
         function reverseSegment(i1: number, i2: number) {
             while (i1 < i2) {
-                const a = path[i1]
-                const b = path[i2]
-                path[i1] = b
-                path[i2] = a
+                [path[i1], path[i2]] = [path[i2], path[i1]]
+
                 pos[idx(path[i1])] = i1
                 pos[idx(path[i2])] = i2
-                i1++;
+
+                i1++
                 i2--
             }
         }
@@ -337,6 +301,40 @@ function generateHamiltonian(
 }
 
 
+function normalizeHamiltonian(
+    path: Cell[],
+    snake: Cell[] // [head ... tail]
+): Cell[] {
+    const head = snake[0]
+    const neck = snake.length > 1 ? snake[1] : null
+
+    // rotate so head is at index 0
+    const idx = path.findIndex(
+        c => c.r === head.r && c.c === head.c
+    )
+    if (idx === -1) return path
+
+    let rotated = [
+        ...path.slice(idx),
+        ...path.slice(0, idx),
+    ]
+
+    // if next step goes into the neck, reverse direction
+    if (
+        neck &&
+        rotated[1].r === neck.r &&
+        rotated[1].c === neck.c
+    ) {
+        rotated = [
+            rotated[0],
+            ...rotated.slice(1).reverse(),
+        ]
+    }
+
+    return rotated
+}
+
+
 function buildNextMap(path: Cell[]): Map<string, Cell> {
     const map = new Map<string, Cell>();
     for (let i = 0; i < path.length; i++) {
@@ -345,6 +343,160 @@ function buildNextMap(path: Cell[]): Map<string, Cell> {
         map.set(`${a.r},${a.c}`, b);
     }
     return map;
+}
+
+
+function cellKey(c: Cell): string {
+    return `${c.r},${c.c}`;
+}
+
+function patternDistance(path: Cell[], apple: Cell): number {
+    const ai = path.findIndex(c => c.r === apple.r && c.c === apple.c);
+    return ai === -1 ? Infinity : ai; // head is assumed at index 0
+}
+
+function is2x2Square(a: Cell, b: Cell, c: Cell, d: Cell): boolean {
+    const rs = new Set([a.r, b.r, c.r, d.r]);
+    const cs = new Set([a.c, b.c, c.c, d.c]);
+    return rs.size === 2 && cs.size === 2;
+}
+
+function extend(from: Cell, to: Cell): Cell {
+    return {
+        r: to.r + (to.r - from.r),
+        c: to.c + (to.c - from.c),
+    };
+}
+
+function spliceByRemoveInsert(
+    path: Cell[],
+    indexMap: Map<string, number>,
+    A: Cell,
+    B: Cell,
+    C: Cell,
+    D: Cell,
+    Bp: Cell,
+    Cp: Cell
+): Cell[] | null {
+
+    const iB = indexMap.get(cellKey(B));
+    const iC = indexMap.get(cellKey(C));
+    const iBp = indexMap.get(cellKey(Bp));
+    const iCp = indexMap.get(cellKey(Cp));
+
+    if (iB == null || iC == null || iBp == null || iCp == null) {
+        return null;
+    }
+
+    // B and C must be consecutive
+    if (Math.abs(iB - iC) !== 1) return null;
+
+    // B′ and C′ must be consecutive
+    if (Math.abs(iBp - iCp) !== 1) return null;
+
+    // --- remove B and C ---
+    const removed = path.filter(
+        (_, i) => i !== iB && i !== iC
+    );
+
+    // indices shift after removal
+    const idxBp = removed.findIndex(
+        c => c.r === Bp.r && c.c === Bp.c
+    );
+    const idxCp = removed.findIndex(
+        c => c.r === Cp.r && c.c === Cp.c
+    );
+
+    if (idxBp === -1 || idxCp === -1) {
+        console.groupEnd();
+        return null;
+    }
+
+    // determine insertion point (between B′ and C′)
+    const insertAt = Math.min(idxBp, idxCp) + 1;
+
+    // insert reversed [C, B]
+    return [
+        ...removed.slice(0, insertAt),
+        C,
+        B,
+        ...removed.slice(insertAt),
+    ];
+}
+
+
+
+function optimizeHamiltonianByBumps(
+    rawPath: Cell[],
+    snake: Cell[],
+    apple: Cell
+): Cell[] {
+    if (rawPath.length === 0) return rawPath;
+
+    let path = normalizeHamiltonian(rawPath, snake);
+    const N = path.length;
+
+    const snakeSet = new Set<string>();
+    for (let i = 1; i < snake.length; i++) {
+        snakeSet.add(cellKey(snake[i]));
+    }
+
+    while (true) {
+        let improved = false;
+
+        const indexMap = new Map<string, number>();
+        for (let i = 0; i < N; i++) indexMap.set(cellKey(path[i]), i);
+
+        const baseDist = patternDistance(path, apple);
+
+        const segment = pathFromHeadToApple(path, snake, apple);
+
+        for (let si = 0; si + 3 < segment.length; si++) {
+            const A = segment[si];
+            const B = segment[si + 1];
+            const C = segment[si + 2];
+            const D = segment[si + 3];
+
+            if (!is2x2Square(A, B, C, D)) continue;
+
+            const Bp = extend(A, B);
+            const Cp = extend(D, C);
+
+            if (snakeSet.has(cellKey(Bp)) || snakeSet.has(cellKey(Cp))) continue;
+
+            const newPath = spliceByRemoveInsert(
+                path,
+                indexMap,
+                A, B, C, D,
+                Bp, Cp
+            );
+
+            if (!newPath) continue;
+
+            const newDist = patternDistance(newPath, apple);
+            /*
+            // ---------- LOG ----------
+            console.group("BUMP FLIP");
+            console.log("A B C D:", A, B, C, D);
+            console.log("B' C':", Bp, Cp);
+            console.log("BEFORE:", path);
+            console.log("AFTER:", newPath);
+            console.log("distance:", baseDist, "→", newDist);
+            console.groupEnd();
+            // -----------------------
+            */
+            // ✅ strict rule: must shorten by exactly 2
+            if (newDist === baseDist - 2) {
+                path = newPath;
+                improved = true;
+                break;
+            }
+        }
+
+        if (!improved) break;
+    }
+
+    return path;
 }
 
 
@@ -472,10 +624,6 @@ function SnakePage() {
     const [rowsInput, setRowsInput] = useState(String(rows));
     const [colsInput, setColsInput] = useState(String(cols));
     const [techMode, setTechMode] = useState<"casual" | "formal">("casual");
-
-    useEffect(() => {
-        console.log("Apple updated:", apple);
-    }, [apple]);
 
 
     const stepsPerSecondCalculated =

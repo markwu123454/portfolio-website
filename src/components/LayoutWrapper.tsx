@@ -6,6 +6,7 @@ import {Header} from "@/components/Header";
 import {Footer} from "@/components/Footer";
 import AnalyticsWrapper from "@/components/Analytics";
 import {SpeedInsights} from "@vercel/speed-insights/next";
+import '@/app/ag-grid-client';
 
 // ---- BLACKLIST CONFIG ----
 const blacklistPaths = ["/takeordouble"];

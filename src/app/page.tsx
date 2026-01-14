@@ -289,6 +289,54 @@ export default function HomePage() {
         lastRef.current = null; // reset clock to avoid resume jump
     };
 
+    type SystemStatus = {
+        deploymentTime?: number;
+        isBuilding: boolean;
+        commitSha?: string;
+        commitUrl?: string;
+    };
+
+    type DeploymentStatusResponse = {
+        this: SystemStatus;
+        sprocketstatfrontend: SystemStatus;
+        sprocketstatbackend: SystemStatus;
+        updatedAt: number;
+    };
+
+    const LIVE_SYSTEMS = [
+        {key: "this", name: "Portfolio Website"},
+        {key: "sprocketstatfrontend", name: "SprocketStats Frontend"},
+        {key: "sprocketstatbackend", name: "SprocketStats Backend"},
+    ] as const;
+
+    const [deployments, setDeployments] =
+        useState<DeploymentStatusResponse | null>(null);
+    const [deploymentsError, setDeploymentsError] = useState(false);
+
+    useEffect(() => {
+        let alive = true;
+
+        const load = async () => {
+            try {
+                const res = await fetch("/api/deployment-status", {
+                    cache: "no-store",
+                });
+                if (!res.ok) throw new Error();
+                const json = (await res.json()) as DeploymentStatusResponse;
+                if (alive) setDeployments(json);
+            } catch {
+                if (alive) setDeploymentsError(true);
+            }
+        };
+
+        load();
+        const id = setInterval(load, 90_000);
+        return () => {
+            alive = false;
+            clearInterval(id);
+        };
+    }, []);
+
     return (
         <div className="relative min-h-screen text-white space-y-8">
             <JsonLd id="person-jsonld" data={person}/>
@@ -619,10 +667,9 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Working on data presentation and integration.
-                                Starting to prepare for season rollover and kickoff into FRC Rebuilt.
+                                className="text-white/70">Current:</span> Started working on new match scouting ui and pit questions post kickoff
                             </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 18, 2025</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Jan 14, 2026</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
                                 <div className="h-full w-[78%] rounded-full bg-white/60"/>
                             </div>
@@ -643,10 +690,10 @@ export default function HomePage() {
                             </div>
                             <p className="mt-1 text-sm text-white/75">An outreach project for my FRC Team.</p>
                             <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Brainstorming and designing illustrations, preparing pitch to mentors for green lighting.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
+                                className="text-white/70">Current:</span>Got approved, started prototyping elements.</p>
+                            <p className="mt-1 text-xs text-white/50">Last updated Jan 14, 2026</p>
                             <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[5%] rounded-full bg-white/60"/>
+                                <div className="h-full w-[15%] rounded-full bg-white/60"/>
                             </div>
                             <Link
                                 href="/teamsprocket"
@@ -657,6 +704,82 @@ export default function HomePage() {
                         </div>
                     </div>
                 </section>
+
+                <section className="py-16 font-mono">
+                    <h2 className="text-lg font-semibold tracking-tight text-white/90">
+                        LIVE SYSTEMS
+                        <span className="ml-3 inline-block h-px w-12 align-middle bg-white/30" />
+                    </h2>
+
+                    <p className="mt-2 text-xs text-white/50">
+                        DEPLOYMENT TELEMETRY
+                    </p>
+
+                    <div className="mt-4 overflow-x-auto rounded-xl border border-white/15 bg-black/70 backdrop-blur">
+                        <table className="w-full text-xs border-collapse">
+                            <thead className="bg-white/[0.03] text-white/60">
+                            <tr>
+                                <th className="px-4 py-2 text-left">SYSTEM</th>
+                                <th className="px-4 py-2 text-left">STATE</th>
+                                <th className="px-4 py-2 text-left">DEPLOYED_AT</th>
+                                <th className="px-4 py-2 text-left">COMMIT_SHA</th>
+                            </tr>
+                            </thead>
+
+                            <tbody className="divide-y divide-white/10">
+                            {LIVE_SYSTEMS.map((s) => {
+                                const d = deployments?.[s.key];
+
+                                return (
+                                    <tr key={s.key} className="hover:bg-white/[0.04]">
+                                        <td className="px-4 py-2 text-white/90">
+                                            {s.name}
+                                        </td>
+
+                                        <td className="px-4 py-2">
+                                            {deploymentsError ? (
+                                                <span className="text-white/40">
+                    UNKNOWN
+                  </span>
+                                            ) : d?.isBuilding ? (
+                                                <span className="text-amber-300">
+                    BUILDING
+                  </span>
+                                            ) : (
+                                                <span className="text-emerald-300">
+                    STABLE
+                  </span>
+                                            )}
+                                        </td>
+
+                                        <td className="px-4 py-2 text-white/60">
+                                            {d?.deploymentTime
+                                                ? new Date(d.deploymentTime).toISOString()
+                                                : "—"}
+                                        </td>
+
+                                        <td className="px-4 py-2">
+                                            {d?.commitUrl && d?.commitSha ? (
+                                                <Link
+                                                    href={d.commitUrl}
+                                                    target="_blank"
+                                                    className="text-cyan-300 hover:text-cyan-200"
+                                                >
+                                                    {d.commitSha}
+                                                </Link>
+                                            ) : (
+                                                <span className="text-white/30">—</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+
 
                 {/* Contact / Links */}
                 <section className="max-w-4xl pb-10">
@@ -1032,3 +1155,14 @@ const ShootingStars: React.FC<Props> = ({
         </div>
     );
 };
+
+function timeAgo(ts?: number) {
+    if (!ts) return "—";
+    const s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return `${s}s ago`;
+    const m = Math.floor(s / 60);
+    if (m < 60) return `${m}m ago`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h ago`;
+    return `${Math.floor(h / 24)}d ago`;
+}

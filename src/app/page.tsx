@@ -289,6 +289,55 @@ export default function HomePage() {
         lastRef.current = null; // reset clock to avoid resume jump
     };
 
+    type SystemStatus = {
+        deploymentTime?: number;
+        isBuilding: boolean;
+        commitSha?: string;
+        commitUrl?: string;
+    };
+
+    type DeploymentStatusResponse = {
+        this: SystemStatus;
+        sprocketstatfrontend: SystemStatus;
+        sprocketstatbackend: SystemStatus;
+        updatedAt: number;
+    };
+
+    const LIVE_SYSTEMS = [
+        {key: "this", name: "Portfolio Website"},
+        {key: "sprocketstatfrontend", name: "SprocketStats Frontend"},
+        {key: "sprocketstatbackend", name: "SprocketStats Backend"},
+    ] as const;
+
+    const [deployments, setDeployments] =
+        useState<DeploymentStatusResponse | null>(null);
+    const [deploymentsError, setDeploymentsError] = useState(false);
+
+    useEffect(() => {
+        let alive = true;
+
+        const load = async () => {
+            try {
+                const res = await fetch("/api/deployment-status", {
+                    cache: "no-store",
+                });
+                if (!res.ok) throw new Error();
+                const json = (await res.json()) as DeploymentStatusResponse;
+                if (alive) setDeployments(json);
+            } catch {
+                if (alive) setDeploymentsError(true);
+            }
+        };
+
+        load();
+        const id = setInterval(load, 90_000);
+        return () => {
+            alive = false;
+            clearInterval(id);
+        };
+    }, []);
+
+
     return (
         <div className="relative min-h-screen text-white space-y-8">
             <JsonLd id="person-jsonld" data={person}/>
@@ -331,9 +380,13 @@ export default function HomePage() {
                             Hi! I&apos;m Mark.
                         </h1>
 
-                        <p className="mt-4 text-lg text-white/80 max-w-prose">
-                            I build robots and make apps.
+                        <p className="mt-2 text-sm tracking-widest text-white/60">
+                            STUDENT ENGINEER · ROBOTICS · SOFTWARE
                         </p>
+
+                        <div className="mt-4 text-xs text-white/50">
+                            SYSTEM STATUS: IN HIGHSCHOOL
+                        </div>
                     </div>
 
                     {/* Featured projects inline */}
@@ -576,119 +629,340 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                <section className="py-16 md:py-24 container mx-0 px-0 md:px-0">
-                    <div className="flex items-baseline justify-between">
-                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                            Active Projects
-                            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
-                        </h2>
-                    </div>
+                {/* Active projects */}
+                <section className="py-12 border-t border-white/10 font-mono">
+                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
+                        ACTIVE PROJECTS
+                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
+                    </h2>
 
-                    <div className="mt-6 grid gap-6 md:grid-cols-3">
+                    <p className="mt-2 text-xs tracking-widest text-white/50">
+                        CURRENTLY MAINTAINED SYSTEMS
+                    </p>
 
-                        <div
-                            className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">Aetherius UAV</h3>
-                                <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-amber-500/20 text-amber-300 border-amber-400/30">On Hold</span>
+                    <div className="mt-6 grid gap-4 md:grid-cols-3">
+                        {/* Aetherius UAV */}
+                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
+                            {/* scanlines */}
+                            <div
+                                aria-hidden
+                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
+                            />
+
+                            <div className="relative flex items-center justify-between">
+                                <span className="text-xs tracking-wider text-white/80">
+                                    AETHERIUS_UAV
+                                </span>
+                                <span className="text-[10px] tracking-widest text-amber-300">
+                                    ON_HOLD
+                                </span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">Fixed-wing UAV with Raspberry Pi avionics and
-                                custom GCS</p>
-                            <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Fixing electronic issues and preparing
-                                hardware-software testing.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
-                            <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[19%] rounded-full bg-white/60"/>
+
+                            <div className="relative mt-3 space-y-2 text-xs">
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">DESC</span>
+                                    <span className="text-white/70">
+                                        Fixed-wing UAV with custom avionics
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">STATE</span>
+                                    <span className="text-white/70">
+                                        Electrical debugging & HW/SW validation
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">UPDATED</span>
+                                    <span className="text-white/50">
+                                        2025-11-23
+                                    </span>
+                                </div>
                             </div>
+
+                            {/* load bar */}
+                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
+                                <div className="h-full w-[19%] bg-white/60"/>
+                            </div>
+
                             <Link
                                 href="/dronescape/uav"
-                                className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
                             >
-                                Open →
+                                OPEN →
                             </Link>
+
+                            {/* corner accent */}
+                            <div
+                                aria-hidden
+                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
+                            />
                         </div>
 
-                        <div
-                            className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">FRC Scouting</h3>
-                                <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
+                        {/* FRC Scouting */}
+                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
+                            <div
+                                aria-hidden
+                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
+                            />
+
+                            <div className="relative flex items-center justify-between">
+                                <span className="text-xs tracking-wider text-white/80">
+                                    FRC_SCOUTING
+                                </span>
+                                <span className="text-[10px] tracking-widest text-emerald-300">
+                                    ACTIVE
+                                </span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">React + FastAPI analytics platform with PWA</p>
-                            <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span> Working on data presentation and integration.
-                                Starting to prepare for season rollover and kickoff into FRC Rebuilt.
-                            </p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 18, 2025</p>
-                            <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[78%] rounded-full bg-white/60"/>
+
+                            <div className="relative mt-3 space-y-2 text-xs">
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">DESC</span>
+                                    <span className="text-white/70">
+                                        React + FastAPI analytics platform
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">STATE</span>
+                                    <span className="text-white/70">
+                                        Post kickoff: work on scouting UI and questions
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">UPDATED</span>
+                                    <span className="text-white/50">
+                                        2026-1-14
+                                    </span>
+                                </div>
                             </div>
+
+                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
+                                <div className="h-full w-[78%] bg-white/60"/>
+                            </div>
+
                             <Link
                                 href="/teamsprocket/scouting"
-                                className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
                             >
-                                Open →
+                                OPEN →
                             </Link>
+
+                            <div
+                                aria-hidden
+                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
+                            />
                         </div>
 
-                        <div
-                            className="group rounded-2xl p-5 md:p-6 bg-white/5 backdrop-blur border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] transition hover:bg-white/[0.07]">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold">FRC Outreach Project</h3>
-                                <span
-                                    className="inline-flex rounded-lg border px-2 py-0.5 text-[11px] font-medium bg-green-500/20 text-green-300 border-green-400/30">Active Development</span>
+                        {/* FRC Outreach */}
+                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
+                            <div
+                                aria-hidden
+                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
+                            />
+
+                            <div className="relative flex items-center justify-between">
+                                <span className="text-xs tracking-wider text-white/80">
+                                    FRC_OUTREACH
+                                </span>
+                                <span className="text-[10px] tracking-widest text-emerald-300">
+                                    ACTIVE
+                                </span>
                             </div>
-                            <p className="mt-1 text-sm text-white/75">An outreach project for my FRC Team.</p>
-                            <p className="mt-2 text-xs text-white/60"><span
-                                className="text-white/70">Current:</span>Brainstorming and designing illustrations, preparing pitch to mentors for green lighting.</p>
-                            <p className="mt-1 text-xs text-white/50">Last updated Nov 23, 2025</p>
-                            <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                                <div className="h-full w-[5%] rounded-full bg-white/60"/>
+
+                            <div className="relative mt-3 space-y-2 text-xs">
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">DESC</span>
+                                    <span className="text-white/70">
+                                        Outreach & education initiatives
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">STATE</span>
+                                    <span className="text-white/70">
+                                        Approved, started prototyping
+                                    </span>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <span className="text-white/40 w-24">UPDATED</span>
+                                    <span className="text-white/50">
+                                        2026-1-14
+                                    </span>
+                                </div>
                             </div>
+
+                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
+                                <div className="h-full w-[5%] bg-white/60"/>
+                            </div>
+
                             <Link
                                 href="/teamsprocket"
-                                className="mt-4 inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
                             >
-                                Open →
+                                OPEN →
                             </Link>
+
+                            <div
+                                aria-hidden
+                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
+                            />
                         </div>
                     </div>
                 </section>
 
-                {/* Contact / Links */}
-                <section className="max-w-4xl pb-10">
-                    <SectionTitle>Links</SectionTitle>
-                    <p className="mt-2 text-white/75">Contact me or browse the code.</p>
-                    <div className="mt-4 flex flex-wrap gap-3">
+
+                {/* System status */}
+                <section
+                    className="py-16 font-mono"
+                    style={{fontVariantNumeric: "tabular-nums"}}
+                >
+                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
+                        LIVE SYSTEMS
+                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
+                    </h2>
+
+                    <p className="mt-2 text-xs tracking-widest text-white/50">
+                        DEPLOYMENT TELEMETRY STREAM
+                    </p>
+
+                    <div
+                        className="mt-6 grid gap-4 md:grid-cols-3 "
+                    >
+                        {LIVE_SYSTEMS.map((s) => {
+                            const d = deployments?.[s.key];
+
+                            return (
+                                <div
+                                    key={s.key}
+                                    className="relative rounded-xl border border-white/15 bg-black/70 backdrop-blur p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] hover:bg-black/80 transition"
+                                >
+                                    {/* scanlines */}
+                                    <div
+                                        aria-hidden
+                                        className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
+                                    />
+
+                                    {/* header */}
+                                    <div className="relative flex items-center justify-between">
+                                        <span className="text-xs tracking-wider text-white/80">
+                                            {s.name.toUpperCase()}
+                                        </span>
+
+                                        <span
+                                            className={`text-[10px] tracking-widest ${
+                                                deploymentsError
+                                                    ? "text-white/40"
+                                                    : d?.isBuilding
+                                                        ? "text-amber-300"
+                                                        : "text-emerald-300"
+                                            }`}
+                                        >
+                                            {deploymentsError
+                                                ? "UNKNOWN"
+                                                : d?.isBuilding
+                                                    ? "BUILDING" : "STABLE"}
+                                        </span>
+                                    </div>
+
+                                    {/* body */}
+                                    <div className="relative mt-3 space-y-2 text-xs">
+                                        <div className="flex gap-2">
+                                            <span className="text-white/40 w-28">
+                                                DEPLOYED_AT
+                                            </span>
+                                            <span className="text-white/70 break-all">
+                                                {d?.deploymentTime
+                                                    ? new Date(d.deploymentTime).toISOString()
+                                                    : "—"}
+                                            </span>
+                                        </div>
+
+                                        <div className="flex gap-2">
+                                            <span className="text-white/40 w-28">
+                                                COMMIT_SHA
+                                            </span>
+                                            {d?.commitUrl && d?.commitSha ? (
+                                                <Link
+                                                    href={d.commitUrl}
+                                                    target="_blank"
+                                                    className="text-cyan-300 hover:text-cyan-200 break-all"
+                                                >
+                                                    {d.commitSha}
+                                                </Link>
+                                            ) : (
+                                                <span className="text-white/30">—</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* corner accent */}
+                                    <div
+                                        aria-hidden
+                                        className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+
+                {/* External Links */}
+                <section className="py-12 border-t border-white/10 font-mono max-w-4xl">
+                    <h2 className="text-sm tracking-[0.2em] text-white/70">
+                        EXTERNAL_LINKS
+                    </h2>
+
+                    <p className="mt-2 text-xs tracking-widest text-white/40">
+                        COMMUNICATION & SOURCE ACCESS
+                    </p>
+
+                    <div className="mt-6 space-y-3">
+                        {/* Email */}
                         <a
                             href="https://mail.google.com/mail/?view=cm&fs=1&to=me@markwu.org"
-                            target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center justify-between
+                       rounded-md border border-white/15
+                       bg-black/60 px-4 py-3
+                       hover:bg-black/80 transition"
                         >
-                            <Image src="/gmail.png" alt="Gmail" width={20} height={20}/>
-                            <span className="font-medium">Email Me</span>
+                            <span className="text-xs tracking-widest text-white/70">
+                                EMAIL_INTERFACE
+                            </span>
+
+                            <span className="text-xs tracking-widest text-cyan-300
+                             group-hover:translate-x-0.5 transition">
+                                OPEN →
+                            </span>
                         </a>
 
+                        {/* GitHub */}
                         <Link
                             href="https://github.com/markwu123454"
-                            target="_blank" rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 rounded-xl px-4 py-2 border border-white/15 bg-black/40 hover:bg-white/15 focus-visible:ring-2 focus-visible:ring-white/30"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center justify-between
+                       rounded-md border border-white/15
+                       bg-black/60 px-4 py-3
+                       hover:bg-black/80 transition"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16"
-                                 className="opacity-90">
-                                <path
-                                    fill="currentColor" fillRule="evenodd"
-                                    d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584c.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076c-.343-.93-.881-1.175-.881-1.175c-.734-.489.048-.489.048-.489c.783.049 1.224.832 1.224.832c.734 1.223 1.859.88 2.3.685c.048-.538.293-.88.489-1.076c-1.762-.196-3.621-.881-3.621-3.964c0-.88.293-1.566.832-2.153c-.05-.147-.343-.978.098-2.055c0 0 .685-.196 2.201.832c.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832c.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915c.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.984 7.984 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            <span className="font-medium">GitHub Profile</span>
+                            <span className="text-xs tracking-widest text-white/70">
+                                SOURCE_REPOSITORY
+                            </span>
+
+                            <span className="text-xs tracking-widest text-cyan-300
+                             group-hover:translate-x-0.5 transition">
+                                OPEN →
+                            </span>
                         </Link>
                     </div>
                 </section>
+
             </main>
         </div>
     );

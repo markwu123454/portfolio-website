@@ -283,7 +283,7 @@ export default function WaitPage() {
                                     style={{ left: r.x - 8, top: r.y - 8 }}
                                 />
                             ))}
-                            <span className="relative z-10">I'm sorry</span>
+                            <span className="relative z-10">I&#39;m sorry</span>
                         </button>
 
                         <p className="font-mono-custom text-[9px] text-white/15 tracking-widest text-center">

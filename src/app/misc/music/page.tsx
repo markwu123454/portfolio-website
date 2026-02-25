@@ -56,7 +56,7 @@ export default function MusicPage() {
                     <h2 className="p-3 font-bold text-3xl">Original Composition</h2>
 
                     <Card>
-                        <h3 className="text-2xl font-semibold">Music for Three Musicians (2025)</h3>
+                        <h3 className="text-2xl font-semibold">Music for Three Musicians (2024)</h3>
                         <p className="mt-1 text-white/70 text-sm">
                             2 minutes • Minimalist / Process-based
                         </p>

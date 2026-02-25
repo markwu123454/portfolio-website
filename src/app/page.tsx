@@ -8,97 +8,45 @@ import {ArrowDown, ArrowRight} from "lucide-react"
 
 // 1) Hardcode your PNGs (filenames in /public/logo)
 const LOGOS = [
+    // Languages
     "/logo/typescript.png",
-    "/logo/solidworks.png",
-    "/logo/react.png",
-    "/logo/mavlink.png",
-    "/logo/next.png",
-    "/logo/raspberrypi.png",
-    "/logo/sklearn.png",
-    "/logo/postgresql.png",
-    "/logo/tensorflow.png",
-    "/logo/bambulab.png",
     "/logo/python.png",
+    "/logo/cs.png",
+
+    // Frontend / Web
+    "/logo/react.png",
+    "/logo/next.png",
     "/logo/tailwind.png",
-    "/logo/git.png",
-    "/logo/fusion360.png",
-    "/logo/fastapi.png",
-    "/logo/onshape.png",
     "/logo/tauri.png",
+
+    // Backend / Data
+    "/logo/fastapi.png",
+    "/logo/postgresql.png",
+    "/logo/sklearn.png",
+    "/logo/tensorflow.png",
+
+    // CAD / Engineering
+    "/logo/solidworks.png",
+    "/logo/fusion360.png",
+    "/logo/onshape.png",
+
+    // Hardware / Robotics
+    "/logo/raspberrypi.png",
+    "/logo/mavlink.png",
+    "/logo/bambulab.png",
+
+    // Tooling
+    "/logo/git.png",
 ] as const;
 
 // 2) Per-logo JSX detail (keys = filename sans extension)
 const detailByKey: Record<string, JSX.Element> = {
-    onshape: (
-        <div className="p-5">
-            <h3 className="font-semibold">Onshape</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Browser based CAD software, used in various smaller projects.
-            </p>
-        </div>
-    ),
-    tensorflow: (
-        <div className="p-5">
-            <h3 className="font-semibold">TensorFlow</h3>
-            <p className="mt-1 text-sm text-white/80">
-                TensorFlow is an ai training library developed by Google, in the past smaller projects I have utilised
-                it in training feature recognition, regression, and classification models.
-            </p>
-        </div>
-    ),
-    git: (
-        <div className="p-5">
-            <h3 className="font-semibold">Git</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Or more specifically Github is a file sharing and hosting website I use for most of my projects.
-            </p>
-        </div>
-    ),
-    sklearn: (
-        <div className="p-5">
-            <h3 className="font-semibold">SciKit Learn</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A python ml library I used in the Team Sprocket Scouting app to process data using various models.
-            </p>
-        </div>
-    ),
-    postgresql: (
-        <div className="p-5">
-            <h3 className="font-semibold">PostGreSQL</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Opensource database I used in the Team Sprocket Scouting app to store and retrieve generated data.
-            </p>
-        </div>
-    ),
-    next: (
-        <div className="p-5">
-            <h3 className="font-semibold">Next.js</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A typescript framework that incorporate frontend and backend that I used for this website.
-            </p>
-        </div>
-    ),
+    // Languages
     typescript: (
         <div className="p-5">
             <h3 className="font-semibold">TypeScript</h3>
             <p className="mt-1 text-sm text-white/80">
-                A popular programming language that is commonly used in web development.
-            </p>
-        </div>
-    ),
-    react: (
-        <div className="p-5">
-            <h3 className="font-semibold">React</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A typescript framework I used in multiple other projects.
-            </p>
-        </div>
-    ),
-    tailwind: (
-        <div className="p-5">
-            <h3 className="font-semibold">Tailwind CSS</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A useful css replacement tool I use on all my web projects to improve ui and presentation.
+                Primary web language in my projects, used for strict typing and safer refactoring.
             </p>
         </div>
     ),
@@ -106,54 +54,45 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Python</h3>
             <p className="mt-1 text-sm text-white/80">
-                A general purpose programming language I use to host backend/server, data processing, and a variety of
-                other programs.
+                Go-to programming language I use for everything, including backend services, data processing,
+                robotics control scripts, and ML experimentation.
             </p>
         </div>
     ),
-    fastapi: (
+    cs: (
         <div className="p-5">
-            <h3 className="font-semibold">FastAPI</h3>
+            <h3 className="font-semibold">C#</h3>
             <p className="mt-1 text-sm text-white/80">
-                A Python backend library I commonly use with React.
+                Used for Windows desktop applications and tooling,
+                primarily with WPF for native UI development.
             </p>
         </div>
     ),
-    solidworks: (
+
+    // Frontend / Web
+    react: (
         <div className="p-5">
-            <h3 className="font-semibold">SolidWorks</h3>
+            <h3 className="font-semibold">React</h3>
             <p className="mt-1 text-sm text-white/80">
-                A cading software I use in Team Sprocket for designing complex subsystems and robot assemblies.
+                Core UI framework I use to build interactive web interfaces,
+                component systems, and dynamic dashboards.
             </p>
         </div>
     ),
-    fusion360: (
+    next: (
         <div className="p-5">
-            <h3 className="font-semibold">Fusion 360</h3>
-            <p className="mt-1 text-sm text-white/80">A 3D designing software I use in various robotics projects.</p>
-        </div>
-    ),
-    raspberrypi: (
-        <div className="p-5">
-            <h3 className="font-semibold">Raspberry Pi</h3>
+            <h3 className="font-semibold">Next.js</h3>
             <p className="mt-1 text-sm text-white/80">
-                A mini-computer or microcontroller I used in Dronescape and various other projects.
+                Full-stack React framework I use to combine frontend UI with API routes and server rendering on simpler projects that doesn&#39;t require persistent backend,
+                including this site’s architecture.
             </p>
         </div>
     ),
-    bambulab: (
+    tailwind: (
         <div className="p-5">
-            <h3 className="font-semibold">Bambu Lab</h3>
+            <h3 className="font-semibold">Tailwind CSS</h3>
             <p className="mt-1 text-sm text-white/80">
-                A 3D printer brand which I utilised a lot in various projects.
-            </p>
-        </div>
-    ),
-    mavlink: (
-        <div className="p-5">
-            <h3 className="font-semibold">MAVLink</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A communication protocol used in my Dronescape project, where I specifically used PyMavLink.
+                A css replacement I use to make my life easier.
             </p>
         </div>
     ),
@@ -161,11 +100,116 @@ const detailByKey: Record<string, JSX.Element> = {
         <div className="p-5">
             <h3 className="font-semibold">Tauri</h3>
             <p className="mt-1 text-sm text-white/80">
-                A cross-platform web framework I used in some smaller prototypes and projects.
+                Desktop app framework for packaging web UIs into lightweight native binaries, used when I can&#39;t get the level of UI quality I want with WPF.
+            </p>
+        </div>
+    ),
+
+    // Backend / Data
+    fastapi: (
+        <div className="p-5">
+            <h3 className="font-semibold">FastAPI</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Backend framework I use to build high-performance APIs instead of Next.js.
+            </p>
+        </div>
+    ),
+    postgresql: (
+        <div className="p-5">
+            <h3 className="font-semibold">PostgreSQL</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Relational database used for structured project data storage, analytics outputs,
+                and server-backed applications requiring reliable querying.
+            </p>
+        </div>
+    ),
+    sklearn: (
+        <div className="p-5">
+            <h3 className="font-semibold">SciKit Learn</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Python ML toolkit used for classical models, data preprocessing, and evaluation pipelines,
+                including regression and classification workflows.
+            </p>
+        </div>
+    ),
+    tensorflow: (
+        <div className="p-5">
+            <h3 className="font-semibold">TensorFlow</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Machine learning framework I’ve used for training and evaluating neural network models,
+                primarily for feature recognition and predictive tasks.
+            </p>
+        </div>
+    ),
+
+    // CAD / Engineering
+    solidworks: (
+        <div className="p-5">
+            <h3 className="font-semibold">SolidWorks</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Primary CAD tool for complex mechanical assemblies and subsystem design, used mainly in my FRC team.
+            </p>
+        </div>
+    ),
+    fusion360: (
+        <div className="p-5">
+            <h3 className="font-semibold">Fusion 360</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Alternative CAD software I also know, used mainly in combat robotics.
+            </p>
+        </div>
+    ),
+    onshape: (
+        <div className="p-5">
+            <h3 className="font-semibold">Onshape</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Browser-based CAD platform I use when rapid collaboration and shared component libraries are needed.
+                Useful for sourcing and adapting community-built parametric designs.
+            </p>
+        </div>
+    ),
+
+    // Hardware / Robotics
+    raspberrypi: (
+        <div className="p-5">
+            <h3 className="font-semibold">Raspberry Pi</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Embedded computing platform used for onboard control, edge processing,
+                and hardware-integrated project deployments, since I&#39;m not familiar with digital electronics(yet).
+            </p>
+        </div>
+    ),
+    mavlink: (
+        <div className="p-5">
+            <h3 className="font-semibold">MAVLink</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Drone communication protocol used for telemetry and control integration,
+                including PyMAVLink-based implementations.
+            </p>
+        </div>
+    ),
+    bambulab: (
+        <div className="p-5">
+            <h3 className="font-semibold">Bambu Lab</h3>
+            <p className="mt-1 text-sm text-white/80">
+                3D printing platform used for functional prototypes and production parts,
+                with frequent iteration in robotics and hardware projects.
+            </p>
+        </div>
+    ),
+
+    // Tooling
+    git: (
+        <div className="p-5">
+            <h3 className="font-semibold">Git</h3>
+            <p className="mt-1 text-sm text-white/80">
+                Primary version control system I use for all major projects, with GitHub for remote hosting,
+                collaboration, and release management.
             </p>
         </div>
     ),
 };
+
 
 function keyFromPath(p: string) {
     const base = p.split("/").pop() ?? "";
@@ -181,6 +225,8 @@ export default function HomePage() {
         sameAs: ["https://github.com/markwu123454"],
         jobTitle: "Student Engineer",
     };
+
+    const isMobile = useIsMobile();
 
     const [activeKey, setActiveKey] = useState<string | null>(null);
     const doubled = useMemo(() => [...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS], []);
@@ -206,21 +252,17 @@ export default function HomePage() {
     // robust measurement using child positions: distance between item 0 and item[LOGOS.length]
     const measureUnitWidth = () => {
         const el = trackRef.current;
-        if (!el) return;
-        const children = el.children;
-        if (children.length < LOGOS.length + 1) return;
-        const a = (children[0] as HTMLElement).getBoundingClientRect();
-        const b = (children[LOGOS.length] as HTMLElement).getBoundingClientRect();
-        const dx = b.left - a.left;
-        if (dx > 0) {
-            unitWidthRef.current = dx;
-            // Keep x in [-w, 0)
-            const w = unitWidthRef.current;
-            const canonical = ((xRef.current % w) + w) % w;
-            xRef.current = -canonical;
-            if (trackRef.current) {
-                trackRef.current.style.transform = `translate3d(${xRef.current}px,0,0)`;
-            }
+        if (!el || !LOGOS.length) return;
+
+        // Use total scrollable width divided by the number of times you repeated the list
+        // If 'doubled' is 2x LOGOS, repeats is 2.
+        const totalWidth = el.scrollWidth;
+        const w = totalWidth / (doubled.length / LOGOS.length);
+
+        if (w > 0) {
+            unitWidthRef.current = w;
+            // Normalize the current position so it stays within [0, -w]
+            xRef.current = xRef.current % w;
         }
     };
 
@@ -264,17 +306,25 @@ export default function HomePage() {
             let dt = (t - lastRef.current) / 1000;
             lastRef.current = t;
 
-            if (dt > 0.05) dt = 0.05; // clamp after background tab, etc.
+            if (dt > 0.1) dt = 0.1; // Slightly more generous clamp
 
             const speed = speedRef.current;
             const w = unitWidthRef.current;
 
+            // ONLY update if not paused and we have a width
             if (!paused && speed > 0 && w > 0) {
-                let x = xRef.current - speed * dt;
-                if (x <= -w) x += w; // seamless wrap
-                xRef.current = x;
+                xRef.current -= speed * dt;
+
+                // The magic fix: Use modulo to keep xRef.current
+                // always within the bounds of one "unit width"
+                if (Math.abs(xRef.current) >= w) {
+                    xRef.current = xRef.current % w;
+                }
+
                 if (trackRef.current) {
-                    trackRef.current.style.transform = `translate3d(${x}px,0,0)`;
+                    // Use floor or round to prevent sub-pixel "jittering"
+                    // but keep the ref as a float for smooth math
+                    trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0)`;
                 }
             }
             raf = requestAnimationFrame(step);
@@ -395,20 +445,16 @@ export default function HomePage() {
                             Featured Projects
                         </h2>
                         <div className="mt-4 grid gap-6 md:grid-cols-3">
-                            {/*<FeaturedCard title="Aetherius UAV" href="/dronescape/uav">
-                                Fixed-wing UAV with Raspberry Pi avionics and a custom GCS. MAVLink telemetry, offline
-                                planning, terrain mapping.
-                            </FeaturedCard>*/}
-
-                            <FeaturedCard title="FRC - Team Sprocket" href="/teamsprocket">
-                                A FRC Team based in Diamond bar, LA. We build decent robots and win impact awards. I do
-                                CAD, scouting app, and outreach initiatives.
-                            </FeaturedCard>
-
-                            {/*<div className="rounded-2xl p-5 md:p-6 border border-dashed border-white/10 text-white/60">
-                                Coming soon
-                            </div>*/}
+                            <FeaturedModule
+                                title="FRC - Team Sprocket"
+                                href="/teamsprocket"
+                                status="ACTIVE"
+                                tag="ROBOTICS"
+                            >
+                                FRC team based in Diamond Bar. CAD, scouting app, and outreach initiatives.
+                            </FeaturedModule>
                         </div>
+
                     </div>
 
                     {/* Scroll hint (smooth + animated) */}
@@ -432,21 +478,34 @@ export default function HomePage() {
 
                 </section>
 
+                {isMobile && (
+                    <div className="mb-6 mx-4 rounded-md border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
+                        Some pages are not fully optimized for mobile yet.
+                    </div>
+                )}
+
+
                 {/* Anchor target for scroll hint */}
                 <div id="next" className="pt-16 md:pt-24"/>
 
                 {/* Activity List */}
                 <section className="py-16" id="catalog">
-                    <div className="flex items-baseline justify-between mb-6">
-                        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                            Catalog
-                            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
-                        </h2>
-                    </div>
+                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
+                        CATALOG
+                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
+                    </h2>
+                    <p className="mt-2 text-xs tracking-widest text-white/50">
+                        PROJECT RECORD
+                    </p>
 
-                    <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/5 backdrop-blur">
+                    <div className="relative overflow-x-auto rounded-xl border border-white/15 bg-black/70 backdrop-blur font-mono">
+                        <div
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
+                        />
+
                         <table className="w-full text-sm md:text-base text-left border-collapse">
-                            <thead className="bg-white/10 text-white/80">
+                            <thead className="bg-black/80 text-white/70 text-xs tracking-widest">
                             <tr>
                                 <th className="px-4 py-3 font-medium w-[25%]">Title</th>
                                 <th className="px-4 py-3 font-medium w-[15%]">Competition</th>
@@ -537,13 +596,13 @@ export default function HomePage() {
                             ].map((a) => (
                                 <tr
                                     key={a.title}
-                                    className="group transition hover:bg-white/[0.04] cursor-default"
+                                    className="group transition hover:bg-cyan-400/[0.06] cursor-default"
                                 >
-                                    <td className="px-4 py-4 font-medium text-white text-base">{a.title}</td>
-                                    <td className="px-4 py-4 text-white/70">{a.competition || "—"}</td>
-                                    <td className="px-4 py-4 text-white/80">{a.contribution}</td>
-                                    <td className="px-4 py-4 text-white/70">{a.awards || "—"}</td>
-                                    <td className="px-4 py-4">
+                                    <td className="px-4 py-4 text-white/80 text-md tracking-wide">{a.title}</td>
+                                    <td className="px-4 py-4 text-white/60 text-sm">{a.competition || "—"}</td>
+                                    <td className="px-4 py-4 text-white/60 text-sm">{a.contribution}</td>
+                                    <td className="px-4 py-4 text-white/60 text-sm">{a.awards || "—"}</td>
+                                    <td className="px-4 py-4 text-white/60 text-sm">
                                         {a.link ? (
                                             <Link
                                                 href={a.link}
@@ -565,18 +624,29 @@ export default function HomePage() {
                 {/* Logos + Details — keeps YOUR marquee loop, only styling/layout changed */}
                 <section
                     className="select-none"
-                    onMouseEnter={onEnter}
-                    onMouseLeave={onLeave}
-                    onFocus={onEnter}
-                    onBlur={onLeave}
                 >
-                    <SectionTitle>Tooling & Stack</SectionTitle>
+                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
+                        TOOLING & STACK
+                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
+                    </h2>
+                    <p className="mt-2 text-xs tracking-widest text-white/50">
+                        TOOLS AND SERVICES I USE EXTENSIVELY
+                    </p>
 
                     {/* rail */}
                     <div
-                        className="mt-4 overflow-x-hidden rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur">
+                        className="mt-4 overflow-x-hidden rounded-xl border border-white/15 bg-black/70 backdrop-blur relative">
+                        <div
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:100%_4px]"
+                        />
+
                         <div
                             ref={trackRef}
+                            onMouseEnter={onEnter}
+                            onMouseLeave={onLeave}
+                            onFocus={onEnter}
+                            onBlur={onLeave}
                             className="flex items-center will-change-transform py-4"
                             style={{transform: `translate3d(${xRef.current}px,0,0)`, animation: "none"}}
                         >
@@ -585,7 +655,7 @@ export default function HomePage() {
                                 return (
                                     <div
                                         key={`${k}-${i}`}
-                                        className="px-8 md:px-10 flex items-center justify-center flex-none min-h-24"
+                                        className="px-6 md:px-8 flex items-center justify-center flex-none"
                                     >
                                         <button
                                             className="group rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40"
@@ -601,7 +671,7 @@ export default function HomePage() {
                                                 width={96}
                                                 height={96}
                                                 priority={false}
-                                                className="h-16 w-auto md:h-20 opacity-90 transition group-hover:opacity-100 group-hover:scale-110"
+                                                className="h-16 w-auto opacity-80 group-hover:opacity-100 group-hover:scale-110 transition"
                                                 draggable={false}
                                             />
                                         </button>
@@ -977,106 +1047,56 @@ function SectionTitle({children}: { children: React.ReactNode }) {
     );
 }
 
-type FeaturedCardProps = {
+type FeaturedModuleProps = {
     title: string;
     href: string;
+    status: string;
+    tag: string;
     children: React.ReactNode;
-    className?: string;
 };
 
-function FeaturedCard({title, href, children, className}: FeaturedCardProps) {
-    const id = title.toLowerCase().replace(/\s+/g, "-");
+function FeaturedModule({ title, href, status, tag, children }: FeaturedModuleProps) {
     return (
-        <article
-            className={[
-                "group relative rounded-2xl p-5 md:p-6 overflow-hidden",
-                // glass base
-                "bg-white/[0.04] backdrop-blur",
-                // gradient ring (outer)
-                "ring-1 ring-white/10",
-                // inner highlight ring
-                "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]",
-                // lift + scale
-                "transition-transform duration-300 will-change-transform",
-                "hover:-translate-y-0.5 hover:scale-[1.01]",
-                className ?? "",
-            ].join(" ")}
-            aria-labelledby={`${id}-title`}
-        >
-            {/* gradient border overlay */}
+        <article className="group relative rounded-xl border border-white/15 bg-black/65 backdrop-blur p-5 font-mono transition hover:bg-black/80">
+
+            {/* subtle grid texture */}
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 rounded-2xl opacity-90"
-                // subtle cyan→violet animated border via masked background
-                style={{
-                    background:
-                        "linear-gradient(135deg, rgba(34,211,238,0.25), rgba(167,139,250,0.25)) border-box",
-                    WebkitMask:
-                        "linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0)",
-                    WebkitMaskComposite: "xor",
-                    maskComposite: "exclude",
-                    border: "1px solid transparent",
-                }}
+                className="pointer-events-none absolute inset-0 opacity-[0.05]
+        [background-image:linear-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)]
+        [background-size:100%_4px]"
             />
 
-            {/* sheen sweep */}
-            <div
-                aria-hidden
-                className="absolute inset-0 -translate-x-full opacity-0 transition-transform duration-700 ease-out
-                   group-hover:translate-x-full group-hover:opacity-100"
-                style={{
-                    background:
-                        "linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.08), transparent 70%)",
-                }}
-            />
-
-            {/* soft glow on hover */}
-            <div
-                aria-hidden
-                className="absolute -inset-8 rounded-[28px] opacity-0 blur-2xl transition
-                   group-hover:opacity-40"
-                style={{
-                    background:
-                        "radial-gradient(40% 40% at 50% 0%, rgba(167,139,250,0.20), transparent 60%), radial-gradient(40% 40% at 0% 100%, rgba(34,211,238,0.18), transparent 60%)",
-                }}
-            />
-
-            <h3 id={`${id}-title`} className="text-lg md:text-xl font-semibold tracking-tight">
-                {title}
-            </h3>
-
-            <p className="mt-2 text-sm md:text-base text-white/75 transition-transform duration-300 group-hover:-translate-y-0.5">
-                {children}
-            </p>
-
-            <div className="mt-4 flex items-center justify-between">
-                <Link
-                    href={href}
-                    aria-describedby={`${id}-title`}
-                    className="relative inline-flex items-center gap-2 text-sm font-medium rounded-xl px-3 py-1.5
-                     border border-white/15 bg-black/40 hover:bg-white/15
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-                >
-                    See more
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5"/>
-                </Link>
-
-                {/* optional tiny badge; remove if unwanted */}
-                <span className="text-[11px] px-2 py-1 rounded-lg bg-white/5 ring-1 ring-white/10 text-white/60">
-          Project
+            <div className="relative flex items-center justify-between">
+        <span className="text-xs tracking-widest text-white/70">
+          {tag}
+        </span>
+                <span className="text-[10px] tracking-widest text-cyan-300">
+          {status}
         </span>
             </div>
 
-            {/* make whole card clickable without duplicate focus targets */}
+            <h3 className="relative mt-3 text-base tracking-wide text-white/90">
+                {title}
+            </h3>
+
+            <p className="relative mt-2 text-xs text-white/60 leading-relaxed">
+                {children}
+            </p>
+
             <Link
                 href={href}
-                aria-label={title}
-                className="absolute inset-0 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-                tabIndex={-1}
-            />
+                className="relative mt-4 inline-flex items-center gap-2 text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
+            >
+                OPEN PROJECT →
+            </Link>
+
+            {/* corner tick */}
+            <div className="absolute top-2 left-2 h-2 w-2 border-t border-l border-cyan-400/40" />
         </article>
     );
 }
+
 
 interface Star {
     id: number;
@@ -1306,3 +1326,19 @@ const ShootingStars: React.FC<Props> = ({
         </div>
     );
 };
+
+function useIsMobile(breakpoint = 768) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+
+        const update = () => setIsMobile(mq.matches);
+        update();
+
+        mq.addEventListener("change", update);
+        return () => mq.removeEventListener("change", update);
+    }, [breakpoint]);
+
+    return isMobile;
+}

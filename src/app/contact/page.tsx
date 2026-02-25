@@ -1,5 +1,6 @@
 // app/contact/page.tsx
-import {Mail, Github, ArrowUpRight, Linkedin} from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
+import { SiGithub, SiLinkedin } from "react-icons/si";
 
 export default function ContactPage() {
     return (
@@ -51,7 +52,7 @@ export default function ContactPage() {
                             href="https://github.com/markwu123454"
                             title="GitHub"
                             subtitle="Explore my code and projects"
-                            Icon={Github}
+                            Icon={SiGithub}
                             external
                             accent="from-fuchsia-400 via-violet-400 to-cyan-400"
                         />
@@ -59,7 +60,7 @@ export default function ContactPage() {
                             href="https://www.linkedin.com/in/mark-mai-wu/"
                             title="LinkedIn"
                             subtitle="Professional profile and experience"
-                            Icon={Linkedin}
+                            Icon={SiLinkedin}
                             external
                             accent="from-sky-400 via-blue-500 to-indigo-500"
                         />
@@ -104,7 +105,7 @@ function ContactCard({
                 "border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md",
                 // subtle edges + hover glow
                 "shadow-[0_0_0_1px_rgba(255,255,255,.04)] transition",
-                "hover:bg-white/[0.06] hover:shadow-[0_0_0_1px_rgba(255,255,255,.10),0_0_30px_6px_rgba(0,255,255,.08)]",
+                "hover:bg-white/[0.06]",
             ].join(" ")}
         >
             {/* gradient top border accent */}

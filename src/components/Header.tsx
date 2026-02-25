@@ -282,7 +282,7 @@ export function Header() {
 
                     {/* Mobile toggle */}
                     <button
-                        className="md:hidden ml-6"
+                        className="md:hidden px-4 h-full flex items-center"
                         aria-label="Toggle menu"
                         onClick={() => {
                             const next = !mobileOpen;
@@ -379,15 +379,33 @@ export function Header() {
                 ].join(" ")}
                 aria-hidden={!mobileOpen}
             >
-                <div className="pt-24 bg-black/80 backdrop-blur-sm border-b border-white/10">
+                <div className="pt-2 bg-black/90 backdrop-blur-md border-b border-white/10">
+
+                    {/* Panel header row */}
+                    <div className="px-4 pb-2 flex items-center justify-between border-b border-white/10">
+                        <span className="text-lg tracking-widest text-white">MENU</span>
+                        <button
+                            onClick={() => {
+                                setMobileOpen(false);
+                                setMobileActive(null);
+                            }}
+                            className="p-2"
+                            aria-label="Close menu"
+                        >
+                            <X size={18} />
+                        </button>
+                    </div>
+
                     <nav aria-label="Mobile Primary" className="px-4 py-2">
                         <ul className="divide-y divide-white/10">
+
+                            {/* Expandable nav groups */}
                             {NAV.map((item) => {
                                 const id = `m-${item.label.replace(/\s+/g, "-").toLowerCase()}`;
                                 const expanded = mobileActive === id;
+
                                 return (
                                     <li key={id} className="py-1">
-                                        {/* Top-level: button only (no navigation) */}
                                         <button
                                             className="flex w-full items-center justify-between py-4 text-left text-lg font-semibold tracking-tight"
                                             aria-controls={`${id}-panel`}
@@ -396,13 +414,13 @@ export function Header() {
                                         >
                                             <span className="inline-flex items-center gap-2">
                                                 {item.label}
-                                                {item.menu ? <PlusMinus active={expanded}/> : null}
+                                                {item.menu ? <PlusMinus active={expanded} /> : null}
                                             </span>
-                                            {/* Optional: tiny chevron for affordance */}
+
                                             <ChevronRight
                                                 size={18}
                                                 className={[
-                                                    "transition-transform duration-200",
+                                                    "transition-transform duration-200 opacity-70",
                                                     expanded ? "rotate-90" : "rotate-0"
                                                 ].join(" ")}
                                                 aria-hidden
@@ -420,11 +438,13 @@ export function Header() {
                                             <div className="min-h-0 overflow-hidden">
                                                 {item.menu ? (
                                                     <div className="pb-4 pl-1">
+
                                                         {item.menu.heading && (
                                                             <p className="mb-2 text-[10px] tracking-widest text-white/70">
                                                                 {item.menu.heading}
                                                             </p>
                                                         )}
+
                                                         <ul className="space-y-2">
                                                             {item.menu.links.map((l) => (
                                                                 <li key={l.href}>
@@ -441,6 +461,7 @@ export function Header() {
                                                                 </li>
                                                             ))}
                                                         </ul>
+
                                                         {item.menu.blurb && (
                                                             <p className="mt-3 max-w-prose text-sm text-white/70">
                                                                 {item.menu.blurb}
@@ -449,7 +470,6 @@ export function Header() {
                                                     </div>
                                                 ) : (
                                                     <div className="pb-4 pl-1">
-                                                        {/* For items without a submenu, provide a dedicated link row */}
                                                         <Link
                                                             href={item.href}
                                                             className="inline-flex items-center gap-2 text-base font-medium hover:underline"
@@ -468,16 +488,29 @@ export function Header() {
                                 );
                             })}
 
-                            {/* Static link(s) at bottom */}
-                            <li className="py-1">
+                            {/* Standalone links section */}
+                            <li className="mt-3 pt-4 border-t border-white/15">
+                                <p className="px-1 pb-2 text-[10px] tracking-widest text-white/60">
+                                    GENERAL
+                                </p>
+
+                                <Link
+                                    href="/about"
+                                    className="block py-3 text-lg font-semibold hover:underline"
+                                    onClick={() => setMobileOpen(false)}
+                                >
+                                    About me
+                                </Link>
+
                                 <Link
                                     href="/contact"
-                                    className="block py-4 text-lg font-semibold hover:underline"
+                                    className="block py-3 text-lg font-semibold hover:underline"
                                     onClick={() => setMobileOpen(false)}
                                 >
                                     Contact
                                 </Link>
                             </li>
+
                         </ul>
                     </nav>
                 </div>
@@ -492,6 +525,7 @@ export function Header() {
                     }}
                 />
             </div>
+
 
             <style jsx global>{`
                 /* =========================

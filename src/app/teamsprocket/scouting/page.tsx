@@ -171,11 +171,11 @@ export default function ScoutingPortfolioPage() {
             <section className="mx-auto max-w-6xl px-6 py-24 text-center">
                 <h2 className="text-3xl font-bold mb-3">Explore Further</h2>
                 <p className="text-white/80 mb-6">
-                    Try out the app(sorry, the team didn&#39;t let me share sources).
+                    Try out the app.
                 </p>
                 <div className="flex justify-center flex-wrap gap-3">
                     <a
-                        href="https://sprocket-scouting-demo.vercel.app/"
+                        href="https://sprocketstats.com/"
                         className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-white border border-white/20 bg-white/5 hover:bg-white/10"
                     >
                         Open App

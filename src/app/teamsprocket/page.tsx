@@ -39,8 +39,8 @@ export default function SprocketPage() {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         <Stat label="My Role" value="CAD Subteam member"
                               hint="Mainly resposible for competition robot design"/>
-                        <Stat label="FIRST Seasons Survived" value="2" hint="FLL - City Shaper, FRC - ReefScape"/>
-                        <Stat label="Competitions" value="4" hint="2025 OCR, 2025 CVR, 2025 Worlds, 2025 SoCal Showdown"/>
+                        <Stat label="FIRST Seasons Survived" value="3" hint="FLL - City Shaper, FRC - ReefScape, FRC - Rebuilt"/>
+                        <Stat label="Competitions" value="5" hint="2025 OCR, 2025 CVR, 2025 Worlds, 2025 SoCal Showdown, 2026 Port Hueneme"/>
                     </div>
                 </section>
 
@@ -110,10 +110,10 @@ export default function SprocketPage() {
                             FIRST Age(2025-26)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
-                            Competitions: CA District Hueneme Port Event(Mar 6-8), CA District San Gabriel Valley Event(Mar 27-29)
+                            Competitions: CA District Hueneme Port Event(3-8-0, rank 37 out of 42), CA District San Gabriel Valley Event(Mar 27-29)
                         </p>
                         <p className="mt-2 text-sm text-white/70">
-                            Awards: TBD
+                            Awards: N/A
                         </p>
                     </div>
                 </section>

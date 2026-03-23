@@ -7,7 +7,6 @@ export function Footer() {
     const rafRef = useRef<number | null>(null);
     const nextPos = useRef<{x:number; y:number} | null>(null);
 
-    // rAF loop to throttle pointer updates
     useEffect(() => {
         const tick = () => {
             if (nextPos.current && overlayRef.current) {
@@ -41,57 +40,71 @@ export function Footer() {
         <footer
             onPointerMove={onMove}
             onPointerLeave={onLeave}
-            className="group relative border-t border-white/10 bg-black/80 backdrop-blur-sm"
+            className="group relative border-t border-white/[0.08] bg-black/50 backdrop-blur-2xl"
         >
-            {/* neon hairline */}
-            <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-fuchsia-400 via-cyan-400 to-emerald-400 opacity-70" />
+            {/* Scanlines */}
+            <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 opacity-[0.04]
+                [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_3px)]"
+            />
 
-            {/* cursor-follow overlay (throttled, subtle) */}
+            {/* Neon hairline — cyan → violet gradient */}
+            <div
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-cyan-400/50 via-violet-400/40 to-cyan-400/50"
+            />
+
+            {/* Corner accents */}
+            <div
+                aria-hidden
+                className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/15 pointer-events-none z-10"
+            />
+            <div
+                aria-hidden
+                className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/15 pointer-events-none z-10"
+            />
+
+            {/* Cursor-follow overlay */}
             <div
                 aria-hidden
                 ref={overlayRef}
-                // init vars once; rAF updates them
                 style={
                     {
                         "--mx": "-9999px",
                         "--my": "-9999px",
-                        // Smaller, clamped radius for cheaper masks
                         "--r": "clamp(72px, 10vw, 120px)",
                     } as React.CSSProperties
                 }
                 className={[
                     "pointer-events-none absolute inset-0",
-                    // only show on hover/focus to avoid constant compositing
                     "opacity-0 transition-opacity duration-120",
                     "group-hover:opacity-100 group-focus-within:opacity-100",
-                    // hint to GPU/compositor
-                    "[will-change:opacity,filter]"
+                    "[will-change:opacity,filter]",
                 ].join(" ")}
             >
-                {/* Color glow (cheap) */}
+                {/* Cyan / violet glow */}
                 <div
                     className={[
                         "absolute inset-0",
-                        "[background:linear-gradient(90deg,#f0abfc_0%,#22d3ee_50%,#10b981_100%)]",
+                        "[background:linear-gradient(90deg,#22d3ee_0%,#a78bfa_50%,#22d3ee_100%)]",
                         "[mask-image:radial-gradient(var(--r)_var(--r)_at_var(--mx)_var(--my),black,transparent_70%)]",
-                        "opacity-20",        // lower for subtlety
-                        "blur-[2px]"         // tiny blur for softness
+                        "opacity-15",
+                        "blur-[2px]",
                     ].join(" ")}
                 />
 
-                {/* Tiny localized backdrop blur (expensive → keep very small and subtle) */}
                 <div
                     className={[
                         "absolute inset-0",
-                        // smaller, tighter mask than the color glow
                         "[mask-image:radial-gradient(calc(var(--r)*0.75)_calc(var(--r)*0.75)_at_var(--mx)_var(--my),black,transparent_70%)]",
-                        "backdrop-blur-[4px]", // lighter blur than 8px
-                        "opacity-35"           // modest intensity
+                        "backdrop-blur-[4px]",
+                        "opacity-35",
                     ].join(" ")}
                 />
             </div>
 
-            {/* reduced motion: disable the effect */}
+            {/* Reduced motion */}
             <style
                 dangerouslySetInnerHTML={{
                     __html: `
@@ -102,30 +115,44 @@ export function Footer() {
                 }}
             />
 
-            <div className="mx-auto max-w-5xl py-6 px-4 text-center text-sm text-zinc-500">
-        <span className="block">
-          © 2025 <span className="text-zinc-300">Mark Wu</span>.
-        </span>
-                <span className="block">
-          Licensed under{" "}
-                    <a
-                        href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline hover:text-cyan-300 transition-colors"
-                    >
-            CC BY-NC-ND 4.0
-          </a>
-          .
-        </span>
-                <span className="block mt-1">
-          <a
-              href="mailto:me@markwu.org"
-              className="text-zinc-400 hover:text-fuchsia-300 underline decoration-dotted transition-colors"
-          >
-            me@markwu.org
-          </a>
-        </span>
+            {/* Content */}
+            <div className="relative z-[1] mx-auto max-w-5xl px-6 lg:px-24 py-6">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                    {/* Left: signature */}
+                    <div className="flex items-center gap-3">
+                        <div className="h-[7px] w-[7px] rounded-full bg-cyan-400/40" />
+                        <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
+                            DESIGNED & BUILT BY{" "}
+                            <span className="text-white/70">MARK WU</span>
+                        </span>
+                    </div>
+
+                    {/* Center: links */}
+                    <div className="flex items-center gap-4">
+                        <a
+                            href="mailto:me@markwu.org"
+                            className="text-xs tracking-[0.12em] text-white/40 font-mono
+                                hover:text-cyan-300 transition-colors"
+                        >
+                            me@markwu.org
+                        </a>
+                        <div className="h-3 w-px bg-white/10" />
+                        <a
+                            href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs tracking-[0.12em] text-white/40 font-mono
+                                hover:text-cyan-300 transition-colors"
+                        >
+                            CC BY-NC-ND 4.0
+                        </a>
+                    </div>
+
+                    {/* Right: year */}
+                    <span className="text-xs tracking-[0.15em] text-white/30 font-mono">
+                        © 2026
+                    </span>
+                </div>
             </div>
         </footer>
     );

@@ -29,17 +29,6 @@ export default function CADPage() {
                 </p>
             </header>
 
-            {/* Summary strip */}
-            <section aria-labelledby="summary" className="mb-12">
-                <h2 id="summary" className="sr-only">Summary</h2>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                    <Stat label="CAD Platform" value="SolidWorks" hint="Fusion → SW transition" />
-                    <Stat label="Core Subsystem" value="Climb" hint="Used at Worlds" />
-                    <Stat label="Full Bot Practices" value="2" hint="1690&4414 + 2910&1323" />
-                    <Stat label="Season(s) survived" value="1" hint="ReefScape" />
-                </div>
-            </section>
-
             <section className="mb-16">
                 <h2 className="text-4xl font-bold">ReefScape</h2>
                 <p className="mt-2 text-lg text-white/70">
@@ -232,6 +221,23 @@ export default function CADPage() {
                             className="object-cover"
                         />
                     </div>
+                </Card>
+            </section>
+
+            <section className="mb-16">
+                <h2 className="text-4xl font-bold">Rebuilt</h2>
+                <p className="mt-2 text-lg text-white/70">
+                    First Age(2025-26)
+                </p>
+                <p className="mt-2 text-sm text-white/70">
+                    Competitions: CA District Hueneme Port Event(3-8-0, rank 37 out of 42), CA District San Gabriel Valley Event(Mar 27-29) <br/>
+                    Off-season competitions: N/A
+                </p>
+            </section>
+
+            <section className="mb-4 gap-6">
+                <Card>
+                    2026 robot will be posted after Socal Champs!
                 </Card>
             </section>
         </main>

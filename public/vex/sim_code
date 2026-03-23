@@ -1,0 +1,772 @@
+#include "vex.h"
+using namespace vex;
+
+brain Brain;
+controller Controller1 = controller(primary);
+
+#define SCREEN_W 480
+#define SCREEN_H 230
+
+uint32_t screenBuffer[SCREEN_W * SCREEN_H];
+
+#define PI 3.14159265f
+#define DEG2RAD (PI / 180.0f)
+float fabs_(float x){return x<0?-x:x;}
+float fmin_(float a,float b){return a<b?a:b;}
+float fmax_(float a,float b){return a>b?a:b;}
+float fclamp(float v,float lo,float hi){return fmax_(lo,fmin_(hi,v));}
+
+uint32_t rgba(int r,int g,int b,int a=255){
+    return ((uint32_t)a<<24)|((uint32_t)r<<16)|((uint32_t)g<<8)|(uint32_t)b;
+}
+
+// ---------- Drawing ----------
+void clearBuffer(uint32_t c){for(int i=0;i<SCREEN_W*SCREEN_H;i++)screenBuffer[i]=c;}
+void setPixel(int x,int y,uint32_t c){if(x>=0&&x<SCREEN_W&&y>=0&&y<SCREEN_H)screenBuffer[y*SCREEN_W+x]=c;}
+void blendPixel(int x,int y,uint32_t c,int a){
+    if(x<0||x>=SCREEN_W||y<0||y>=SCREEN_H||a<=0)return;
+    if(a>=255){screenBuffer[y*SCREEN_W+x]=c;return;}
+    uint32_t d=screenBuffer[y*SCREEN_W+x];
+    screenBuffer[y*SCREEN_W+x]=rgba(
+        ((d>>16)&0xFF)+(((int)((c>>16)&0xFF)-(int)((d>>16)&0xFF))*a>>8),
+        ((d>>8)&0xFF)+(((int)((c>>8)&0xFF)-(int)((d>>8)&0xFF))*a>>8),
+        (d&0xFF)+(((int)(c&0xFF)-(int)(d&0xFF))*a>>8));
+}
+void fillRect(int x1,int y1,int x2,int y2,uint32_t c){
+    for(int y=y1;y<=y2;y++)for(int x=x1;x<=x2;x++)setPixel(x,y,c);
+}
+void fillCircle(int cx,int cy,int r,uint32_t c){
+    int r2=r*r;for(int y=-r;y<=r;y++)for(int x=-r;x<=r;x++)if(x*x+y*y<=r2)setPixel(cx+x,cy+y,c);
+}
+void drawRing(int cx,int cy,int r,int t,uint32_t c){
+    int o2=r*r,i2=(r-t)*(r-t);
+    for(int y=-r;y<=r;y++)for(int x=-r;x<=r;x++){int d=x*x+y*y;if(d<=o2&&d>=i2)setPixel(cx+x,cy+y,c);}
+}
+
+// Antialiased filled circle
+void fillCircleAA(int cx,int cy,float r,uint32_t c){
+    int ir=(int)(r+1.5f);
+    for(int y=-ir;y<=ir;y++)for(int x=-ir;x<=ir;x++){
+        float dist=sqrtf((float)(x*x+y*y));
+        if(dist<=r-0.5f) setPixel(cx+x,cy+y,c);
+        else if(dist<r+0.5f) blendPixel(cx+x,cy+y,c,(int)((r+0.5f-dist)*255));
+    }
+}
+
+void fillHexagon(int cx,int cy,int r,uint32_t c){
+    for(int py=-r-1;py<=r+1;py++) for(int px=-r-1;px<=r+1;px++){
+        float ax=fabs_((float)px), ay=fabs_((float)py);
+        float fr=(float)r;
+        float s3=0.866f;
+        if(ay <= fr*s3 && ay <= -1.732f*ax + fr*1.732f)
+            setPixel(cx+px,cy+py,c);
+    }
+}
+
+void drawHexagonOutline(int cx,int cy,int r,int thick,uint32_t c){
+    for(int py=-r-2;py<=r+2;py++) for(int px=-r-2;px<=r+2;px++){
+        float ax=fabs_((float)px), ay=fabs_((float)py);
+        float fr=(float)r, fri=(float)(r-thick);
+        float s3=0.866f;
+        bool outer = (ay<=fr*s3 && ay<=-1.732f*ax+fr*1.732f);
+        bool inner = (ay<=fri*s3 && ay<=-1.732f*ax+fri*1.732f);
+        if(outer && !inner) setPixel(cx+px,cy+py,c);
+    }
+}
+
+// SDF rect
+static float rectSDF(float lx,float ly,float hw,float hh){
+    float dx=fabs_(lx)-hw,dy=fabs_(ly)-hh;
+    return sqrtf(fmax_(dx,0)*fmax_(dx,0)+fmax_(dy,0)*fmax_(dy,0))+fmin_(fmax_(dx,dy),0.0f);
+}
+void fillRotatedRect(int cx,int cy,int hw,int hh,float ang,uint32_t c){
+    float rad=ang*DEG2RAD,co=cosf(rad),si=sinf(rad);
+    float fhw=(float)hw,fhh=(float)hh;int b=hw+hh+2;
+    for(int py=-b;py<=b;py++)for(int px=-b;px<=b;px++){
+        float lx=px*co+py*si,ly=-px*si+py*co;float d=rectSDF(lx,ly,fhw,fhh);
+        if(d<1){if(d<=0)setPixel(cx+px,cy+py,c);else blendPixel(cx+px,cy+py,c,(int)((1-d)*255));}
+    }
+}
+void drawRotatedRectOutline(int cx,int cy,int hw,int hh,float ang,int th,uint32_t c){
+    float rad=ang*DEG2RAD,co=cosf(rad),si=sinf(rad);
+    float fhw=(float)hw,fhh=(float)hh,ihw=(float)(hw-th),ihh=(float)(hh-th);int b=hw+hh+2;
+    for(int py=-b;py<=b;py++)for(int px=-b;px<=b;px++){
+        float lx=px*co+py*si,ly=-px*si+py*co;
+        float oc=1-fmax_(fmin_(rectSDF(lx,ly,fhw,fhh)+.5f,1.f),0.f);
+        float ic=1-fmax_(fmin_(rectSDF(lx,ly,ihw,ihh)+.5f,1.f),0.f);
+        float cv=oc-ic;if(cv>.01f){int a=(int)(cv*255);
+            if(a>=255)setPixel(cx+px,cy+py,c);else blendPixel(cx+px,cy+py,c,a);}
+    }
+}
+
+// ---------- Font ----------
+static const uint8_t font5x7_digits[10][7]={
+    {0x0E,0x11,0x13,0x15,0x19,0x11,0x0E},{0x04,0x0C,0x04,0x04,0x04,0x04,0x0E},
+    {0x0E,0x11,0x01,0x06,0x08,0x10,0x1F},{0x0E,0x11,0x01,0x06,0x01,0x11,0x0E},
+    {0x02,0x06,0x0A,0x12,0x1F,0x02,0x02},{0x1F,0x10,0x1E,0x01,0x01,0x11,0x0E},
+    {0x06,0x08,0x10,0x1E,0x11,0x11,0x0E},{0x1F,0x01,0x02,0x04,0x08,0x08,0x08},
+    {0x0E,0x11,0x11,0x0E,0x11,0x11,0x0E},{0x0E,0x11,0x11,0x0F,0x01,0x02,0x0C},
+};
+static const uint8_t font5x7_SCORE[5][7]={
+    {0x0E,0x11,0x10,0x0E,0x01,0x11,0x0E},{0x0E,0x11,0x10,0x10,0x10,0x11,0x0E},
+    {0x0E,0x11,0x11,0x11,0x11,0x11,0x0E},{0x1E,0x11,0x11,0x1E,0x14,0x12,0x11},
+    {0x1F,0x10,0x10,0x1E,0x10,0x10,0x1F},
+};
+static const uint8_t font5x7_HELD[4][7]={
+    {0x11,0x11,0x11,0x1F,0x11,0x11,0x11},
+    {0x1F,0x10,0x10,0x1E,0x10,0x10,0x1F},
+    {0x10,0x10,0x10,0x10,0x10,0x10,0x1F},
+    {0x1C,0x12,0x11,0x11,0x11,0x12,0x1C},
+};
+
+void drawGlyph(const uint8_t g[7],int ox,int oy,int s,uint32_t c){
+    for(int r=0;r<7;r++)for(int co=0;co<5;co++)if(g[r]&(0x10>>co))
+        for(int sy=0;sy<s;sy++)for(int sx=0;sx<s;sx++)setPixel(ox+co*s+sx,oy+r*s+sy,c);
+}
+void drawGlyphSh(const uint8_t g[7],int ox,int oy,int s,uint32_t c,uint32_t sh){
+    drawGlyph(g,ox+1,oy+1,s,sh);drawGlyph(g,ox,oy,s,c);
+}
+void drawStylizedScore(int score,int gf){
+    int s=2,gw=10,gap=2,sx=8,sy=6;int p=(gf/6)%4;int br=200+p*14;
+    uint32_t lc=rgba(180,220,255),ls=rgba(30,50,90),nc=rgba(br,255,br),ns=rgba(20,80,20);
+    for(int i=0;i<5;i++)drawGlyphSh(font5x7_SCORE[i],sx+i*(gw+gap),sy,s,lc,ls);
+    int sepX=sx+5*(gw+gap)+2;
+    fillRect(sepX,sy+4,sepX+2,sy+6,lc);fillRect(sepX,sy+9,sepX+2,sy+11,lc);
+    char buf[12];int len=0;
+    if(score==0){buf[len++]=0;}else{int t=score;while(t>0){buf[len++]=t%10;t/=10;}
+        for(int i=0;i<len/2;i++){char tmp=buf[i];buf[i]=buf[len-1-i];buf[len-1-i]=tmp;}}
+    int nx=sepX+8;
+    for(int i=0;i<len;i++)drawGlyphSh(font5x7_digits[(int)buf[i]],nx+i*(gw+gap),sy,s,nc,ns);
+    fillRect(sx,sy+7*s+3,nx+len*(gw+gap),sy+7*s+4,rgba(80,140,220));
+}
+
+void drawHeldHUD(int held){
+    int s=1,gw=5,gap=1,sx=8,sy=24;
+    uint32_t lc=rgba(200,180,100),ls=rgba(60,50,20);
+    for(int i=0;i<4;i++)drawGlyphSh(font5x7_HELD[i],sx+i*(gw+gap),sy,s,lc,ls);
+    int sepX=sx+4*(gw+gap)+1;
+    fillRect(sepX,sy+2,sepX+1,sy+3,lc);fillRect(sepX,sy+5,sepX+1,sy+6,lc);
+    char buf[4];int len=0;
+    if(held==0){buf[len++]=0;}else{int t=held;while(t>0){buf[len++]=t%10;t/=10;}
+        for(int i=0;i<len/2;i++){char tmp=buf[i];buf[i]=buf[len-1-i];buf[len-1-i]=tmp;}}
+    int nx=sepX+4;
+    uint32_t nc=rgba(255,220,80),ns=rgba(80,60,10);
+    for(int i=0;i<len;i++)drawGlyphSh(font5x7_digits[(int)buf[i]],nx+i*(gw+gap),sy,s,nc,ns);
+}
+
+// ==========================================================================
+//  Walls
+// ==========================================================================
+struct WallCircle{float x,y,r;};
+struct WallLine{float x1,y1,x2,y2,thickness;};
+struct WallRect{float cx,cy,hw,hh;};
+#define MAX_WC 16
+#define MAX_WL 32
+#define MAX_WR 24
+WallCircle wcs[MAX_WC];int nwc=0;
+WallLine wls[MAX_WL];int nwl=0;
+WallRect wrs[MAX_WR];int nwr=0;
+void addWC(float x,float y,float r){if(nwc<MAX_WC)wcs[nwc++]={x,y,r};}
+void addWL(float x1,float y1,float x2,float y2,float t){if(nwl<MAX_WL)wls[nwl++]={x1,y1,x2,y2,t};}
+void addWR(float cx,float cy,float hw,float hh){if(nwr<MAX_WR)wrs[nwr++]={cx,cy,hw,hh};}
+
+void closestPtSeg(float px,float py,float ax,float ay,float bx,float by,float&cx,float&cy){
+    float dx=bx-ax,dy=by-ay,l2=dx*dx+dy*dy;
+    if(l2<.001f){cx=ax;cy=ay;return;}
+    float t=fclamp(((px-ax)*dx+(py-ay)*dy)/l2,0,1);cx=ax+t*dx;cy=ay+t*dy;
+}
+
+void resolveCircleRect(float&px,float&py,float rad,float&vx,float&vy,float bounce,
+                       float rcx,float rcy,float rhw,float rhh){
+    float cpx=fclamp(px,rcx-rhw,rcx+rhw);
+    float cpy=fclamp(py,rcy-rhh,rcy+rhh);
+    float dx=px-cpx,dy=py-cpy;
+    float dist=sqrtf(dx*dx+dy*dy);
+    if(dist<rad&&dist>0.01f){
+        float nx=dx/dist,ny=dy/dist;
+        px+=nx*(rad-dist);py+=ny*(rad-dist);
+        float vn=vx*nx+vy*ny;
+        if(vn<0){vx-=(1+bounce)*vn*nx;vy-=(1+bounce)*vn*ny;}
+    } else if(dist<0.01f){
+        float dxL=px-(rcx-rhw), dxR=(rcx+rhw)-px;
+        float dyT=py-(rcy-rhh), dyB=(rcy+rhh)-py;
+        float minD=dxL; int axis=0;
+        if(dxR<minD){minD=dxR;axis=1;}
+        if(dyT<minD){minD=dyT;axis=2;}
+        if(dyB<minD){minD=dyB;axis=3;}
+        switch(axis){
+            case 0: px=rcx-rhw-rad; if(vx>0)vx*=-bounce; break;
+            case 1: px=rcx+rhw+rad; if(vx<0)vx*=-bounce; break;
+            case 2: py=rcy-rhh-rad; if(vy>0)vy*=-bounce; break;
+            case 3: py=rcy+rhh+rad; if(vy<0)vy*=-bounce; break;
+        }
+    }
+}
+
+void resolveCircleWalls(float&px,float&py,float rad,float&vx,float&vy,float bounce){
+    for(int i=0;i<nwc;i++){
+        float dx=px-wcs[i].x,dy=py-wcs[i].y,dist=sqrtf(dx*dx+dy*dy),md=rad+wcs[i].r;
+        if(dist<md&&dist>.01f){float nx=dx/dist,ny=dy/dist;px+=nx*(md-dist);py+=ny*(md-dist);
+            float vn=vx*nx+vy*ny;if(vn<0){vx-=(1+bounce)*vn*nx;vy-=(1+bounce)*vn*ny;}}
+    }
+    for(int i=0;i<nwl;i++){
+        float cx,cy;closestPtSeg(px,py,wls[i].x1,wls[i].y1,wls[i].x2,wls[i].y2,cx,cy);
+        float dx=px-cx,dy=py-cy,dist=sqrtf(dx*dx+dy*dy),md=rad+wls[i].thickness;
+        if(dist<md&&dist>.01f){float nx=dx/dist,ny=dy/dist;px+=nx*(md-dist);py+=ny*(md-dist);
+            float vn=vx*nx+vy*ny;if(vn<0){vx-=(1+bounce)*vn*nx;vy-=(1+bounce)*vn*ny;}}
+    }
+    for(int i=0;i<nwr;i++){
+        resolveCircleRect(px,py,rad,vx,vy,bounce,wrs[i].cx,wrs[i].cy,wrs[i].hw,wrs[i].hh);
+    }
+}
+
+bool insideWall(float px,float py,float cl){
+    for(int i=0;i<nwc;i++){float dx=px-wcs[i].x,dy=py-wcs[i].y;if(sqrtf(dx*dx+dy*dy)<wcs[i].r+cl)return true;}
+    for(int i=0;i<nwl;i++){
+        float cx,cy;closestPtSeg(px,py,wls[i].x1,wls[i].y1,wls[i].x2,wls[i].y2,cx,cy);
+        float dx=px-cx,dy=py-cy;if(sqrtf(dx*dx+dy*dy)<wls[i].thickness+cl)return true;}
+    for(int i=0;i<nwr;i++){
+        float cpx=fclamp(px,wrs[i].cx-wrs[i].hw,wrs[i].cx+wrs[i].hw);
+        float cpy=fclamp(py,wrs[i].cy-wrs[i].hh,wrs[i].cy+wrs[i].hh);
+        float dx=px-cpx,dy=py-cpy;if(sqrtf(dx*dx+dy*dy)<cl)return true;
+    }
+    return false;
+}
+
+// ==========================================================================
+//  Field layout constants
+// ==========================================================================
+#define BLUE_BUMP_X 120
+#define RED_BUMP_X  360
+#define BUMP_HW     2
+
+#define BLUE_HUB_X BLUE_BUMP_X
+#define BLUE_HUB_Y (SCREEN_H/2)
+#define RED_HUB_X  RED_BUMP_X
+#define RED_HUB_Y  (SCREEN_H/2)
+#define HUB_HEX_R 18
+
+#define HUB_ZONE_HW 24
+#define HUB_ZONE_HH 24
+
+#define TRENCH_WIDTH 22
+#define BLUE_TRENCH_X1 (BLUE_BUMP_X - TRENCH_WIDTH - BUMP_HW)
+#define BLUE_TRENCH_X2 (BLUE_BUMP_X - BUMP_HW - 1)
+#define RED_TRENCH_X1  (RED_BUMP_X + BUMP_HW + 1)
+#define RED_TRENCH_X2  (RED_BUMP_X + TRENCH_WIDTH + BUMP_HW)
+
+#define HORIZ_WALL_TOP_Y (BLUE_HUB_Y - HUB_ZONE_HH - 8)
+#define HORIZ_WALL_BOT_Y (BLUE_HUB_Y + HUB_ZONE_HH + 8)
+
+#define HUB_GOAL_R 10.0f
+#define HUB_RIM_R  20.0f
+#define EXIT_SPEED 2.5f
+
+void initWalls(){
+    addWR(BLUE_HUB_X, BLUE_HUB_Y, HUB_ZONE_HW, HUB_ZONE_HH);
+    addWR(RED_HUB_X, RED_HUB_Y, HUB_ZONE_HW, HUB_ZONE_HH);
+
+    float hCx_b = (BLUE_TRENCH_X1 + BLUE_BUMP_X + BUMP_HW) * 0.5f;
+    float hHw_b = (BLUE_BUMP_X + BUMP_HW - BLUE_TRENCH_X1) * 0.5f;
+    addWR(hCx_b, HORIZ_WALL_TOP_Y, hHw_b, 4);
+    addWR(hCx_b, HORIZ_WALL_BOT_Y, hHw_b, 4);
+
+    float hCx_r = (RED_BUMP_X - BUMP_HW + RED_TRENCH_X2) * 0.5f;
+    float hHw_r = (RED_TRENCH_X2 - (RED_BUMP_X - BUMP_HW)) * 0.5f;
+    addWR(hCx_r, HORIZ_WALL_TOP_Y, hHw_r, 4);
+    addWR(hCx_r, HORIZ_WALL_BOT_Y, hHw_r, 4);
+}
+
+void drawField(){
+    for(int y=0;y<SCREEN_H;y++){setPixel(SCREEN_W/2,y,rgba(70,70,80));setPixel(SCREEN_W/2+1,y,rgba(70,70,80));}
+
+    for(int y=2;y<SCREEN_H-2;y++){
+        for(int x=2;x<40;x++) blendPixel(x,y,rgba(30,30,100),25);
+        for(int x=SCREEN_W-40;x<SCREEN_W-2;x++) blendPixel(x,y,rgba(100,30,30),25);
+    }
+
+    uint32_t trenchBlue=rgba(30,35,80);
+    fillRect(BLUE_TRENCH_X1, 1, BLUE_TRENCH_X2, HORIZ_WALL_TOP_Y-1, trenchBlue);
+    fillRect(BLUE_TRENCH_X1, HORIZ_WALL_BOT_Y+1, BLUE_TRENCH_X2, SCREEN_H-2, trenchBlue);
+
+    uint32_t trenchRed=rgba(80,30,30);
+    fillRect(RED_TRENCH_X1, 1, RED_TRENCH_X2, HORIZ_WALL_TOP_Y-1, trenchRed);
+    fillRect(RED_TRENCH_X1, HORIZ_WALL_BOT_Y+1, RED_TRENCH_X2, SCREEN_H-2, trenchRed);
+
+    uint32_t wallBlueCol=rgba(40,50,130);
+    uint32_t wallRedCol=rgba(130,40,40);
+    fillRect(BLUE_TRENCH_X1, HORIZ_WALL_TOP_Y-4, BLUE_BUMP_X+BUMP_HW, HORIZ_WALL_TOP_Y+4, wallBlueCol);
+    fillRect(BLUE_TRENCH_X1, HORIZ_WALL_BOT_Y-4, BLUE_BUMP_X+BUMP_HW, HORIZ_WALL_BOT_Y+4, wallBlueCol);
+    fillRect(RED_BUMP_X-BUMP_HW, HORIZ_WALL_TOP_Y-4, RED_TRENCH_X2, HORIZ_WALL_TOP_Y+4, wallRedCol);
+    fillRect(RED_BUMP_X-BUMP_HW, HORIZ_WALL_BOT_Y-4, RED_TRENCH_X2, HORIZ_WALL_BOT_Y+4, wallRedCol);
+
+    uint32_t bumpBlue=rgba(40,50,160);
+    uint32_t bumpRed=rgba(160,40,40);
+    fillRect(BLUE_BUMP_X-BUMP_HW, 1, BLUE_BUMP_X+BUMP_HW, SCREEN_H-2, bumpBlue);
+    fillRect(RED_BUMP_X-BUMP_HW, 1, RED_BUMP_X+BUMP_HW, SCREEN_H-2, bumpRed);
+
+    uint32_t zoneGray=rgba(45,45,55);
+    uint32_t zoneBorder=rgba(75,75,85);
+
+    fillRect(BLUE_HUB_X-HUB_ZONE_HW, BLUE_HUB_Y-HUB_ZONE_HH,
+             BLUE_HUB_X+HUB_ZONE_HW, BLUE_HUB_Y+HUB_ZONE_HH, zoneGray);
+    fillRect(BLUE_HUB_X-HUB_ZONE_HW, BLUE_HUB_Y-HUB_ZONE_HH, BLUE_HUB_X+HUB_ZONE_HW, BLUE_HUB_Y-HUB_ZONE_HH+1, zoneBorder);
+    fillRect(BLUE_HUB_X-HUB_ZONE_HW, BLUE_HUB_Y+HUB_ZONE_HH-1, BLUE_HUB_X+HUB_ZONE_HW, BLUE_HUB_Y+HUB_ZONE_HH, zoneBorder);
+    fillRect(BLUE_HUB_X-HUB_ZONE_HW, BLUE_HUB_Y-HUB_ZONE_HH, BLUE_HUB_X-HUB_ZONE_HW+1, BLUE_HUB_Y+HUB_ZONE_HH, zoneBorder);
+    fillRect(BLUE_HUB_X+HUB_ZONE_HW-1, BLUE_HUB_Y-HUB_ZONE_HH, BLUE_HUB_X+HUB_ZONE_HW, BLUE_HUB_Y+HUB_ZONE_HH, zoneBorder);
+
+    fillHexagon(BLUE_HUB_X,BLUE_HUB_Y,HUB_HEX_R,rgba(40,50,90));
+    drawHexagonOutline(BLUE_HUB_X,BLUE_HUB_Y,HUB_HEX_R,3,rgba(60,90,180));
+    fillHexagon(BLUE_HUB_X,BLUE_HUB_Y,9,rgba(20,30,60));
+    drawHexagonOutline(BLUE_HUB_X,BLUE_HUB_Y,9,2,rgba(80,120,200));
+    fillCircle(BLUE_HUB_X,BLUE_HUB_Y,3,rgba(100,160,255));
+
+    fillRect(RED_HUB_X-HUB_ZONE_HW, RED_HUB_Y-HUB_ZONE_HH,
+             RED_HUB_X+HUB_ZONE_HW, RED_HUB_Y+HUB_ZONE_HH, zoneGray);
+    fillRect(RED_HUB_X-HUB_ZONE_HW, RED_HUB_Y-HUB_ZONE_HH, RED_HUB_X+HUB_ZONE_HW, RED_HUB_Y-HUB_ZONE_HH+1, zoneBorder);
+    fillRect(RED_HUB_X-HUB_ZONE_HW, RED_HUB_Y+HUB_ZONE_HH-1, RED_HUB_X+HUB_ZONE_HW, RED_HUB_Y+HUB_ZONE_HH, zoneBorder);
+    fillRect(RED_HUB_X-HUB_ZONE_HW, RED_HUB_Y-HUB_ZONE_HH, RED_HUB_X-HUB_ZONE_HW+1, RED_HUB_Y+HUB_ZONE_HH, zoneBorder);
+    fillRect(RED_HUB_X+HUB_ZONE_HW-1, RED_HUB_Y-HUB_ZONE_HH, RED_HUB_X+HUB_ZONE_HW, RED_HUB_Y+HUB_ZONE_HH, zoneBorder);
+
+    fillHexagon(RED_HUB_X,RED_HUB_Y,HUB_HEX_R,rgba(90,40,40));
+    drawHexagonOutline(RED_HUB_X,RED_HUB_Y,HUB_HEX_R,3,rgba(180,60,60));
+    fillHexagon(RED_HUB_X,RED_HUB_Y,9,rgba(60,20,20));
+    drawHexagonOutline(RED_HUB_X,RED_HUB_Y,9,2,rgba(200,80,80));
+    fillCircle(RED_HUB_X,RED_HUB_Y,3,rgba(255,100,100));
+
+    for(int x=0;x<SCREEN_W;x++){setPixel(x,0,rgba(90,90,90));setPixel(x,SCREEN_H-1,rgba(90,90,90));}
+    for(int y=0;y<SCREEN_H;y++){setPixel(0,y,rgba(90,90,90));setPixel(SCREEN_W-1,y,rgba(90,90,90));}
+}
+
+// ==========================================================================
+//  FUEL (YELLOW balls)
+// ==========================================================================
+#define MAX_FUEL 150
+#define FUEL_RADIUS 5.0f
+#define FUEL_FRICTION 0.92f
+
+#define FUEL_GROUND   0
+#define FUEL_AIRBORNE 1
+#define FUEL_EXITING  2
+
+struct Fuel{
+    float x,y,vx,vy;
+    bool active;
+    int state;
+    float flightT,totalFlightT;
+    int targetHub;
+    int exitTimer;
+};
+Fuel fuels[MAX_FUEL];
+
+uint32_t rng=12345;
+uint32_t qrand(){rng^=rng<<13;rng^=rng>>17;rng^=rng<<5;return rng;}
+float qrandf(){return (float)(qrand()%10000)/10000.0f;}
+float qrandRange(float lo,float hi){return lo+qrandf()*(hi-lo);}
+
+void spawnFuelAt(int idx,float fx,float fy){
+    fuels[idx].x=fx;fuels[idx].y=fy;
+    fuels[idx].vx=0;fuels[idx].vy=0;
+    fuels[idx].active=true;fuels[idx].state=FUEL_GROUND;
+    fuels[idx].flightT=0;fuels[idx].totalFlightT=0;
+    fuels[idx].targetHub=0;fuels[idx].exitTimer=0;
+}
+
+void initFuels(){
+    for(int i=0;i<MAX_FUEL;i++)fuels[i].active=false;
+    float cx=(float)(SCREEN_W/2),cy=(float)(SCREEN_H/2);
+    for(int i=0;i<100;i++){
+        for(int a=0;a<50;a++){
+            float fx=cx-60+(float)(qrand()%120);
+            float fy=cy-50+(float)(qrand()%100);
+            if(!insideWall(fx,fy,FUEL_RADIUS+3)){spawnFuelAt(i,fx,fy);break;}
+        }
+        if(!fuels[i].active) spawnFuelAt(i,cx+(float)((int)(qrand()%40)-20),cy+(float)((int)(qrand()%40)-20));
+    }
+}
+
+void drawFuelBall(float fx,float fy,float radiusScale){
+    float outerR=4.5f*radiusScale;
+    float innerR=2.5f*radiusScale;
+    if(outerR<0.5f)outerR=0.5f;
+    if(innerR<0.3f)innerR=0.3f;
+    fillCircleAA((int)fx,(int)fy,outerR,rgba(220,200,20));
+    if(innerR>0.8f) fillCircleAA((int)fx,(int)fy,innerR,rgba(255,240,60));
+}
+
+// ==========================================================================
+//  FRC Bot
+// ==========================================================================
+#define BOT_MAX_HELD 50
+#define SHOT_COOLDOWN_FRAMES 3
+
+struct Bot{
+    float x,y,vx,vy,heading,vHeading;
+    int halfW,halfH;
+    bool intakeDown;
+    int heldFuel;
+    float intakeExtend;
+    bool shooting;
+    int shotCooldown;
+};
+Bot bot;
+
+void initBot(){
+    bot.x=60;bot.y=SCREEN_H/2;bot.vx=0;bot.vy=0;
+    bot.heading=90;bot.vHeading=0;
+    bot.halfW=10;bot.halfH=10;
+    bot.intakeDown=false;bot.heldFuel=0;
+    bot.intakeExtend=0;
+    bot.shooting=false;bot.shotCooldown=0;
+}
+
+void drawBot(){
+    int cx=(int)bot.x,cy=(int)bot.y;
+    float ang=bot.heading,rad=ang*DEG2RAD;
+    float co=cosf(rad),si=sinf(rad);
+
+    int bHW=bot.halfW+3, bHH=bot.halfH+3;
+    fillRotatedRect(cx,cy,bHW,bHH,ang,rgba(30,50,160));
+    drawRotatedRectOutline(cx,cy,bHW+1,bHH+1,ang,2,rgba(60,80,200));
+    fillRotatedRect(cx,cy,bot.halfW,bot.halfH,ang,rgba(35,35,45));
+
+    float mOff=7.0f;
+    for(int my=-1;my<=1;my+=2)for(int mx=-1;mx<=1;mx+=2){
+        float lx_=mx*mOff,ly_=my*mOff;
+        int sx=cx+(int)(co*lx_-si*ly_),sy=cy+(int)(si*lx_+co*ly_);
+        fillRotatedRect(sx,sy,2,3,ang,rgba(60,60,70));
+    }
+
+    {
+        float lx_=0,ly_=5;
+        int bx=cx+(int)(co*lx_-si*ly_),by=cy+(int)(si*lx_+co*ly_);
+        fillRotatedRect(bx,by,4,2,ang,rgba(80,20,20));
+    }
+
+    {
+        float extDist=(float)(bHH-1)+bot.intakeExtend*6.0f;
+        int fx=cx+(int)(si*extDist);
+        int fy=cy+(int)(-co*extDist);
+        int stripeHW=bHW-1;
+        if(bot.intakeDown)
+            fillRotatedRect(fx,fy,stripeHW,2,ang,rgba(180,255,180));
+        else
+            fillRotatedRect(fx,fy,stripeHW,1,ang,rgba(220,220,240));
+    }
+
+    fillRotatedRect(cx,cy,5,2,ang,rgba(200,200,200));
+}
+
+// ==========================================================================
+//  Shooting
+// ==========================================================================
+
+void shootBall(){
+    if(bot.heldFuel<=0)return;
+    int slot=-1;
+    for(int i=0;i<MAX_FUEL;i++)if(!fuels[i].active){slot=i;break;}
+    if(slot<0)return;
+
+    bot.heldFuel--;
+
+    float rad=bot.heading*DEG2RAD;
+    float co=cosf(rad),si=sinf(rad);
+
+    // Back direction (opposite of front)
+    float backX=-si,backY=co;
+    // Lateral direction
+    float latX=co,latY=si;
+
+    // Pick random lane: left(-6), mid(0), right(+6)
+    int lane=(int)(qrand()%3);
+    float lateralOff=(lane==0)?-6.0f:(lane==2)?6.0f:0.0f;
+
+    float spawnDist=(float)(bot.halfH+5);
+    float sx=bot.x+backX*spawnDist+latX*lateralOff;
+    float sy=bot.y+backY*spawnDist+latY*lateralOff;
+
+    // Dumb shot: fires backward with fixed speed + small random scatter
+    float shotSpeed=qrandRange(5.0f,7.0f);
+    float shotAngle=qrandRange(-0.15f,0.15f); // small random angle offset (radians)
+    float dirX=backX*cosf(shotAngle)-backY*sinf(shotAngle);
+    float dirY=backX*sinf(shotAngle)+backY*cosf(shotAngle);
+
+    // Flight time based on randomized distance
+    float flightDist=qrandRange(80.0f,140.0f);
+    float baseFlightT=flightDist/shotSpeed;
+    if(baseFlightT<8)baseFlightT=8;
+    if(baseFlightT>35)baseFlightT=35;
+
+    fuels[slot].active=true;
+    fuels[slot].state=FUEL_AIRBORNE;
+    fuels[slot].x=sx;fuels[slot].y=sy;
+    fuels[slot].vx=dirX*shotSpeed;
+    fuels[slot].vy=dirY*shotSpeed;
+    fuels[slot].flightT=0;fuels[slot].totalFlightT=baseFlightT;
+    fuels[slot].targetHub=0; // unused now
+    fuels[slot].exitTimer=0;
+}
+
+void landBall(int idx){
+    Fuel&f=fuels[idx];
+
+    // Off-screen? Just disappear
+    if(f.x<-10||f.x>SCREEN_W+10||f.y<-10||f.y>SCREEN_H+10){
+        f.active=false;
+        return;
+    }
+
+    // Check both hubs passively
+    float hubXs[2]={(float)BLUE_HUB_X,(float)RED_HUB_X};
+    float hubYs[2]={(float)BLUE_HUB_Y,(float)RED_HUB_Y};
+    for(int h=0;h<2;h++){
+        float dx=f.x-hubXs[h],dy=f.y-hubYs[h];
+        float dist=sqrtf(dx*dx+dy*dy);
+        if(dist<HUB_GOAL_R){
+            // Scored!
+            f.state=FUEL_EXITING;
+            f.exitTimer=15+(int)(qrand()%10);
+            f.vx=0;f.vy=0;
+            f.x=hubXs[h];f.y=hubYs[h];
+            f.targetHub=h;
+            return;
+        } else if(dist<HUB_RIM_R){
+            // Rim bounce
+            f.state=FUEL_GROUND;
+            if(dist>0.1f){
+                float nx=dx/dist,ny=dy/dist;
+                float bounceSpd=qrandRange(1.5f,3.5f);
+                f.vx=nx*bounceSpd;f.vy=ny*bounceSpd;
+                f.x=hubXs[h]+nx*(HUB_ZONE_HW+FUEL_RADIUS+2);
+                f.y=hubYs[h]+ny*(HUB_ZONE_HH+FUEL_RADIUS+2);
+            }
+            return;
+        }
+    }
+
+    // Didn't hit any hub — become a ground ball with residual velocity
+    f.state=FUEL_GROUND;
+    f.vx*=0.3f;f.vy*=0.3f;
+}
+
+// ==========================================================================
+//  Bot face detection
+// ==========================================================================
+enum BotFace{FACE_FRONT,FACE_BACK,FACE_LEFT,FACE_RIGHT};
+BotFace getFuelFace(float bx,float by,float head,int hw,int hh,float fx,float fy){
+    float rad=head*DEG2RAD,co=cosf(rad),si=sinf(rad);
+    float dx=fx-bx,dy=fy-by;
+    float lx_=dx*co+dy*si,ly_=-dx*si+dy*co;
+    float nx=fabs_(lx_)/(float)hw,ny=fabs_(ly_)/(float)hh;
+    if(ny>=nx)return(ly_<0)?FACE_FRONT:FACE_BACK;
+    else return(lx_<0)?FACE_LEFT:FACE_RIGHT;
+}
+float distSq(float ax,float ay,float bx,float by){float dx=ax-bx,dy=ay-by;return dx*dx+dy*dy;}
+
+int score=0;
+
+// ==========================================================================
+//  Main
+// ==========================================================================
+int main(){
+    uint32_t bgColor=rgba(25,25,35);
+    rng=(uint32_t)Brain.Timer.time(msec)^0xDEADBEEF;
+    initWalls();initFuels();initBot();
+
+    #define TARGET_FPS 30
+    #define TARGET_FRAME_MS (1000/TARGET_FPS)
+    uint32_t frameStart=Brain.Timer.time(msec);int gf=0;
+
+    #define DEADZONE 10
+    #define MOVE_ACCEL 0.88f
+    #define MOVE_MAX_SPEED 5.0f
+    #define MOVE_FRICTION 0.5f
+    #define ROT_ACCEL 0.88f
+    #define ROT_MAX_SPEED 6.0f
+    #define ROT_FRICTION 0.5f
+
+    float interactR=18+FUEL_RADIUS,interactR2=interactR*interactR;
+    float botRadius=sqrtf((float)(bot.halfW*bot.halfW+bot.halfH*bot.halfH))+3;
+
+    while(true){
+        int lx=Controller1.Axis4.position();
+        int ly=Controller1.Axis3.position();
+        int rx=Controller1.Axis1.position();
+        if(lx>-DEADZONE&&lx<DEADZONE)lx=0;
+        if(ly>-DEADZONE&&ly<DEADZONE)ly=0;
+        if(rx>-DEADZONE&&rx<DEADZONE)rx=0;
+        float jx=(float)lx/100,jy=(float)ly/100,jr=(float)rx/100;
+
+        bot.intakeDown=Controller1.ButtonL1.pressing()||Controller1.ButtonL2.pressing();
+        bot.shooting=Controller1.ButtonR1.pressing()||Controller1.ButtonR2.pressing();
+
+        if(bot.intakeDown){
+            if(bot.intakeExtend<1.0f)bot.intakeExtend+=0.15f;
+            if(bot.intakeExtend>1.0f)bot.intakeExtend=1.0f;
+        } else {
+            if(bot.intakeExtend>0.0f)bot.intakeExtend-=0.15f;
+            if(bot.intakeExtend<0.0f)bot.intakeExtend=0.0f;
+        }
+
+        // Shooting
+        if(bot.shotCooldown>0)bot.shotCooldown--;
+        if(bot.shooting&&bot.heldFuel>0&&bot.shotCooldown<=0){
+            shootBall();
+            bot.shotCooldown=SHOT_COOLDOWN_FRAMES;
+        }
+
+        // Rotation
+        bot.vHeading+=jr*ROT_ACCEL;
+        if(bot.vHeading>ROT_MAX_SPEED)bot.vHeading=ROT_MAX_SPEED;
+        if(bot.vHeading<-ROT_MAX_SPEED)bot.vHeading=-ROT_MAX_SPEED;
+        if(rx==0)bot.vHeading*=ROT_FRICTION;
+        if(fabs_(bot.vHeading)<.05f&&rx==0)bot.vHeading=0;
+        bot.heading+=bot.vHeading;
+        while(bot.heading>=360)bot.heading-=360;while(bot.heading<0)bot.heading+=360;
+
+        // Translation
+        float hrad=bot.heading*DEG2RAD;
+        float fwX=sinf(hrad),fwY=-cosf(hrad),stX=cosf(hrad),stY=sinf(hrad);
+        bot.vx+=(jy*fwX+jx*stX)*MOVE_ACCEL;
+        bot.vy+=(jy*fwY+jx*stY)*MOVE_ACCEL;
+        float spd=sqrtf(bot.vx*bot.vx+bot.vy*bot.vy);
+        if(spd>MOVE_MAX_SPEED){bot.vx=bot.vx/spd*MOVE_MAX_SPEED;bot.vy=bot.vy/spd*MOVE_MAX_SPEED;}
+        if(lx==0&&ly==0){bot.vx*=MOVE_FRICTION;bot.vy*=MOVE_FRICTION;
+            if(fabs_(bot.vx)<.05f)bot.vx=0;if(fabs_(bot.vy)<.05f)bot.vy=0;}
+        bot.x+=bot.vx;bot.y+=bot.vy;
+
+        int bE=bot.halfW+4;
+        if(bot.x<bE){bot.x=bE;bot.vx*=-.3f;}
+        if(bot.x>SCREEN_W-bE){bot.x=SCREEN_W-bE;bot.vx*=-.3f;}
+        if(bot.y<bE){bot.y=bE;bot.vy*=-.3f;}
+        if(bot.y>SCREEN_H-bE){bot.y=SCREEN_H-bE;bot.vy*=-.3f;}
+
+        resolveCircleWalls(bot.x,bot.y,botRadius,bot.vx,bot.vy,0.2f);
+
+        // Fuel physics
+        for(int i=0;i<MAX_FUEL;i++){
+            if(!fuels[i].active)continue;
+
+            if(fuels[i].state==FUEL_AIRBORNE){
+                fuels[i].x+=fuels[i].vx;
+                fuels[i].y+=fuels[i].vy;
+                fuels[i].flightT+=1.0f;
+                // Off-screen mid-flight? Gone
+                if(fuels[i].x<-20||fuels[i].x>SCREEN_W+20||fuels[i].y<-20||fuels[i].y>SCREEN_H+20){
+                    fuels[i].active=false;continue;
+                }
+                if(fuels[i].flightT>=fuels[i].totalFlightT) landBall(i);
+                continue;
+            }
+
+            if(fuels[i].state==FUEL_EXITING){
+                fuels[i].exitTimer--;
+                if(fuels[i].exitTimer<=0){
+                    score++;
+                    fuels[i].state=FUEL_GROUND;
+                    if(fuels[i].targetHub==0){
+                        fuels[i].x=(float)(BLUE_HUB_X-HUB_ZONE_HW-FUEL_RADIUS-4);
+                        fuels[i].y=(float)BLUE_HUB_Y+qrandRange(-8.0f,8.0f);
+                        fuels[i].vx=-EXIT_SPEED;
+                        fuels[i].vy=qrandRange(-0.5f,0.5f);
+                    } else {
+                        fuels[i].x=(float)(RED_HUB_X+HUB_ZONE_HW+FUEL_RADIUS+4);
+                        fuels[i].y=(float)RED_HUB_Y+qrandRange(-8.0f,8.0f);
+                        fuels[i].vx=EXIT_SPEED;
+                        fuels[i].vy=qrandRange(-0.5f,0.5f);
+                    }
+                }
+                continue;
+            }
+
+            // Ground physics
+            fuels[i].x+=fuels[i].vx;fuels[i].y+=fuels[i].vy;
+            fuels[i].vx*=FUEL_FRICTION;fuels[i].vy*=FUEL_FRICTION;
+            if(fabs_(fuels[i].vx)<.02f)fuels[i].vx=0;if(fabs_(fuels[i].vy)<.02f)fuels[i].vy=0;
+            if(fuels[i].x<FUEL_RADIUS){fuels[i].x=FUEL_RADIUS;fuels[i].vx*=-.5f;}
+            if(fuels[i].x>SCREEN_W-FUEL_RADIUS){fuels[i].x=SCREEN_W-FUEL_RADIUS;fuels[i].vx*=-.5f;}
+            if(fuels[i].y<FUEL_RADIUS){fuels[i].y=FUEL_RADIUS;fuels[i].vy*=-.5f;}
+            if(fuels[i].y>SCREEN_H-FUEL_RADIUS){fuels[i].y=SCREEN_H-FUEL_RADIUS;fuels[i].vy*=-.5f;}
+            resolveCircleWalls(fuels[i].x,fuels[i].y,FUEL_RADIUS,fuels[i].vx,fuels[i].vy,0.4f);
+
+            for(int j=i+1;j<MAX_FUEL;j++){
+                if(!fuels[j].active||fuels[j].state!=FUEL_GROUND)continue;
+                float dx=fuels[j].x-fuels[i].x,dy=fuels[j].y-fuels[i].y;
+                float dist=sqrtf(dx*dx+dy*dy),minD=FUEL_RADIUS*2;
+                if(dist<minD&&dist>.01f){float nx=dx/dist,ny=dy/dist,pen=(minD-dist)*.5f;
+                    fuels[i].x-=nx*pen;fuels[i].y-=ny*pen;fuels[j].x+=nx*pen;fuels[j].y+=ny*pen;
+                    float vi=fuels[i].vx*nx+fuels[i].vy*ny,vj=fuels[j].vx*nx+fuels[j].vy*ny;
+                    fuels[i].vx+=(vj-vi)*nx*.8f;fuels[i].vy+=(vj-vi)*ny*.8f;
+                    fuels[j].vx+=(vi-vj)*nx*.8f;fuels[j].vy+=(vi-vj)*ny*.8f;}
+            }
+        }
+
+        // Bot vs ground fuel
+        for(int i=0;i<MAX_FUEL;i++){
+            if(!fuels[i].active||fuels[i].state!=FUEL_GROUND)continue;
+            float d2=distSq(bot.x,bot.y,fuels[i].x,fuels[i].y);
+            if(d2<interactR2){
+                BotFace face=getFuelFace(bot.x,bot.y,bot.heading,bot.halfW+3,bot.halfH+3,fuels[i].x,fuels[i].y);
+                // Only collect if intake is down AND not full
+                if(face==FACE_FRONT&&bot.intakeDown&&bot.heldFuel<BOT_MAX_HELD){
+                    fuels[i].active=false;bot.heldFuel++;
+                }else{
+                    // Push ball away (including when intake is full)
+                    float dist=sqrtf(d2);if(dist>.01f){
+                        float nx=(fuels[i].x-bot.x)/dist,ny=(fuels[i].y-bot.y)/dist;
+                        float ps=sqrtf(bot.vx*bot.vx+bot.vy*bot.vy)*.7f+.3f;
+                        fuels[i].vx+=nx*ps;fuels[i].vy+=ny*ps;
+                        float pen=interactR-dist;if(pen>0){fuels[i].x+=nx*pen;fuels[i].y+=ny*pen;}}
+                }
+            }
+        }
+
+        // --- Draw ---
+        clearBuffer(bgColor);
+        drawField();
+
+        // Ground balls
+        for(int i=0;i<MAX_FUEL;i++){
+            if(!fuels[i].active||fuels[i].state!=FUEL_GROUND)continue;
+            drawFuelBall(fuels[i].x,fuels[i].y,1.0f);
+        }
+
+        drawBot();
+
+        // Airborne balls (drawn on top — they're in the air)
+        for(int i=0;i<MAX_FUEL;i++){
+            if(!fuels[i].active||fuels[i].state!=FUEL_AIRBORNE)continue;
+            float t=fuels[i].flightT/fuels[i].totalFlightT;
+            // Parabola: shrinks to 0.4 at midpoint, full size at start/end
+            float scale=1.0f-0.6f*sinf(PI*t);
+            if(scale<0.3f)scale=0.3f;
+            drawFuelBall(fuels[i].x,fuels[i].y,scale);
+        }
+
+        drawStylizedScore(score,gf);
+        drawHeldHUD(bot.heldFuel);
+
+        // Intake HUD
+        if(bot.intakeDown){
+            fillRect(SCREEN_W-50,4,SCREEN_W-6,16,rgba(40,120,40));
+            for(int y_=6;y_<=14;y_++)setPixel(SCREEN_W-46,y_,rgba(200,255,200));
+            for(int y_=6;y_<=14;y_++){setPixel(SCREEN_W-42,y_,rgba(200,255,200));setPixel(SCREEN_W-36,y_,rgba(200,255,200));}
+            setPixel(SCREEN_W-41,7,rgba(200,255,200));setPixel(SCREEN_W-40,8,rgba(200,255,200));
+            setPixel(SCREEN_W-39,9,rgba(200,255,200));setPixel(SCREEN_W-38,10,rgba(200,255,200));
+            setPixel(SCREEN_W-37,11,rgba(200,255,200));
+        }
+
+        // Shooting indicator
+        if(bot.shooting&&bot.heldFuel>0){
+            fillRect(SCREEN_W-50,20,SCREEN_W-6,32,rgba(120,40,40));
+        }
+
+        Brain.Screen.drawImageFromBuffer(screenBuffer,0,0,SCREEN_W,SCREEN_H);
+        Brain.Screen.render();
+
+        gf++;uint32_t elapsed=Brain.Timer.time(msec)-frameStart;
+        if(elapsed<TARGET_FRAME_MS)wait(TARGET_FRAME_MS-elapsed,msec);
+        frameStart+=TARGET_FRAME_MS;
+    }
+    return 0;
+}

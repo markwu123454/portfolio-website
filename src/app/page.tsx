@@ -1,1344 +1,1039 @@
 "use client";
 
+import {useState, useEffect, useRef, useCallback} from "react";
 import Link from "next/link";
-import Image from "next/image";
-import JsonLd from "@/components/JsonLD";
-import {JSX, useEffect, useMemo, useRef, useState} from "react";
-import {ArrowDown, ArrowRight} from "lucide-react"
+import {ArrowDown} from "lucide-react";
 
-// 1) Hardcode your PNGs (filenames in /public/logo)
-const LOGOS = [
-    // Languages
-    "/logo/typescript.png",
-    "/logo/python.png",
-    "/logo/cs.png",
+const PROJECTS = [
+    {
+        id: "frc-robot",
+        title: "FRC Competition Robot",
+        tag: "ROBOTICS · CAD · MECHANICAL",
+        status: "ACTIVE",
+        desc: "Competition robot CAD for FRC Team 3473 - Team Sprocket",
+        img: "/sprocket/robot_cad_2026.png",
+        link: "/teamsprocket/cad",
+    },
+    {
+        id: "scouting",
+        title: "SprocketStats Platform",
+        tag: "SOFTWARE · FULLSTACK · ANALYTICS",
+        status: "ACTIVE",
+        desc: "React + FastAPI scouting and analytics platform with live match dashboards.",
+        img: "/sprocket/scouting_2026.png",
+        link: "/teamsprocket/scouting",
+    },
+    {
+        id: "uav",
+        title: "Aetherius UAV",
+        tag: "HARDWARE · AVIONICS · MAVLINK",
+        status: "ON_HOLD",
+        desc: "Custom fixed-wing drone with Raspberry Pi avionics.",
+        img: "/aetherius/dd2f2ce996d5ddd75e8cf7fc5e3e01f1.jpg",
+        link: "/dronescape/uav",
+    },
+    {
+        id: "gcs",
+        title: "Aetherius GCS",
+        tag: "SOFTWARE · EMBEDDED SYSTEMS · CONTROL SYSTEMS",
+        status: "ON_HOLD",
+        desc: "A modern ground control station for mavlink fixed wing.",
+        img: "/aetherius/img.png",
+        link: "/dronescape/gcs",
+    },
+    {
+        id: "turret",
+        title: "Harbinger",
+        tag: "SOFTWARE · DIGITAL ELECTRONICS · CONTROL SYSTEMS",
+        status: "ACTIVE",
+        desc: "A turret using a differential mechanism.",
+        img: "/harbinger/img.png",
+        link: "/misc/harbinger",
+    },
+];
 
-    // Frontend / Web
-    "/logo/react.png",
-    "/logo/next.png",
-    "/logo/tailwind.png",
-    "/logo/tauri.png",
-
-    // Backend / Data
-    "/logo/fastapi.png",
-    "/logo/postgresql.png",
-    "/logo/sklearn.png",
-    "/logo/tensorflow.png",
-
-    // CAD / Engineering
-    "/logo/solidworks.png",
-    "/logo/fusion360.png",
-    "/logo/onshape.png",
-
-    // Hardware / Robotics
-    "/logo/raspberrypi.png",
-    "/logo/mavlink.png",
-    "/logo/bambulab.png",
-
-    // Tooling
-    "/logo/git.png",
-] as const;
-
-// 2) Per-logo JSX detail (keys = filename sans extension)
-const detailByKey: Record<string, JSX.Element> = {
-    // Languages
-    typescript: (
-        <div className="p-5">
-            <h3 className="font-semibold">TypeScript</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Primary web language in my projects, used for strict typing and safer refactoring.
-            </p>
-        </div>
-    ),
-    python: (
-        <div className="p-5">
-            <h3 className="font-semibold">Python</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Go-to programming language I use for everything, including backend services, data processing,
-                robotics control scripts, and ML experimentation.
-            </p>
-        </div>
-    ),
-    cs: (
-        <div className="p-5">
-            <h3 className="font-semibold">C#</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Used for Windows desktop applications and tooling,
-                primarily with WPF for native UI development.
-            </p>
-        </div>
-    ),
-
-    // Frontend / Web
-    react: (
-        <div className="p-5">
-            <h3 className="font-semibold">React</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Core UI framework I use to build interactive web interfaces,
-                component systems, and dynamic dashboards.
-            </p>
-        </div>
-    ),
-    next: (
-        <div className="p-5">
-            <h3 className="font-semibold">Next.js</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Full-stack React framework I use to combine frontend UI with API routes and server rendering on simpler projects that doesn&#39;t require persistent backend,
-                including this site’s architecture.
-            </p>
-        </div>
-    ),
-    tailwind: (
-        <div className="p-5">
-            <h3 className="font-semibold">Tailwind CSS</h3>
-            <p className="mt-1 text-sm text-white/80">
-                A css replacement I use to make my life easier.
-            </p>
-        </div>
-    ),
-    tauri: (
-        <div className="p-5">
-            <h3 className="font-semibold">Tauri</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Desktop app framework for packaging web UIs into lightweight native binaries, used when I can&#39;t get the level of UI quality I want with WPF.
-            </p>
-        </div>
-    ),
-
-    // Backend / Data
-    fastapi: (
-        <div className="p-5">
-            <h3 className="font-semibold">FastAPI</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Backend framework I use to build high-performance APIs instead of Next.js.
-            </p>
-        </div>
-    ),
-    postgresql: (
-        <div className="p-5">
-            <h3 className="font-semibold">PostgreSQL</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Relational database used for structured project data storage, analytics outputs,
-                and server-backed applications requiring reliable querying.
-            </p>
-        </div>
-    ),
-    sklearn: (
-        <div className="p-5">
-            <h3 className="font-semibold">SciKit Learn</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Python ML toolkit used for classical models, data preprocessing, and evaluation pipelines,
-                including regression and classification workflows.
-            </p>
-        </div>
-    ),
-    tensorflow: (
-        <div className="p-5">
-            <h3 className="font-semibold">TensorFlow</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Machine learning framework I’ve used for training and evaluating neural network models,
-                primarily for feature recognition and predictive tasks.
-            </p>
-        </div>
-    ),
-
-    // CAD / Engineering
-    solidworks: (
-        <div className="p-5">
-            <h3 className="font-semibold">SolidWorks</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Primary CAD tool for complex mechanical assemblies and subsystem design, used mainly in my FRC team.
-            </p>
-        </div>
-    ),
-    fusion360: (
-        <div className="p-5">
-            <h3 className="font-semibold">Fusion 360</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Alternative CAD software I also know, used mainly in combat robotics.
-            </p>
-        </div>
-    ),
-    onshape: (
-        <div className="p-5">
-            <h3 className="font-semibold">Onshape</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Browser-based CAD platform I use when rapid collaboration and shared component libraries are needed.
-                Useful for sourcing and adapting community-built parametric designs.
-            </p>
-        </div>
-    ),
-
-    // Hardware / Robotics
-    raspberrypi: (
-        <div className="p-5">
-            <h3 className="font-semibold">Raspberry Pi</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Embedded computing platform used for onboard control, edge processing,
-                and hardware-integrated project deployments, since I&#39;m not familiar with digital electronics(yet).
-            </p>
-        </div>
-    ),
-    mavlink: (
-        <div className="p-5">
-            <h3 className="font-semibold">MAVLink</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Drone communication protocol used for telemetry and control integration,
-                including PyMAVLink-based implementations.
-            </p>
-        </div>
-    ),
-    bambulab: (
-        <div className="p-5">
-            <h3 className="font-semibold">Bambu Lab</h3>
-            <p className="mt-1 text-sm text-white/80">
-                3D printing platform used for functional prototypes and production parts,
-                with frequent iteration in robotics and hardware projects.
-            </p>
-        </div>
-    ),
-
-    // Tooling
-    git: (
-        <div className="p-5">
-            <h3 className="font-semibold">Git</h3>
-            <p className="mt-1 text-sm text-white/80">
-                Primary version control system I use for all major projects, with GitHub for remote hosting,
-                collaboration, and release management.
-            </p>
-        </div>
-    ),
+const STATUS_CLASS: Record<string, string> = {
+    ACTIVE: "text-emerald-300 bg-emerald-400/10 border-emerald-400/25",
+    ON_HOLD: "text-amber-300 bg-amber-400/10 border-amber-400/25",
+    LEGACY: "text-white/50 bg-white/5 border-white/10",
 };
 
-
-function keyFromPath(p: string) {
-    const base = p.split("/").pop() ?? "";
-    return base.replace(/\.(png|jpg|jpeg|webp|svg)$/i, "").toLowerCase();
-}
-
-export default function HomePage() {
-    const person = {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: "Mark Wu",
-        url: "https://markwu.org",
-        sameAs: ["https://github.com/markwu123454"],
-        jobTitle: "Student Engineer",
-    };
-
-    const isMobile = useIsMobile();
-
-    const [activeKey, setActiveKey] = useState<string | null>(null);
-    const doubled = useMemo(() => [...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS], []);
-
-    // --- Marquee controller ---
-    const trackRef = useRef<HTMLDivElement | null>(null);
-    const [paused, setPaused] = useState(false);
-    const xRef = useRef(0);
-    const lastRef = useRef<number | null>(null);
-    const unitWidthRef = useRef(0);
-    const speedRef = useRef(80); // px/s
-
-    // Reduced motion → stop marquee
-    useEffect(() => {
-        if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            speedRef.current = 0;
-        }
-    }, []);
-
-    // compute repeats once (you repeat 4x)
-    const repeats = useMemo(() => (LOGOS.length ? doubled.length / LOGOS.length : 1), [doubled.length]);
-
-    // robust measurement using child positions: distance between item 0 and item[LOGOS.length]
-    const measureUnitWidth = () => {
-        const el = trackRef.current;
-        if (!el || !LOGOS.length) return;
-
-        // Use total scrollable width divided by the number of times you repeated the list
-        // If 'doubled' is 2x LOGOS, repeats is 2.
-        const totalWidth = el.scrollWidth;
-        const w = totalWidth / (doubled.length / LOGOS.length);
-
-        if (w > 0) {
-            unitWidthRef.current = w;
-            // Normalize the current position so it stays within [0, -w]
-            xRef.current = xRef.current % w;
-        }
-    };
-
-    // initial measure + on repeats change
-    useEffect(() => {
-        measureUnitWidth();
-    }, [repeats]);
-
-    // re-measure after images load
-    useEffect(() => {
-        const el = trackRef.current;
-        if (!el) return;
-        const imgs = Array.from(el.querySelectorAll("img"));
-        if (imgs.length === 0) return;
-        let remaining = imgs.length;
-        const done = () => {
-            remaining -= 1;
-            if (remaining <= 0) measureUnitWidth();
-        };
-        imgs.forEach((img) => {
-            if ((img as HTMLImageElement).complete) done();
-            else {
-                img.addEventListener("load", done, {once: true});
-                img.addEventListener("error", done, {once: true});
-            }
-        });
-    }, [doubled.length]);
-
-    // re-measure on resize
-    useEffect(() => {
-        const onR = () => measureUnitWidth();
-        window.addEventListener("resize", onR);
-        return () => window.removeEventListener("resize", onR);
-    }, []);
-
-    // rAF loop with true pause + dt clamp
-    useEffect(() => {
-        let raf = 0;
-        const step = (t: number) => {
-            if (lastRef.current == null) lastRef.current = t;
-            let dt = (t - lastRef.current) / 1000;
-            lastRef.current = t;
-
-            if (dt > 0.1) dt = 0.1; // Slightly more generous clamp
-
-            const speed = speedRef.current;
-            const w = unitWidthRef.current;
-
-            // ONLY update if not paused and we have a width
-            if (!paused && speed > 0 && w > 0) {
-                xRef.current -= speed * dt;
-
-                // The magic fix: Use modulo to keep xRef.current
-                // always within the bounds of one "unit width"
-                if (Math.abs(xRef.current) >= w) {
-                    xRef.current = xRef.current % w;
-                }
-
-                if (trackRef.current) {
-                    // Use floor or round to prevent sub-pixel "jittering"
-                    // but keep the ref as a float for smooth math
-                    trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0)`;
-                }
-            }
-            raf = requestAnimationFrame(step);
-        };
-        raf = requestAnimationFrame(step);
-        return () => cancelAnimationFrame(raf);
-    }, [paused]);
-
-    const onEnter = () => setPaused(true);
-    const onLeave = () => {
-        setPaused(false);
-        lastRef.current = null; // reset clock to avoid resume jump
-    };
-
-    type SystemStatus = {
-        deploymentTime?: number;
-        isBuilding: boolean;
-        commitSha?: string;
-        commitUrl?: string;
-    };
-
-    type DeploymentStatusResponse = {
-        this: SystemStatus;
-        sprocketstatfrontend: SystemStatus;
-        sprocketstatbackend: SystemStatus;
-        updatedAt: number;
-    };
-
-    const LIVE_SYSTEMS = [
-        {key: "this", name: "Portfolio Website"},
-        {key: "sprocketstatfrontend", name: "SprocketStats Frontend"},
-        {key: "sprocketstatbackend", name: "SprocketStats Backend"},
-    ] as const;
-
-    const [deployments, setDeployments] =
-        useState<DeploymentStatusResponse | null>(null);
-    const [deploymentsError, setDeploymentsError] = useState(false);
-
-    useEffect(() => {
-        let alive = true;
-
-        const load = async () => {
-            try {
-                const res = await fetch("/api/deployment-status", {
-                    cache: "no-store",
-                });
-                if (!res.ok) throw new Error();
-                const json = (await res.json()) as DeploymentStatusResponse;
-                if (alive) setDeployments(json);
-            } catch {
-                if (alive) setDeploymentsError(true);
-            }
-        };
-
-        load();
-        const id = setInterval(load, 90_000);
-        return () => {
-            alive = false;
-            clearInterval(id);
-        };
-    }, []);
+const DURATION = 5000;
 
 
+/* ═══════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════ */
+
+const SKILLS = [
+    {
+        category: "LANGUAGES",
+        icon: "λ",
+        items: ["Python", "TypeScript", "C#", "C++"],
+    },
+    {
+        category: "FRAMEWORKS",
+        icon: "⚙",
+        items: ["React / Next.js", "FastAPI", "TailwindCSS", "WPF", "Tauri"],
+    },
+    {
+        category: "TOOLS & PLATFORMS",
+        icon: "▸",
+        items: ["SolidWorks / Fusion 360 / OnShape", "Git / GitHub", "MAVLink"],
+    },
+    {
+        category: "HARDWARE",
+        icon: "◈",
+        items: ["Raspberry Pi", "Arduino", "ESP32", "3D Printing", "Soldering"],
+    },
+];
+
+const ACHIEVEMENTS = [
+    {
+        year: "2025",
+        title: "FRC Regional Impact Award",
+        desc: "Team 3473 won regional impact award at Orange County Regional.",
+        tag: "ROBOTICS",
+    },
+    {
+        year: "2024",
+        title: "Combat Robotics Tournament Champion",
+        desc: "Led combat robotics team to win our school's end-of-year tournament.",
+        tag: "ROBOTICS",
+    },
+    {
+        year: "2025",
+        title: "JPL Invention Challenge",
+        desc: "Led a team that almost qualified for finals for the NASA JPL Invention Challenge.",
+        tag: "LEADERSHIP",
+    },
+];
+
+const CONTACT_LINKS = [
+    {
+        label: "GITHUB",
+        href: "https://github.com/markwu123454",
+        handle: "@markwu123454",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+        ),
+    },
+    {
+        label: "PERSONAL EMAIL",
+        href: "mailto:mark.wu123454@gmail.com",
+        handle: "mark.wu123454@gmail.com",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                <path
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+            </svg>
+        ),
+    },
+    {
+        label: "PROFESSIONAL EMAIL",
+        href: "mailto:me@markwu.org",
+        handle: "me@markwu.org",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                <path
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+            </svg>
+        ),
+    },
+    {
+        label: "LINKEDIN",
+        href: "https://www.linkedin.com/in/mark-mai-wu",
+        handle: "/in/mark-mai-wu",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+                <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+        ),
+    },
+];
+
+/* ═══════════════════════════════════════════════════════
+   REUSABLE PIECES
+   ═══════════════════════════════════════════════════════ */
+
+/** HUD-style section header */
+function SectionHeader({label, title}: { label: string; title: string }) {
     return (
-        <div className="relative min-h-screen text-white space-y-8">
-            <JsonLd id="person-jsonld" data={person}/>
-
-            {/* atmospherics */}
-            <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-                {/* existing radial blobs */}
-                <div
-                    className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(900px_560px_at_12%_-8%,#22d3ee,transparent_70%),radial-gradient(900px_560px_at_88%_12%,#a78bfa,transparent_65%)]"/>
-                {/* animated background effect */}
-                <ShootingStars className="absolute inset-0 opacity-[0.3]" rate={0.5}/>
-
-                {/* grid */}
-                <div
-                    className="absolute inset-0 mix-blend-overlay [mask-image:linear-gradient(to_bottom,black,transparent_72%)]">
-                    <div
-                        className="h-full w-full bg-[linear-gradient(to_right,rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:48px_48px]"/>
-                </div>
-                {/* noise */}
-                <div
-                    className="absolute inset-0 opacity-[0.04] [background-image:radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] bg-[size:3px_3px]"/>
+        <div className="mb-10">
+            <div className="flex items-center gap-3 mb-3">
+                <div className="h-[7px] w-[7px] rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]"/>
+                <span className="text-xs tracking-[0.25em] text-cyan-400/70 font-mono">{label}</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-cyan-400/20 to-transparent"/>
             </div>
-
-
-            <main className="container mx-auto">
-
-                {/* HERO (full screen) */}
-                <section
-                    aria-labelledby="hero-heading"
-                    className="relative h-[100svh] min-h-[640px] flex flex-col justify-center items-start px-6 md:px-8 pt-24"
-                >
-
-
-                    <div className="max-w-5xl">
-                        <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight
-                                       bg-[linear-gradient(90deg,theme(colors.cyan.300),white,theme(colors.violet.300),white,theme(colors.cyan.300))]
-                                       bg-clip-text text-transparent
-                                       [background-size:200%_100%] animate-[bg-pan_8s_linear_infinite]
-                                       drop-shadow-[0_0_24px_rgba(167,139,250,0.25)]">
-                            Hi! I&apos;m Mark.
-                        </h1>
-
-                        <p className="mt-2 text-sm tracking-widest text-white/60">
-                            STUDENT ENGINEER · ROBOTICS · SOFTWARE
-                        </p>
-
-                        <div className="mt-4 text-xs text-white/50">
-                            SYSTEM STATUS: IN HIGHSCHOOL
-                        </div>
-                    </div>
-
-                    {/* Featured projects inline */}
-                    <div className="mt-10 w-full" aria-labelledby="featured-heading">
-                        <h2 id="featured-heading" className="text-xl md:text-2xl font-semibold tracking-tight">
-                            Featured Projects
-                        </h2>
-                        <div className="mt-4 grid gap-6 md:grid-cols-3">
-                            <FeaturedModule
-                                title="FRC - Team Sprocket"
-                                href="/teamsprocket"
-                                status="ACTIVE"
-                                tag="ROBOTICS"
-                            >
-                                FRC team based in Diamond Bar. CAD, scouting app, and outreach initiatives.
-                            </FeaturedModule>
-                        </div>
-
-                    </div>
-
-                    {/* Scroll hint (smooth + animated) */}
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById("next")?.scrollIntoView({behavior: "smooth"});
-                            history.replaceState(null, "", " "); // removes #next from URL
-                        }}
-                        className="group absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/30"
-                        aria-label="Scroll to content"
-                    >
-                        <span className="relative inline-flex h-10 w-10 items-center justify-center">
-                            {/* pulse ring */}
-                            <span className="absolute inset-0 rounded-full border border-white/20 animate-pulse"/>
-                            {/* chevron */}
-                            <ArrowDown
-                                className="h-5 w-5 text-white/70 transition group-hover:text-white/90 animate-bounce"/>
-                        </span>
-                    </button>
-
-                </section>
-
-                {isMobile && (
-                    <div className="mb-6 mx-4 rounded-md border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
-                        Some pages are not fully optimized for mobile yet.
-                    </div>
-                )}
-
-
-                {/* Anchor target for scroll hint */}
-                <div id="next" className="pt-16 md:pt-24"/>
-
-                {/* Activity List */}
-                <section className="py-16" id="catalog">
-                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
-                        CATALOG
-                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
-                    </h2>
-                    <p className="mt-2 text-xs tracking-widest text-white/50">
-                        PROJECT RECORD
-                    </p>
-
-                    <div className="relative overflow-x-auto rounded-xl border border-white/15 bg-black/70 backdrop-blur font-mono">
-                        <div
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
-                        />
-
-                        <table className="w-full text-sm md:text-base text-left border-collapse">
-                            <thead className="bg-black/80 text-white/70 text-xs tracking-widest">
-                            <tr>
-                                <th className="px-4 py-3 font-medium w-[25%]">Title</th>
-                                <th className="px-4 py-3 font-medium w-[15%]">Competition</th>
-                                <th className="px-4 py-3 font-medium w-[35%]">My Contribution</th>
-                                <th className="px-4 py-3 font-medium w-[15%]">Awards / Recognition</th>
-                                <th className="px-4 py-3 font-medium w-[10%]">Link</th>
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/10">
-                            {[
-                                {
-                                    title: "Team Sprocket (Robot Design)",
-                                    competition: "FRC",
-                                    contribution: "Responsible for CAD design and mechanical system integration for competition robot.",
-                                    awards: "",
-                                    link: "/teamsprocket/cad",
-                                },
-                                {
-                                    title: "Team Sprocket (Scouting App)",
-                                    competition: "FRC",
-                                    contribution: "Designed and implemented full-stack scouting and analytics platform.",
-                                    awards: "",
-                                    link: "/teamsprocket/scouting",
-                                },
-                                {
-                                    title: "Team Sprocket (Outreach)",
-                                    competition: "FRC",
-                                    contribution: "Led development of STEM demos and assisted others in various community outreaches.",
-                                    awards: "2025 Impact Award, 2025 Imagery Award",
-                                    link: null,
-                                },
-                                {
-                                    title: "Aetherius UAV",
-                                    competition: "",
-                                    contribution: "Lead engineer for a fixed wing UAV.",
-                                    awards: "",
-                                    link: "/dronescape/uav",
-                                },
-                                {
-                                    title: "Aetherius GCS",
-                                    competition: "",
-                                    contribution: "Lead developer for UAV avionics software and custom Ground Control Station.",
-                                    awards: "",
-                                    link: "/dronescape/gcs",
-                                },
-                                {
-                                    title: "The Scavengers – JPL Challenge",
-                                    competition: "JPL Invention Challenge",
-                                    contribution: "Captain and CAD lead.",
-                                    awards: "Qualified for Regionals (Finals canceled)",
-                                    link: null,
-                                },
-                                {
-                                    title: "Team Infernope",
-                                    competition: "Combat Robotics",
-                                    contribution: "Founded and led a combat robotics team for 3 years.",
-                                    awards: "2024 End-of-Year Tournament Champion",
-                                    link: "/legacy/teaminfernope",
-                                },
-                                {
-                                    title: "Portfolio Website",
-                                    competition: "",
-                                    contribution: "This website where I keep track of and document projects.",
-                                    awards: "",
-                                    link: null,
-                                },
-                                {
-                                    title: "SigmaCat Robotics",
-                                    competition: "RIVAL Robotics",
-                                    contribution: "Designed the robot and created vision and path planning software.",
-                                    awards: "",
-                                    link: null,
-                                },
-                                {
-                                    title: "Project Temptest",
-                                    competition: "",
-                                    contribution: "A heavy-lift drone project I mentor.",
-                                    awards: "",
-                                    link: null,
-                                },
-                                {
-                                    title: "Music composition",
-                                    competition: "",
-                                    contribution: "Played in rock bands, concert bands, ensembles, and musical productions",
-                                    awards: "SWIS ARTS - Secondary Music Dedicated Service (22-23)",
-                                    link: "/misc/music",
-                                },
-                            ].map((a) => (
-                                <tr
-                                    key={a.title}
-                                    className="group transition hover:bg-cyan-400/[0.06] cursor-default"
-                                >
-                                    <td className="px-4 py-4 text-white/80 text-md tracking-wide">{a.title}</td>
-                                    <td className="px-4 py-4 text-white/60 text-sm">{a.competition || "—"}</td>
-                                    <td className="px-4 py-4 text-white/60 text-sm">{a.contribution}</td>
-                                    <td className="px-4 py-4 text-white/60 text-sm">{a.awards || "—"}</td>
-                                    <td className="px-4 py-4 text-white/60 text-sm">
-                                        {a.link ? (
-                                            <Link
-                                                href={a.link}
-                                                className="inline-flex items-center gap-1 text-cyan-300 hover:text-cyan-200 font-medium transition"
-                                            >
-                                                Open →
-                                            </Link>
-                                        ) : (
-                                            <span className="text-white/40 italic">Not yet documented</span>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                {/* Logos + Details — keeps YOUR marquee loop, only styling/layout changed */}
-                <section
-                    className="select-none"
-                >
-                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
-                        TOOLING & STACK
-                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
-                    </h2>
-                    <p className="mt-2 text-xs tracking-widest text-white/50">
-                        TOOLS AND SERVICES I USE EXTENSIVELY
-                    </p>
-
-                    {/* rail */}
-                    <div
-                        className="mt-4 overflow-x-hidden rounded-xl border border-white/15 bg-black/70 backdrop-blur relative">
-                        <div
-                            aria-hidden
-                            className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:linear-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:100%_4px]"
-                        />
-
-                        <div
-                            ref={trackRef}
-                            onMouseEnter={onEnter}
-                            onMouseLeave={onLeave}
-                            onFocus={onEnter}
-                            onBlur={onLeave}
-                            className="flex items-center will-change-transform py-4"
-                            style={{transform: `translate3d(${xRef.current}px,0,0)`, animation: "none"}}
-                        >
-                            {doubled.map((src, i) => {
-                                const k = keyFromPath(src);
-                                return (
-                                    <div
-                                        key={`${k}-${i}`}
-                                        className="px-6 md:px-8 flex items-center justify-center flex-none"
-                                    >
-                                        <button
-                                            className="group rounded-md outline-none focus-visible:ring-2 focus-visible:ring-white/40"
-                                            onMouseEnter={() => setActiveKey(k)}
-                                            onFocus={() => setActiveKey(k)}
-                                            onMouseLeave={() => setActiveKey(null)}
-                                            onBlur={() => setActiveKey(null)}
-                                            aria-label={k}
-                                        >
-                                            <Image
-                                                src={src}
-                                                alt={k}
-                                                width={96}
-                                                height={96}
-                                                priority={false}
-                                                className="h-16 w-auto opacity-80 group-hover:opacity-100 group-hover:scale-110 transition"
-                                                draggable={false}
-                                            />
-                                        </button>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* detail panel */}
-                    <div
-                        className="mt-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur
-                     transition data-[active=false]:opacity-80"
-                        data-active={!!activeKey}
-                        aria-live="polite"
-                    >
-                        {activeKey && detailByKey[activeKey] ? detailByKey[activeKey] : (
-                            <div className="p-5">
-                                <h3 className="text-base font-semibold">Tooling & Stack</h3>
-                                <p className="mt-1 text-sm text-white/80">
-                                    Libraries and tools I actively use across projects.
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                </section>
-
-                {/* Active projects */}
-                <section className="py-12 border-t border-white/10 font-mono">
-                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
-                        ACTIVE PROJECTS
-                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
-                    </h2>
-
-                    <p className="mt-2 text-xs tracking-widest text-white/50">
-                        CURRENTLY MAINTAINED SYSTEMS
-                    </p>
-
-                    <div className="mt-6 grid gap-4 md:grid-cols-3">
-                        {/* Aetherius UAV */}
-                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
-                            {/* scanlines */}
-                            <div
-                                aria-hidden
-                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
-                            />
-
-                            <div className="relative flex items-center justify-between">
-                                <span className="text-xs tracking-wider text-white/80">
-                                    AETHERIUS_UAV
-                                </span>
-                                <span className="text-[10px] tracking-widest text-amber-300">
-                                    ON_HOLD
-                                </span>
-                            </div>
-
-                            <div className="relative mt-3 space-y-2 text-xs">
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">DESC</span>
-                                    <span className="text-white/70">
-                                        Fixed-wing UAV with custom avionics
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">STATE</span>
-                                    <span className="text-white/70">
-                                        Electrical debugging & HW/SW validation
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">UPDATED</span>
-                                    <span className="text-white/50">
-                                        2025-11-23
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* load bar */}
-                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
-                                <div className="h-full w-[19%] bg-white/60"/>
-                            </div>
-
-                            <Link
-                                href="/dronescape/uav"
-                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
-                            >
-                                OPEN →
-                            </Link>
-
-                            {/* corner accent */}
-                            <div
-                                aria-hidden
-                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
-                            />
-                        </div>
-
-                        {/* FRC Scouting */}
-                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
-                            <div
-                                aria-hidden
-                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
-                            />
-
-                            <div className="relative flex items-center justify-between">
-                                <span className="text-xs tracking-wider text-white/80">
-                                    FRC_SCOUTING
-                                </span>
-                                <span className="text-[10px] tracking-widest text-emerald-300">
-                                    ACTIVE
-                                </span>
-                            </div>
-
-                            <div className="relative mt-3 space-y-2 text-xs">
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">DESC</span>
-                                    <span className="text-white/70">
-                                        React + FastAPI analytics platform
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">STATE</span>
-                                    <span className="text-white/70">
-                                        Post kickoff: work on scouting UI and questions
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">UPDATED</span>
-                                    <span className="text-white/50">
-                                        2026-1-14
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
-                                <div className="h-full w-[78%] bg-white/60"/>
-                            </div>
-
-                            <Link
-                                href="/teamsprocket/scouting"
-                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
-                            >
-                                OPEN →
-                            </Link>
-
-                            <div
-                                aria-hidden
-                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
-                            />
-                        </div>
-
-                        {/* FRC Outreach */}
-                        <div className="relative rounded-xl border border-white/15 bg-black/70 p-4 backdrop-blur">
-                            <div
-                                aria-hidden
-                                className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
-                            />
-
-                            <div className="relative flex items-center justify-between">
-                                <span className="text-xs tracking-wider text-white/80">
-                                    FRC_OUTREACH
-                                </span>
-                                <span className="text-[10px] tracking-widest text-emerald-300">
-                                    ACTIVE
-                                </span>
-                            </div>
-
-                            <div className="relative mt-3 space-y-2 text-xs">
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">DESC</span>
-                                    <span className="text-white/70">
-                                        Outreach & education initiatives
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">STATE</span>
-                                    <span className="text-white/70">
-                                        Approved, started prototyping
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-2">
-                                    <span className="text-white/40 w-24">UPDATED</span>
-                                    <span className="text-white/50">
-                                        2026-1-14
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="mt-3 h-1.5 bg-white/10 rounded overflow-hidden">
-                                <div className="h-full w-[5%] bg-white/60"/>
-                            </div>
-
-                            <Link
-                                href="/teamsprocket"
-                                className="mt-3 inline-block text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
-                            >
-                                OPEN →
-                            </Link>
-
-                            <div
-                                aria-hidden
-                                className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
-                            />
-                        </div>
-                    </div>
-                </section>
-
-
-                {/* System status */}
-                <section
-                    className="py-16 font-mono"
-                    style={{fontVariantNumeric: "tabular-nums"}}
-                >
-                    <h2 className="text-lg font-semibold tracking-[0.15em] text-white/90">
-                        LIVE SYSTEMS
-                        <span className="ml-3 inline-block h-px w-12 align-middle bg-cyan-400/60"/>
-                    </h2>
-
-                    <p className="mt-2 text-xs tracking-widest text-white/50">
-                        DEPLOYMENT TELEMETRY STREAM
-                    </p>
-
-                    <div
-                        className="mt-6 grid gap-4 md:grid-cols-3 "
-                    >
-                        {LIVE_SYSTEMS.map((s) => {
-                            const d = deployments?.[s.key];
-
-                            return (
-                                <div
-                                    key={s.key}
-                                    className="relative rounded-xl border border-white/15 bg-black/70 backdrop-blur p-4 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)] hover:bg-black/80 transition"
-                                >
-                                    {/* scanlines */}
-                                    <div
-                                        aria-hidden
-                                        className="pointer-events-none absolute inset-0 rounded-xl opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] [background-size:100%_3px]"
-                                    />
-
-                                    {/* header */}
-                                    <div className="relative flex items-center justify-between">
-                                        <span className="text-xs tracking-wider text-white/80">
-                                            {s.name.toUpperCase()}
-                                        </span>
-
-                                        <span
-                                            className={`text-[10px] tracking-widest ${
-                                                deploymentsError
-                                                    ? "text-white/40"
-                                                    : d?.isBuilding
-                                                        ? "text-amber-300"
-                                                        : "text-emerald-300"
-                                            }`}
-                                        >
-                                            {deploymentsError
-                                                ? "UNKNOWN"
-                                                : d?.isBuilding
-                                                    ? "BUILDING" : "STABLE"}
-                                        </span>
-                                    </div>
-
-                                    {/* body */}
-                                    <div className="relative mt-3 space-y-2 text-xs">
-                                        <div className="flex gap-2">
-                                            <span className="text-white/40 w-28">
-                                                DEPLOYED_AT
-                                            </span>
-                                            <span className="text-white/70 break-all">
-                                                {d?.deploymentTime
-                                                    ? new Date(d.deploymentTime).toISOString()
-                                                    : "—"}
-                                            </span>
-                                        </div>
-
-                                        <div className="flex gap-2">
-                                            <span className="text-white/40 w-28">
-                                                COMMIT_SHA
-                                            </span>
-                                            {d?.commitUrl && d?.commitSha ? (
-                                                <Link
-                                                    href={d.commitUrl}
-                                                    target="_blank"
-                                                    className="text-cyan-300 hover:text-cyan-200 break-all"
-                                                >
-                                                    {d.commitSha}
-                                                </Link>
-                                            ) : (
-                                                <span className="text-white/30">—</span>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* corner accent */}
-                                    <div
-                                        aria-hidden
-                                        className="absolute top-2 right-2 h-2 w-2 border-t border-r border-cyan-400/40"
-                                    />
-                                </div>
-                            );
-                        })}
-                    </div>
-                </section>
-
-                {/* External Links */}
-                <section className="py-12 border-t border-white/10 font-mono max-w-4xl">
-                    <h2 className="text-sm tracking-[0.2em] text-white/70">
-                        EXTERNAL_LINKS
-                    </h2>
-
-                    <p className="mt-2 text-xs tracking-widest text-white/40">
-                        COMMUNICATION & SOURCE ACCESS
-                    </p>
-
-                    <div className="mt-6 space-y-3">
-                        {/* Email */}
-                        <a
-                            href="https://mail.google.com/mail/?view=cm&fs=1&to=me@markwu.org"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-between
-                       rounded-md border border-white/15
-                       bg-black/60 px-4 py-3
-                       hover:bg-black/80 transition"
-                        >
-                            <span className="text-xs tracking-widest text-white/70">
-                                EMAIL_INTERFACE
-                            </span>
-
-                            <span className="text-xs tracking-widest text-cyan-300
-                             group-hover:translate-x-0.5 transition">
-                                OPEN →
-                            </span>
-                        </a>
-
-                        {/* GitHub */}
-                        <Link
-                            href="https://github.com/markwu123454"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center justify-between
-                       rounded-md border border-white/15
-                       bg-black/60 px-4 py-3
-                       hover:bg-black/80 transition"
-                        >
-                            <span className="text-xs tracking-widest text-white/70">
-                                SOURCE_REPOSITORY
-                            </span>
-
-                            <span className="text-xs tracking-widest text-cyan-300
-                             group-hover:translate-x-0.5 transition">
-                                OPEN →
-                            </span>
-                        </Link>
-                    </div>
-                </section>
-
-            </main>
+            <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-white/90">{title}</h2>
         </div>
     );
 }
 
-function SectionTitle({children}: { children: React.ReactNode }) {
-    return (
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
-            {children}
-            <span className="ml-2 inline-block h-[2px] w-16 align-middle bg-white/20 rounded"/>
-        </h2>
-    );
-}
-
-type FeaturedModuleProps = {
-    title: string;
-    href: string;
-    status: string;
-    tag: string;
+/** Shared panel wrapper that matches the hero cards */
+function Panel({
+                   children,
+                   className = "",
+               }: {
     children: React.ReactNode;
-};
-
-function FeaturedModule({ title, href, status, tag, children }: FeaturedModuleProps) {
+    className?: string;
+}) {
     return (
-        <article className="group relative rounded-xl border border-white/15 bg-black/65 backdrop-blur p-5 font-mono transition hover:bg-black/80">
-
-            {/* subtle grid texture */}
+        <div
+            className={`relative rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden ${className}`}
+        >
+            {/* Scanlines */}
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-[0.05]
-        [background-image:linear-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)]
-        [background-size:100%_4px]"
+                className="pointer-events-none absolute inset-0 opacity-[0.04]
+                [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_3px)]"
             />
-
-            <div className="relative flex items-center justify-between">
-        <span className="text-xs tracking-widest text-white/70">
-          {tag}
-        </span>
-                <span className="text-[10px] tracking-widest text-cyan-300">
-          {status}
-        </span>
-            </div>
-
-            <h3 className="relative mt-3 text-base tracking-wide text-white/90">
-                {title}
-            </h3>
-
-            <p className="relative mt-2 text-xs text-white/60 leading-relaxed">
-                {children}
-            </p>
-
-            <Link
-                href={href}
-                className="relative mt-4 inline-flex items-center gap-2 text-xs tracking-widest text-cyan-300 hover:text-cyan-200"
-            >
-                OPEN PROJECT →
-            </Link>
-
-            {/* corner tick */}
-            <div className="absolute top-2 left-2 h-2 w-2 border-t border-l border-cyan-400/40" />
-        </article>
+            {/* Corner accents */}
+            <div
+                aria-hidden
+                className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/15 rounded-tl-xl pointer-events-none z-10"
+            />
+            <div
+                aria-hidden
+                className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/15 rounded-br-xl pointer-events-none z-10"
+            />
+            <div className="relative z-[1]">{children}</div>
+        </div>
     );
 }
 
-
-interface Star {
-    id: number;
-    dur: number;
-    len: number;
-    thick: number;
-    delay: number;
-    path: string;
-    color: string;
-}
-
-interface Props {
+/** Fade-in-on-scroll wrapper */
+function Reveal({children, className = "", delay = 0}: {
+    children: React.ReactNode;
     className?: string;
-    rate?: number; // Stars per second
-    duration?: [number, number]; // Min/max duration in seconds
-    length?: [number, number]; // Min/max length in pixels
-    thickness?: [number, number]; // Min/max thickness in pixels
-    spawnPadding?: number; // Offscreen spawn padding
-    maxConcurrent?: number; // Max stars on screen
-    colors?: string[]; // Array of possible star colors
-}
-
-// Utility function for random numbers
-const rand = (min: number, max: number) => min + Math.random() * (max - min);
-
-const ShootingStars: React.FC<Props> = ({
-                                            className = '',
-                                            rate = 0.8,
-                                            duration = [1.6, 2.8],
-                                            length = [90, 170],
-                                            thickness = [1, 2],
-                                            spawnPadding = 140,
-                                            maxConcurrent = 14,
-                                            colors = ['#ffffff', '#B090F0', '#87ceeb'],
-                                        }) => {
-    const [stars, setStars] = useState<Star[]>([]);
-    const boxRef = useRef<HTMLDivElement>(null);
-    const pathMap = useRef<Map<number, string>>(new Map());
-    const idRef = useRef(0);
-    const loopTimerRef = useRef<number | null>(null);
-    const isMountedRef = useRef(true);
-
-    // Memoize config to prevent unnecessary effect runs
-    const config = useMemo(
-        () => ({duration, length, thickness, spawnPadding, maxConcurrent, colors}),
-        [duration, length, thickness, spawnPadding, maxConcurrent, colors.join(',')]
-    );
-
-    // Replace your generateStarPath with this:
-    const generateStarPath = (rect: DOMRect | DOMRectReadOnly, pad: number): string => {
-        const W = Math.max(1, rect.width);
-        const H = Math.max(1, rect.height);
-
-        // Upward shift by ~1/3 screen height
-        const yShift = -H / 3;
-
-        // Offscreen endpoints: RIGHT -> LEFT
-        const x0 = rand(W + pad, W + pad * 2);    // start offscreen right
-        const y0 = rand(-pad * 0.2, H * 0.35);
-
-        const x1 = rand(-pad * 2, -pad);          // end offscreen left
-        const y1 = rand(H * 0.55, H + pad * 0.2);
-
-        // Interior guide points (before shift)
-        const g1x = rand(W * 0.55, W * 0.85);
-        const g1y = rand(H * 0.15, H * 0.40);
-        const g2x = rand(W * 0.15, W * 0.45);
-        const g2y = rand(H * 0.45, H * 0.75);
-
-        // Jitter near the guides
-        const jitter = (v: number, j: number) => v + rand(-j, j);
-        const c1x = jitter(g1x, W * 0.05);
-        const c1y = jitter(g1y, H * 0.05);
-        const c2x = jitter(g2x, W * 0.05);
-        const c2y = jitter(g2y, H * 0.05);
-
-        // Apply linear upward shift to all Y's
-        return `M ${x0} ${y0 + yShift} C ${c1x} ${c1y + yShift}, ${c2x} ${c2y + yShift}, ${x1} ${y1 + yShift}`;
-    };
-
-
-// Optional: ensure path meaningfully crosses the viewport (retry up to N)
-    const generateCrossingPath = (rect: DOMRect | DOMRectReadOnly, pad: number, tries = 6): string => {
-        for (let i = 0; i < tries; i++) {
-            const p = generateStarPath(rect, pad);
-            if (roughlyCrossesViewport(p, rect)) return p;
-        }
-        // Fallback—last generated path
-        return generateStarPath(rect, pad);
-    };
-
-// Cheap viewport-crossing heuristic: sample at t=.3 and t=.7
-    const roughlyCrossesViewport = (d: string, rect: DOMRect | DOMRectReadOnly): boolean => {
-        const cmd = d.match(/[-\d.]+/g)?.map(Number) ?? [];
-        if (cmd.length < 12) return true;
-        const [x0, y0, c1x, c1y, c2x, c2y, x1, y1] = [cmd[0], cmd[1], cmd[2], cmd[3], cmd[4], cmd[5], cmd[6], cmd[7]];
-
-        // cubic Bezier point
-        const at = (t: number) => {
-            const mt = 1 - t;
-            const x = mt * mt * mt * x0 + 3 * mt * mt * t * c1x + 3 * mt * t * t * c2x + t * t * t * x1;
-            const y = mt * mt * mt * y0 + 3 * mt * mt * t * c1y + 3 * mt * t * t * c2y + t * t * t * y1;
-            return {x, y};
-        };
-
-        const p1 = at(0.3);
-        const p2 = at(0.7);
-        const inside = (p: { x: number; y: number }) =>
-            p.x >= 0 && p.x <= rect.width && p.y >= 0 && p.y <= rect.height;
-
-        // require at least one of the samples to be inside
-        return inside(p1) || inside(p2);
-    };
-
-    // Spawn a single star
-    const spawnStar = (rect: DOMRect) => {
-        if (!isMountedRef.current) return () => {
-        };
-
-        const id = idRef.current++;
-        const path = generateCrossingPath(rect, config.spawnPadding);
-        const star: Star = {
-            id,
-            dur: rand(config.duration[0], config.duration[1]),
-            len: rand(config.length[0], config.length[1]),
-            thick: rand(config.thickness[0], config.thickness[1]),
-            delay: rand(0, 0.5),
-            path,
-            color: config.colors[Math.floor(rand(0, config.colors.length))],
-        };
-
-        pathMap.current.set(id, path);
-
-        // Update stars safely
-        setStars((prev) => {
-            if (prev.length >= config.maxConcurrent) {
-                const oldestId = prev[0]?.id;
-                if (oldestId !== undefined) pathMap.current.delete(oldestId);
-                return [...prev.slice(1), star];
-            }
-            return [...prev, star];
-        });
-
-        // Cleanup
-        const timeout = window.setTimeout(() => {
-            if (isMountedRef.current) {
-                pathMap.current.delete(id);
-                setStars((prev) => prev.filter((s) => s.id !== id));
-            }
-        }, (star.dur + star.delay) * 1000 + 200);
-
-        return () => clearTimeout(timeout);
-    };
+    delay?: number
+}) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const box = boxRef.current;
-        if (!box) return;
-
-        isMountedRef.current = true;
-
-        const loop = () => {
-            if (!isMountedRef.current || !box) return;
-
-            const rect = box.getBoundingClientRect();
-            const cleanup = spawnStar(rect);
-            const intervalMs = rate > 0 ? 1000 / rate : 999999;
-            const skew = rand(0.7, 1.3);
-
-            loopTimerRef.current = window.setTimeout(() => {
-                cleanup?.();
-                loop();
-            }, intervalMs * skew) as unknown as number;
-        };
-
-        loop();
-
-        return () => {
-            isMountedRef.current = false;
-            if (loopTimerRef.current) {
-                clearTimeout(loopTimerRef.current);
-                loopTimerRef.current = null;
-            }
-            pathMap.current.clear();
-        };
-    }, [rate]); // Only depend on rate, as config is memoized
+        const el = ref.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                    obs.disconnect();
+                }
+            },
+            {threshold: 0.15}
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
 
     return (
         <div
-            ref={boxRef}
-            className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+            ref={ref}
+            className={[
+                "transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+                className,
+            ].join(" ")}
+            style={{transitionDelay: `${delay}ms`}}
         >
-            {stars.map((star) => (
-                <div
-                    key={star.id}
-                    className="absolute will-change-transform"
-                    style={{
-                        width: `${star.len}px`,
-                        height: `${star.thick}px`,
-                        background: `linear-gradient(to right, transparent, ${star.color})`,
-                        borderRadius: `${star.thick}px`,
-                        filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.5))',
-                        offsetPath: `path('${pathMap.current.get(star.id) || 'M0 0'}')`,
-                        offsetRotate: 'auto',
-                        offsetAnchor: '100% 50%',
-                        animation: `shoot-path ${star.dur}s linear ${star.delay}s both`,
-                    }}
-                />
-            ))}
-            <style jsx global>{`
-                @keyframes shoot-path {
-                    0% {
-                        opacity: 0;
-                        offset-distance: 0%;
-                    }
-                    10% {
-                        opacity: 1;
-                    }
-                    90% {
-                        opacity: 1;
-                    }
-                    100% {
-                        opacity: 0;
-                        offset-distance: 100%;
-                    }
-                }
-            `}</style>
+            {children}
         </div>
     );
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION: ABOUT
+   ═══════════════════════════════════════════════════════ */
+
+function AboutSection() {
+    return (
+        <section className="px-6 lg:px-24 py-20" id="about">
+            <Reveal>
+                <SectionHeader label="01" title="About Me"/>
+            </Reveal>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4">
+                <Reveal delay={100}>
+                    <Panel className="p-6 md:p-8">
+                        {/* Terminal-style header bar */}
+                        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.06]">
+                            <div className="flex gap-[5px]">
+                                {[0, 1, 2].map((i) => (
+                                    <div
+                                        key={i}
+                                        className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
+                                    />
+                                ))}
+                            </div>
+                            <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
+                                ABOUT.README
+                            </span>
+                        </div>
+
+                        <div className="space-y-4 text-[15px] leading-relaxed text-white/65">
+                            <p>
+                                I&apos;m <span className="text-white/90 font-medium">Mark</span>, a high school
+                                student engineer based in{" "}
+                                <span className="text-cyan-300/80">Diamond Bar, California</span>. I build things
+                                that move — robots, drones, and the software systems that power them.
+                            </p>
+                            <p>
+                                As a core member of{" "}
+                                <span className="text-white/90 font-medium">FRC Team 3473 — Team Sprocket</span>,
+                                I lead our CAD and software divisions, designing competition robots in SolidWorks
+                                and building full-stack analytics tools that give our alliance real-time strategic
+                                data.
+                            </p>
+                            <p>
+                                Outside of robotics, I&apos;m developing{" "}
+                                <span className="text-white/90 font-medium">Aetherius</span> — a custom fixed-wing
+                                UAV platform with Raspberry Pi-based avionics and a purpose-built ground control
+                                station. I care about well-crafted systems, clean interfaces, and making complex
+                                engineering accessible.
+                            </p>
+                            <p>
+                                I also work on other smaller projects on and off,
+                            </p>
+                        </div>
+
+                        {/* Bottom readout */}
+                        <div
+                            className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-x-6 gap-y-2 text-xs tracking-[0.12em] font-mono text-white/35">
+                            <span>FOCUS: ROBOTICS + SOFTWARE</span>
+                            <span>CLASS: 2026</span>
+                        </div>
+                    </Panel>
+                </Reveal>
+
+                {/* Side card: quick stats */}
+                <Reveal delay={200}>
+                    <Panel className="p-5 flex flex-col justify-between h-full">
+                        <div>
+                            <div className="text-xs tracking-[0.18em] text-cyan-400/70 font-mono mb-4">
+                                QUICK_STATS
+                            </div>
+                            <div className="space-y-3">
+                                {[
+                                    {label: "PROJECTS", value: "3", sub: "Active builds"},
+                                    {label: "FRC SEASONS", value: "2", sub: "Since junior year"},
+                                    {label: "COMMITS", value: "500+", sub: "Open source"},
+                                    {label: "COFFEES", value: "0", sub: "Somehow"},
+                                ].map((stat) => (
+                                    <div key={stat.label} className="flex items-baseline justify-between">
+                                        <div>
+                                            <span className="text-sm font-mono text-white/50">{stat.label}</span>
+                                            <span
+                                                className="block text-[11px] text-white/30 font-mono">{stat.sub}</span>
+                                        </div>
+                                        <span className="text-xl font-extrabold text-white/85 tabular-nums">
+                                            {stat.value}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Decorative telemetry */}
+                        <div
+                            className="mt-6 pt-3 border-t border-white/[0.06] text-[11px] tracking-[0.12em] text-white/25 font-mono">
+                            SYS.UPTIME: 18 YEARS
+                        </div>
+                    </Panel>
+                </Reveal>
+            </div>
+        </section>
+    );
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION: SKILLS
+   ═══════════════════════════════════════════════════════ */
+
+function SkillsSection() {
+    return (
+        <section className="px-6 lg:px-24 py-20" id="skills">
+            <Reveal>
+                <SectionHeader label="02" title="Tech Stack"/>
+            </Reveal>
+
+            <Reveal delay={100}>
+                <Panel className="p-6 md:p-8">
+                    {/* Terminal header bar */}
+                    <div className="flex items-center gap-2.5 mb-8 pb-4 border-b border-white/[0.06]">
+                        <div className="flex gap-[5px]">
+                            {[0, 1, 2].map((i) => (
+                                <div
+                                    key={i}
+                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
+                                />
+                            ))}
+                        </div>
+                        <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
+                            STACK.CONFIG
+                        </span>
+                        <div className="flex-1"/>
+                        <span className="text-[11px] tracking-[0.15em] text-white/30 font-mono">
+                            {SKILLS.reduce((sum, g) => sum + g.items.length, 0)} LOADED
+                        </span>
+                    </div>
+
+                    <div className="space-y-8">
+                        {SKILLS.map((group, gi) => (
+                            <Reveal key={group.category} delay={gi * 80}>
+                                <div>
+                                    {/* Category label */}
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <span className="text-base text-cyan-400/60 font-mono leading-none">
+                                            {group.icon}
+                                        </span>
+                                        <span className="text-xs tracking-[0.2em] text-white/50 font-mono">
+                                            {group.category}
+                                        </span>
+                                        <div className="flex-1 h-px bg-white/[0.04]"/>
+                                    </div>
+
+                                    {/* Chips */}
+                                    <div className="flex flex-wrap gap-2">
+                                        {group.items.map((item) => (
+                                            <span
+                                                key={item}
+                                                className="inline-flex items-center px-3.5 py-1.5 rounded-md border border-white/[0.08]
+                                                    bg-white/[0.02] text-sm text-white/70 font-mono tracking-wide
+                                                    hover:border-cyan-400/25 hover:bg-cyan-400/[0.04] hover:text-white/90
+                                                    transition-all duration-200 cursor-default select-none"
+                                            >
+                                                {item}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div
+                        className="mt-8 pt-4 border-t border-white/[0.06] text-[11px] tracking-[0.12em] font-mono text-white/25">
+                        ALWAYS_LEARNING: TRUE
+                    </div>
+                </Panel>
+            </Reveal>
+        </section>
+    );
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION: ACHIEVEMENTS
+   ═══════════════════════════════════════════════════════ */
+
+const TAG_COLORS: Record<string, string> = {
+    ROBOTICS: "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
+    SOFTWARE: "text-cyan-300 bg-cyan-400/10 border-cyan-400/20",
+    AVIONICS: "text-violet-300 bg-violet-400/10 border-violet-400/20",
+    LEADERSHIP: "text-amber-300 bg-amber-400/10 border-amber-400/20",
 };
 
-function useIsMobile(breakpoint = 768) {
-    const [isMobile, setIsMobile] = useState(false);
+function AchievementsSection() {
+    return (
+        <section className="px-6 lg:px-24 py-20" id="achievements">
+            <Reveal>
+                <SectionHeader label="03" title="Achievements"/>
+            </Reveal>
+
+            <div className="relative">
+                {/* Vertical timeline line */}
+                <div
+                    aria-hidden
+                    className="absolute left-[19px] md:left-[23px] top-0 bottom-0 w-px bg-gradient-to-b from-cyan-400/20 via-violet-400/15 to-transparent"
+                />
+
+                <div className="space-y-4">
+                    {ACHIEVEMENTS.map((item, i) => (
+                        <Reveal key={i} delay={i * 80}>
+                            <div className="flex gap-4 md:gap-6 items-start">
+                                {/* Timeline dot */}
+                                <div className="relative flex-shrink-0 mt-5">
+                                    <div
+                                        className="h-[10px] w-[10px] md:h-3 md:w-3 rounded-full border-2 border-cyan-400/40 bg-black"/>
+                                    <div
+                                        aria-hidden
+                                        className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping"
+                                        style={{animationDuration: "3s", animationDelay: `${i * 0.5}s`}}
+                                    />
+                                </div>
+
+                                {/* Card */}
+                                <Panel className="flex-1 p-4 md:p-5 group hover:border-white/[0.12] transition-colors">
+                                    <div
+                                        className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs tracking-[0.15em] text-white/35 font-mono">
+                                                {item.year}
+                                            </span>
+                                            <h3 className="text-base font-semibold text-white/90 group-hover:text-white transition-colors">
+                                                {item.title}
+                                            </h3>
+                                        </div>
+                                        <span
+                                            className={`text-[11px] tracking-[0.15em] px-2 py-0.5 rounded border font-mono flex-shrink-0 w-fit ${
+                                                TAG_COLORS[item.tag] ?? "text-white/50 bg-white/5 border-white/10"
+                                            }`}
+                                        >
+                                            {item.tag}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-white/55 leading-relaxed">{item.desc}</p>
+                                </Panel>
+                            </div>
+                        </Reveal>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION: CONTACT
+   ═══════════════════════════════════════════════════════ */
+
+function ContactSection() {
+    return (
+        <section className="px-6 lg:px-24 pt-20 pb-32" id="contact">
+            <Reveal>
+                <SectionHeader label="04" title="Get In Touch"/>
+            </Reveal>
+
+            <Reveal delay={100}>
+                <Panel className="max-w-2xl mx-auto p-6 md:p-8">
+                    {/* Header bar */}
+                    <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.06]">
+                        <div className="flex gap-[5px]">
+                            {[0, 1, 2].map((i) => (
+                                <div
+                                    key={i}
+                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
+                                />
+                            ))}
+                        </div>
+                        <span className="text-xs tracking-[0.15em] text-white/50 font-mono">CONTACT.INIT</span>
+                    </div>
+
+                    <p className="text-[15px] text-white/60 leading-relaxed mb-8">
+                        Interested in collaborating, have a question about my projects, or just want to say hi?
+                        I&apos;m always open to connecting with fellow builders.
+                    </p>
+
+                    {/* Link cards */}
+                    <div className="space-y-3">
+                        {CONTACT_LINKS.map((link) => (
+                            <a
+                                key={link.label}
+                                href={link.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center gap-4 rounded-lg border border-white/[0.06] bg-white/[0.02]
+                                    px-5 py-4 hover:bg-white/[0.05] hover:border-cyan-400/20 transition-all"
+                            >
+                                <span className="text-white/40 group-hover:text-cyan-300 transition-colors">
+                                    {link.icon}
+                                </span>
+                                <div className="flex-1 min-w-0">
+                                    <span
+                                        className="block text-xs tracking-[0.18em] text-white/50 font-mono group-hover:text-white/60 transition-colors">
+                                        {link.label}
+                                    </span>
+                                    <span
+                                        className="block text-sm text-white/70 font-mono truncate mt-0.5 group-hover:text-white/90 transition-colors">
+                                        {link.handle}
+                                    </span>
+                                </div>
+                                <span
+                                    className="text-sm text-cyan-400/50 group-hover:text-cyan-300 group-hover:translate-x-0.5 transition-all font-mono">
+                                    →
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+
+                    {/* Footer readout */}
+                    <div
+                        className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between text-[11px] tracking-[0.12em] font-mono text-white/25">
+                        <span>RESPONSE_TIME: &lt; 24H</span>
+                        <span>STATUS: ACCEPTING_MESSAGES</span>
+                    </div>
+                </Panel>
+            </Reveal>
+        </section>
+    );
+}
+
+export default function HeroShowcase() {
+    const [active, setActive] = useState(0);
+    const [transitioning, setTransitioning] = useState(false);
+    const [hovered, setHovered] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    const progressRef = useRef(0);
+    const [progressDisplay, setProgressDisplay] = useState(0);
+    const rafRef = useRef<number | null>(null);
+    const lastTickRef = useRef<number | null>(null);
+
+    useEffect(() => setMounted(true), []);
+
+    const goTo = useCallback(
+        (idx: number) => {
+            if (idx === active || transitioning) return;
+            setTransitioning(true);
+            progressRef.current = 0;
+            setProgressDisplay(0);
+            lastTickRef.current = null;
+            setTimeout(() => {
+                setActive(idx);
+                setTransitioning(false);
+            }, 300);
+        },
+        [active, transitioning]
+    );
 
     useEffect(() => {
-        const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+        const tick = (now: number) => {
+            if (hovered) {
+                lastTickRef.current = null;
+                rafRef.current = requestAnimationFrame(tick);
+                return;
+            }
+            if (lastTickRef.current === null) lastTickRef.current = now;
+            const dt = now - lastTickRef.current;
+            lastTickRef.current = now;
+            progressRef.current += dt / DURATION;
+            setProgressDisplay(Math.min(progressRef.current, 1));
 
-        const update = () => setIsMobile(mq.matches);
-        update();
+            if (progressRef.current >= 1) {
+                progressRef.current = 0;
+                setProgressDisplay(0);
+                lastTickRef.current = null;
+                setTransitioning(true);
+                setTimeout(() => {
+                    setActive((prev) => (prev + 1) % PROJECTS.length);
+                    setTransitioning(false);
+                }, 300);
+            }
+            rafRef.current = requestAnimationFrame(tick);
+        };
+        rafRef.current = requestAnimationFrame(tick);
+        return () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
+    }, [hovered]);
 
-        mq.addEventListener("change", update);
-        return () => mq.removeEventListener("change", update);
-    }, [breakpoint]);
+    const proj = PROJECTS[active];
+    const statusClass = STATUS_CLASS[proj.status] ?? STATUS_CLASS.LEGACY;
 
-    return isMobile;
+    return (
+        <>
+            <section
+                className="relative mt-24 flex min-h-[calc(100svh-6rem)] flex-col px-6 lg:px-24 pb-4"
+                aria-labelledby="hero-heading"
+            >
+                <div
+                    className={[
+                        "w-full flex-1 flex flex-col transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
+                    ].join(" ")}
+                >
+                    {/* ════════ Side-by-side: identity + showcase ════════ */}
+                    <div className="hero-layout flex-1 flex flex-col lg:flex-row lg:items-stretch gap-3 pt-4">
+
+                        {/* ─── Left column: identity ─── */}
+                        <div
+                            className="relative lg:w-[280px] xl:w-[300px] flex-shrink-0 flex flex-col
+                        rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden"
+                        >
+                            {/* Scanlines (matching showcase) */}
+                            <div
+                                aria-hidden
+                                className="pointer-events-none absolute inset-0 opacity-[0.04]
+                            [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_3px)]"
+                            />
+
+                            <div className="relative z-[1] flex flex-col justify-between h-full p-5 lg:p-6">
+                                {/* Top: identity info */}
+                                <div>
+                                    {/* Status dot */}
+                                    <div className="mb-4 flex items-center gap-2.5">
+                                        <div
+                                            className="h-[7px] w-[7px] rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)] animate-pulse"/>
+                                        <span className="text-xs tracking-[0.2em] text-white/60 font-mono">
+                                        SYSTEMS ONLINE
+                                    </span>
+                                    </div>
+
+                                    {/* Name */}
+                                    <h1
+                                        id="hero-heading"
+                                        className={[
+                                            "text-3xl xl:text-4xl font-extrabold tracking-tight leading-[1.1]",
+                                            "bg-[linear-gradient(90deg,theme(colors.cyan.300),white,theme(colors.violet.300),white,theme(colors.cyan.300))]",
+                                            "bg-clip-text text-transparent",
+                                            "[background-size:200%_100%] animate-[bg-pan_8s_linear_infinite]",
+                                            "drop-shadow-[0_0_24px_rgba(167,139,250,0.25)]",
+                                        ].join(" ")}
+                                    >
+                                        Hi! I&apos;m Mark.
+                                    </h1>
+
+                                    <p className="mt-1.5 text-[13px] tracking-[0.15em] text-white/70 font-mono">
+                                        STUDENT ENGINEER
+                                    </p>
+
+                                    {/* Separator */}
+                                    <div className="my-4 h-px bg-white/[0.06]"/>
+
+                                    {/* Discipline list */}
+                                    <div className="space-y-2">
+                                        {["ROBOTICS", "SOFTWARE", "AVIONICS", "CAD"].map((tag) => (
+                                            <div key={tag} className="flex items-center gap-2.5">
+                                                <div className="h-1 w-1 rounded-full bg-cyan-400/40"/>
+                                                <span className="text-xs tracking-[0.15em] text-white/60 font-mono">
+                                                {tag}
+                                            </span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="my-4 h-px bg-white/[0.06]"/>
+
+                                    {/* Key-value readouts */}
+                                    <div className="space-y-1.5 text-xs tracking-[0.12em] font-mono">
+                                        {[
+                                            ["STATUS", "IN HIGHSCHOOL"],
+                                            ["PROJECTS", `${PROJECTS.length} FEATURED`],
+                                            ["LOCATION", "DIAMOND BAR, CA"],
+                                        ].map(([k, v]) => (
+                                            <div key={k} className="flex justify-between">
+                                                <span className="text-white/50">{k}</span>
+                                                <span className="text-white/70">{v}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Bottom: external links */}
+                                <div className="mt-5 lg:mt-0 flex flex-col gap-1.5">
+                                    {[
+                                        {
+                                            label: "SOURCE_REPO",
+                                            href: "https://github.com/markwu123454",
+                                            external: true,
+                                        },
+                                        {
+                                            label: "CONTACT",
+                                            href: "/contact",
+                                            external: false,
+                                        },
+                                    ].map((link) => (
+                                        <a
+                                            key={link.label}
+                                            href={link.href}
+                                            {...(link.external && {target: "_blank", rel: "noopener noreferrer"})}
+                                            className="group flex items-center justify-between rounded-md border border-white/[0.06]
+                                    bg-white/[0.02] px-3 py-2 hover:bg-white/[0.05] transition"
+                                        >
+                                    <span className="text-xs tracking-[0.15em] text-white/60 font-mono">
+                                {link.label}
+                                    </span>
+                                            <span
+                                                className="text-xs text-cyan-400/70 group-hover:text-cyan-300 transition font-mono">
+                                    →
+                                    </span>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Corner accent */}
+                            <div aria-hidden
+                                 className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/15 rounded-tl-xl pointer-events-none"/>
+                            <div aria-hidden
+                                 className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/15 rounded-br-xl pointer-events-none"/>
+                        </div>
+
+                        {/* ─── Right column: showcase + tiles ─── */}
+                        <div className="flex-1 flex flex-col min-w-0 min-h-0 gap-2">
+
+                            {/* Showcase frame */}
+                            <div
+                                onMouseEnter={() => setHovered(true)}
+                                onMouseLeave={() => setHovered(false)}
+                                className="relative flex-1 flex flex-col rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden"
+                            >
+                                {/* Scanlines */}
+                                <div
+                                    aria-hidden
+                                    className="pointer-events-none absolute inset-0 z-[5] opacity-[0.04] [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.1)_2px,rgba(255,255,255,0.1)_3px)]"
+                                />
+
+                                {/* Top bar */}
+                                <div
+                                    className="relative z-[6] flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06] bg-black/60">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="flex gap-[5px]">
+                                            {[0, 1, 2].map((i) => (
+                                                <div
+                                                    key={i}
+                                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
+                                                />
+                                            ))}
+                                        </div>
+                                        <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
+                                        FEATURED_PROJECTS.VIEW
+                                    </span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                    <span className="text-[11px] tracking-[0.15em] text-white/45 font-mono">
+                                        {String(active + 1).padStart(2, "0")}/{String(PROJECTS.length).padStart(2, "0")}
+                                    </span>
+                                        <span
+                                            className={`text-[11px] tracking-[0.15em] px-2 py-0.5 rounded border font-mono ${statusClass}`}
+                                        >
+                                        {proj.status.replace("_", " ")}
+                                    </span>
+                                    </div>
+                                </div>
+
+                                {/* Image + info */}
+                                <div
+                                    className="showcase-inner relative flex-1 grid grid-cols-1 md:grid-cols-[1fr_260px]">
+                                    {/* Image */}
+                                    <div className="relative overflow-hidden">
+                                        {PROJECTS.map((p, i) => (
+                                            <div
+                                                key={p.id}
+                                                className="absolute inset-0 bg-cover bg-center transition-all duration-500 ease-out"
+                                                style={{
+                                                    backgroundImage: `url(${p.img})`,
+                                                    opacity: i === active && !transitioning ? 1 : 0,
+                                                    transform:
+                                                        i === active && !transitioning
+                                                            ? "scale(1)"
+                                                            : "scale(1.04)",
+                                                }}
+                                            />
+                                        ))}
+
+                                        <div
+                                            className="absolute inset-0 bg-gradient-to-t from-[rgba(6,8,12,0.7)] to-transparent z-[2]"/>
+
+                                        {/* Image corner brackets */}
+                                        <div aria-hidden
+                                             className="absolute top-3 left-3 z-[3] h-4 w-4 border-t border-l border-cyan-400/30"/>
+                                        <div aria-hidden
+                                             className="absolute bottom-3 left-3 z-[3] h-4 w-4 border-b border-l border-cyan-400/30"/>
+                                        <div aria-hidden
+                                             className="absolute top-3 right-3 z-[3] h-4 w-4 border-t border-r border-cyan-400/30 md:hidden"/>
+                                        <div aria-hidden
+                                             className="absolute bottom-3 right-3 z-[3] h-4 w-4 border-b border-r border-violet-400/30 md:hidden"/>
+
+                                        {/* Telemetry */}
+                                        <div
+                                            className="absolute bottom-4 left-4 z-[3] flex gap-4 text-[11px] tracking-[0.12em] text-white/40 font-mono select-none">
+                                            <span>IDX:{String(active).padStart(3, "0")}</span>
+                                            <span>PRG:{String(Math.round(progressDisplay * 100)).padStart(3, "0")}%</span>
+                                            <span>{hovered ? "▮▮ HOLD" : "▶ CYCLE"}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Info panel */}
+                                    <div
+                                        className="relative z-[6] flex flex-col justify-between p-5 border-t md:border-t-0 md:border-l border-white/[0.06] bg-black/30">
+                                        <div>
+                                            <div
+                                                className="text-[11px] tracking-[0.18em] text-cyan-400/80 font-mono mb-2">
+                                                {proj.tag}
+                                            </div>
+                                            <h2
+                                                className={[
+                                                    "text-xl font-semibold text-white/90 leading-tight transition-all duration-300",
+                                                    transitioning
+                                                        ? "opacity-0 translate-y-2"
+                                                        : "opacity-100 translate-y-0",
+                                                ].join(" ")}
+                                            >
+                                                {proj.title}
+                                            </h2>
+                                            <p
+                                                className={[
+                                                    "mt-3 text-sm text-white/65 leading-relaxed transition-all duration-300 delay-[50ms]",
+                                                    transitioning
+                                                        ? "opacity-0 translate-y-1.5"
+                                                        : "opacity-100 translate-y-0",
+                                                ].join(" ")}
+                                            >
+                                                {proj.desc}
+                                            </p>
+                                        </div>
+
+                                        <Link
+                                            href={proj.link}
+                                            className={[
+                                                "group mt-4 inline-flex items-center gap-2 text-[13px] tracking-[0.15em] text-cyan-300 hover:text-cyan-200 font-mono transition-all",
+                                                transitioning ? "opacity-0" : "opacity-100",
+                                            ].join(" ")}
+                                        >
+                                            OPEN PROJECT
+                                            <svg
+                                                className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                            >
+                                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                                            </svg>
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                {/* Bottom bar */}
+                                <div
+                                    className="relative z-[6] flex items-center gap-3 px-4 py-2.5 border-t border-white/[0.06] bg-black/60">
+                                    <div className="flex gap-1">
+                                        {PROJECTS.map((p, i) => (
+                                            <button
+                                                key={p.id}
+                                                onClick={() => goTo(i)}
+                                                className={[
+                                                    "h-1 rounded-full border-none cursor-pointer transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                                                    i === active
+                                                        ? "w-7 bg-gradient-to-r from-cyan-400 to-violet-400"
+                                                        : "w-3 bg-white/[0.12] hover:bg-white/20",
+                                                ].join(" ")}
+                                                aria-label={`Show ${p.title}`}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <div className="flex-1 h-0.5 bg-white/[0.06] rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full rounded-full"
+                                            style={{
+                                                width: `${progressDisplay * 100}%`,
+                                                background: hovered
+                                                    ? "rgba(255,255,255,0.15)"
+                                                    : "rgba(34,211,238,0.35)",
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="flex gap-1">
+                                        {([-1, 1] as const).map((dir) => (
+                                            <button
+                                                key={dir}
+                                                onClick={() =>
+                                                    goTo(
+                                                        (active + dir + PROJECTS.length) % PROJECTS.length
+                                                    )
+                                                }
+                                                className="h-7 w-7 rounded-md border border-white/10 bg-white/[0.02] text-white/40 hover:border-cyan-400/30 hover:text-cyan-300 flex items-center justify-center text-xs cursor-pointer transition-all"
+                                            >
+                                                {dir === -1 ? "←" : "→"}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Frame accents */}
+                                <div aria-hidden
+                                     className="absolute top-0 left-0 w-5 h-5 border-t border-l border-cyan-400/20 rounded-tl-xl z-10 pointer-events-none"/>
+                                <div aria-hidden
+                                     className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-violet-400/20 rounded-br-xl z-10 pointer-events-none"/>
+                            </div>
+
+                            {/* Quick-nav tiles */}
+                            <div
+                                className="showcase-tiles grid gap-2"
+                                style={{
+                                    gridTemplateColumns: `repeat(${Math.min(PROJECTS.length, 4)}, 1fr)`,
+                                }}
+                            >
+                                {PROJECTS.map((p, i) => (
+                                    <button
+                                        key={p.id}
+                                        onClick={() => goTo(i)}
+                                        className={[
+                                            "rounded-lg border px-3 py-2 text-left cursor-pointer transition-all duration-200 font-mono",
+                                            i === active
+                                                ? "border-cyan-400/20 bg-cyan-400/5"
+                                                : "border-white/[0.06] bg-black/30 hover:bg-white/[0.03]",
+                                        ].join(" ")}
+                                    >
+                                        <div
+                                            className={[
+                                                "text-xs font-medium tracking-[0.08em] truncate transition-colors",
+                                                i === active ? "text-white/90" : "text-white/60",
+                                            ].join(" ")}
+                                        >
+                                            {p.title}
+                                        </div>
+                                        <div
+                                            className={[
+                                                "text-[10px] tracking-[0.15em] mt-0.5 transition-colors",
+                                                i === active ? "text-cyan-400/60" : "text-white/40",
+                                            ].join(" ")}
+                                        >
+                                            {p.tag.split("·")[0].trim()}
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ════════ Scroll hint ════════ */}
+                    <button
+                        onClick={() => {
+                            document.getElementById("next")?.scrollIntoView({behavior: "smooth"});
+                            history.replaceState(null, "", " ");
+                        }}
+                        className="group mx-auto mt-4 mb-2 flex items-center justify-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                        aria-label="Scroll to content"
+                    >
+                    <span className="relative inline-flex h-10 w-10 items-center justify-center">
+                        <span className="absolute inset-0 rounded-full border border-white/20 animate-pulse"/>
+                        <ArrowDown
+                            className="h-5 w-5 text-white/50 group-hover:text-white/80 animate-bounce transition"/>
+                    </span>
+                    </button>
+                </div>
+
+                {/* ════════ Responsive ════════ */}
+                <style>{`
+            @media (max-width: 1024px) {
+            .hero-layout {
+            flex-direction: column !important;
+            }
+          .hero-layout > div:first-child {
+            width: 100% !important;
+          }
+          .showcase-inner {
+            grid-template-columns: 1fr !important;
+          }
+          .showcase-tiles {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        `}</style>
+            </section>
+            <AboutSection/>
+            <SkillsSection/>
+            <AchievementsSection/>
+            <ContactSection/>
+        </>
+    );
 }

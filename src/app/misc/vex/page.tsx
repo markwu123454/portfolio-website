@@ -1,8 +1,34 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, type ReactNode } from "react";
+
+/* ── types ────────────────────────────────────────────────────── */
+interface MediaItem {
+    type: "image" | "video" | "code";
+    src: string;
+    alt: string;
+    lang?: string;
+}
+
+interface Spec {
+    label: string;
+    value: string;
+}
+
+interface Project {
+    id: string;
+    num: string;
+    title: string;
+    tag: string;
+    status: string;
+    statusColor: string;
+    ringColor: string;
+    description: string;
+    specs: Spec[];
+    media: MediaItem[];
+}
 
 /* ── project data ─────────────────────────────────────────────── */
-const projects = [
+const projects: Project[] = [
     {
         id: "swerve",
         num: "01",
@@ -89,8 +115,8 @@ const projects = [
 ];
 
 /* ── intersection observer hook ───────────────────────────────── */
-function useReveal() {
-    const ref = useRef(null);
+function useReveal(): [React.RefObject<HTMLDivElement | null>, boolean] {
+    const ref = useRef<HTMLDivElement>(null);
     const [visible, setVisible] = useState(false);
     useEffect(() => {
         const el = ref.current;
@@ -112,7 +138,7 @@ function useReveal() {
 
 /* ── small components ─────────────────────────────────────────── */
 
-function CornerBrackets({ children, className = "" }) {
+function CornerBrackets({ children, className = "" }: { children: ReactNode; className?: string }) {
     return (
         <div className={`relative ${className}`}>
             <span className="absolute -top-px -left-px w-[18px] h-[18px] border-t-2 border-l-2 border-cyan-400 rounded-tl opacity-70" />
@@ -122,7 +148,7 @@ function CornerBrackets({ children, className = "" }) {
     );
 }
 
-function TerminalBar({ label }) {
+function TerminalBar({ label }: { label: string }) {
     return (
         <div className="flex items-center gap-2.5 px-4 py-2.5 border-b border-cyan-400/[0.12] bg-black/25">
       <span className="flex gap-[5px]">
@@ -137,7 +163,7 @@ function TerminalBar({ label }) {
     );
 }
 
-function StatusDot({ statusColor, ringColor, label }) {
+function StatusDot({ statusColor, ringColor, label }: { statusColor: string; ringColor: string; label: string }) {
     return (
         <span className="inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.14em] text-white/60 uppercase">
       <span className="relative inline-block w-2 h-2">
@@ -149,7 +175,7 @@ function StatusDot({ statusColor, ringColor, label }) {
     );
 }
 
-function SectionHeader({ num, title }) {
+function SectionHeader({ num, title }: { num: string; title: string }) {
     const [ref, vis] = useReveal();
     return (
         <div
@@ -172,7 +198,7 @@ function SectionHeader({ num, title }) {
     );
 }
 
-function TelemetryLine({ items }) {
+function TelemetryLine({ items }: { items: Spec[] }) {
     return (
         <div className="flex flex-wrap gap-x-5 gap-y-1.5 px-4 py-2.5 border-t border-cyan-400/[0.12] bg-black/20">
             {items.map((item, i) => (
@@ -186,7 +212,7 @@ function TelemetryLine({ items }) {
 }
 
 /* ── media type badges ────────────────────────────────────────── */
-function MediaTypeBadge({ type }) {
+function MediaTypeBadge({ type }: { type: MediaItem["type"] }) {
     if (type === "code") {
         return (
             <span className="inline-flex items-center gap-[5px] px-2 py-[2px] rounded border border-cyan-400/20 bg-cyan-400/5 font-mono text-[9px] tracking-[0.1em] text-cyan-400 uppercase">
@@ -221,7 +247,7 @@ function MediaTypeBadge({ type }) {
 }
 
 /* ── minimal C++ syntax highlighting ──────────────────────────── */
-function syntaxHighlight(line) {
+function syntaxHighlight(line: string): ReactNode {
     if (line.trimStart().startsWith("//")) {
         return <span className="text-white/30 italic">{line}</span>;
     }
@@ -260,7 +286,7 @@ function syntaxHighlight(line) {
 }
 
 /* ── image media item ─────────────────────────────────────────── */
-function ImageMedia({ item, index }) {
+function ImageMedia({ item, index }: { item: MediaItem; index: number }) {
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
 
@@ -312,9 +338,9 @@ function ImageMedia({ item, index }) {
 }
 
 /* ── video media item ─────────────────────────────────────────── */
-function VideoMedia({ item, index }) {
+function VideoMedia({ item, index }: { item: MediaItem; index: number }) {
     const [playing, setPlaying] = useState(false);
-    const videoRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     const togglePlay = () => {
         if (!videoRef.current) return;
@@ -386,8 +412,8 @@ function VideoMedia({ item, index }) {
 }
 
 /* ── code media item ──────────────────────────────────────────── */
-function CodeMedia({ item, index }) {
-    const [code, setCode] = useState(null);
+function CodeMedia({ item, index }: { item: MediaItem; index: number }) {
+    const [code, setCode] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [expanded, setExpanded] = useState(false);
     const [error, setError] = useState(false);
@@ -479,7 +505,7 @@ function CodeMedia({ item, index }) {
 }
 
 /* ── project card ─────────────────────────────────────────────── */
-function ProjectCard({ project, delay = 0 }) {
+function ProjectCard({ project, delay = 0 }: { project: Project; delay?: number }) {
     const [ref, vis] = useReveal();
     const [activeTab, setActiveTab] = useState("gallery");
 

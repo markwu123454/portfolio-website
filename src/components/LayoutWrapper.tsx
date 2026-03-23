@@ -9,7 +9,7 @@ import {SpeedInsights} from "@vercel/speed-insights/next";
 import '@/app/ag-grid-client';
 
 // ---- BLACKLIST CONFIG ----
-const blacklistPaths = ["/takeordouble"];
+const blacklistPaths = ["/takeordouble", "/idehfbcendivd"];
 
 function isBlacklisted(pathname: string): boolean {
     return blacklistPaths.some(rule => pathname.startsWith(rule));

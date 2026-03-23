@@ -260,7 +260,7 @@ function syntaxHighlight(line: string): ReactNode {
     const combined =
         /(".*?"|'.*?')|\b(int|void|float|double|bool|char|long|short|unsigned|signed|const|static|return|if|else|for|while|do|switch|case|break|continue|class|struct|enum|namespace|using|public|private|protected|virtual|override|auto|true|false|nullptr|include|define|pragma)\b|(\b\d+\.?\d*f?\b)/g;
 
-    const parts = [];
+    const parts: ReactNode[] = [];
     let lastIndex = 0;
     let match;
 

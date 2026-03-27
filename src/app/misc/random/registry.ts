@@ -30,6 +30,8 @@ export const demos: DemoRegistry = {
         import("./GatchaSimulator").then((m: { default: DemoModule }) => m.default),
     Hamiltonian: () =>
         import("./Hamiltonian").then((m: { default: DemoModule }) => m.default),
+    ToleranceTester: () =>
+        import("./ToleranceTester").then((m: { default: DemoModule }) => m.default),
 };
 
 export type DemoSlug = keyof typeof demos;

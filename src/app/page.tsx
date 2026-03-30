@@ -90,22 +90,28 @@ const SKILLS = [
 
 const ACHIEVEMENTS = [
     {
-        year: "2025",
-        title: "FRC Regional Impact Award",
-        desc: "Team 3473 won regional impact award at Orange County Regional.",
+        year: "2026",
+        title: "District Engineering Inspiration Award Sponsored by SpaceX",
+        desc: "Team 3473 won the engineering inspiration award(EI) at San Gabriel Valley District Event.",
         tag: "ROBOTICS",
+    },
+    {
+        year: "2025",
+        title: "Regional FIRST Impact Award",
+        desc: "Team 3473 won the regional impact award at Orange County Regional.",
+        tag: "ROBOTICS",
+    },
+    {
+        year: "2025",
+        title: "JPL Invention Challenge Division Qualification",
+        desc: "Led a team that almost qualified for finals for the NASA JPL Invention Challenge.",
+        tag: "LEADERSHIP",
     },
     {
         year: "2024",
         title: "Combat Robotics Tournament Champion",
-        desc: "Led combat robotics team to win our school's end-of-year tournament.",
+        desc: "Led a combat robotics team to win our school's end-of-year tournament.",
         tag: "ROBOTICS",
-    },
-    {
-        year: "2025",
-        title: "JPL Invention Challenge",
-        desc: "Led a team that almost qualified for finals for the NASA JPL Invention Challenge.",
-        tag: "LEADERSHIP",
     },
 ];
 

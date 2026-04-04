@@ -53,9 +53,9 @@ const PROJECTS = [
 ];
 
 const STATUS_CLASS: Record<string, string> = {
-    ACTIVE: "text-emerald-300 bg-emerald-400/10 border-emerald-400/25",
-    ON_HOLD: "text-amber-300 bg-amber-400/10 border-amber-400/25",
-    LEGACY: "text-white/50 bg-white/5 border-white/10",
+    ACTIVE: "text-emerald-300 bg-emerald-400/10 border-emerald-400/50",
+    ON_HOLD: "text-amber-300 bg-amber-400/10 border-amber-400/50",
+    LEGACY: "text-white/50 bg-white/5 border-white/25",
 };
 
 const DURATION = 5000;
@@ -190,7 +190,7 @@ function Panel({
 }) {
     return (
         <div
-            className={`relative rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden ${className}`}
+            className={`relative rounded-xl border-2 border-white/[0.28] bg-black/50 backdrop-blur-2xl overflow-hidden ${className}`}
         >
             {/* Scanlines */}
             <div
@@ -201,11 +201,11 @@ function Panel({
             {/* Corner accents */}
             <div
                 aria-hidden
-                className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/15 rounded-tl-xl pointer-events-none z-10"
+                className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/45 rounded-tl-xl pointer-events-none z-10"
             />
             <div
                 aria-hidden
-                className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/15 rounded-br-xl pointer-events-none z-10"
+                className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/45 rounded-br-xl pointer-events-none z-10"
             />
             <div className="relative z-[1]">{children}</div>
         </div>
@@ -252,6 +252,33 @@ function Reveal({children, className = "", delay = 0}: {
     );
 }
 
+/** macOS-style traffic lights — grey by default, real colors on hover (easter egg) */
+function MacCircles() {
+    const [hovered, setHovered] = useState(false);
+    const colors = [
+        { idle: "bg-white/[0.06]", active: "bg-[#ff5f57]", border: "border-[#e0443e]/60" },
+        { idle: "bg-white/[0.06]", active: "bg-[#febc2e]", border: "border-[#d4a017]/60" },
+        { idle: "bg-white/[0.06]", active: "bg-[#28c840]", border: "border-[#1aab29]/60" },
+    ];
+    return (
+        <div
+            className="flex gap-[5px]"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            {colors.map((c, i) => (
+                <div
+                    key={i}
+                    className={[
+                        "h-2 w-2 rounded-full border transition-all duration-300",
+                        hovered ? `${c.active} ${c.border}` : `${c.idle} border-white/[0.1]`,
+                    ].join(" ")}
+                />
+            ))}
+        </div>
+    );
+}
+
 /* ═══════════════════════════════════════════════════════
    SECTION: ABOUT
    ═══════════════════════════════════════════════════════ */
@@ -267,14 +294,9 @@ function AboutSection() {
                 <Reveal delay={100}>
                     <Panel className="p-6 md:p-8">
                         {/* Terminal-style header bar */}
-                        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.06]">
+                        <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.25]">
                             <div className="flex gap-[5px]">
-                                {[0, 1, 2].map((i) => (
-                                    <div
-                                        key={i}
-                                        className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
-                                    />
-                                ))}
+                                <MacCircles />
                             </div>
                             <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
                                 ABOUT.README
@@ -309,7 +331,7 @@ function AboutSection() {
 
                         {/* Bottom readout */}
                         <div
-                            className="mt-6 pt-4 border-t border-white/[0.06] flex flex-wrap gap-x-6 gap-y-2 text-xs tracking-[0.12em] font-mono text-white/35">
+                            className="mt-6 pt-4 border-t border-white/[0.25] flex flex-wrap gap-x-6 gap-y-2 text-xs tracking-[0.12em] font-mono text-white/35">
                             <span>FOCUS: ROBOTICS + SOFTWARE</span>
                             <span>CLASS: 2026</span>
                         </div>
@@ -327,7 +349,7 @@ function AboutSection() {
                                 {[
                                     {label: "PROJECTS", value: "3", sub: "Active builds"},
                                     {label: "FRC SEASONS", value: "2", sub: "Since junior year"},
-                                    {label: "COMMITS", value: "500+", sub: "Open source"},
+                                    {label: "COMMITS", value: "500+", sub: "Source avaliable"},
                                     {label: "COFFEES", value: "0", sub: "Somehow"},
                                 ].map((stat) => (
                                     <div key={stat.label} className="flex items-baseline justify-between">
@@ -346,7 +368,7 @@ function AboutSection() {
 
                         {/* Decorative telemetry */}
                         <div
-                            className="mt-6 pt-3 border-t border-white/[0.06] text-[11px] tracking-[0.12em] text-white/25 font-mono">
+                            className="mt-6 pt-3 border-t border-white/[0.25] text-[11px] tracking-[0.12em] text-white/25 font-mono">
                             SYS.UPTIME: 18 YEARS
                         </div>
                     </Panel>
@@ -370,14 +392,9 @@ function SkillsSection() {
             <Reveal delay={100}>
                 <Panel className="p-6 md:p-8">
                     {/* Terminal header bar */}
-                    <div className="flex items-center gap-2.5 mb-8 pb-4 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2.5 mb-8 pb-4 border-b border-white/[0.25]">
                         <div className="flex gap-[5px]">
-                            {[0, 1, 2].map((i) => (
-                                <div
-                                    key={i}
-                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
-                                />
-                            ))}
+                            <MacCircles />
                         </div>
                         <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
                             STACK.CONFIG
@@ -408,9 +425,9 @@ function SkillsSection() {
                                         {group.items.map((item) => (
                                             <span
                                                 key={item}
-                                                className="inline-flex items-center px-3.5 py-1.5 rounded-md border border-white/[0.08]
+                                                className="inline-flex items-center px-3.5 py-1.5 rounded-md border border-white/[0.28]
                                                     bg-white/[0.02] text-sm text-white/70 font-mono tracking-wide
-                                                    hover:border-cyan-400/25 hover:bg-cyan-400/[0.04] hover:text-white/90
+                                                    hover:border-cyan-400/55 hover:bg-cyan-400/[0.04] hover:text-white/90
                                                     transition-all duration-200 cursor-default select-none"
                                             >
                                                 {item}
@@ -424,7 +441,7 @@ function SkillsSection() {
 
                     {/* Footer */}
                     <div
-                        className="mt-8 pt-4 border-t border-white/[0.06] text-[11px] tracking-[0.12em] font-mono text-white/25">
+                        className="mt-8 pt-4 border-t border-white/[0.25] text-[11px] tracking-[0.12em] font-mono text-white/25">
                         ALWAYS_LEARNING: TRUE
                     </div>
                 </Panel>
@@ -438,10 +455,10 @@ function SkillsSection() {
    ═══════════════════════════════════════════════════════ */
 
 const TAG_COLORS: Record<string, string> = {
-    ROBOTICS: "text-emerald-300 bg-emerald-400/10 border-emerald-400/20",
-    SOFTWARE: "text-cyan-300 bg-cyan-400/10 border-cyan-400/20",
-    AVIONICS: "text-violet-300 bg-violet-400/10 border-violet-400/20",
-    LEADERSHIP: "text-amber-300 bg-amber-400/10 border-amber-400/20",
+    ROBOTICS: "text-emerald-300 bg-emerald-400/10 border-emerald-400/45",
+    SOFTWARE: "text-cyan-300 bg-cyan-400/10 border-cyan-400/50",
+    AVIONICS: "text-violet-300 bg-violet-400/10 border-violet-400/50",
+    LEADERSHIP: "text-amber-300 bg-amber-400/10 border-amber-400/45",
 };
 
 function AchievementsSection() {
@@ -465,7 +482,7 @@ function AchievementsSection() {
                                 {/* Timeline dot */}
                                 <div className="relative flex-shrink-0 mt-5">
                                     <div
-                                        className="h-[10px] w-[10px] md:h-3 md:w-3 rounded-full border-2 border-cyan-400/40 bg-black"/>
+                                        className="h-[10px] w-[10px] md:h-3 md:w-3 rounded-full border-2 border-cyan-400/50 bg-black"/>
                                     <div
                                         aria-hidden
                                         className="absolute inset-0 rounded-full bg-cyan-400/20 animate-ping"
@@ -474,7 +491,7 @@ function AchievementsSection() {
                                 </div>
 
                                 {/* Card */}
-                                <Panel className="flex-1 p-4 md:p-5 group hover:border-white/[0.12] transition-colors">
+                                <Panel className="flex-1 p-4 md:p-5 group hover:border-white/[0.32] transition-colors">
                                     <div
                                         className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
                                         <div className="flex items-center gap-3">
@@ -487,7 +504,7 @@ function AchievementsSection() {
                                         </div>
                                         <span
                                             className={`text-[11px] tracking-[0.15em] px-2 py-0.5 rounded border font-mono flex-shrink-0 w-fit ${
-                                                TAG_COLORS[item.tag] ?? "text-white/50 bg-white/5 border-white/10"
+                                                TAG_COLORS[item.tag] ?? "text-white/50 bg-white/5 border-white/25"
                                             }`}
                                         >
                                             {item.tag}
@@ -518,14 +535,9 @@ function ContactSection() {
             <Reveal delay={100}>
                 <Panel className="max-w-2xl mx-auto p-6 md:p-8">
                     {/* Header bar */}
-                    <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.06]">
+                    <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-white/[0.25]">
                         <div className="flex gap-[5px]">
-                            {[0, 1, 2].map((i) => (
-                                <div
-                                    key={i}
-                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
-                                />
-                            ))}
+                            <MacCircles />
                         </div>
                         <span className="text-xs tracking-[0.15em] text-white/50 font-mono">CONTACT.INIT</span>
                     </div>
@@ -543,8 +555,8 @@ function ContactSection() {
                                 href={link.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group flex items-center gap-4 rounded-lg border border-white/[0.06] bg-white/[0.02]
-                                    px-5 py-4 hover:bg-white/[0.05] hover:border-cyan-400/20 transition-all"
+                                className="group flex items-center gap-4 rounded-lg border border-white/[0.25] bg-white/[0.02]
+                                    px-5 py-4 hover:bg-white/[0.05] hover:border-cyan-400/50 transition-all"
                             >
                                 <span className="text-white/40 group-hover:text-cyan-300 transition-colors">
                                     {link.icon}
@@ -569,7 +581,7 @@ function ContactSection() {
 
                     {/* Footer readout */}
                     <div
-                        className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between text-[11px] tracking-[0.12em] font-mono text-white/25">
+                        className="mt-8 pt-4 border-t border-white/[0.25] flex items-center justify-between text-[11px] tracking-[0.12em] font-mono text-white/25">
                         <span>RESPONSE_TIME: &lt; 24H</span>
                         <span>STATUS: ACCEPTING_MESSAGES</span>
                     </div>
@@ -659,7 +671,7 @@ export default function HeroShowcase() {
                         {/* ─── Left column: identity ─── */}
                         <div
                             className="relative lg:w-[280px] xl:w-[300px] flex-shrink-0 flex flex-col
-                        rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden"
+                        rounded-xl border border-white/[0.28] bg-black/50 backdrop-blur-2xl overflow-hidden"
                         >
                             {/* Scanlines (matching showcase) */}
                             <div
@@ -748,7 +760,7 @@ export default function HeroShowcase() {
                                             key={link.label}
                                             href={link.href}
                                             {...(link.external && {target: "_blank", rel: "noopener noreferrer"})}
-                                            className="group flex items-center justify-between rounded-md border border-white/[0.06]
+                                            className="group flex items-center justify-between rounded-md border border-white/[0.25]
                                     bg-white/[0.02] px-3 py-2 hover:bg-white/[0.05] transition"
                                         >
                                     <span className="text-xs tracking-[0.15em] text-white/60 font-mono">
@@ -765,9 +777,9 @@ export default function HeroShowcase() {
 
                             {/* Corner accent */}
                             <div aria-hidden
-                                 className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/15 rounded-tl-xl pointer-events-none"/>
+                                 className="absolute top-0 left-0 w-4 h-4 border-t border-l border-cyan-400/45 rounded-tl-xl pointer-events-none"/>
                             <div aria-hidden
-                                 className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/15 rounded-br-xl pointer-events-none"/>
+                                 className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-violet-400/45 rounded-br-xl pointer-events-none"/>
                         </div>
 
                         {/* ─── Right column: showcase + tiles ─── */}
@@ -777,7 +789,7 @@ export default function HeroShowcase() {
                             <div
                                 onMouseEnter={() => setHovered(true)}
                                 onMouseLeave={() => setHovered(false)}
-                                className="relative flex-1 flex flex-col rounded-xl border border-white/[0.08] bg-black/50 backdrop-blur-2xl overflow-hidden"
+                                className="relative flex-1 flex flex-col rounded-xl border border-white/[0.28] bg-black/50 backdrop-blur-2xl overflow-hidden"
                             >
                                 {/* Scanlines */}
                                 <div
@@ -787,15 +799,10 @@ export default function HeroShowcase() {
 
                                 {/* Top bar */}
                                 <div
-                                    className="relative z-[6] flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06] bg-black/60">
+                                    className="relative z-[6] flex items-center justify-between px-4 py-2.5 border-b border-white/[0.25] bg-black/60">
                                     <div className="flex items-center gap-2.5">
                                         <div className="flex gap-[5px]">
-                                            {[0, 1, 2].map((i) => (
-                                                <div
-                                                    key={i}
-                                                    className="h-2 w-2 rounded-full bg-white/[0.06] border border-white/[0.1]"
-                                                />
-                                            ))}
+                                            <MacCircles />
                                         </div>
                                         <span className="text-xs tracking-[0.15em] text-white/50 font-mono">
                                         FEATURED_PROJECTS.VIEW
@@ -838,11 +845,11 @@ export default function HeroShowcase() {
 
                                         {/* Image corner brackets */}
                                         <div aria-hidden
-                                             className="absolute top-3 left-3 z-[3] h-4 w-4 border-t border-l border-cyan-400/30"/>
+                                             className="absolute top-3 left-3 z-[3] h-4 w-4 border-t border-l border-cyan-400/60"/>
                                         <div aria-hidden
-                                             className="absolute bottom-3 left-3 z-[3] h-4 w-4 border-b border-l border-cyan-400/30"/>
+                                             className="absolute bottom-3 left-3 z-[3] h-4 w-4 border-b border-l border-cyan-400/60"/>
                                         <div aria-hidden
-                                             className="absolute top-3 right-3 z-[3] h-4 w-4 border-t border-r border-cyan-400/30 md:hidden"/>
+                                             className="absolute top-3 right-3 z-[3] h-4 w-4 border-t border-r border-cyan-400/60 md:hidden"/>
                                         <div aria-hidden
                                              className="absolute bottom-3 right-3 z-[3] h-4 w-4 border-b border-r border-violet-400/30 md:hidden"/>
 
@@ -857,7 +864,7 @@ export default function HeroShowcase() {
 
                                     {/* Info panel */}
                                     <div
-                                        className="relative z-[6] flex flex-col justify-between p-5 border-t md:border-t-0 md:border-l border-white/[0.06] bg-black/30">
+                                        className="relative z-[6] flex flex-col justify-between p-5 border-t md:border-t-0 md:border-l border-white/[0.25] bg-black/30">
                                         <div>
                                             <div
                                                 className="text-[11px] tracking-[0.18em] text-cyan-400/80 font-mono mb-2">
@@ -908,7 +915,7 @@ export default function HeroShowcase() {
 
                                 {/* Bottom bar */}
                                 <div
-                                    className="relative z-[6] flex items-center gap-3 px-4 py-2.5 border-t border-white/[0.06] bg-black/60">
+                                    className="relative z-[6] flex items-center gap-3 px-4 py-2.5 border-t border-white/[0.25] bg-black/60">
                                     <div className="flex gap-1">
                                         {PROJECTS.map((p, i) => (
                                             <button
@@ -946,7 +953,7 @@ export default function HeroShowcase() {
                                                         (active + dir + PROJECTS.length) % PROJECTS.length
                                                     )
                                                 }
-                                                className="h-7 w-7 rounded-md border border-white/10 bg-white/[0.02] text-white/40 hover:border-cyan-400/30 hover:text-cyan-300 flex items-center justify-center text-xs cursor-pointer transition-all"
+                                                className="h-7 w-7 rounded-md border border-white/25 bg-white/[0.02] text-white/40 hover:border-cyan-400/60 hover:text-cyan-300 flex items-center justify-center text-xs cursor-pointer transition-all"
                                             >
                                                 {dir === -1 ? "←" : "→"}
                                             </button>
@@ -956,9 +963,9 @@ export default function HeroShowcase() {
 
                                 {/* Frame accents */}
                                 <div aria-hidden
-                                     className="absolute top-0 left-0 w-5 h-5 border-t border-l border-cyan-400/20 rounded-tl-xl z-10 pointer-events-none"/>
+                                     className="absolute top-0 left-0 w-5 h-5 border-t border-l border-cyan-400/50 rounded-tl-xl z-10 pointer-events-none"/>
                                 <div aria-hidden
-                                     className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-violet-400/20 rounded-br-xl z-10 pointer-events-none"/>
+                                     className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-violet-400/50 rounded-br-xl z-10 pointer-events-none"/>
                             </div>
 
                             {/* Quick-nav tiles */}
@@ -975,8 +982,8 @@ export default function HeroShowcase() {
                                         className={[
                                             "rounded-lg border px-3 py-2 text-left cursor-pointer transition-all duration-200 font-mono",
                                             i === active
-                                                ? "border-cyan-400/20 bg-cyan-400/5"
-                                                : "border-white/[0.06] bg-black/30 hover:bg-white/[0.03]",
+                                                ? "border-cyan-400/50 bg-cyan-400/5"
+                                                : "border-white/[0.25] bg-black/30 hover:bg-white/[0.03]",
                                         ].join(" ")}
                                     >
                                         <div
@@ -1011,7 +1018,7 @@ export default function HeroShowcase() {
                         aria-label="Scroll to content"
                     >
                     <span className="relative inline-flex h-10 w-10 items-center justify-center">
-                        <span className="absolute inset-0 rounded-full border border-white/20 animate-pulse"/>
+                        <span className="absolute inset-0 rounded-full border border-white/25 animate-pulse"/>
                         <ArrowDown
                             className="h-5 w-5 text-white/50 group-hover:text-white/80 animate-bounce transition"/>
                     </span>

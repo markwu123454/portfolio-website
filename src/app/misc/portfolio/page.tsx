@@ -1,87 +1,112 @@
-// app/projects/portfolio-website/page.tsx
-"use client";
-
-import React from "react";
 import { Globe } from "lucide-react";
 
 export default function PortfolioWebsitePage() {
     return (
-        <main className="relative min-h-[calc(100vh-209px)] overflow-hidden bg-black text-white mt-24">
-            <GridGlow />
+        <>
+            {/* ── ambient background ──────────────────────────────────── */}
+            <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+                <div className="absolute inset-0 bg-[#06080d]" />
+                <div
+                    className="absolute inset-0 animate-[gridPulse_8s_ease-in-out_infinite]"
+                    style={{
+                        backgroundImage:
+                            "linear-gradient(rgba(0,220,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,220,255,0.03) 1px,transparent 1px)",
+                        backgroundSize: "56px 56px",
+                    }}
+                />
+                <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,220,255,0.06),transparent_70%)]" />
+                <div className="absolute -bottom-40 -left-32 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.05),transparent_70%)]" />
+            </div>
 
-            <section className="relative z-10 mx-auto flex max-w-3xl flex-col gap-10 px-6 pt-24 pb-32">
-                {/* Header */}
-                <header className="space-y-4">
+            <style>{`
+        @keyframes gridPulse {
+          0%,100%{opacity:0.02}
+          50%{opacity:0.06}
+        }
+        @keyframes headingGlow {
+          0%,100%{text-shadow:0 0 24px rgba(0,220,255,0.12)}
+          50%{text-shadow:0 0 44px rgba(0,220,255,0.28)}
+        }
+      `}</style>
 
-                    <h1 className="text-balance text-4xl font-black tracking-tight md:text-6xl">
-                        <GradientText>markwu.org</GradientText>
+            <main className="relative z-[1] mx-auto w-full max-w-5xl px-6 py-16 mt-16">
+                {/* ── header ────────────────────────────────────────────── */}
+                <header className="mb-14">
+                    <div className="font-mono text-[11px] tracking-[0.2em] text-white/40 uppercase mb-4">
+                        <span className="text-cyan-400">■</span> META — THIS SITE
+                    </div>
+
+                    <h1 className="font-mono text-[clamp(30px,4.5vw,48px)] font-extrabold leading-[1.08] tracking-tight animate-[headingGlow_4s_ease-in-out_infinite]">
+            <span className="bg-gradient-to-br from-cyan-400 to-violet-500 bg-clip-text text-transparent">
+              MARKWU.ORG
+            </span>
                     </h1>
 
-                    <p className="text-pretty text-sm leading-relaxed text-white/70 md:text-base">
-                        A minimalist personal website designed to present my technical projects, teams,
-                        and ongoing work in a unified hub. Built with Next.js and styled with Tailwind CSS
+                    <p className="mt-5 font-sans text-[15px] leading-[1.7] text-white/55 max-w-[520px]">
+                        The site you&apos;re looking at. A unified hub for my projects,
+                        teams, and ongoing work — built around a terminal-inspired design
+                        system with monospace typography, cyan/violet accents, and
+                        telemetry-style data presentation.
                     </p>
                 </header>
 
-                {/* Overview */}
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-                    <h2 className="mb-3 text-lg font-semibold text-white/90">Overview</h2>
-                    <p className="text-sm text-white/70 leading-relaxed">
-                        The site organizes all my major and minor projects including Team Sprocket, DroneScape,
-                        Project Aetherius, and Infernope Robotics under the domain{" "}
-                        <code className="rounded bg-white/10 px-1.5 py-0.5 text-xs text-white/80">
-                            markwu.org
-                        </code>.
-                    </p>
+                {/* ── stack ─────────────────────────────────────────────── */}
+                <div className="flex items-center gap-3 mb-7">
+                    <span className="font-mono text-[13px] font-bold text-cyan-400 tracking-[0.08em]">—</span>
+                    <span className="relative inline-block w-2 h-2">
+            <span className="absolute inset-0 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,220,255,0.35)]" />
+          </span>
+                    <span className="flex-1 h-px bg-gradient-to-r from-cyan-400/25 to-transparent" />
+                    <span className="font-mono text-[11px] tracking-[0.14em] text-white/35 uppercase">STACK</span>
                 </div>
 
-                {/* Technical details */}
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-                    <h2 className="mb-3 text-lg font-semibold text-white/90">Technical Details</h2>
-                    <ul className="list-disc space-y-1 pl-6 text-sm text-white/70">
-                        <li>Framework: Next.js 14 (App Router)</li>
-                        <li>Styling: Tailwind CSS and pure css for more complex animations</li>
-                        <li>Animation: Framer Motion</li>
-                        <li>Deployment: Vercel (DNS managed via Namecheap)</li>
-                        <li>Navigation: Megamenu grouped by project commitment and lifecycle</li>
-                        <li>Accessibility: Semantic HTML and keyboard navigation</li>
-                    </ul>
+                <div className="rounded-lg border border-cyan-400/[0.1] bg-[rgba(10,18,32,0.65)] backdrop-blur-xl overflow-hidden mb-14">
+                    <div className="flex items-center gap-2.5 px-5 py-2.5 border-b border-cyan-400/[0.08] bg-black/25">
+            <span className="flex gap-[5px]">
+              <span className="w-2 h-2 rounded-full bg-[#ff5f57] opacity-70" />
+              <span className="w-2 h-2 rounded-full bg-[#febc2e] opacity-70" />
+              <span className="w-2 h-2 rounded-full bg-[#28c840] opacity-70" />
+            </span>
+                        <span className="font-mono text-[10px] tracking-[0.14em] text-white/50 uppercase">TECH.MANIFEST</span>
+                    </div>
+                    <div className="p-5 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2">
+                        {[
+                            { l: "FRAMEWORK", v: "NEXT.JS (APP ROUTER)" },
+                            { l: "STYLING", v: "TAILWIND" },
+                            { l: "FONTS", v: "JETBRAINS MONO · IBM PLEX SANS" },
+                            { l: "DEPLOY", v: "VERCEL" },
+                            { l: "DNS", v: "CLOUDFLARE" },
+                            { l: "DOMAIN", v: "MARKWU.ORG" },
+                        ].map((t, i) => (
+                            <div key={i}>
+                                <div className="font-mono text-[9px] tracking-[0.16em] text-white/35 uppercase">{t.l}</div>
+                                <div className="font-mono text-[12px] text-white/60 mt-0.5">{t.v}</div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Design philosophy */}
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-                    <h2 className="mb-3 text-lg font-semibold text-white/90">Design Philosophy</h2>
-                    <blockquote className="border-l-2 border-white/20 pl-4 italic text-white/70">
-                        “Functional minimalism.” Every visual or structural element serves hierarchy,
-                        readability, or navigation efficiency.
-                    </blockquote>
+                {/* ── the joke ──────────────────────────────────────────── */}
+                <div className="rounded-lg border border-cyan-400/[0.1] bg-[rgba(10,18,32,0.65)] backdrop-blur-xl p-5 flex items-center gap-3 mb-14">
+                    <Globe className="h-4 w-4 text-cyan-400/50 shrink-0" />
+                    <span className="font-mono text-sm text-white/50">
+            You&apos;re already looking at it.
+          </span>
                 </div>
 
-                {/* Footer links */}
-                <div className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/90 shadow-sm backdrop-blur transition hover:bg-white/10 select-none cursor-default">
-                    Link: <Globe className="mx-2 h-4 w-4" />
-                    Oh wait — you&#39;re looking at it!
+                {/* ── footer telemetry ──────────────────────────────────── */}
+                <div className="border-t border-cyan-400/[0.1] pt-6 pb-10 flex flex-wrap gap-x-7 gap-y-1.5">
+                    {[
+                        { l: "SYS.STATUS", v: "LIVE" },
+                        { l: "PAGES", v: "YOU'RE ON ONE" },
+                    ].map((t, i) => (
+                        <span key={i} className="font-mono text-[10px] tracking-[0.1em] text-white/35">
+              <span className="text-white/50">{t.l}:</span>{" "}
+                            <span className="text-cyan-400">{t.v}</span>
+            </span>
+                    ))}
                 </div>
-            </section>
-        </main>
-    );
-}
-
-/* --------------------------------- UI Bits --------------------------------- */
-function GradientText({ children }: { children: React.ReactNode }) {
-    return (
-        <span className="bg-gradient-to-br from-white via-white to-white/60 bg-clip-text text-transparent [text-shadow:0_0_32px_rgba(255,255,255,0.15)]">
-      {children}
-    </span>
-    );
-}
-
-/* ----------------------- Background: Stars + GridGlow ---------------------- */
-function GridGlow() {
-    return (
-        <>
-            <div className="pointer-events-none absolute inset-0 z-0 [background:radial-gradient(60%_50%_at_50%_40%,rgba(32,149,243,0.25)_0%,rgba(0,0,0,0.0)_60%),radial-gradient(60%_50%_at_50%_80%,rgba(16,185,129,0.15)_0%,rgba(0,0,0,0.0)_60%)]" />
-            <div className="pointer-events-none absolute inset-0 z-0 opacity-20 [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:40px_40px]" />
+            </main>
         </>
     );
 }

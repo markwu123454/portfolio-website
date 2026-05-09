@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useId, useState } from "react";
-import { ChevronDown, ChevronRight, TriangleAlert } from "lucide-react";
+import {useId, useState} from "react";
+import {ChevronDown, ChevronRight, TriangleAlert} from "lucide-react";
 
 /*
  * IMAGE DIMENSIONS (measured):
@@ -30,7 +30,7 @@ export default function CADPage() {
         <>
             {/* ── ambient background ──────────────────────────────────── */}
             <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-                <div className="absolute inset-0 bg-[#06080d]" />
+                <div className="absolute inset-0 bg-[#06080d]"/>
                 <div
                     className="absolute inset-0 animate-[gridPulse_8s_ease-in-out_infinite]"
                     style={{
@@ -39,8 +39,10 @@ export default function CADPage() {
                         backgroundSize: "56px 56px",
                     }}
                 />
-                <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,220,255,0.06),transparent_70%)]" />
-                <div className="absolute -bottom-40 -left-32 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.05),transparent_70%)]" />
+                <div
+                    className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,220,255,0.06),transparent_70%)]"/>
+                <div
+                    className="absolute -bottom-40 -left-32 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.05),transparent_70%)]"/>
             </div>
 
             <style>{`
@@ -77,7 +79,7 @@ export default function CADPage() {
                 {/* ════════════════════════════════════════════════════════
             SEASON 1: REEFSCAPE
         ════════════════════════════════════════════════════════ */}
-                <SectionDivider num="S1" label="SEASON.REEFSCAPE" />
+                <SectionDivider num="S1" label="SEASON.REEFSCAPE"/>
 
                 <SeasonHeader
                     title="ReefScape"
@@ -91,10 +93,10 @@ export default function CADPage() {
                 />
 
                 {/* ── 1.1  pre-season ──────────────────────────────────── */}
-                <PhaseDivider num="1.1" label="PRE-SEASON" />
+                <PhaseDivider num="1.1" label="PRE-SEASON"/>
 
                 <Panel className="mb-10">
-                    <PanelBar label="ONBOARDING" />
+                    <PanelBar label="ONBOARDING"/>
                     <div className="p-5">
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-[1fr_auto]">
                             <div>
@@ -126,11 +128,11 @@ export default function CADPage() {
                 </Panel>
 
                 {/* ── 1.2  build season ─────────────────────────────────── */}
-                <PhaseDivider num="1.2" label="BUILD-SEASON.SUBSYSTEMS" />
+                <PhaseDivider num="1.2" label="BUILD-SEASON.SUBSYSTEMS"/>
 
                 {/* intake (scrapped) */}
                 <Panel className="mb-4">
-                    <PanelBar label="SUBSYS.INTAKE" status="SCRAPPED" statusColor="amber" />
+                    <PanelBar label="SUBSYS.INTAKE" status="SCRAPPED" statusColor="amber"/>
                     <div className="p-5 grid grid-cols-1 gap-5 md:grid-cols-[1fr_260px]">
                         <div>
                             <h3 className="font-mono text-base font-bold text-white/85 tracking-tight">
@@ -160,7 +162,7 @@ export default function CADPage() {
 
                 {/* climb (shipped) */}
                 <Panel className="mb-10">
-                    <PanelBar label="SUBSYS.CLIMB" status="SHIPPED" statusColor="emerald" />
+                    <PanelBar label="SUBSYS.CLIMB" status="SHIPPED" statusColor="emerald"/>
                     <div className="p-5">
                         <h3 className="font-mono text-base font-bold text-white/85 tracking-tight">
                             Climb subsystem
@@ -174,9 +176,12 @@ export default function CADPage() {
 
                         {/* 802×722(1.11), 1706×1279(1.33), 1706×1279(1.33) */}
                         <div className="mt-4 grid grid-cols-3 gap-3">
-                            <Img src="/solidworks/{C9458B6B-8225-4316-9C7E-309683CBDC82}.png" alt="Climb concept CAD" w={802} h={722} />
-                            <Img src="/solidworks/f805624e83623c87c7082c5fd1e75fba.jpg" alt="Drivebase climb test" w={1706} h={1279} />
-                            <Img src="/solidworks/58a88204ec28a905ad1667fe61e58dbe.jpg" alt="Worlds climb success" w={1706} h={1279} />
+                            <Img src="/solidworks/{C9458B6B-8225-4316-9C7E-309683CBDC82}.png" alt="Climb concept CAD"
+                                 w={802} h={722}/>
+                            <Img src="/solidworks/f805624e83623c87c7082c5fd1e75fba.jpg" alt="Drivebase climb test"
+                                 w={1706} h={1279}/>
+                            <Img src="/solidworks/58a88204ec28a905ad1667fe61e58dbe.jpg" alt="Worlds climb success"
+                                 w={1706} h={1279}/>
                         </div>
 
                         <SpecBlock
@@ -192,7 +197,7 @@ export default function CADPage() {
                 </Panel>
 
                 {/* ── 1.3  practice studies ─────────────────────────────── */}
-                <PhaseDivider num="1.3" label="PRACTICE.REVERSE-ENGINEERING" />
+                <PhaseDivider num="1.3" label="PRACTICE.REVERSE-ENGINEERING"/>
 
                 <p className="mb-6 font-sans text-sm text-white/45 max-w-2xl">
                     CAD practice of other teams&apos; robots purely from robot reveal and
@@ -206,8 +211,18 @@ export default function CADPage() {
                         title="1690 × 4414 hybrid"
                         summary="Elements taken from 1690: 4 bar ground intake, ultra-light differential elevator and arm. Elements taken from 4414: motor driven grabber."
                         gallery={[
-                            { src: "/solidworks/{AE219238-8BB7-4E2D-B0AF-E17E795C96DA}.png", alt: "Practice #1 CAD", w: 1059, h: 852 },
-                            { src: "/solidworks/{DE04C1FD-A281-4AEC-9A13-41A03C5B4156}.png", alt: "Reference robot", w: 647, h: 670 },
+                            {
+                                src: "/solidworks/{AE219238-8BB7-4E2D-B0AF-E17E795C96DA}.png",
+                                alt: "Practice #1 CAD",
+                                w: 1059,
+                                h: 852
+                            },
+                            {
+                                src: "/solidworks/{DE04C1FD-A281-4AEC-9A13-41A03C5B4156}.png",
+                                alt: "Reference robot",
+                                w: 647,
+                                h: 670
+                            },
                         ]}
                     >
                         <SubsystemSection title="Elevator">
@@ -217,8 +232,10 @@ export default function CADPage() {
                             </p>
                             {/* 466×633(0.74) + 397×845(0.47) — both portrait */}
                             <div className="mt-3 grid grid-cols-2 gap-3 max-w-md">
-                                <Img src="/solidworks/{A7574BBF-A191-48AD-9BEF-CA605A55813A}.png" alt="Elevator view" w={466} h={633} />
-                                <Img src="/solidworks/Screenshot 2025-03-10 134357.png" alt="Rigging detail" w={397} h={845} />
+                                <Img src="/solidworks/{A7574BBF-A191-48AD-9BEF-CA605A55813A}.png" alt="Elevator view"
+                                     w={466} h={633}/>
+                                <Img src="/solidworks/Screenshot 2025-03-10 134357.png" alt="Rigging detail" w={397}
+                                     h={845}/>
                             </div>
                         </SubsystemSection>
                         <SubsystemSection title="Intake">
@@ -228,8 +245,10 @@ export default function CADPage() {
                             </p>
                             {/* 970×756(1.28) + 971×785(1.24) — similar landscape */}
                             <div className="mt-3 grid grid-cols-2 gap-3">
-                                <Img src="/solidworks/{7F8C180E-E30A-4F7E-943C-4D3E5082E3C1}.png" alt="Intake" w={970} h={756} />
-                                <Img src="/solidworks/{BF2AAED7-2041-4930-A4B5-7F1724DCF4A4}.png" alt="Indexer" w={971} h={785} />
+                                <Img src="/solidworks/{7F8C180E-E30A-4F7E-943C-4D3E5082E3C1}.png" alt="Intake" w={970}
+                                     h={756}/>
+                                <Img src="/solidworks/{BF2AAED7-2041-4930-A4B5-7F1724DCF4A4}.png" alt="Indexer" w={971}
+                                     h={785}/>
                             </div>
                         </SubsystemSection>
                         <SubsystemSection title="Arm">
@@ -254,8 +273,18 @@ export default function CADPage() {
                         title="2910 × 1323 blend"
                         summary="Elements taken from 2910: multi-tool hand for algae and coral, capable of ground intake. Elements taken from 1323: elevator, and elevator pivot."
                         gallery={[
-                            { src: "/solidworks/{8B2EC6D4-D0A4-4CB5-9F3B-1B1180A80D9E}.png", alt: "Practice #2 CAD", w: 939, h: 826 },
-                            { src: "/solidworks/{D227BF55-ACFA-44EA-AC0F-70747FB6BB4A}.png", alt: "Reference robot", w: 790, h: 715 },
+                            {
+                                src: "/solidworks/{8B2EC6D4-D0A4-4CB5-9F3B-1B1180A80D9E}.png",
+                                alt: "Practice #2 CAD",
+                                w: 939,
+                                h: 826
+                            },
+                            {
+                                src: "/solidworks/{D227BF55-ACFA-44EA-AC0F-70747FB6BB4A}.png",
+                                alt: "Reference robot",
+                                w: 790,
+                                h: 715
+                            },
                         ]}
                     >
                         <SubsystemSection title="Elevator">
@@ -265,7 +294,8 @@ export default function CADPage() {
                             </p>
                             {/* 632×718 → 0.88:1 portrait */}
                             <div className="mt-3 max-w-xs">
-                                <Img src="/solidworks/{44F91A73-7658-4898-AE80-4C4A43AF14A0}.png" alt="Short-wide elevator" w={632} h={718} />
+                                <Img src="/solidworks/{44F91A73-7658-4898-AE80-4C4A43AF14A0}.png"
+                                     alt="Short-wide elevator" w={632} h={718}/>
                             </div>
                         </SubsystemSection>
                         <SubsystemSection title="Elevator Pivot">
@@ -283,7 +313,8 @@ export default function CADPage() {
                             </p>
                             {/* 758×503 → 1.51:1 landscape */}
                             <div className="mt-3 max-w-md">
-                                <Img src="/solidworks/{C2655D9F-F9C1-43DC-A1BF-22620025D351}.png" alt="End effector" w={758} h={503} />
+                                <Img src="/solidworks/{C2655D9F-F9C1-43DC-A1BF-22620025D351}.png" alt="End effector"
+                                     w={758} h={503}/>
                             </div>
                         </SubsystemSection>
                         <FailureBlock
@@ -299,10 +330,10 @@ export default function CADPage() {
                 </div>
 
                 {/* ── 1.4  competition result ──────────────────────────── */}
-                <PhaseDivider num="1.4" label="COMPETITION.RESULT" />
+                <PhaseDivider num="1.4" label="COMPETITION.RESULT"/>
 
                 <Panel className="mb-14">
-                    <PanelBar label="EVAL.FINAL" status="COMPETED" statusColor="emerald" />
+                    <PanelBar label="EVAL.FINAL" status="COMPETED" statusColor="emerald"/>
                     <div className="p-5 grid grid-cols-1 gap-6 md:grid-cols-[1fr_280px]">
                         <div>
                             <h3 className="font-mono text-base font-bold text-white/85 tracking-tight">
@@ -356,16 +387,141 @@ export default function CADPage() {
                     ]}
                 />
 
-                <Panel className="mb-14">
-                    <PanelBar label="STATUS.PENDING" />
-                    <div className="p-5 flex items-center gap-3">
-            <span className="relative inline-block w-2 h-2">
-              <span className="absolute inset-0 rounded-full bg-amber-400 animate-pulse" />
-              <span className="absolute -inset-[3px] rounded-full bg-amber-400/25 animate-pulse" />
-            </span>
-                        <span className="font-mono text-sm text-white/50">
-              2026 robot will be posted after SoCal Champs.
-            </span>
+                {/* ── 2.1  build season ─────────────────────────────────── */}
+                <PhaseDivider num="2.1" label="BUILD-SEASON.SUBSYSTEMS" />
+
+                <Panel className="mb-10">
+                    <PanelBar label="SUBSYS.STORAGE-INDEXER" status="SHIPPED" statusColor="emerald" />
+                    <div className="p-5">
+                        <h3 className="font-mono text-base font-bold text-white/85 tracking-tight">
+                            Storage &amp; Indexer
+                        </h3>
+                        <p className="mt-2 font-sans text-sm text-white/50 leading-[1.6] max-w-2xl">
+                            My subsystem this season, owned end-to-end. The goal: active,
+                            gravity-independent throughput into a 3-wide shooter — no coasting on
+                            ball weight to feed the system.
+                        </p>
+
+                        {/* TODO: final robot CAD hero image */}
+                        {/* <Img src="/sprocket/TODO_final_robot_cad.png" alt="Final robot CAD" w={} h={} className="mt-4" /> */}
+
+                        <div className="mt-6 space-y-4">
+
+                            {/* ITER.01 — small HTD belt, no paddles */}
+                            <div className="rounded-md border border-cyan-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-cyan-400/50 uppercase">ITER.01</span>
+                                    <span className="flex-1 h-px bg-cyan-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Small HTD TPU Belt</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_180px]">
+                                    <p className="font-sans text-sm text-white/50 leading-[1.6]">
+                                        Started as a quick print to skip waiting on a sourced HTD belt during early prototyping.
+                                        Standard profile, small, no paddles. Mentors noticed it was working — I got assigned the indexer subsystem.
+                                    </p>
+                                    {/* 1215×1620 → 0.75:1 */}
+                                    <Img src="/sprocket/prototype_indexer_before_paddle.png" alt="Prototype indexer, no paddles" w={1215} h={1620} />
+                                </div>
+                            </div>
+
+                            {/* ITER.02 — paddles added */}
+                            <div className="rounded-md border border-cyan-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-cyan-400/50 uppercase">ITER.02</span>
+                                    <span className="flex-1 h-px bg-cyan-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Paddles Added</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_180px]">
+                                    <p className="font-sans text-sm text-white/50 leading-[1.6]">
+                                        Added paddles to the back of the belt links to actively push balls
+                                        through the channel rather than relying on friction or gravity.
+                                    </p>
+                                    {/* 1215×1620 → 0.75:1 */}
+                                    <Img src="/sprocket/belt_with_paddle.png" alt="Belt with paddles" w={1215} h={1620} />
+                                </div>
+                            </div>
+
+                            {/* ITER.03–04 — 4in then mentor-pushed to 6in giant */}
+                            <div className="rounded-md border border-cyan-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-cyan-400/50 uppercase">ITER.03–04</span>
+                                    <span className="flex-1 h-px bg-cyan-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Scale-Up → 4″ → 6″ Giant</span>
+                                </div>
+                                <p className="font-sans text-sm text-white/50 leading-[1.6] mb-3">
+                                    Scaled the belt wider for better ball contact — first to 4&quot;, then mentors pushed for something much bigger.
+                                    Final spec: 6&quot; wide, ~200 links, ~1 kg per spool. Three of these run on the robot.
+                                </p>
+                                {/* TODO: 4in belt image if you have one */}
+                                {/* <Img src="/sprocket/TODO_4in_belt.png" alt="4in belt iteration" w={} h={} className="mt-3 mb-3" /> */}
+                                {/* 2880×2160 → 1.33:1 */}
+                                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                    <Img src="/sprocket/final_belt_v1_in_h2d.png" alt="Final belt v1 — CAD" w={2880} h={2160} />
+                                    <Img src="/sprocket/final_belt_v1_in_test.png" alt="Final belt v1 — physical test" w={2880} h={2160} />
+                                </div>
+                            </div>
+
+                            {/* ITER.05 — stiff paddles fixed */}
+                            <div className="rounded-md border border-cyan-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-cyan-400/50 uppercase">ITER.05</span>
+                                    <span className="flex-1 h-px bg-cyan-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Compliant Paddles</span>
+                                </div>
+                                <p className="font-sans text-sm text-white/50 leading-[1.6]">
+                                    Paddles were too stiff at scale — bouncing balls instead of pushing them.
+                                    Reprinted softer; compliance fixed it.
+                                </p>
+                                {/* TODO: compliant paddle close-up */}
+                                {/* <Img src="/sprocket/TODO_compliant_paddles.png" alt="Compliant paddles" w={} h={} className="mt-3" /> */}
+                            </div>
+
+                            {/* ITER.06 — grooves + chevron */}
+                            <div className="rounded-md border border-cyan-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-cyan-400/50 uppercase">ITER.06</span>
+                                    <span className="flex-1 h-px bg-cyan-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Grooves &amp; Chevron Paddles</span>
+                                </div>
+                                <p className="font-sans text-sm text-white/50 leading-[1.6]">
+                                    Added surface grooves and angled the paddles in a chevron pattern to auto-center
+                                    balls across the 6&quot; width.
+                                </p>
+                                {/* TODO: chevron belt image */}
+                                {/* <Img src="/sprocket/TODO_chevron.png" alt="Chevron paddle belt" w={} h={} className="mt-3" /> */}
+                            </div>
+
+                            {/* ITER.07 — pillow blocks + slidable gearboxes */}
+                            <div className="rounded-md border border-violet-400/10 bg-black/20 p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="font-mono text-[9px] tracking-[0.16em] text-violet-400/50 uppercase">ITER.07</span>
+                                    <span className="flex-1 h-px bg-violet-400/10" />
+                                    <span className="font-mono text-[9px] tracking-[0.12em] text-white/30 uppercase">Pillow Blocks + Slidable Gearboxes</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_200px]">
+                                    <p className="font-sans text-sm text-white/50 leading-[1.6]">
+                                        Designed full gearboxes that slide along the robot frame to set belt tension,
+                                        paired with pillow block bearing mounts. Tension adjustable without disassembly.
+                                    </p>
+                                    {/* 2880×2160 → 1.33:1 */}
+                                    <Img src="/sprocket/final_belt_v1n2_on_indexer.png" alt="Belt on indexer with gearbox" w={2880} h={2160} />
+                                </div>
+                                {/* TODO: gearbox slider close-up */}
+                                {/* <Img src="/sprocket/TODO_gearbox_slider.png" alt="Slidable gearbox" w={} h={} className="mt-3" /> */}
+                            </div>
+
+                        </div>
+
+                        <SpecBlock
+                            title="Final specs"
+                            items={[
+                                "6″ wide, ~200 links, ~1 kg/spool — 3 belts on robot",
+                                "TPU printed — no lead time, tunable durometer per part",
+                                "Chevron paddle geometry auto-centers balls laterally",
+                                "Slidable gearboxes + pillow blocks for in-situ tension adjustment",
+                                "Active push feed — gravity-independent throughput into 3-wide shooter",
+                            ]}
+                        />
                     </div>
                 </Panel>
 
@@ -373,13 +529,13 @@ export default function CADPage() {
                 <div className="border-t border-cyan-400/[0.1] pt-6 pb-10 flex flex-wrap gap-x-7 gap-y-1.5">
                     {[
                         { l: "SYS.STATUS", v: "OPERATIONAL" },
-                        { l: "PHASES", v: "4 LOADED" },
+                        { l: "PHASES", v: "5 LOADED" },
                         { l: "PLATFORM", v: "SOLIDWORKS" },
                     ].map((t, i) => (
                         <span key={i} className="font-mono text-[10px] tracking-[0.1em] text-white/35">
-              <span className="text-white/50">{t.l}:</span>{" "}
+                            <span className="text-white/50">{t.l}:</span>{" "}
                             <span className="text-cyan-400">{t.v}</span>
-            </span>
+                        </span>
                     ))}
                 </div>
             </main>
@@ -391,31 +547,32 @@ export default function CADPage() {
    LAYOUT PRIMITIVES
 ══════════════════════════════════════════════════════════════════ */
 
-function SectionDivider({ num, label }: { num: string; label: string }) {
+function SectionDivider({num, label}: { num: string; label: string }) {
     return (
         <div className="flex items-center gap-3 mb-7">
             <span className="font-mono text-[13px] font-bold text-cyan-400 tracking-[0.08em] min-w-[26px]">{num}</span>
             <span className="relative inline-block w-2 h-2">
-        <span className="absolute inset-0 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,220,255,0.35)]" />
+        <span className="absolute inset-0 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,220,255,0.35)]"/>
       </span>
-            <span className="flex-1 h-px bg-gradient-to-r from-cyan-400/25 to-transparent" />
+            <span className="flex-1 h-px bg-gradient-to-r from-cyan-400/25 to-transparent"/>
             <span className="font-mono text-[11px] tracking-[0.14em] text-white/35 uppercase">{label}</span>
         </div>
     );
 }
 
-function PhaseDivider({ num, label }: { num: string; label: string }) {
+function PhaseDivider({num, label}: { num: string; label: string }) {
     return (
         <div className="flex items-center gap-3 mb-5 mt-2">
-            <span className="font-mono text-[11px] font-bold text-violet-400/70 tracking-[0.08em] min-w-[26px]">{num}</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-400/50" />
-            <span className="flex-1 h-px bg-gradient-to-r from-violet-400/15 to-transparent" />
+            <span
+                className="font-mono text-[11px] font-bold text-violet-400/70 tracking-[0.08em] min-w-[26px]">{num}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-400/50"/>
+            <span className="flex-1 h-px bg-gradient-to-r from-violet-400/15 to-transparent"/>
             <span className="font-mono text-[10px] tracking-[0.14em] text-white/30 uppercase">{label}</span>
         </div>
     );
 }
 
-function SeasonHeader({ title, subtitle, records }: { title: string; subtitle: string; records: string[] }) {
+function SeasonHeader({title, subtitle, records}: { title: string; subtitle: string; records: string[] }) {
     return (
         <div className="mb-8">
             <h2 className="font-mono text-2xl font-extrabold text-white/90 tracking-tight">{title}</h2>
@@ -431,33 +588,44 @@ function SeasonHeader({ title, subtitle, records }: { title: string; subtitle: s
     );
 }
 
-function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function Panel({children, className = ""}: { children: React.ReactNode; className?: string }) {
     return (
-        <div className={`rounded-lg border border-cyan-400/[0.1] bg-[rgba(10,18,32,0.65)] backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-cyan-400/20 hover:shadow-[0_0_22px_rgba(0,220,255,0.07)] ${className}`}>
+        <div
+            className={`rounded-lg border border-cyan-400/[0.1] bg-[rgba(10,18,32,0.65)] backdrop-blur-xl overflow-hidden transition-all duration-300 hover:border-cyan-400/20 hover:shadow-[0_0_22px_rgba(0,220,255,0.07)] ${className}`}>
             {children}
         </div>
     );
 }
 
-function PanelBar({ label, status, statusColor }: { label: string; status?: string; statusColor?: "emerald" | "amber" | "red" }) {
-    const dots: Record<string, string> = { emerald: "bg-emerald-400", amber: "bg-amber-400", red: "bg-red-400" };
-    const rings: Record<string, string> = { emerald: "bg-emerald-400/25", amber: "bg-amber-400/25", red: "bg-red-400/25" };
+function PanelBar({label, status, statusColor}: {
+    label: string;
+    status?: string;
+    statusColor?: "emerald" | "amber" | "red"
+}) {
+    const dots: Record<string, string> = {emerald: "bg-emerald-400", amber: "bg-amber-400", red: "bg-red-400"};
+    const rings: Record<string, string> = {
+        emerald: "bg-emerald-400/25",
+        amber: "bg-amber-400/25",
+        red: "bg-red-400/25"
+    };
 
     return (
-        <div className="flex items-center justify-between gap-2.5 px-5 py-2.5 border-b border-cyan-400/[0.08] bg-black/25">
+        <div
+            className="flex items-center justify-between gap-2.5 px-5 py-2.5 border-b border-cyan-400/[0.08] bg-black/25">
             <div className="flex items-center gap-2.5">
         <span className="flex gap-[5px]">
-          <span className="w-2 h-2 rounded-full bg-[#ff5f57] opacity-70" />
-          <span className="w-2 h-2 rounded-full bg-[#febc2e] opacity-70" />
-          <span className="w-2 h-2 rounded-full bg-[#28c840] opacity-70" />
+          <span className="w-2 h-2 rounded-full bg-[#ff5f57] opacity-70"/>
+          <span className="w-2 h-2 rounded-full bg-[#febc2e] opacity-70"/>
+          <span className="w-2 h-2 rounded-full bg-[#28c840] opacity-70"/>
         </span>
                 <span className="font-mono text-[10px] tracking-[0.14em] text-white/50 uppercase">{label}</span>
             </div>
             {status && statusColor && (
-                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.14em] text-white/50 uppercase">
+                <span
+                    className="inline-flex items-center gap-1.5 font-mono text-[9px] tracking-[0.14em] text-white/50 uppercase">
           <span className="relative inline-block w-[6px] h-[6px]">
-            <span className={`absolute inset-0 rounded-full ${dots[statusColor]} animate-pulse`} />
-            <span className={`absolute -inset-[2px] rounded-full ${rings[statusColor]} animate-pulse`} />
+            <span className={`absolute inset-0 rounded-full ${dots[statusColor]} animate-pulse`}/>
+            <span className={`absolute -inset-[2px] rounded-full ${rings[statusColor]} animate-pulse`}/>
           </span>
                     {status}
         </span>
@@ -469,11 +637,14 @@ function PanelBar({ label, status, statusColor }: { label: string; status?: stri
 /* ══════════════════════════════════════════════════════════════════
    IMAGE — uses real w/h so Next.js renders correct aspect ratio
 ══════════════════════════════════════════════════════════════════ */
-function Img({ src, alt, w, h, className = "" }: { src: string; alt: string; w: number; h: number; className?: string }) {
+function Img({src, alt, w, h, className = ""}: { src: string; alt: string; w: number; h: number; className?: string }) {
     return (
-        <div className={`relative overflow-hidden rounded-md border border-cyan-400/[0.08] bg-black/30 transition-all duration-300 hover:border-cyan-400/25 hover:shadow-[0_0_14px_rgba(0,220,255,0.08)] ${className}`}>
-            <Image src={src} alt={alt} width={w} height={h} sizes="(min-width:768px) 50vw, 100vw" className="w-full h-auto object-contain" />
-            <div className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,220,255,0.012)_2px,rgba(0,220,255,0.012)_4px)]" />
+        <div
+            className={`relative overflow-hidden rounded-md border border-cyan-400/[0.08] bg-black/30 transition-all duration-300 hover:border-cyan-400/25 hover:shadow-[0_0_14px_rgba(0,220,255,0.08)] ${className}`}>
+            <Image src={src} alt={alt} width={w} height={h} sizes="(min-width:768px) 50vw, 100vw"
+                   className="w-full h-auto object-contain"/>
+            <div
+                className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,220,255,0.012)_2px,rgba(0,220,255,0.012)_4px)]"/>
         </div>
     );
 }
@@ -482,12 +653,13 @@ function Img({ src, alt, w, h, className = "" }: { src: string; alt: string; w: 
    CONTENT PRIMITIVES
 ══════════════════════════════════════════════════════════════════ */
 
-function SpecBlock({ title, items }: { title: string; items: string[] }) {
+function SpecBlock({title, items}: { title: string; items: string[] }) {
     return (
         <div className="mt-5 pt-4 border-t border-cyan-400/[0.08]">
             <div className="mb-2 flex items-center gap-2">
-                <ChevronRight className="h-3.5 w-3.5 text-cyan-400/60" />
-                <span className="font-mono text-[10px] tracking-[0.14em] text-cyan-400/70 uppercase font-bold">{title}</span>
+                <ChevronRight className="h-3.5 w-3.5 text-cyan-400/60"/>
+                <span
+                    className="font-mono text-[10px] tracking-[0.14em] text-cyan-400/70 uppercase font-bold">{title}</span>
             </div>
             <div className="space-y-1">
                 {items.map((t, i) => (
@@ -500,12 +672,13 @@ function SpecBlock({ title, items }: { title: string; items: string[] }) {
     );
 }
 
-function FailureBlock({ label, points }: { label: string; points: string[] }) {
+function FailureBlock({label, points}: { label: string; points: string[] }) {
     return (
         <div className="mt-5 rounded-md border border-red-500/20 bg-red-500/[0.04] p-4">
             <div className="mb-2 flex items-center gap-2">
-                <TriangleAlert className="h-3.5 w-3.5 text-red-400/80" />
-                <span className="font-mono text-[10px] tracking-[0.14em] text-red-400/80 uppercase font-bold">{label}</span>
+                <TriangleAlert className="h-3.5 w-3.5 text-red-400/80"/>
+                <span
+                    className="font-mono text-[10px] tracking-[0.14em] text-red-400/80 uppercase font-bold">{label}</span>
             </div>
             <div className="space-y-1">
                 {points.map((p, i) => (
@@ -522,15 +695,26 @@ function FailureBlock({ label, points }: { label: string; points: string[] }) {
    PRACTICE BLOCK (collapsible)
 ══════════════════════════════════════════════════════════════════ */
 
-interface GalleryItem { src: string; alt: string; w: number; h: number }
+interface GalleryItem {
+    src: string;
+    alt: string;
+    w: number;
+    h: number
+}
 
-function PracticeBlock({ num, title, summary, gallery, children }: { num: string; title: string; summary: string; gallery: GalleryItem[]; children: React.ReactNode }) {
+function PracticeBlock({num, title, summary, gallery, children}: {
+    num: string;
+    title: string;
+    summary: string;
+    gallery: GalleryItem[];
+    children: React.ReactNode
+}) {
     const [open, setOpen] = useState(false);
     const id = useId();
 
     return (
         <Panel>
-            <PanelBar label={`PRACTICE.${num}`} />
+            <PanelBar label={`PRACTICE.${num}`}/>
             <div className="p-5">
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div>
@@ -543,13 +727,14 @@ function PracticeBlock({ num, title, summary, gallery, children }: { num: string
                             aria-controls={id}
                             className="mt-3 inline-flex items-center gap-2 rounded-md border border-cyan-400/15 bg-cyan-400/[0.04] px-3 py-2 font-mono text-[10px] tracking-[0.12em] text-cyan-400/70 uppercase hover:bg-cyan-400/[0.08] hover:text-cyan-400 transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-cyan-400/30"
                         >
-                            <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+                            <ChevronDown
+                                className={`h-3.5 w-3.5 transition-transform duration-200 ${open ? "rotate-180" : ""}`}/>
                             {open ? "COLLAPSE" : "EXPAND DETAILS"}
                         </button>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         {gallery.map((item) => (
-                            <Img key={item.src} src={item.src} alt={item.alt} w={item.w} h={item.h} />
+                            <Img key={item.src} src={item.src} alt={item.alt} w={item.w} h={item.h}/>
                         ))}
                     </div>
                 </div>
@@ -569,11 +754,11 @@ function PracticeBlock({ num, title, summary, gallery, children }: { num: string
     );
 }
 
-function SubsystemSection({ title, children }: { title: string; children: React.ReactNode }) {
+function SubsystemSection({title, children}: { title: string; children: React.ReactNode }) {
     return (
         <section className="mt-5">
             <div className="flex items-center gap-2 mb-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-violet-400/50" />
+                <span className="w-1.5 h-1.5 rounded-full bg-violet-400/50"/>
                 <h4 className="font-mono text-[11px] tracking-[0.14em] text-violet-400/70 uppercase font-bold">{title}</h4>
             </div>
             <div className="space-y-2">{children}</div>

@@ -1,0 +1,202 @@
+/* ════════════════════════════════════════════════════════════════
+   Portfolio redesign — design tokens
+   One structural system, three palettes, automatic light/dark
+   for the two dark themes (base, hazard) via prefers-color-scheme.
+
+   ── How it works ────────────────────────────────────────────────
+   :root              → base palette, dark by default
+   @media light       → base palette flips to a light variant
+   [data-theme="manuscript"] → fixed warm-paper palette (always light;
+                                used by /music because the embedded
+                                MuseScore score is light-mode only)
+   [data-theme="hazard"]      → dark by default
+   @media light + hazard      → hazard flips to a light variant
+
+   ── Pinning a scheme ────────────────────────────────────────────
+   Add data-color-scheme="dark" or "light" to any page-root element
+   to ignore the system preference for that page.
+════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Charter&family=Iowan+Old+Style&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap');
+
+/* ─────────────────────────────────────────────────────────────────
+   1. BASE — "engineering notebook" — DARK (default)
+   ───────────────────────────────────────────────────────────────── */
+:root {
+    --bg:           #0c0c0e;
+    --bg-elev:      #131316;
+    --fg:           #e9e7e2;
+    --fg-muted:     rgba(233, 231, 226, 0.62);
+    --fg-soft:      rgba(233, 231, 226, 0.42);
+    --rule:         rgba(255, 255, 255, 0.08);
+    --rule-strong:  rgba(255, 255, 255, 0.16);
+
+    --accent:       #7dd3fc;             /* sky-300 */
+    --accent-soft:  rgba(125, 211, 252, 0.16);
+    --warn:         #fbbf24;             /* amber-400 */
+    --good:         #4ade80;             /* green-400 */
+    --bad:          #f87171;             /* red-400  */
+
+    --font-sans:    'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono:    'JetBrains Mono', 'IBM Plex Mono', ui-monospace, monospace;
+    --font-serif:   'Source Serif 4', 'Charter', 'Iowan Old Style', Georgia, serif;
+
+    --measure:      720px;
+    --gutter:       56px;
+    --section-gap:  72px;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   1L. BASE — LIGHT (auto, when OS prefers light)
+   Slightly warm paper, deeper sky accent, darker semantic colors
+   for AA contrast on near-white.
+   ───────────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg:           #fbfaf6;
+        --bg-elev:      #ffffff;
+        --fg:           #15161a;
+        --fg-muted:     rgba(21, 22, 26, 0.66);
+        --fg-soft:      rgba(21, 22, 26, 0.42);
+        --rule:         rgba(0, 0, 0, 0.10);
+        --rule-strong:  rgba(0, 0, 0, 0.20);
+
+        --accent:       #0369a1;           /* sky-700 — same family, AA on bg */
+        --accent-soft:  rgba(3, 105, 161, 0.10);
+        --warn:         #b45309;           /* amber-700 */
+        --good:         #15803d;           /* green-700 */
+        --bad:          #b91c1c;           /* red-700  */
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   2. MANUSCRIPT — fixed light, used by /music
+   Warm paper, claret editor's-pencil accent. Does NOT respond to
+   prefers-color-scheme — it stays light because the MuseScore
+   embed only renders cleanly on a light background.
+   ───────────────────────────────────────────────────────────────── */
+[data-theme="manuscript"] {
+    --bg:           #f6f3ec;
+    --bg-elev:      #ffffff;
+    --fg:           #1a1a1a;
+    --fg-muted:     rgba(26, 26, 26, 0.65);
+    --fg-soft:      rgba(26, 26, 26, 0.42);
+    --rule:         rgba(0, 0, 0, 0.10);
+    --rule-strong:  rgba(0, 0, 0, 0.22);
+
+    --accent:       #9b2c2c;             /* claret */
+    --accent-soft:  rgba(155, 44, 44, 0.10);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   3. HAZARD — DARK (default)
+   Used by /work/combat. Amber + red on near-black.
+   ───────────────────────────────────────────────────────────────── */
+[data-theme="hazard"] {
+    --bg:           #0d0d0d;
+    --bg-elev:      #181613;
+    --fg:           #f3ede2;
+    --fg-muted:     rgba(243, 237, 226, 0.60);
+    --fg-soft:      rgba(243, 237, 226, 0.40);
+    --rule:         rgba(247, 163, 19, 0.18);
+    --rule-strong:  rgba(247, 163, 19, 0.36);
+
+    --accent:       #f7a313;             /* hazard amber */
+    --accent-2:     #e23b2b;             /* incident red */
+    --accent-soft:  rgba(247, 163, 19, 0.12);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   3L. HAZARD — LIGHT (auto)
+   Same identity, on a near-white. Amber and red are darkened so
+   they remain unmistakably "hazard" rather than reading pastel.
+   ───────────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: light) {
+    [data-theme="hazard"] {
+        --bg:           #f7f4ee;
+        --bg-elev:      #ffffff;
+        --fg:           #181410;
+        --fg-muted:     rgba(24, 20, 16, 0.66);
+        --fg-soft:      rgba(24, 20, 16, 0.42);
+        --rule:         rgba(180, 83, 9, 0.22);
+        --rule-strong:  rgba(180, 83, 9, 0.45);
+
+        --accent:       #b45309;           /* deeper amber, AA on bg */
+        --accent-2:     #b91c1c;           /* deeper red */
+        --accent-soft:  rgba(180, 83, 9, 0.10);
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   4. PINS — opt out of system preference per page or per region
+   ───────────────────────────────────────────────────────────────── */
+[data-color-scheme="dark"] {
+    --bg:           #0c0c0e;
+    --bg-elev:      #131316;
+    --fg:           #e9e7e2;
+    --fg-muted:     rgba(233, 231, 226, 0.62);
+    --fg-soft:      rgba(233, 231, 226, 0.42);
+    --rule:         rgba(255, 255, 255, 0.08);
+    --rule-strong:  rgba(255, 255, 255, 0.16);
+    --accent:       #7dd3fc;
+    --accent-soft:  rgba(125, 211, 252, 0.16);
+    --warn:         #fbbf24;
+    --good:         #4ade80;
+    --bad:          #f87171;
+}
+[data-color-scheme="light"] {
+    --bg:           #fbfaf6;
+    --bg-elev:      #ffffff;
+    --fg:           #15161a;
+    --fg-muted:     rgba(21, 22, 26, 0.66);
+    --fg-soft:      rgba(21, 22, 26, 0.42);
+    --rule:         rgba(0, 0, 0, 0.10);
+    --rule-strong:  rgba(0, 0, 0, 0.20);
+    --accent:       #0369a1;
+    --accent-soft:  rgba(3, 105, 161, 0.10);
+    --warn:         #b45309;
+    --good:         #15803d;
+    --bad:          #b91c1c;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   5. STRUCTURAL CLASSES
+   ───────────────────────────────────────────────────────────────── */
+.notebook {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+.notebook[data-theme="manuscript"] { font-family: var(--font-serif); font-size: 16px; }
+
+.notebook a { color: var(--accent); text-decoration: none; }
+.notebook a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.notebook h1, .notebook h2, .notebook h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+.notebook h1 { font-size: 44px; line-height: 1.05; }
+.notebook h2 { font-size: 28px; line-height: 1.15; letter-spacing: -0.015em; }
+.notebook h3 { font-size: 18px; line-height: 1.3; }
+
+.notebook[data-theme="manuscript"] h1,
+.notebook[data-theme="manuscript"] h2,
+.notebook[data-theme="manuscript"] h3 { font-family: var(--font-serif); font-weight: 500; }
+
+.notebook .mono   { font-family: var(--font-mono); }
+.notebook .label  { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-soft); }
+.notebook .meta   { font-family: var(--font-mono); font-size: 12px; color: var(--fg-muted); }
+.notebook .dim    { color: var(--fg-muted); }
+.notebook .hairline { border: 0; border-top: 1px solid var(--rule); }
+
+/* Hazard stripe pattern — uses tokens so it inverts cleanly */
+.hazard-stripe {
+    height: 8px;
+    background: repeating-linear-gradient(
+            45deg,
+            var(--accent) 0 12px,
+            var(--bg) 12px 24px
+    );
+}

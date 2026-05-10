@@ -3,15 +3,13 @@
 /**
  * Megamenu — opens off the "Work" nav item in the site Header.
  *
+ * Desktop: hover-open 3-column panel anchored below the trigger.
+ * Mobile: not used directly — Work links are in the drawer instead.
+ *         But if the megamenu IS rendered on mobile (e.g. via direct
+ *         nav), the panel becomes a full-width stacked list.
+ *
  * Hover-open with a 120ms close-delay so a fast cursor doesn't flicker.
- * Closes on outside click, on Escape, and on route change. ArrowDown
- * on the trigger opens it for keyboard users.
- *
- *   <WorkMegamenuTrigger active={pathname.startsWith('/work')} />
- *
- * Three categorised columns (Robotics / Drones / Software), each
- * item a Link with a StatusPill. Footer rule with "All work →" and
- * "Lab →" shortcuts.
+ * Closes on outside click, on Escape, and on route change.
  */
 
 import Link from 'next/link';
@@ -25,7 +23,7 @@ import {
 } from 'react';
 
 /* ─────────────────────────────────────────────────────────────────
-   Data — single source of truth for the panel.
+   Data
    ───────────────────────────────────────────────────────────────── */
 
 type Tone = 'good' | 'warn' | 'bad' | 'neutral';
@@ -47,84 +45,76 @@ interface MenuColumn {
 
 const COLUMNS: MenuColumn[] = [
     {
-        label: 'Robotics',
+        label: 'Active',
         kicker: 'C.01',
         items: [
             {
-                href: '/work/sprocket-frc',
-                title: 'Sprocket — FRC CAD',
-                blurb: 'Climb subsystem ’24-25, full-bot ’25-26.',
-                status: 'competing',
-                tone: 'warn',
-                year: '2024 —',
-            },
-            {
-                href: '/work/combat',
-                title: 'Team Infernope',
-                blurb: 'Twelve combat robots, three years. 1st EOY ’25.',
-                status: 'archive',
-                tone: 'neutral',
-                year: '2022–25',
-            },
-            {
                 href: '/work/harbinger',
-                title: 'Harbinger Turret',
-                blurb: 'Differential-drive turret, closed-loop heading.',
-                status: 'shelved',
-                tone: 'neutral',
-                year: '2025',
-            },
-        ],
-    },
-    {
-        label: 'Drones',
-        kicker: 'C.02',
-        items: [
-            {
-                href: '/work/aetherius',
-                title: 'Aetherius UAV',
-                blurb: 'Fixed-wing, Pixhawk, custom MAVLink GCS.',
-                status: 'building',
-                tone: 'warn',
-                year: '2024 —',
-            },
-            {
-                href: '/work/aetherius-gcs',
-                title: 'Aetherius GCS',
-                blurb: 'Tauri-based ground station. MAVLink over UDP/serial.',
+                title: 'Harbinger',
+                blurb: 'Embedded C++ turret. Coilgun actuator, closed-loop heading.',
                 status: 'building',
                 tone: 'warn',
                 year: '2025 —',
             },
+            {
+                href: '/work/aetherius',
+                title: 'Aetherius UAV',
+                blurb: 'Fixed-wing, rev 4. Pixhawk 6X, MAVLink, RPi companion.',
+                status: 'building',
+                tone: 'warn',
+                year: '2024 —',
+            },
+            {
+                href: '/work/sprocketstats',
+                title: 'SprocketStats',
+                blurb: 'FRC scouting + analytics. AI transition in progress.',
+                status: 'shipped',
+                tone: 'good',
+                year: '2024 —',
+            },
         ],
     },
     {
-        label: 'Software',
+        label: 'Robotics + CAD',
+        kicker: 'C.02',
+        items: [
+            {
+                href: '/work/sprocket-frc',
+                title: 'Sprocket — FRC CAD',
+                blurb: 'Two FRC seasons with Team 3473. Climb subsystem + full-bot.',
+                status: 'archive',
+                tone: 'neutral',
+                year: '2024–26',
+            },
+            {
+                href: '/work/combat',
+                title: 'Team Infernope',
+                blurb: 'Twelve combat robots, three years. 1st place EOY \'25.',
+                status: 'archive',
+                tone: 'neutral',
+                year: '2022–25',
+            },
+        ],
+    },
+    {
+        label: 'Software + Other',
         kicker: 'C.03',
         items: [
             {
                 href: '/work/sprocketstats',
                 title: 'SprocketStats',
-                blurb: 'Real-time scouting + analytics. React · FastAPI · Postgres.',
+                blurb: 'React · FastAPI · Postgres. Used at events.',
                 status: 'shipped',
                 tone: 'good',
                 year: '2024 —',
             },
             {
-                href: '/work/match-replay',
-                title: 'Match Replay',
-                blurb: 'FRC match video annotator. Browser-only, ffmpeg-wasm.',
-                status: 'shipped',
-                tone: 'good',
-                year: '2025',
-            },
-            {
-                href: '/work/portfolio',
-                title: 'This site',
-                blurb: 'Tokenised, hand-rolled, three palettes.',
-                status: 'shipped',
-                tone: 'good',
-                year: '2026',
+                href: '/experiments',
+                title: 'Experiments',
+                blurb: 'tools, algorithms, experiments.',
+                status: 'ongoing',
+                tone: 'neutral',
+                year: 'various',
             },
         ],
     },
@@ -156,7 +146,6 @@ export function WorkMegamenuTrigger({ active = false }: WorkMegamenuTriggerProps
         }
     }, []);
 
-    // Close on outside click.
     useEffect(() => {
         if (!open) return;
         const onDown = (e: MouseEvent) => {
@@ -166,7 +155,6 @@ export function WorkMegamenuTrigger({ active = false }: WorkMegamenuTriggerProps
         return () => document.removeEventListener('mousedown', onDown);
     }, [open]);
 
-    // Close on Escape.
     useEffect(() => {
         if (!open) return;
         const onKey = (e: globalThis.KeyboardEvent) => {
@@ -176,7 +164,6 @@ export function WorkMegamenuTrigger({ active = false }: WorkMegamenuTriggerProps
         return () => document.removeEventListener('keydown', onKey);
     }, [open]);
 
-    // Close on route change.
     useEffect(() => { setOpen(false); }, [pathname]);
 
     const onTriggerKey = (e: ReactKeyboardEvent<HTMLAnchorElement>) => {
@@ -189,6 +176,8 @@ export function WorkMegamenuTrigger({ active = false }: WorkMegamenuTriggerProps
     return (
         <div
             ref={containerRef}
+            // Desktop: hover to open. On touch/mobile the drawer handles nav,
+            // but keep click-toggle as a fallback if rendered on small screens.
             onMouseEnter={() => { cancelClose(); setOpen(true); }}
             onMouseLeave={scheduleClose}
             className="relative inline-block"
@@ -247,9 +236,9 @@ function MegamenuPanel({ open, onClose }: { open: boolean; onClose: () => void }
             aria-hidden={!open}
             className={`
                 absolute top-[calc(100%+12px)] left-1/2 z-50
-                w-[760px] max-w-[calc(100vw-32px)]
+                w-[min(780px,calc(100vw-32px))]
                 bg-bg-elev border border-rule rounded-md
-                px-7 pt-6 pb-5
+                px-4 sm:px-7 pt-5 sm:pt-6 pb-4 sm:pb-5
                 shadow-[0_1px_0_var(--rule),_0_24px_48px_-12px_rgba(0,0,0,0.32)]
                 transition-[opacity,transform] duration-200 ease-out
                 ${open
@@ -257,18 +246,24 @@ function MegamenuPanel({ open, onClose }: { open: boolean; onClose: () => void }
                 : 'opacity-0 -translate-x-1/2 -translate-y-1 scale-[0.985] pointer-events-none'}
             `}
         >
-            <div className="grid grid-cols-3 gap-8">
+            {/*
+                Desktop: 3-column grid.
+                Tablet/mobile: single stacked column (panel is unlikely
+                to show on phones since header uses the drawer, but handles
+                edge cases like landscape phones or narrow tablets).
+            */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-8">
                 {COLUMNS.map((col) => (
                     <Column key={col.label} column={col} onItemClick={onClose} />
                 ))}
             </div>
 
-            <hr className="border-0 border-t border-rule my-5 mb-3" />
+            <hr className="border-0 border-t border-rule my-4 sm:my-5 mb-3" />
 
             <div className="flex justify-between items-center font-mono text-[11px] tracking-mono text-fg-soft">
-                <span>11 projects · indexed 2026.05</span>
+                <span>indexed 2026.05</span>
                 <span className="flex gap-[18px]">
-                    <FooterLink href="/lab" onClick={onClose}>Lab →</FooterLink>
+                    <FooterLink href="/lab"  onClick={onClose}>Lab →</FooterLink>
                     <FooterLink href="/work" onClick={onClose}>All work →</FooterLink>
                 </span>
             </div>
@@ -355,9 +350,9 @@ function FooterLink({
    ───────────────────────────────────────────────────────────────── */
 
 const TONE_DOT: Record<Tone, string> = {
-    good: 'bg-good',
-    warn: 'bg-warn',
-    bad: 'bg-bad',
+    good:    'bg-good',
+    warn:    'bg-warn',
+    bad:     'bg-bad',
     neutral: 'bg-fg-soft',
 };
 

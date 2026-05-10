@@ -59,7 +59,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 function Footnote() {
     return (
-        <div className="w-full max-w-[1100px] mx-auto px-8 pt-3 pb-12">
+        // Tighter horizontal padding on mobile (px-4), full px-8 on sm+
+        <div className="w-full max-w-[1100px] mx-auto px-4 sm:px-8 pt-3 pb-8 sm:pb-12">
             <div className="flex justify-between items-baseline border-t border-rule pt-[18px] font-mono text-[11px] tracking-mono text-fg-soft">
                 <span>— v1 · 2026.05</span>
                 <span>EOF</span>

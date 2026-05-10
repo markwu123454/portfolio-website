@@ -279,7 +279,7 @@ export function Button({
 
 export function Page({ children }: { children: ReactNode }) {
     return (
-        <main className="max-w-[1100px] mx-auto px-8 pb-24">{children}</main>
+        <main className="max-w-[1100px] mx-auto px-4 md:px-8 pb-24">{children}</main>
     );
 }
 
@@ -323,21 +323,17 @@ export function StatStrip({
     cols?: number;
 }) {
     const gridCols = cols ?? items.length;
-    const style = { '--strip-cols': gridCols } as CSSProperties;
     return (
         <dl
-            className="grid gap-x-8 border-t border-b border-rule py-4"
-            style={{
-                ...style,
-                gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))`,
-            }}
+            className="grid grid-cols-2 gap-x-8 gap-y-5 border-t border-b border-rule py-4 sm:[grid-template-columns:var(--strip-cols)]"
+            style={{ '--strip-cols': `repeat(${gridCols}, minmax(0, 1fr))` } as CSSProperties}
         >
             {items.map((it, i) => (
                 <div key={i} className="min-w-0">
                     <dt className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-1">
                         {it.label}
                     </dt>
-                    <dd className="m-0 text-[14px] text-fg">{it.value}</dd>
+                    <dd className="m-0 text-[14px] text-fg leading-snug">{it.value}</dd>
                 </div>
             ))}
         </dl>

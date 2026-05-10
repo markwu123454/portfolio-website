@@ -8,8 +8,9 @@
 
 import { Page, PageHeader, Section, ArrowLink } from '../components/site/primitives';
 import type { ReactNode } from 'react';
+import {Metadata} from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'Now',
     description: "What I'm working on this month.",
 };
@@ -57,24 +58,14 @@ export default function NowPage() {
 
 const ACTIVE = [
     {
-        kicker: 'Aetherius rev 4',
-        title: 'Twin-boom airframe — wiring loom, then MAVLink failsafes',
-        body: 'Wing layup is done. Boom alignment jig printed. Targeting maiden before SoCal Showdown. The failsafe config is the bit I’m nervous about — the rev 3 lockup is fresh.',
+        kicker: 'Harbinger',
+        title: 'Differential turret — getting absolute encoders to register, then differential PID',
+        body: 'Current main project. Gimbal motors on SimpleFOC, ESP32, Qt app over Bluetooth. Coilgun is in planning.',
     },
     {
-        kicker: 'SprocketStats v3.5',
-        title: 'Post-Worlds debrief, schedule view shipped',
-        body: '200+ active scouters at Worlds. Current focus: alliance-prediction view for the off-season events.',
-    },
-    {
-        kicker: 'FRC offseason',
-        title: 'Concept sketches for SoCal Showdown rebuild',
-        body: 'Drawing on what didn’t work in ReefScape. Intake redesign is the most interesting open question.',
-    },
-    {
-        kicker: 'This site',
-        title: 'v1 ship — replacing the previous portfolio',
-        body: 'Restructuring took longer than I’d like to admit. You’re reading the result.',
+        kicker: 'Aetherius UAV',
+        title: 'Twin-boom airframe — picking it back up for a summer maiden',
+        body: 'Avionics are in. Switched from RPi companion to SiK radio. One crash on the first attempt. Next flight this summer.',
     },
 ];
 
@@ -108,10 +99,8 @@ function Active() {
    ═════════════════════════════════════════════════════════════════ */
 
 const BACK_BURNER = [
-    'Harbinger turret — closed-loop tuning paused since March.',
-    'Music — second composition started, not finished.',
-    'Resume polish — overdue.',
-    'A short writeup of the rev 2 → rev 3 wiring redesign.',
+    'SprocketStats — down for maintenance, AI pivot being considered for next season.',
+    'Aetherius GCS — v1 Python/FastAPI, v2 Tauri + Python, both shelved while airframe takes priority.',
 ];
 
 function BackBurner() {
@@ -137,18 +126,18 @@ function BackBurner() {
    ═════════════════════════════════════════════════════════════════ */
 
 const LEARNING: Array<[string, ReactNode]> = [
-    ['Reading', 'Blandy & Sadowski — Programming Rust'],
-    ['Watching', 'Carlo Cipolla lectures on engineering judgement'],
-    ['Listening', 'Steve Reich — Music for Three Musicians'],
-    ['Practicing', 'CFD intuition — XFLR5 first, then OpenFOAM'],
+    ['Practicing', 'C++ — embedded, on ESP32'],
+    ['Practicing', 'Electronics — power circuits, high-voltage drivers for coilgun'],
+    ['Considering', 'KiCad or Solidworks Electronics — if coilgun PCB design gets serious'],
+    ['Considering', 'Betaflight'],
 ];
 
 function Learning() {
     return (
         <dl className="m-0">
-            {LEARNING.map(([k, v]) => (
+            {LEARNING.map(([k, v], i) => (
                 <div
-                    key={k}
+                    key={i}
                     className="grid grid-cols-[110px_minmax(0,1fr)] gap-4 py-3 border-t border-rule items-baseline"
                 >
                     <dt className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
@@ -168,7 +157,7 @@ function Learning() {
 function UpdateMeta() {
     return (
         <div className="mt-16 flex justify-between font-mono text-[11px] tracking-mono text-fg-soft">
-            <span>— /now · last updated 2026.05.04</span>
+            <span>— /now · last updated 2026.05.10</span>
             <span>Next update: 2026.06.01</span>
         </div>
     );

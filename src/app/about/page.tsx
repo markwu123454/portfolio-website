@@ -14,8 +14,9 @@ import {
     Button,
 } from '../components/site/primitives';
 import type { ReactNode } from 'react';
+import {Metadata} from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
     title: 'About',
     description:
         'Student engineer. What I am looking for, how I work, short biography.',
@@ -28,7 +29,7 @@ export default function AboutPage() {
                 tag={['ABOUT', '2026', '#002']}
                 title="I lead with what I’m"
                 subtitle={<>looking for — biography is at the bottom.</>}
-                dek="Recruiters, professors, lab leads — read the top half. Friends and fellow students — read the bottom. Either way, the contact box on Home works."
+                dek="Recruiters, professors, lab leads — read the top half. Friends and fellow students — read the bottom. Either way, the contact box on the home page works."
             />
 
             <Section num="01" title="What I’m looking for">

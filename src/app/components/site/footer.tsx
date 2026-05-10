@@ -15,7 +15,7 @@ import type { ReactNode } from 'react';
 
 export function Footer() {
     return (
-        <footer className="w-full max-w-[1100px] mx-auto px-8 pt-12 pb-2 mt-24 border-t border-rule">
+        <footer className="w-full max-w-[1100px] mx-auto px-8 pt-12 pb-2 mt-3 border-t border-rule">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 text-[13px]">
                 <Column>
                     <Identity />

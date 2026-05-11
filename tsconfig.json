@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "types": ["youtube"],
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

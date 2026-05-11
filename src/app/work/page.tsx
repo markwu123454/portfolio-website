@@ -20,9 +20,9 @@ import {
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Work — 7 projects',
+    title: 'Work — 5 projects',
     description:
-        'Seven projects. Filter by domain. Status reflects current activity, not completion year.',
+        'Five projects. Filter by domain. Status reflects current activity, not completion year.',
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -50,7 +50,7 @@ const PROJECTS: Project[] = [
     { num: '02', href: '/work/aetherius',     title: 'Aetherius UAV',           blurb: 'Fixed-wing drone — Pixhawk avionics, MAVLink telemetry. Twin-boom in build.',                              status: 'building', domain: 'Drones',   year: '2024 —',  recency: 95  },
     { num: '03', href: '/work/sprocketstats', title: 'SprocketStats',           blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events. AI transition ongoing.', status: 'shipped',  domain: 'Software', year: '2024 —',  recency: 90  },
     { num: '04', href: '/work/sprocket-frc',  title: 'Sprocket — FRC CAD',      blurb: 'Two seasons with Team 3473. Climb subsystem then full-bot ownership.',                                     status: 'archive',  domain: 'Robotics', year: '2024–26', recency: 80  },
-    { num: '05', href: '/work/combat',        title: 'Team Infernope',          blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",                               status: 'archive',  domain: 'Combat',   year: '2022–25', recency: 70  },
+    { num: '05', href: '/work/combat',        title: 'Team Infernope',          blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",                               status: 'archive',  domain: 'Combat',   year: '2020–24', recency: 70  },
 ];
 
 const STATUS_TONE: Record<Status, Tone> = {
@@ -91,7 +91,7 @@ export default async function WorkIndexPage({ searchParams }: PageProps) {
     return (
         <Page>
             <PageHeader
-                tag={['WORK', '7 PROJECTS', '#003']}
+                tag={['WORK', '5 PROJECTS', '#003']}
                 title="Seven projects."
                 subtitle="Filter by domain."
                 dek="Status reflects current activity, not completion year. Click any row to read the case study."

@@ -263,7 +263,7 @@ function MegamenuPanel({ open, onClose }: { open: boolean; onClose: () => void }
             <div className="flex justify-between items-center font-mono text-[11px] tracking-mono text-fg-soft">
                 <span>indexed 2026.05</span>
                 <span className="flex gap-[18px]">
-                    <FooterLink href="/lab"  onClick={onClose}>Lab →</FooterLink>
+                    <FooterLink href="/now"  onClick={onClose}>Now →</FooterLink>
                     <FooterLink href="/work" onClick={onClose}>All work →</FooterLink>
                 </span>
             </div>

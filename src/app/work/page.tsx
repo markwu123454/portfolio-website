@@ -51,8 +51,6 @@ const PROJECTS: Project[] = [
     { num: '03', href: '/work/sprocketstats', title: 'SprocketStats',           blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events. AI transition ongoing.', status: 'shipped',  domain: 'Software', year: '2024 —',  recency: 90  },
     { num: '04', href: '/work/sprocket-frc',  title: 'Sprocket — FRC CAD',      blurb: 'Two seasons with Team 3473. Climb subsystem then full-bot ownership.',                                     status: 'archive',  domain: 'Robotics', year: '2024–26', recency: 80  },
     { num: '05', href: '/work/combat',        title: 'Team Infernope',          blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",                               status: 'archive',  domain: 'Combat',   year: '2022–25', recency: 70  },
-    { num: '07', href: '/work/scavenger',     title: 'JPL Invention Challenge', blurb: "Team captain. Reached regional finals. The machine was overcomplicated — the leadership lesson wasn't.",   status: 'archive',  domain: 'Robotics', year: '2024–25', recency: 60  },
-    { num: '06', href: '/work/vex',           title: 'VEX',                     blurb: 'Pre-FRC robotics. Competition code, mechanisms.',                                                          status: 'archive',  domain: 'Robotics', year: '2021–23', recency: 50  },
 ];
 
 const STATUS_TONE: Record<Status, Tone> = {

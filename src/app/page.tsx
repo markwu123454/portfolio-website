@@ -101,7 +101,7 @@ function Hero() {
 
                 <div className="mt-8 sm:mt-10 flex gap-3 flex-wrap items-center">
                     <Button href="/work" variant="primary" arrow>See work</Button>
-                    <Button href="/resume.pdf" variant="ghost" external>Resume.pdf</Button>
+                    <Button  href="/resume.pdf#view=FitV" variant="ghost" external>Resume.pdf</Button>
                     {/* Email hint — only meaningful where there's room */}
                     <span className="hidden sm:inline font-mono text-xs text-fg-soft ml-1">
                         — me@markwu.org · response &lt; 24h
@@ -333,7 +333,7 @@ function Contact() {
         { kicker: 'Email',    label: 'me@markwu.org',                  href: 'mailto:me@markwu.org',                          glyph: '↗', external: true },
         { kicker: 'GitHub',   label: 'github.com/markwu123454',        href: 'https://github.com/markwu123454',               glyph: '↗', external: true },
         { kicker: 'LinkedIn', label: 'linkedin.com/in/mark-mai-wu',    href: 'https://linkedin.com/in/mark-mai-wu',           glyph: '↗', external: true },
-        { kicker: 'Resume',   label: 'resume.pdf',                     href: '/resume.pdf',                                   glyph: '↓', external: true },
+        { kicker: 'Resume',   label: 'resume.pdf',                     href: '/resume.pdf#view=FitV',                                   glyph: '↓', external: true },
     ];
 
     return (

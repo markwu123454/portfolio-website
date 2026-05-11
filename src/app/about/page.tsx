@@ -74,7 +74,7 @@ function LookingFor() {
                     end-to-end.
                 </p>
                 <div className="mt-6 flex gap-3 flex-wrap">
-                    <Button href="/resume.pdf" variant="primary" arrow external>
+                    <Button href="/resume.pdf#view=FitV" variant="primary" arrow external>
                         Resume.pdf
                     </Button>
                     <Button href="mailto:me@markwu.org" variant="ghost" external>

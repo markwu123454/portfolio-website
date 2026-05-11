@@ -30,7 +30,7 @@ export function Footer() {
                 <Column heading="Writing">
                     <FLink href="/music">Music</FLink>
                     <FLink href="/about">About</FLink>
-                    <FLink href="/resume.pdf" external>Resume.pdf</FLink>
+                    <FLink href="/resume.pdf#view=FitV" external>Resume.pdf</FLink>
                 </Column>
 
                 <Column heading="Contact">

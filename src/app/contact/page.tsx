@@ -107,7 +107,7 @@ function PrimarySlab() {
                 >
                     Compose
                 </Button>
-                <Button href="/resume.pdf" variant="ghost" external>
+                <Button href="/resume.pdf#view=FitV" variant="ghost" external>
                     Resume.pdf
                 </Button>
             </div>
@@ -159,7 +159,7 @@ const CHANNELS: Channel[] = [
         kicker: 'Resume',
         label: 'resume.pdf',
         meta: 'one page · updated 2026.05',
-        href: '/resume.pdf',
+        href: '/resume.pdf#view=FitV',
         glyph: '↓',
         external: true,
     },

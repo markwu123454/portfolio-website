@@ -27,5 +27,5 @@ Disallow: /
 User-agent: Applebot-Extended
 Disallow: /
 
-# EU DSM Directive Article 4 opt-out (legally binding in EU)
+# opt-out
 Content-Signal: search=yes,ai-train=no

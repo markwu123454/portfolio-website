@@ -196,7 +196,7 @@ const IMG = {
     currentApp:   { src: "/sprocket/Screenshot 2026-05-10 075229.png", w: 2559, h: 1599 },
     earlierApp:   { src: "/sprocket/Screenshot 2026-04-03 205309.png", w: 985,  h: 487  },
     sliderClose:  { src: "/sprocket/img.png",                          w: 503,  h: 898  },
-    matchReview:  { src: "/sprocket/scouting_2026.png",                w: 469,  h: 985  },
+    matchReview: { src: "/sprocket/scouting_2026.png", w: 1919, h: 914 },
     yoloTracking: { src: "/sprocket/img_1.png",                        w: 2879, h: 1799 },
 } as const;
 
@@ -427,14 +427,14 @@ export default function SprocketStatsPage() {
                     </div>
 
                     <figure className="ss-fig">
-                        <div className="frame ss-fig-portrait">
+                        <div className="frame">
                             <div className="img-wrap">
                                 <Image
                                     src={IMG.matchReview.src}
                                     width={IMG.matchReview.w}
                                     height={IMG.matchReview.h}
                                     alt="Match review screen from the data-presentation side of the app."
-                                    sizes="(max-width: 720px) 100vw, 380px"
+                                    sizes="(max-width: 720px) 100vw, 1936px"
                                 />
                             </div>
                         </div>

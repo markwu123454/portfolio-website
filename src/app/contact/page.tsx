@@ -1,173 +1,271 @@
-import { Mail, FileText, ExternalLink } from "lucide-react";
-import { SiGithub, SiLinkedin } from "react-icons/si";
+/**
+ * Contact — /contact
+ *
+ * Server component. Quiet, editorial. Email-forward.
+ *
+ * Per DIRECTION §6: "Single column. Four links: email, GitHub, LinkedIn,
+ * resume.pdf. Drop the heavy cyan card grid and animated headings.
+ * Add response-time line."
+ *
+ * Layout:
+ *   PageHeader  (kicker · title · dek)
+ *   Primary slab: email + response time (the actual call to action)
+ *   01 — Channels       (the four links, expanded with meta)
+ *   02 — Logistics      (timezone, location, last updated, fingerprint)
+ */
+
+import type { ReactNode } from 'react';
+import {
+    Page,
+    PageHeader,
+    Section,
+    Tag,
+    Button,
+} from '../components/site/primitives';
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: 'Contact — Mark Wu',
+    description:
+        'Email, GitHub, LinkedIn, resume. Open to internships and lab placements for Summer 2026.',
+};
 
 export default function ContactPage() {
     return (
-        <>
-            {/* ── ambient background ──────────────────────────────────── */}
-            <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-                <div className="absolute inset-0 bg-[#06080d]" />
-                <div
-                    className="absolute inset-0 animate-[gridPulse_8s_ease-in-out_infinite]"
-                    style={{
-                        backgroundImage:
-                            "linear-gradient(rgba(0,220,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,220,255,0.03) 1px,transparent 1px)",
-                        backgroundSize: "56px 56px",
-                    }}
-                />
-                <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,220,255,0.06),transparent_70%)]" />
-                <div className="absolute -bottom-40 -left-32 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.05),transparent_70%)]" />
-            </div>
-
-            <style>{`
-        @keyframes gridPulse {
-          0%,100%{opacity:0.02}
-          50%{opacity:0.06}
-        }
-        @keyframes headingGlow {
-          0%,100%{text-shadow:0 0 24px rgba(0,220,255,0.12)}
-          50%{text-shadow:0 0 44px rgba(0,220,255,0.28)}
-        }
-      `}</style>
-
-            <main className="relative z-[1] mx-auto w-full max-w-4xl px-6 py-16 mt-16">
-                {/* ── header ────────────────────────────────────────────── */}
-                <header className="mb-12">
-                    <div className="font-mono text-[11px] tracking-[0.2em] text-white/40 uppercase mb-4">
-                        <span className="text-cyan-400">■</span> GENERAL — CONTACT
+        <Page>
+            <PageHeader
+                tag={['CONTACT', '2026', '#005']}
+                title="Write any time."
+                subtitle="Recruiters, professors, lab leads — and other student engineers."
+                dek={
+                    <>
+                        Email is best. I read everything and reply within a day,
+                        usually faster. No form to fill out — please just send
+                        the message you want me to read.
+                    </>
+                }
+                after={
+                    <div className="flex flex-wrap gap-2.5">
+                        <Tag variant="accent">Open · internships + labs</Tag>
+                        <Tag variant="outline">Available — Summer 2026</Tag>
                     </div>
+                }
+            />
 
-                    <h1 className="font-mono text-[clamp(30px,4.5vw,48px)] font-extrabold leading-[1.08] tracking-tight animate-[headingGlow_4s_ease-in-out_infinite]">
-            <span className="bg-gradient-to-br from-cyan-400 to-violet-500 bg-clip-text text-transparent">
-              CONNECT
-            </span>
-                    </h1>
+            <PrimarySlab />
 
-                    <p className="mt-5 font-sans text-[15px] leading-[1.7] text-white/50 max-w-md">
-                        Collaborations, projects, or a quick chat.
-                    </p>
-                </header>
+            <Section num="01" title="Channels" kicker="WHERE TO REACH ME">
+                <Channels />
+            </Section>
 
-                {/* ── contact grid ──────────────────────────────────────── */}
-                <div className="grid gap-3 sm:grid-cols-2 mb-14">
-                    <ContactCard
-                        href="mailto:me@markwu.org"
-                        icon={<Mail className="h-4 w-4" />}
-                        tag="EMAIL"
-                        title="Professional Email"
-                        subtitle="me@markwu.org"
-                    />
-                    <ContactCard
-                        href="https://github.com/markwu123454"
-                        icon={<SiGithub className="h-4 w-4" />}
-                        tag="CODE"
-                        title="GitHub"
-                        subtitle="Explore my code and projects"
-                        external
-                    />
-                    <ContactCard
-                        href="https://www.linkedin.com/in/mark-mai-wu/"
-                        icon={<SiLinkedin className="h-4 w-4" />}
-                        tag="PROFESSIONAL"
-                        title="LinkedIn"
-                        subtitle="Professional profile and experience"
-                        external
-                    />
-                    <ContactCard
-                        href="mailto:mark.wu123454@gmail.com"
-                        icon={<Mail className="h-4 w-4" />}
-                        tag="EMAIL"
-                        title="Personal Email"
-                        subtitle="mark.wu123454@gmail.com"
-                    />
-                    <ContactCard
-                        href="/resume"
-                        icon={<FileText className="h-4 w-4" />}
-                        tag="RESUME"
-                        title="Resume"
-                        subtitle="/resume"
-                        highlight
-                    />
-                </div>
-
-                {/* ── footer telemetry ──────────────────────────────────── */}
-                <div className="border-t border-cyan-400/[0.1] pt-6 pb-10 flex flex-wrap gap-x-7 gap-y-1.5">
-                    {[
-                        { l: "CHANNELS", v: "5" },
-                        { l: "STATUS", v: "OPEN" },
-                    ].map((t, i) => (
-                        <span key={i} className="font-mono text-[10px] tracking-[0.1em] text-white/35">
-              <span className="text-white/50">{t.l}:</span>{" "}
-                            <span className="text-cyan-400">{t.v}</span>
-            </span>
-                    ))}
-                </div>
-            </main>
-        </>
+            <Section num="02" title="Logistics" kicker="THE FINE PRINT">
+                <Logistics />
+            </Section>
+        </Page>
     );
 }
 
-/* ══════════════════════════════════════════════════════════════════
-   CONTACT CARD
-══════════════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════
+   PRIMARY SLAB — email is the headline; everything else is below.
+   Hairlines, no card. Size hierarchy does the work.
+   ═════════════════════════════════════════════════════════════════ */
 
-function ContactCard({
-                         href,
-                         icon,
-                         tag,
-                         title,
-                         subtitle,
-                         external,
-                         highlight,
-                     }: {
-    href: string;
-    icon: React.ReactNode;
-    tag: string;
-    title: string;
-    subtitle: string;
-    external?: boolean;
-    highlight?: boolean;
-}) {
+function PrimarySlab() {
     return (
-        <a
-            href={href}
-            target={external ? "_blank" : undefined}
-            rel={external ? "noopener noreferrer" : undefined}
-            className={`group block rounded-lg border bg-[rgba(10,18,32,0.65)] backdrop-blur-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_22px_rgba(0,220,255,0.08)] ${
-                highlight
-                    ? "border-cyan-400/25 hover:border-cyan-400/40"
-                    : "border-cyan-400/[0.1] hover:border-cyan-400/25"
-            }`}
-        >
-            {/* scanline */}
-            <div className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(0,220,255,0.008)_2px,rgba(0,220,255,0.008)_4px)]" />
-
-            <div className="p-5 flex items-start gap-4">
-                {/* icon */}
-                <div className={`shrink-0 mt-0.5 flex items-center justify-center w-9 h-9 rounded-md border transition-colors duration-200 ${
-                    highlight
-                        ? "border-cyan-400/30 bg-cyan-400/[0.08] text-cyan-400"
-                        : "border-cyan-400/[0.1] bg-cyan-400/[0.04] text-cyan-400/60 group-hover:text-cyan-400 group-hover:border-cyan-400/25"
-                }`}>
-                    {icon}
+        <section className="border-t border-b border-rule-strong py-10 my-2 grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-8 items-end">
+            <div>
+                <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-3">
+                    Best — by a wide margin
                 </div>
-
-                {/* text */}
-                <div className="flex-1 min-w-0">
-                    <div className="font-mono text-[9px] tracking-[0.16em] text-white/35 uppercase">
-                        {tag}
-                    </div>
-                    <div className="mt-0.5 font-mono text-sm font-bold text-white/85 tracking-tight">
-                        {title}
-                    </div>
-                    <div className="mt-0.5 font-sans text-[12px] text-white/40 leading-[1.4] truncate">
-                        {subtitle}
-                    </div>
-                </div>
-
-                {/* arrow */}
-                <ExternalLink className="shrink-0 mt-1 h-3.5 w-3.5 text-white/15 group-hover:text-cyan-400/50 transition-colors duration-200" />
+                <a
+                    href="mailto:me@markwu.org?subject=Hello%20Mark"
+                    className="
+                        block no-underline text-fg
+                        font-mono font-medium
+                        text-[clamp(28px,4.4vw,44px)]
+                        tracking-[-0.01em]
+                        leading-[1.05]
+                        hover:text-accent
+                        transition-colors duration-150
+                    "
+                >
+                    me@markwu.org
+                </a>
+                <p className="mt-4 mb-0 text-[14.5px] text-fg-muted leading-relaxed max-w-[560px]">
+                    I read every message. Typical reply{' '}
+                    <span className="text-fg font-medium">under 24 hours</span>{' '}
+                    on weekdays, longer during competition weekends or AP windows.
+                </p>
             </div>
-        </a>
+
+            <div className="flex gap-2.5 flex-wrap">
+                <Button
+                    href="mailto:me@markwu.org?subject=Hello%20Mark"
+                    variant="primary"
+                    arrow
+                    external
+                >
+                    Compose
+                </Button>
+                <Button href="/resume.pdf" variant="ghost" external>
+                    Resume.pdf
+                </Button>
+            </div>
+        </section>
+    );
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   01 — CHANNELS
+   Same row pattern as home, with one extra column: a mono meta
+   field (handle, signature, repo count) so each row earns the row.
+   ═════════════════════════════════════════════════════════════════ */
+
+interface Channel {
+    kicker: string;
+    label: string;
+    meta: string;
+    href: string;
+    glyph: '↗' | '↓';
+    external: boolean;
+}
+
+const CHANNELS: Channel[] = [
+    {
+        kicker: 'Email',
+        label: 'me@markwu.org',
+        meta: 'usually < 24h',
+        href: 'mailto:me@markwu.org',
+        glyph: '↗',
+        external: true,
+    },
+    {
+        kicker: 'GitHub',
+        label: 'github.com/markwu123454',
+        meta: 'code · CAD · this site',
+        href: 'https://github.com/markwu123454',
+        glyph: '↗',
+        external: true,
+    },
+    {
+        kicker: 'LinkedIn',
+        label: 'linkedin.com/in/mark-mai-wu',
+        meta: 'work history · mutuals',
+        href: 'https://linkedin.com/in/mark-mai-wu',
+        glyph: '↗',
+        external: true,
+    },
+    {
+        kicker: 'Resume',
+        label: 'resume.pdf',
+        meta: 'one page · updated 2026.05',
+        href: '/resume.pdf',
+        glyph: '↓',
+        external: true,
+    },
+];
+
+function Channels() {
+    return (
+        <ul className="list-none m-0 p-0">
+            {CHANNELS.map((c) => (
+                <li key={c.kicker} className="border-t border-rule last:border-b">
+                    <a
+                        href={c.href}
+                        target={c.external ? '_blank' : undefined}
+                        rel={c.external ? 'noopener noreferrer' : undefined}
+                        className="
+                            grid grid-cols-[110px_minmax(0,1fr)_auto_24px]
+                            gap-4 md:gap-6 py-4
+                            text-fg no-underline items-baseline group
+                        "
+                    >
+                        <span className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
+                            {c.kicker}
+                        </span>
+                        <span className="text-[16px] text-fg font-medium tracking-[-0.005em] group-hover:text-accent transition-colors duration-150 truncate">
+                            {c.label}
+                        </span>
+                        <span className="hidden md:inline font-mono text-[11px] text-fg-soft tracking-mono whitespace-nowrap">
+                            {c.meta}
+                        </span>
+                        <span
+                            aria-hidden
+                            className="font-mono text-accent text-sm text-right"
+                        >
+                            {c.glyph}
+                        </span>
+                    </a>
+                </li>
+            ))}
+        </ul>
+    );
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   02 — LOGISTICS
+   Mono key/value strip. The kind of thing a careful sender wants to
+   know (timezone, identity proof) and nobody else has to read.
+   ═════════════════════════════════════════════════════════════════ */
+
+function Logistics() {
+    const ROWS: Array<[string, ReactNode]> = [
+        ['Timezone',    'America/Los_Angeles · UTC−7 (PDT)'],
+        ['Based',       'Diamond Bar, CA · school-year'],
+        ['Reply window','Weekdays · usually < 24h'],
+        ['Languages',   'English · Mandarin'],
+        ['Last updated','2026.05.10'],
+    ];
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-12 items-start">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 m-0">
+                {ROWS.map(([k, v]) => (
+                    <div
+                        key={k}
+                        className="grid grid-cols-[120px_minmax(0,1fr)] gap-4 py-3 border-t border-rule items-baseline"
+                    >
+                        <dt className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
+                            {k}
+                        </dt>
+                        <dd className="m-0 text-[14.5px] text-fg">{v}</dd>
+                    </div>
+                ))}
+            </dl>
+
+            <Provenance />
+        </div>
+    );
+}
+
+/* A small "is this really Mark" panel. Helps with cold outreach where
+   the receiver wants confidence the address isn't spoofed. Sized as a
+   sibling to the dl, mono only, no visual weight. */
+function Provenance() {
+    return (
+        <aside className="border border-rule rounded-md p-4 bg-bg-elev w-full md:w-[280px] font-mono text-[11px] leading-relaxed">
+            <div className="flex justify-between items-baseline pb-2 mb-2 border-b border-rule text-fg-soft tracking-kicker uppercase text-[10px]">
+                <span>Identity</span>
+                <span>verified channels</span>
+            </div>
+            <ul className="m-0 p-0 list-none grid gap-1.5 text-fg-muted">
+                <li>
+                    <span className="text-fg-soft">site →</span>{' '}
+                    <span className="text-fg">markwu.org</span>
+                </li>
+                <li>
+                    <span className="text-fg-soft">git →</span>{' '}
+                    <span className="text-fg">markwu123454</span>
+                </li>
+                <li>
+                    <span className="text-fg-soft">in →</span>{' '}
+                    <span className="text-fg">mark-mai-wu</span>
+                </li>
+            </ul>
+            <p className="mt-3 mb-0 text-fg-soft text-[10.5px] leading-snug">
+                Anyone claiming to be me from a different address — it
+                isn&rsquo;t. Cross-check here.
+            </p>
+        </aside>
     );
 }

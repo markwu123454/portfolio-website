@@ -23,12 +23,10 @@ export function Footer() {
 
                 <Column heading="Work">
                     <FLink href="/work">All projects</FLink>
-                    <FLink href="/lab">Lab</FLink>
                     <FLink href="/now">Now</FLink>
                 </Column>
 
                 <Column heading="Writing">
-                    <FLink href="/music">Music</FLink>
                     <FLink href="/about">About</FLink>
                     <FLink href="/resume.pdf#view=FitV" external>Resume.pdf</FLink>
                 </Column>

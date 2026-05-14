@@ -19,6 +19,7 @@
 
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Header } from './components/nav/header';
 import { Footer } from './components/site/footer';
 import './globals.css';
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="flex-1 min-w-0">{children}</div>
         <Footer />
         <Footnote />
+        <SpeedInsights />
         </body>
         </html>
     );

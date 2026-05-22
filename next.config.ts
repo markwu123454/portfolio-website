@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
                     },
                 ],
             },
+            {
+                source: '/:path*',
+                headers: [
+                    {
+                        key: 'Access-Control-Allow-Origin',
+                        value: '*',
+                    },
+                ],
+            },
         ]
     },
 };

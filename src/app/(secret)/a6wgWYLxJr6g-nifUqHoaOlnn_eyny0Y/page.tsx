@@ -10,11 +10,6 @@ const SLIDES = [
     },
     {
         content: [
-            { type: "text", value: "If you reload this website will be gone." },
-        ],
-    },
-    {
-        content: [
             { type: "text", value: "I dont feel like writing a card soooooo here you go." },
         ],
     },
@@ -212,8 +207,12 @@ const SLIDES = [
     },
     {
         content: [
+            { type: "text", value: "Oh u know funny thing, i tried to make it so if you refresh the page it does't work anymore, like you can only see each page once, but then it didnt work so i didnt bother" },
+        ],
+    },
+    {
+        content: [
             { type: "text", value: "That's the end." },
-            { type: "text", value: "You wont see those stuff again, it feels a little stupid in hindsight. idk if you persuade me enough i may share the images with you, honestly idk why i bothered with this." },
         ],
     },
 ];

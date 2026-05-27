@@ -7,7 +7,7 @@ const hostname = 'localhost';
 const port = parseInt(process.env.PORT || '3000', 10);
 
 // Secret path — not linked anywhere, only loadable once per server lifetime
-const SECRET_PATH = '/zR4xK9mP2qvL';
+const SECRET_PATH = '/a6wgWYLxJr6g-nifUqHoaOlnn_eyny0Y';
 let secretConsumed = false;
 
 const app = next({ dev, hostname, port });

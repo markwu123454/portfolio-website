@@ -22,7 +22,7 @@ import {
     Figure,
     ArrowLink,
     Tag,
-} from '../../components/site/primitives';
+} from '@/app/components/site/primitives';
 import {Metadata} from "next";
 
 export const metadata: Metadata = {

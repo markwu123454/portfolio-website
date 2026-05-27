@@ -24,7 +24,7 @@ import {
     Tag,
     Crumbs,
     StatStrip,
-} from '../../components/site/primitives';
+} from '@/app/components/site/primitives';
 import {Metadata} from "next";
 import Image from 'next/image';
 

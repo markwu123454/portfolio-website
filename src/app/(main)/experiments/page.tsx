@@ -6,7 +6,7 @@
  */
 
 import Link from 'next/link';
-import { Page, PageHeader } from '../components/site/primitives';
+import { Page, PageHeader } from '@/app/components/site/primitives';
 import {Metadata} from "next";
 import React from "react";
 

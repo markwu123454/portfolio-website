@@ -6,7 +6,7 @@
  * Plus a small "last updated" / "next update" timestamp footer.
  */
 
-import { Page, PageHeader, Section, ArrowLink } from '../components/site/primitives';
+import { Page, PageHeader, Section, ArrowLink } from '@/app/components/site/primitives';
 import type { ReactNode } from 'react';
 import {Metadata} from "next";
 

@@ -12,7 +12,7 @@ import {
     PageHeader,
     Section,
     Button,
-} from '../components/site/primitives';
+} from '@/app/components/site/primitives';
 import type { ReactNode } from 'react';
 import {Metadata} from "next";
 

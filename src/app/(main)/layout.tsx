@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import '../globals.css';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Header } from '../components/nav/header';
 import { Footer } from '../components/site/footer';

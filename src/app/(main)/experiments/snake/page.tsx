@@ -14,7 +14,6 @@ import type {StateMsg, BestMsg, StatsMsg} from "./snakeAlgo";
 function SnakePage() {
     const [rows, setRows] = useState(14);
     const [cols, setCols] = useState(16);
-    const [triesSlider, setTriesSlider] = useState(50);
 
     const hamiltonian = useRef<number[]>(generateHamiltonianBasic(rows, cols));
     const nextMap = useRef<Int32Array>(buildNextMap(hamiltonian.current, cols));
@@ -50,13 +49,10 @@ function SnakePage() {
     const generationRef = useRef(0);
     const snakeRef = useRef(snake);
     const appleRef = useRef(apple);
-    const effortRef = useRef(0.5);
 
 
     const stepsPerSecondCalculated =
         stepsPerSecond >= 100 ? Infinity : sliderToSteps(stepsPerSecond);
-
-    const effort = Math.max(0.02, triesSlider / 100);
 
     const cellCount = rows * cols;
     const won = snake.length === cellCount;
@@ -72,8 +68,7 @@ function SnakePage() {
 
 
     // Re-base the worker on the latest state + the cycle the UI currently holds
-    // (its new incumbent). Effort is read from a ref so changing it doesn't
-    // churn this callback's identity (which would reset the board).
+    // (its new incumbent).
     const postState = useCallback((snk: number[], app: number) => {
         const w = workerRef.current;
         if (!w) return;
@@ -84,7 +79,6 @@ function SnakePage() {
             snake: snk,
             apple: app,
             cycle: hamiltonian.current,
-            effort: effortRef.current,
         };
         w.postMessage(msg);
     }, [rows, cols]);
@@ -201,13 +195,6 @@ function SnakePage() {
 
     // Reset the board on mount and whenever the grid changes.
     useEffect(() => { resetBoard(); }, [resetBoard]);
-
-
-    // Push effort changes to the worker without resetting the board.
-    useEffect(() => {
-        effortRef.current = effort;
-        if (workerRef.current) postState(snakeRef.current, appleRef.current);
-    }, [effort, postState]);
 
 
     useEffect(() => {
@@ -340,7 +327,7 @@ function SnakePage() {
                         </button>
                     </div>
 
-                    <div className="bg-bg-elev border border-rule rounded-md p-3 grid grid-cols-3 gap-2 text-sm">
+                    <div className="bg-bg-elev border border-rule rounded-md p-3 grid grid-cols-2 gap-2 text-sm">
                         <label className="flex flex-col gap-1 font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
                             Rows
                             <input
@@ -371,18 +358,6 @@ function SnakePage() {
                                     setCols(newCols);
                                 }}
                                 className="px-2 py-1 bg-bg border border-rule rounded font-mono text-[11px] text-fg disabled:opacity-40"
-                            />
-                        </label>
-                        <label className="flex flex-col gap-1 font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
-                            <div className="flex justify-between">
-                                <span>Effort</span>
-                                <span className="text-zinc-500 text-xs">{Math.round(effort * 100)}%</span>
-                            </div>
-                            <input
-                                type="range" min={0} max={100}
-                                value={triesSlider}
-                                onChange={(e) => setTriesSlider(Number(e.target.value))}
-                                className="accent-emerald-500"
                             />
                         </label>
                     </div>
@@ -525,7 +500,6 @@ function SnakePage() {
                         <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>
                         <li><strong>Heatmap</strong> &mdash; shade each square by how far it is from the apple around the snake, revealing space the body has walled off</li>
                         <li><strong>Rows / Cols</strong> &mdash; change the board size <em>(resets the game)</em></li>
-                        <li><strong>Effort</strong> &mdash; how hard the background search works between moves (higher = better loops, more CPU)</li>
                     </ul>
                 </section>
             </div>

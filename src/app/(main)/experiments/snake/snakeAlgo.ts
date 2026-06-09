@@ -701,7 +701,7 @@ export function enforceGridRules(
 
 // ── Worker message protocol ──
 // UI → worker: the current target + the cycle the UI holds (the incumbent to
-// refine from) + an effort duty-cycle. Sent every step and on reset.
+// refine from). Sent every step and on reset.
 export type StateMsg = {
     type: "state";
     generation: number;
@@ -710,7 +710,6 @@ export type StateMsg = {
     snake: number[];
     apple: number;
     cycle: number[];
-    effort: number;
 };
 
 // worker → UI: the best cycle found so far for the last reported state.

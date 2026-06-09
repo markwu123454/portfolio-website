@@ -10,7 +10,6 @@ import type { StateMsg, StatsMsg } from "./snakeAlgo";
 const ctx = self as unknown as Worker;
 
 const search = new SnakeSearch();
-let effort = 0.5;
 let lastPost = 0;
 let lastStatTime = 0;
 let lastStatCount = -1;
@@ -19,7 +18,6 @@ ctx.onmessage = (e: MessageEvent<StateMsg>) => {
     const m = e.data;
     if (m && m.type === "state") {
         search.setState(m);
-        effort = m.effort;
     }
 };
 
@@ -43,11 +41,10 @@ function loop() {
         lastStatTime = now;
     }
 
-    // Effort is a duty cycle: full effort runs flat out, lower effort sleeps
-    // between bursts (less CPU, lower-quality cycles). Idle sleeps regardless.
-    const e = Math.max(effort, 0.02);
-    const sleep = search.idle ? 50 : Math.round((8 * (1 - e)) / e);
-    setTimeout(loop, sleep);
+    // Run flat out, yielding between bursts so incoming state messages get
+    // processed (and so the browser/OS can throttle it like any other busy
+    // task). When there's nothing left to improve, idle instead of spinning.
+    setTimeout(loop, search.idle ? 50 : 0);
 }
 
 function nowMs() {

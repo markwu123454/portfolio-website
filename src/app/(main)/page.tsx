@@ -158,18 +158,18 @@ interface FeaturedItem {
 // Harbinger leads — it's the current main project.
 const FEATURED: FeaturedItem[] = [
     {
-        num: '01',
-        href: '/work/harbinger',
-        title: 'Harbinger',
-        dek: 'Differential turret with coilgun actuator and closed-loop heading control. Current main project.',
-        status: 'building', tone: 'warn', year: '2025 —',
-    },
-    {
         num: '02',
         href: '/work/aetherius',
         title: 'Aetherius UAV',
         dek: 'Fixed-wing drone, twin boom. Pixhawk 6X, MAVLink telemetry.',
         status: 'building', tone: 'warn', year: '2024 —',
+    },
+    {
+        num: '01',
+        href: '/work/harbinger',
+        title: 'Harbinger',
+        dek: 'Differential turret with coilgun actuator and closed-loop heading control. Current main project.',
+        status: 'paused', tone: 'warn', year: '2025 —',
     },
     {
         num: '03',
@@ -274,7 +274,7 @@ function Timeline() {
                         {r.date}
                     </span>
                     <div>
-                        <h3 className="m-0 text-base font-semibold tracking-tight-1">
+                        <h3 className="m-0 text-base  font-semibold tracking-tight-1">
                             {r.title}
                         </h3>
                         <p className="mt-1 mb-0 text-[14.5px] leading-relaxed text-fg-muted max-w-145">

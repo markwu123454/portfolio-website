@@ -6,8 +6,7 @@
  * URL (?domain=robotics&sort=name) so the page stays server-rendered
  * and links are shareable.
  *
- * The PROJECTS array is the source of truth — share it with the
- * megamenu data in menu.tsx if you decide to consolidate later.
+ * The PROJECTS array is the single source of truth for projects.
  */
 
 import Link from 'next/link';
@@ -20,9 +19,9 @@ import {
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Work — 5 projects',
+    title: 'Work — 7 projects',
     description:
-        'Five projects. Filter by domain. Status reflects current activity, not completion year.',
+        'Seven projects. Filter by domain. Status reflects current activity, not completion year.',
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -158,8 +157,8 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
     return (
         <Page>
             <PageHeader
-                tag={['WORK', '6 PROJECTS', '#003']}
-                title="Six projects."
+                tag={['WORK', '7 PROJECTS', '#003']}
+                title="Seven projects."
                 subtitle="Take a look."
                 dek="Status reflects current activity, not completion year. Click any row to see more details."
             />

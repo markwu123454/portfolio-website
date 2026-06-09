@@ -721,6 +721,13 @@ export type BestMsg = {
     score: number;
 };
 
+// worker → UI: lightweight progress, posted while the search is active.
+export type StatsMsg = {
+    type: "stats";
+    generation: number;
+    generated: number;
+};
+
 
 const nowMs = () =>
     (typeof performance !== "undefined" ? performance.now() : Date.now());
@@ -737,6 +744,7 @@ export class SnakeSearch {
     generation = -1;
     best: number[] = [];
     bestScore = Infinity;
+    generated = 0;
 
     private lowerBound = 1;
     private d0: Int32Array = new Int32Array(0);
@@ -748,6 +756,8 @@ export class SnakeSearch {
             msg.apple !== this.apple ||
             msg.rows !== this.rows ||
             msg.cols !== this.cols;
+
+        if (msg.generation !== this.generation) this.generated = 0;
 
         this.rows = msg.rows;
         this.cols = msg.cols;
@@ -789,6 +799,7 @@ export class SnakeSearch {
             try {
                 const raw = generateHamiltonian(this.rows, this.cols, this.snake, this.apple);
                 if (raw.length === 0) continue;
+                this.generated++;
                 const norm = normalizeHamiltonian(raw, this.snake, this.cols, buildPosMap(raw));
                 const cand = optimizeHamiltonianByBumps(norm, this.snake, this.apple, this.cols);
                 const score = this.scoreOf(cand);

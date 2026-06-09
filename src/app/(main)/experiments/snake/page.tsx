@@ -1,7 +1,6 @@
 "use client";
 
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {InlineMath, BlockMath} from 'react-katex';
 import {
     intC, intR,
     generateHamiltonianBasic, buildNextMap, buildPosMap,
@@ -9,7 +8,7 @@ import {
     randomFreeCell, isSubArc,
     sliderToSteps, digitsOnly, enforceGridRules,
 } from "./snakeAlgo";
-import type {StateMsg, BestMsg} from "./snakeAlgo";
+import type {StateMsg, BestMsg, StatsMsg} from "./snakeAlgo";
 
 
 function SnakePage() {
@@ -38,7 +37,9 @@ function SnakePage() {
 
     const [rowsInput, setRowsInput] = useState(String(rows));
     const [colsInput, setColsInput] = useState(String(cols));
-    const [techMode, setTechMode] = useState<"casual" | "formal">("casual");
+
+    const [steps, setSteps] = useState(0);
+    const [loopsSearched, setLoopsSearched] = useState(0);
 
     // ── Worker + run-loop plumbing ──
     // The search runs on a background thread (snake.worker). The UI samples its
@@ -56,6 +57,11 @@ function SnakePage() {
         stepsPerSecond >= 100 ? Infinity : sliderToSteps(stepsPerSecond);
 
     const effort = Math.max(0.02, triesSlider / 100);
+
+    const cellCount = rows * cols;
+    const won = snake.length === cellCount;
+    const apples = Math.max(0, snake.length - 2);
+    const filledPct = Math.round((snake.length / cellCount) * 100);
 
 
     const heat = useMemo(() => {
@@ -120,6 +126,7 @@ function SnakePage() {
             const finalSnake = [next, ...prev];
             snakeRef.current = finalSnake;
             setSnake(finalSnake);
+            setSteps(s => s + 1);
             return;
         }
 
@@ -138,6 +145,7 @@ function SnakePage() {
 
         snakeRef.current = nextSnake;
         setSnake(nextSnake);
+        setSteps(s => s + 1);
 
         // 2. Hand the worker the new state + the cycle we now hold to refine.
         postState(nextSnake, nextApple);
@@ -159,6 +167,8 @@ function SnakePage() {
         appleRef.current = initialApple;
         setSnake(initialSnake);
         setApple(initialApple);
+        setSteps(0);
+        setLoopsSearched(0);
 
         // New generation: stale worker results (tagged with the old one) are
         // ignored until the worker catches up to this board.
@@ -172,10 +182,13 @@ function SnakePage() {
     // exists when the first state is posted).
     useEffect(() => {
         const w = new Worker(new URL("./snake.worker.ts", import.meta.url), { type: "module" });
-        w.onmessage = (e: MessageEvent<BestMsg>) => {
+        w.onmessage = (e: MessageEvent<BestMsg | StatsMsg>) => {
             const m = e.data;
-            if (m && m.type === "best") {
+            if (!m) return;
+            if (m.type === "best") {
                 latestBestRef.current = { cycle: m.cycle, generation: m.generation };
+            } else if (m.type === "stats" && m.generation === generationRef.current) {
+                setLoopsSearched(m.generated);
             }
         };
         workerRef.current = w;
@@ -376,6 +389,17 @@ function SnakePage() {
                 </div>
             </div>
 
+            {/* Stats */}
+            <div className="mx-auto w-full px-8 pt-3">
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-1 font-mono text-[11px] tracking-kicker uppercase text-fg-soft">
+                    <span>Steps <span className="text-fg">{steps.toLocaleString()}</span></span>
+                    <span>Apples <span className="text-fg">{apples}</span></span>
+                    <span>Filled <span className="text-fg">{filledPct}%</span></span>
+                    <span>Loops searched <span className="text-fg">{loopsSearched.toLocaleString()}</span></span>
+                    {won && <span className="text-emerald-400 font-semibold">Solved</span>}
+                </div>
+            </div>
+
             {/* Grid */}
             <div className="flex-1 grid place-items-center mt-2 px-8">
                 <div
@@ -414,7 +438,7 @@ function SnakePage() {
                             />
                         )}
 
-                        {highlightPath && (
+                        {highlightPath && !won && (
                             <polyline
                                 fill="none" stroke="#facc15" strokeWidth="8"
                                 strokeLinecap="round" strokeLinejoin="round"
@@ -430,11 +454,13 @@ function SnakePage() {
                             points={snake.map(ptInt).join(" ")}
                         />
 
-                        <circle
-                            cx={intC(apple, cols) * 100 + 50}
-                            cy={intR(apple, cols) * 100 + 50}
-                            r="26" fill="#dc2626"
-                        />
+                        {!won && (
+                            <circle
+                                cx={intC(apple, cols) * 100 + 50}
+                                cy={intR(apple, cols) * 100 + 50}
+                                r="26" fill="#dc2626"
+                            />
+                        )}
 
                         {snake.length > 0 && (
                             <circle
@@ -452,30 +478,40 @@ function SnakePage() {
                             />
                         )}
                     </svg>
+
+                    {won && (
+                        <div className="absolute inset-0 grid place-items-center pointer-events-none">
+                            <div className="px-5 py-3 rounded-lg border border-emerald-500 bg-[color-mix(in_srgb,var(--bg)_80%,transparent)] backdrop-blur-sm text-emerald-400 font-mono text-sm tracking-kicker uppercase text-center">
+                                Solved
+                                <div className="text-fg-soft text-[11px] mt-1">{steps.toLocaleString()} steps</div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
             {/* Info / Documentation */}
             <div className="max-w-275 mx-auto px-8 py-10 text-fg space-y-6 border-t border-rule mt-6">
                 <section>
-                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Overview</h2>
+                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">How it works</h2>
                     <p className="leading-relaxed text-fg-muted">
-                        This visualization demonstrates a Snake agent that uses Hamiltonian
-                        cycles to guarantee survival, while dynamically searching for faster
-                        routes instead of following a single fixed cycle.
+                        The snake always follows a <strong>Hamiltonian cycle</strong> &mdash; a single
+                        loop that passes through every square on the board exactly once. As long
+                        as it never leaves that loop it can always reach its own tail, so it can
+                        never trap itself: the game is impossible to lose.
                     </p>
-                    <p className="leading-relaxed mt-3">
-                        Rather than committing to one precomputed Hamiltonian cycle, the
-                        algorithm continuously generates alternative cycles that are compatible
-                        with the snake&apos;s current position. Because the snake always remains on a
-                        valid Hamiltonian cycle, it can never trap itself or reach an unwinnable
-                        state.
+                    <p className="leading-relaxed text-fg-muted mt-3">
+                        A fixed loop is safe but slow &mdash; the snake would crawl through the whole
+                        board to reach each apple. So instead of sticking to one loop, the agent
+                        constantly searches for <em>different</em> loops: ones that reach the apple
+                        sooner, and that leave the most open space behind so the next apple is easy
+                        to get to as well.
                     </p>
-                    <p className="leading-relaxed mt-3">
-                        By evaluating multiple candidate cycles and selecting the one that
-                        reaches the apple in the fewest steps, the snake often outperforms
-                        traditional &ldquo;static&rdquo; Hamiltonian strategies, which blindly traverse the
-                        entire grid.
+                    <p className="leading-relaxed text-fg-muted mt-3">
+                        That search runs on a background thread, continuously improving its best
+                        loop while the page stays responsive. Each move, the snake hops onto the
+                        best loop found so far and steps one square along it &mdash; playing greedily
+                        when it&apos;s safe, and falling back to a slower but safe loop whenever it isn&apos;t.
                     </p>
                 </section>
 
@@ -483,168 +519,14 @@ function SnakePage() {
                     <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Controls</h2>
                     <ul className="list-disc list-inside space-y-1 text-fg-muted">
                         <li><strong>Run / Pause</strong> &mdash; start or halt the simulation</li>
-                        <li><strong>Step</strong> &mdash; advance the simulation by one tick</li>
-                        <li><strong>Speed</strong> &mdash; control steps per second (bounded by computation time)</li>
-                        <li><strong>Hamiltonian Path</strong> &mdash; toggle the full cycle view</li>
-                        <li><strong>Head &rarr; Apple</strong> &mdash; show the currently selected path</li>
-                        <li><strong>Heatmap</strong> &mdash; shade each cell by its distance from the apple around the snake, revealing regions the body has walled off</li>
-                        <li><strong>Rows / Cols</strong> &mdash; change grid dimensions <em>(resets the simulation)</em></li>
-                        <li><strong>Effort</strong> &mdash; how hard the background search works between moves (higher = better cycles, more CPU)</li>
+                        <li><strong>Step</strong> &mdash; advance by a single move</li>
+                        <li><strong>Speed</strong> &mdash; how many moves per second to play</li>
+                        <li><strong>Hamiltonian Path</strong> &mdash; show the full loop the snake is on</li>
+                        <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>
+                        <li><strong>Heatmap</strong> &mdash; shade each square by how far it is from the apple around the snake, revealing space the body has walled off</li>
+                        <li><strong>Rows / Cols</strong> &mdash; change the board size <em>(resets the game)</em></li>
+                        <li><strong>Effort</strong> &mdash; how hard the background search works between moves (higher = better loops, more CPU)</li>
                     </ul>
-                </section>
-
-                <section>
-                    <div className="flex gap-2 mb-4">
-                        <button
-                            onClick={() => setTechMode("casual")}
-                            className={`px-3 py-1 rounded font-mono text-[11px] tracking-kicker uppercase border transition-colors ${
-                                techMode === "casual"
-                                    ? "bg-fg text-bg"
-                                    : "bg-bg-elev border border-rule text-fg-muted hover:border-rule-strong"
-                            }`}
-                        >
-                            Intuition
-                        </button>
-                        <button
-                            onClick={() => setTechMode("formal")}
-                            className={`px-3 py-1 rounded font-mono text-[11px] tracking-kicker uppercase border transition-colors ${
-                                techMode === "formal"
-                                    ? "bg-accent text-bg"
-                                    : "bg-bg-elev border border-rule text-fg-muted hover:border-rule-strong"
-                            }`}
-                        >
-                            Formal / Math
-                        </button>
-                    </div>
-
-                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Technical Notes</h2>
-
-                    {techMode === "casual" && (
-                        <>
-                            <p className="leading-relaxed text-fg-muted">
-                                The core idea of using a hamiltonian cycle is to force the snake to always move along a
-                                path that visits every grid cell exactly once.
-                                Because as long as the snake never leaves this cycle, the head can always every square before looping, which makes failure impossible
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                At each time step, the current snake body is treated as a
-                                locked-in segment of the cycle. The algorithm then attempts to
-                                complete the rest of the cycle around this fixed segment using
-                                randomized backbite operations that only modify the free tail
-                                of the path. Any construction that would disturb the snake&apos;s
-                                ordering is rejected immediately.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                Since many valid Hamiltonian cycles are possible, the algorithm
-                                samples several candidates per step. The number of candidates
-                                is determined adaptively: a BFS shortest-path distance from head
-                                to apple (avoiding the snake body) provides a lower bound, and
-                                the ratio of the current cycle distance to this lower bound
-                                determines how many more cycles to try. When the ratio is close
-                                to 1:1, the current path is near-optimal and searching stops
-                                early. When the ratio is high, more candidates are evaluated.
-                                The Effort slider scales this budget linearly.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                Among all valid candidates, the cycle that brings the apple
-                                closest in forward cycle distance is selected. This allows the
-                                snake to take short, direct routes to the apple when possible,
-                                while still falling back to a slower but still safe cycle if
-                                no improvement exists.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                The result is a strategy that behaves greedily when it is safe
-                                to do so, but defaults to a conservative traversal of the grid
-                                whenever risk would be introduced. This balance makes the
-                                snake appear intelligent without ever entering a losing state.
-                            </p>
-                        </>
-                    )}
-
-                    {techMode === "formal" && (
-                        <>
-                            <p className="leading-relaxed text-fg-muted">
-                                The board is modeled as a rectangular grid graph
-                                <InlineMath math="G = (V, E)"/>, where
-                                <InlineMath math="|V| = N = \text{rows} \times \text{cols}"/> and
-                                edges connect orthogonally adjacent cells.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                At time step <InlineMath math="t"/>, the snake configuration
-                                <InlineMath math="S_t = (v_0, \dots, v_k)"/> is a contiguous
-                                subsequence of a Hamiltonian cycle
-                                <InlineMath math="H_t = (h_0, \dots, h_{N-1})"/> over
-                                <InlineMath math="G"/>:
-                            </p>
-                            <BlockMath math="S_t \subseteq H_t"/>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                The cycle ordering induces a directed successor relation,
-                                allowing the snake to advance by replacing its head with the
-                                next vertex along <InlineMath math="H_t"/>.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                At each step, the algorithm samples a finite set of candidate
-                                Hamiltonian cycles:
-                            </p>
-                            <BlockMath math="\mathcal{C}_t = \{ H_t^{(1)}, \dots, H_t^{(k_t)} \}"/>
-                            <p className="leading-relaxed text-fg-muted">
-                                Each candidate cycle preserves the ordering of
-                                <InlineMath math="S_t"/> and is generated by completing the
-                                remaining vertices using randomized tail-restricted backbite
-                                operations, ensuring that the fixed snake prefix is never
-                                modified.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                For any Hamiltonian cycle
-                                <InlineMath math="H"/>, define the forward cycle distance
-                                <InlineMath math="d_H(u, v)"/> as the number of edges traversed
-                                when moving forward along <InlineMath math="H"/> from
-                                <InlineMath math="u"/> to <InlineMath math="v"/>.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                Let <InlineMath math="d^*_t = d_{\mathrm{BFS}}(\text{head}_t, \text{apple}_t \mid G \setminus S_t)"/>
-                                {" "}denote the BFS shortest-path distance from head to apple on the
-                                grid with the snake body removed. This serves as a lower bound:
-                                <InlineMath math="d_H(\text{head}_t, \text{apple}_t) \geq d^*_t"/> for any
-                                valid cycle <InlineMath math="H"/>.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                The number of candidate cycles sampled is adaptive. Define the
-                                optimality ratio:
-                            </p>
-                            <BlockMath math="\rho_t = \frac{d_{H_{\mathrm{best}}}(\text{head}_t, \text{apple}_t)}{d^*_t}"/>
-                            <p className="leading-relaxed text-fg-muted">
-                                When <InlineMath math="\rho_t \approx 1"/>, the current cycle is
-                                near-optimal and sampling terminates early. As <InlineMath math="\rho_t"/>
-                                {" "}grows, the search budget <InlineMath math="k_t"/> increases,
-                                scaled by a user-controlled effort multiplier <InlineMath math="\mu"/>:
-                            </p>
-                            <BlockMath math="k_t = \left\lceil \mu \cdot f(\rho_t) \right\rceil, \quad f(\rho) = \begin{cases} 0 & \rho \leq 1 \\\\ 1 & \rho \leq 1.2 \\\\ 1 + 14 \cdot \frac{\rho - 1.2}{3.8} & \rho > 1.2 \end{cases}"/>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                The selected cycle minimizes the distance from the snake&apos;s head
-                                to the apple:
-                            </p>
-                            <BlockMath math="
-            H_t \;=\;
-            \arg\min_{H \in \mathcal{C}_t \cup \{H_{t-1}\}}
-            d_H(\text{head}_t, \text{apple}_t)
-            "/>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                Because the snake always advances along a Hamiltonian cycle,
-                                the tail remains reachable from the head at all times. As long
-                                as a Hamiltonian cycle exists for the grid, the snake can never
-                                enter a dead-end configuration.
-                            </p>
-                            <p className="leading-relaxed text-fg-muted mt-3">
-                                The expected runtime for generating a single candidate cycle
-                                using randomized backbite operations is
-                                <InlineMath math="\mathcal{O}(N \log^2 N)"/>, with a pessimistic
-                                upper bound of
-                                <InlineMath math="\mathcal{O}(N^2 \log^2 N)"/> under repeated
-                                restarts.
-                            </p>
-                        </>
-                    )}
                 </section>
             </div>
         </div>

@@ -4,8 +4,6 @@ import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {InlineMath, BlockMath} from 'react-katex';
 
 
-type Cell = { r: number; c: number };
-
 // ── Int-encoded cell helpers ──
 // A cell (r, c) is stored as the single integer r * cols + c.
 // This eliminates object allocations in the hot path.
@@ -646,8 +644,8 @@ function enforceGridRules(
 
 
 function SnakePage() {
-    const [rows, setRows] = useState(16);
-    const [cols, setCols] = useState(20);
+    const [rows, setRows] = useState(14);
+    const [cols, setCols] = useState(16);
     const [triesSlider, setTriesSlider] = useState(50);
 
     const hamiltonian = useRef<number[]>(generateHamiltonianBasic(rows, cols));
@@ -864,7 +862,7 @@ function SnakePage() {
                     <div className="bg-bg-elev border border-rule rounded-md p-3 flex flex-wrap gap-2">
                         <button
                             onClick={toggleShowPath}
-                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
                                 showPath
                                     ? "bg-fg text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
@@ -874,7 +872,7 @@ function SnakePage() {
                         </button>
                         <button
                             onClick={toggleHighlightPath}
-                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
                                 highlightPath
                                     ? "bg-warn text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
@@ -884,9 +882,9 @@ function SnakePage() {
                         </button>
                         <button
                             onClick={() => setShowHeatmap(h => !h)}
-                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
                                 showHeatmap
-                                    ? "bg-gradient-to-r from-emerald-500 to-rose-500 text-bg hover:opacity-90"
+                                    ? "bg-linear-to-r from-emerald-500 to-rose-500 text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
                             }`}
                         >
@@ -1023,9 +1021,9 @@ function SnakePage() {
             </div>
 
             {/* Info / Documentation */}
-            <div className="max-w-[1100px] mx-auto px-8 py-10 text-fg space-y-6 border-t border-rule mt-6">
+            <div className="max-w-275 mx-auto px-8 py-10 text-fg space-y-6 border-t border-rule mt-6">
                 <section>
-                    <h2 className="text-[22px] font-semibold tracking-[-0.015em] mb-2">Overview</h2>
+                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Overview</h2>
                     <p className="leading-relaxed text-fg-muted">
                         This visualization demonstrates a Snake agent that uses Hamiltonian
                         cycles to guarantee survival, while dynamically searching for faster
@@ -1047,7 +1045,7 @@ function SnakePage() {
                 </section>
 
                 <section>
-                    <h2 className="text-[22px] font-semibold tracking-[-0.015em] mb-2">Controls</h2>
+                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Controls</h2>
                     <ul className="list-disc list-inside space-y-1 text-fg-muted">
                         <li><strong>Run / Pause</strong> &mdash; start or halt the simulation</li>
                         <li><strong>Step</strong> &mdash; advance the simulation by one tick</li>
@@ -1084,7 +1082,7 @@ function SnakePage() {
                         </button>
                     </div>
 
-                    <h2 className="text-[22px] font-semibold tracking-[-0.015em] mb-2">Technical Notes</h2>
+                    <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Technical Notes</h2>
 
                     {techMode === "casual" && (
                         <>

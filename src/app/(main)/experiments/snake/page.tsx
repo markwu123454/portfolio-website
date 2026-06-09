@@ -1,6 +1,6 @@
 "use client";
 
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {InlineMath, BlockMath} from 'react-katex';
 
 
@@ -536,6 +536,48 @@ function bfsDistance(
 }
 
 
+// ── Heatmap overlay field (decoupled from the selection algorithm) ──
+// BFS from the apple over the CURRENT grid, treating the whole snake as a
+// wall. Each free cell gets its distance from the apple; cells the body has
+// sealed off stay -1. Purely a visualization of how the body blocks space.
+function reachabilityField(
+    apple: number,
+    rows: number,
+    cols: number,
+    snake: number[]
+): { dist: Int32Array; maxDist: number } {
+    const total = rows * cols;
+    const blocked = new Uint8Array(total);
+    for (let i = 0; i < snake.length; i++) {
+        blocked[snake[i]] = 1;
+    }
+
+    const dist = new Int32Array(total).fill(-1);
+    if (apple < 0 || apple >= total || blocked[apple] === 1) {
+        return { dist, maxDist: 0 };
+    }
+    dist[apple] = 0;
+
+    const queue: number[] = [apple];
+    let qi = 0;
+    let maxDist = 0;
+
+    while (qi < queue.length) {
+        const cur = queue[qi++];
+        const cr = (cur / cols) | 0;
+        const cc = cur % cols;
+        const nd = dist[cur] + 1;
+
+        if (cc + 1 < cols) { const n = cur + 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
+        if (cc - 1 >= 0)   { const n = cur - 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
+        if (cr + 1 < rows) { const n = cur + cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
+        if (cr - 1 >= 0)   { const n = cur - cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
+    }
+
+    return { dist, maxDist };
+}
+
+
 function pathFromHeadToApple(
     path: number[],
     snake: number[],
@@ -624,6 +666,7 @@ function SnakePage() {
     const [running, setRunning] = useState(false);
     const [showPath, setShowPath] = useState(true);
     const [highlightPath, setHighlightPath] = useState(true);
+    const [showHeatmap, setShowHeatmap] = useState(false);
     const [stepsPerSecond, setStepsPerSecond] = useState(3);
 
     const [rowsInput, setRowsInput] = useState(String(rows));
@@ -635,6 +678,13 @@ function SnakePage() {
         stepsPerSecond >= 100 ? Infinity : sliderToSteps(stepsPerSecond);
 
     const triesMultiplier = (triesSlider / 100) * 3.0;
+
+
+    const heat = useMemo(() => {
+        if (!showHeatmap) return null;
+        const { dist, maxDist } = reachabilityField(apple, rows, cols, snake);
+        return { dist, maxDist, snakeSet: new Set(snake) };
+    }, [showHeatmap, apple, rows, cols, snake]);
 
 
     const stepOnce = useCallback(() => {
@@ -832,6 +882,16 @@ function SnakePage() {
                         >
                             Head &rarr; Apple
                         </button>
+                        <button
+                            onClick={() => setShowHeatmap(h => !h)}
+                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                                showHeatmap
+                                    ? "bg-gradient-to-r from-emerald-500 to-rose-500 text-bg hover:opacity-90"
+                                    : "bg-zinc-800 hover:bg-zinc-700"
+                            }`}
+                        >
+                            Heatmap
+                        </button>
                     </div>
 
                     <div className="bg-bg-elev border border-rule rounded-md p-3 grid grid-cols-3 gap-2 text-sm">
@@ -894,9 +954,21 @@ function SnakePage() {
                         aspectRatio: `${cols} / ${rows}`,
                     }}
                 >
-                    {Array.from({length: rows * cols}).map((_, idx) => (
-                        <div key={idx} className="border border-rule bg-bg" />
-                    ))}
+                    {Array.from({length: rows * cols}).map((_, idx) => {
+                        let bg: string | undefined;
+                        if (heat && !heat.snakeSet.has(idx)) {
+                            const d = heat.dist[idx];
+                            const t = d < 0 ? 1 : heat.maxDist > 0 ? d / heat.maxDist : 0;
+                            bg = `hsla(${Math.round(120 * (1 - t))}, 70%, 50%, 0.2)`;
+                        }
+                        return (
+                            <div
+                                key={idx}
+                                className="border border-rule bg-bg"
+                                style={bg ? { backgroundColor: bg } : undefined}
+                            />
+                        );
+                    })}
 
                     <svg
                         className="absolute inset-0 pointer-events-none"
@@ -982,6 +1054,7 @@ function SnakePage() {
                         <li><strong>Speed</strong> &mdash; control steps per second (bounded by computation time)</li>
                         <li><strong>Hamiltonian Path</strong> &mdash; toggle the full cycle view</li>
                         <li><strong>Head &rarr; Apple</strong> &mdash; show the currently selected path</li>
+                        <li><strong>Heatmap</strong> &mdash; shade each cell by its distance from the apple around the snake, revealing regions the body has walled off</li>
                         <li><strong>Rows / Cols</strong> &mdash; change grid dimensions <em>(resets the simulation)</em></li>
                         <li><strong>Effort</strong> &mdash; multiplier on how hard the algorithm searches for a shorter cycle</li>
                     </ul>

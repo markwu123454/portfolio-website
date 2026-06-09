@@ -90,6 +90,102 @@ function zipsToApple(
 }
 
 
+// Weight on post-eat space (φ) vs. route length (ρ) in the combined
+// objective. Tune via a headless sweep over mean steps-per-apple; 1.0 is
+// the neutral starting point where a unit of each excess trades evenly.
+const LAMBDA = 1.0;
+
+// J within this margin of its ideal (0) counts as good enough — stop the
+// search and, for a zipping carried cycle, take it without re-searching.
+const STOP_EPS = 0.05;
+
+
+// Transparent reach field: BFS distance from the apple on the EMPTY grid
+// (body passable). Depends only on the apple, so it is computed once per
+// step and shared across candidates. Returns the field and its total.
+function appleTransparentField(
+    apple: number,
+    rows: number,
+    cols: number
+): { d0: Int32Array; totalD0: number } {
+    const total = rows * cols;
+    const d0 = new Int32Array(total).fill(-1);
+    d0[apple] = 0;
+    const queue: number[] = [apple];
+    let qi = 0;
+    let totalD0 = 0;
+    while (qi < queue.length) {
+        const cur = queue[qi++];
+        const cr = (cur / cols) | 0;
+        const cc = cur % cols;
+        const nd = d0[cur] + 1;
+        if (cc + 1 < cols) { const n = cur + 1;    if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
+        if (cc - 1 >= 0)   { const n = cur - 1;    if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
+        if (cr + 1 < rows) { const n = cur + cols; if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
+        if (cr - 1 >= 0)   { const n = cur - cols; if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
+    }
+    return { d0, totalD0 };
+}
+
+// φ for one candidate cycle: opaque reach-sum / transparent reach-sum, both
+// over the SAME post-eat free cells. The post-eat body is the L+1 cells
+// ending at the apple along the cycle; we flood from the apple around that
+// body. φ ≥ 1, equals 1 when the body forces no detour, and grows as the
+// cycle walls space off behind the apple. Sealed cells cap at the grid size.
+function posteatSpaceRatio(
+    path: number[],
+    posMap: Int32Array,
+    snakeLen: number,
+    apple: number,
+    rows: number,
+    cols: number,
+    d0: Int32Array,
+    totalD0: number
+): number {
+    const N = path.length;
+    const appleIndex = posMap[apple];
+    if (appleIndex === -1) return 1;
+
+    const total = rows * cols;
+    const blocked = new Uint8Array(total);
+
+    let arcSumD0 = 0;
+    for (let i = 0; i <= snakeLen; i++) {
+        const cell = path[((appleIndex - i) % N + N) % N];
+        if (blocked[cell] === 0) {
+            blocked[cell] = 1;
+            arcSumD0 += d0[cell];
+        }
+    }
+
+    const A = totalD0 - arcSumD0;
+    if (A <= 0) return 1;
+
+    const dist = new Int32Array(total).fill(-1);
+    dist[apple] = 0;
+    const queue: number[] = [apple];
+    let qi = 0;
+    while (qi < queue.length) {
+        const cur = queue[qi++];
+        const cr = (cur / cols) | 0;
+        const cc = cur % cols;
+        const nd = dist[cur] + 1;
+        if (cc + 1 < cols) { const n = cur + 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
+        if (cc - 1 >= 0)   { const n = cur - 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
+        if (cr + 1 < rows) { const n = cur + cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
+        if (cr - 1 >= 0)   { const n = cur - cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
+    }
+
+    let B = 0;
+    for (let c = 0; c < total; c++) {
+        if (blocked[c] === 1) continue;
+        B += dist[c] === -1 ? total : dist[c];
+    }
+
+    return B / A;
+}
+
+
 function generateHamiltonianBest(
     rows: number,
     cols: number,
@@ -105,6 +201,22 @@ function generateHamiltonianBest(
     const bfsDist = bfsDistance(snake[0], apple, rows, cols, snake);
     const lowerBound = Number.isFinite(bfsDist) ? Math.max(bfsDist, 1) : 1;
 
+    // Transparent reach field from the apple — a per-step constant, shared
+    // by every candidate's φ.
+    const { d0, totalD0 } = appleTransparentField(apple, rows, cols);
+
+    // Combined objective J = (ρ - 1) + LAMBDA·(φ - 1):
+    //   ρ = d_H(head, apple) / d*  — how much longer than optimal the route is
+    //   φ = post-eat reach overhead — how walled-off the next apple becomes
+    // Both vanish at their ideal, so J >= 0 and J = 0 is perfect.
+    function scoreOf(path: number[], pm: Int32Array): number {
+        const dH = patternDistance(path, apple, pm);
+        if (!Number.isFinite(dH)) return Infinity;
+        const rho = dH / lowerBound;
+        const phi = posteatSpaceRatio(path, pm, snake.length, apple, rows, cols, d0, totalD0);
+        return (rho - 1) + LAMBDA * (phi - 1);
+    }
+
     function consider(rawPath: number[]) {
         if (rawPath.length === 0) return;
 
@@ -114,7 +226,7 @@ function generateHamiltonianBest(
         path = optimizeHamiltonianByBumps(path, snake, apple, cols);
 
         const pm = buildPosMap(path);
-        const score = patternDistance(path, apple, pm);
+        const score = scoreOf(path, pm);
         if (score < bestScore) {
             bestScore = score;
             bestPath = path;
@@ -126,8 +238,12 @@ function generateHamiltonianBest(
         const normalized = normalizeHamiltonian(lastPath, snake, cols, lastPm);
         const pm = buildPosMap(normalized);
 
+        // Fast path: the carried cycle already zips to the apple (ρ = 1). Take
+        // it only if it also leaves space open (φ ≈ 1); otherwise fall through
+        // so a trapping zip can be beaten on the φ term.
         if (zipsToApple(normalized, pm, snake, apple, cols)) {
-            return normalized;
+            const phi = posteatSpaceRatio(normalized, pm, snake.length, apple, rows, cols, d0, totalD0);
+            if (phi - 1 <= STOP_EPS) return normalized;
         }
 
         consider(normalized);
@@ -136,12 +252,15 @@ function generateHamiltonianBest(
     const BASE_MIN = 1;
     const BASE_MAX = 15;
 
+    // Budget grows with how far the best candidate sits from the ideal J = 0,
+    // so the search keeps spending while EITHER the route is long (high ρ) or
+    // the post-eat space is bad (high φ) — not just on distance.
     function computeBudget(): number {
-        const ratio = bestScore / lowerBound;
-        if (ratio <= 1.0) return 0;
-        if (ratio <= 1.2) return Math.ceil(BASE_MIN * triesMultiplier);
+        const excess = bestScore;   // J >= 0, 0 = ideal
+        if (excess <= STOP_EPS) return 0;
+        if (excess <= 0.2) return Math.ceil(BASE_MIN * triesMultiplier);
 
-        const t = Math.min((ratio - 1.2) / (5.0 - 1.2), 1.0);
+        const t = Math.min((excess - 0.2) / (4.0 - 0.2), 1.0);
         const base = BASE_MIN + t * (BASE_MAX - BASE_MIN);
         return Math.ceil(base * triesMultiplier);
     }
@@ -156,7 +275,7 @@ function generateHamiltonianBest(
 
         budget = Math.max(spent, computeBudget());
 
-        if (bestScore <= lowerBound) break;
+        if (bestScore <= STOP_EPS) break;
     }
 
     return bestPath ?? lastPath;

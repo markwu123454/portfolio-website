@@ -7,7 +7,7 @@
  * nav item from the current pathname so callers don't pass it.
  *
  * Desktop:
- *   [ MW · Mark Wu — student engineer ]   [ Work▾ Lab Now About Contact | ● Open ]
+ *   [ MW · Mark Wu — student engineer ]   [ Work Experiments Now About Contact | ● Open ]
  *
  * Mobile:
  *   [ MW · Mark Wu ]   [ ● Open | ☰ ]
@@ -20,7 +20,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { WorkMegamenuTrigger } from './menu';
 
 export function Header() {
     const active = routeToKey(usePathname());
@@ -60,7 +59,7 @@ export function Header() {
 
                     {/* Desktop nav */}
                     <nav className="hidden md:flex items-center gap-[22px]">
-                        <WorkMegamenuTrigger active={active === 'work'} />
+                        <NavLink href="/work" active={active === 'work'}>Work</NavLink>
                         <NavLink href="/experiments" active={active === 'experiments'}>Experiments</NavLink>
                         <NavLink href="/now"     active={active === 'now'}>Now</NavLink>
                         <NavLink href="/about"   active={active === 'about'}>About</NavLink>

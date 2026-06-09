@@ -6,8 +6,7 @@
  * URL (?domain=robotics&sort=name) so the page stays server-rendered
  * and links are shareable.
  *
- * The PROJECTS array is the source of truth — share it with the
- * megamenu data in menu.tsx if you decide to consolidate later.
+ * The PROJECTS array is the single source of truth for projects.
  */
 
 import Link from 'next/link';

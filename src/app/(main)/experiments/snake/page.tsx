@@ -821,7 +821,7 @@ function SnakePage() {
         <div className="flex flex-col pb-4">
             {/* Control Panel */}
             <div className="sticky top-0 z-20 bg-[color-mix(in_srgb,var(--bg)_95%,transparent)] backdrop-blur-md border-b border-rule">
-                <div className="max-w-[1100px] mx-auto px-8 py-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div className="mx-auto px-8 py-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
 
                     <div className="flex items-center gap-2 bg-bg-elev border border-rule rounded-md p-3">
                         <button
@@ -861,10 +861,10 @@ function SnakePage() {
                         />
                     </div>
 
-                    <div className="bg-bg-elev border border-rule rounded-md p-3 flex gap-2">
+                    <div className="bg-bg-elev border border-rule rounded-md p-3 flex flex-wrap gap-2">
                         <button
                             onClick={toggleShowPath}
-                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
                                 showPath
                                     ? "bg-fg text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
@@ -874,7 +874,7 @@ function SnakePage() {
                         </button>
                         <button
                             onClick={toggleHighlightPath}
-                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
                                 highlightPath
                                     ? "bg-warn text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
@@ -884,7 +884,7 @@ function SnakePage() {
                         </button>
                         <button
                             onClick={() => setShowHeatmap(h => !h)}
-                            className={`flex-1 px-3 py-2 rounded-md text-sm ${
+                            className={`flex-1 min-w-[6rem] px-3 py-2 rounded-md text-sm ${
                                 showHeatmap
                                     ? "bg-gradient-to-r from-emerald-500 to-rose-500 text-bg hover:opacity-90"
                                     : "bg-zinc-800 hover:bg-zinc-700"
@@ -976,7 +976,7 @@ function SnakePage() {
                     >
                         {showPath && (
                             <polyline
-                                fill="none" stroke="#333" strokeWidth="4"
+                                fill="none" stroke={showHeatmap ? "#d4d4d8" : "#333"} strokeWidth="4"
                                 points={[...hamiltonian.current, hamiltonian.current[0]].map(ptInt).join(" ")}
                             />
                         )}

@@ -32,7 +32,7 @@ function SnakePage() {
     const [showPath, setShowPath] = useState(true);
     const [highlightPath, setHighlightPath] = useState(true);
     const [showHeatmap, setShowHeatmap] = useState(false);
-    const [stepsPerSecond, setStepsPerSecond] = useState(3);
+    const [stepsPerSecond, setStepsPerSecond] = useState(50);
 
     const [rowsInput, setRowsInput] = useState(String(rows));
     const [colsInput, setColsInput] = useState(String(cols));

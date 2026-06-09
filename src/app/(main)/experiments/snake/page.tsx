@@ -470,14 +470,14 @@ function SnakePage() {
                 <section>
                     <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">How it works</h2>
                     <p className="leading-relaxed text-fg-muted">
-                        The snake always follows a <strong>Hamiltonian cycle</strong> &mdash; a single
+                        The snake always follows a <strong>Hamiltonian cycle</strong>, which is a
                         loop that passes through every square on the board exactly once. As long
-                        as it never leaves that loop it can always reach its own tail, so it can
+                        as the snake never leaves that loop it can always reach its own tail, so it can
                         never trap itself: the game is impossible to lose.
                     </p>
                     <p className="leading-relaxed text-fg-muted mt-3">
-                        A fixed loop is safe but slow &mdash; the snake would crawl through the whole
-                        board to reach each apple. So instead of sticking to one loop, the agent
+                        A fixed loop is safe but slow, the snake would crawl through the whole
+                        board to reach each apple. So instead of sticking to one loop, the algorithm
                         constantly searches for <em>different</em> loops: ones that reach the apple
                         sooner, and that leave the most open space behind so the next apple is easy
                         to get to as well.
@@ -485,8 +485,7 @@ function SnakePage() {
                     <p className="leading-relaxed text-fg-muted mt-3">
                         That search runs on a background thread, continuously improving its best
                         loop while the page stays responsive. Each move, the snake hops onto the
-                        best loop found so far and steps one square along it &mdash; playing greedily
-                        when it&apos;s safe, and falling back to a slower but safe loop whenever it isn&apos;t.
+                        best loop found so far and steps one square along it.
                     </p>
                 </section>
 
@@ -495,6 +494,7 @@ function SnakePage() {
                     <ul className="list-disc list-inside space-y-1 text-fg-muted">
                         <li><strong>Run / Pause</strong> &mdash; start or halt the simulation</li>
                         <li><strong>Step</strong> &mdash; advance by a single move</li>
+                        <li><strong>Reset</strong> &mdash; resets the game</li>
                         <li><strong>Speed</strong> &mdash; how many moves per second to play</li>
                         <li><strong>Hamiltonian Path</strong> &mdash; show the full loop the snake is on</li>
                         <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>

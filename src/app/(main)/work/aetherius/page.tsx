@@ -269,14 +269,13 @@ export default function AetheriusPage() {
                 <div className="ae-hero">
                     <h1>
                         Aetherius UAV —
-                        <span className="cont">fixed-wing build, pre-maiden.</span>
+                        <span className="cont">fixed-wing drone.</span>
                     </h1>
 
                     <div className="right">
                         <p className="dek">
                             Off-the-shelf twin-boom foam/CF airframe with self-sourced
-                            avionics. One short flight before a crash; not counting it as a
-                            maiden. Next attempt planned for summer.
+                            avionics. One short flight before a crash; not counting that. Next attempt planned for summer.
                         </p>
                         <div className="chips">
                             <span className="ae-pill warn"><span className="dot" />Building</span>
@@ -322,7 +321,7 @@ export default function AetheriusPage() {
                     </div>
                     <figcaption>
                         <span className="num">Fig. 1 —</span>
-                        Aetherius airframe — twin-boom, foam and carbon-fiber construction.
+                        Aetherius airframe: twin-boom, foam and carbon-fiber construction.
                         Off-the-shelf platform; avionics sourced separately.
                     </figcaption>
                 </figure>
@@ -344,7 +343,7 @@ export default function AetheriusPage() {
                                     <strong>Pixhawk 6X</strong> flight controller, an{" "}
                                     <strong>FSi6</strong> transmitter, and a{" "}
                                     <strong>SiK</strong> telemetry radio. Ground station is{" "}
-                                    <em>QGroundControl</em>.
+                                    <em>Aetherius GCS</em>.
                                 </p>
                             </div>
                         </section>
@@ -360,7 +359,7 @@ export default function AetheriusPage() {
                                 <p>
                                     Originally planned to use a Raspberry Pi as a companion
                                     computer to relay telemetry to a laptop. Ditched in favor
-                                    of the SiK radio — simpler, more reliable, less friction
+                                    of the SiK radio: simpler, more reliable, less friction
                                     to get flying.
                                 </p>
                             </div>
@@ -376,8 +375,7 @@ export default function AetheriusPage() {
                             <div className="prose">
                                 <p>
                                     One flight attempt. The plane flew for a few seconds before
-                                    crashing. Not counting it as a maiden. Next flight planned
-                                    for summer.
+                                    crashing. Doesn&#39;t count. Next flight planned for summer.
                                 </p>
                             </div>
                         </section>
@@ -393,7 +391,7 @@ export default function AetheriusPage() {
                                 <p>
                                     A custom GCS was started in parallel. <em>v1</em> was a
                                     Python / FastAPI hosted web app; <em>v2</em> was a Tauri
-                                    desktop app with a Python backend. Both are shelved for now
+                                    desktop app with a Python backend. Both are paused for now
                                     while the airframe takes priority. May return to it.
                                 </p>
                             </div>

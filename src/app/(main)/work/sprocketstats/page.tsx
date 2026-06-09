@@ -211,7 +211,7 @@ export default function SprocketStatsPage() {
                     <div className="kicker">Work · Software · 2024 —</div>
                     <h1>SprocketStats</h1>
                     <p className="dek">
-                        A full-stack scouting platform for FRC — built to close the gap between
+                        A full-stack scouting platform for FRC, built to close the gap between
                         raw match data and real alliance decisions. Ensemble prediction,
                         field-mapped input, and a guest sharing system that turns scouted data
                         into a team-facing tool.
@@ -277,7 +277,7 @@ export default function SprocketStatsPage() {
                     </div>
                     <div className="prose">
                         <p>
-                            During the 2025 season Sprocket was using an older scouting app —
+                            During the 2025 season Sprocket was using an older scouting app,
                             effectively a glorified Google Form. It collected less data, was
                             harder to use, had worse analysis, and had a critical security flaw:
                             all data was downloadable without authentication. That app is now
@@ -288,7 +288,7 @@ export default function SprocketStatsPage() {
                             was better data collection, better data quality, and tighter
                             integration across the entire scouting workflow — from getting event
                             data, to match scouting, pit scouting, analysis, presentation, and
-                            sharing — not just more of the same.
+                            sharing, not just more of the same.
                         </p>
                     </div>
                 </section>
@@ -304,7 +304,7 @@ export default function SprocketStatsPage() {
                         <p>
                             Built for FRC <em>Reefscape</em> (2025) and rebuilt for{" "}
                             <em>Rebuilt</em> (2026). In 2026 the main UX challenge was shot
-                            volume — robots in this game shoot at very high throughput, so the
+                            volume: robots in this game shoot at very high throughput, so the
                             original +1 / +2 / +5 / +10 button approach was replaced with a
                             slider scouters can drag or click rapidly. The app also includes a
                             field illustration where scouters input shooting location and
@@ -372,7 +372,7 @@ export default function SprocketStatsPage() {
                             <div className="title">UX change · between events</div>
                             <p>
                                 Task buttons changed from <em>click-to-activate</em> to{" "}
-                                <em>hold-to-activate</em>, removing one interaction per task —
+                                <em>hold-to-activate</em>, removing one interaction per task,
                                 less physical and mental load on scouters across a six-hour event
                                 day.
                             </p>
@@ -390,16 +390,16 @@ export default function SprocketStatsPage() {
                     <div className="prose">
                         <p>
                             An ensemble algorithm with roughly 15 designated output parameters
-                            across robots, past matches, and future matches. Each data source —
-                            Statbotics, match scouting data, pit scouting data, and so on — is
+                            across robots, past matches, and future matches. Each data source,
+                            Statbotics, match scouting data, pit scouting data, and so on, is
                             weighted by how accurately it predicts past matches, then aggregated.
                         </p>
                         <p>
                             Win/loss prediction accuracy in 2026: <strong>&gt; 90%</strong>. For
-                            context, Statbotics — the most widely used FRC analytics platform —
+                            context, Statbotics, the most widely used FRC analytics platform,
                             reaches roughly 80% on the same task, based on observed usage and a
                             Chief Delphi thread discussing its limitations. Score prediction uses
-                            a skewed distribution model — more complex than win/loss, and not
+                            a skewed distribution model, more complex than win/loss, and not
                             reducible to a single accuracy figure.
                         </p>
                     </div>
@@ -458,7 +458,7 @@ export default function SprocketStatsPage() {
                             For the 2026–27 season the team is considering moving from{" "}
                             <em>human-centric</em> to <em>AI-centric</em> scouting. YOLO-based
                             robot tracking is already in development. The plan is to integrate
-                            MTMCT — multi-target multi-camera tracking — and related algorithms
+                            MTMCT(multi-target multi-camera tracking) and related algorithms
                             to eliminate human error from data sources entirely. If this
                             direction holds, there may not be an outward-facing web app next
                             season.

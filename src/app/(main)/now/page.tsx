@@ -19,7 +19,7 @@ export default function NowPage() {
     return (
         <Page>
             <PageHeader
-                tag={['NOW', 'MAY 2026', '#005']}
+                tag={['NOW', 'JUN 2026', '#005']}
                 title="What I’m working on"
                 subtitle="this month."
                 dek={
@@ -29,7 +29,7 @@ export default function NowPage() {
                             nownownow.com
                         </ArrowLink>
                         . If you read this more than 30 days after the date above,
-                        it’s stale — sorry.
+                        it’s stale, sorry.
                     </>
                 }
             />
@@ -58,13 +58,13 @@ export default function NowPage() {
 
 const ACTIVE = [
     {
-        kicker: 'Harbinger',
-        title: 'Differential turret — getting absolute encoders to register, then differential PID',
-        body: 'Current main project. Gimbal motors on SimpleFOC, ESP32, Qt app over Bluetooth. Coilgun is in planning.',
+        kicker: 'Caelifer',
+        title: 'Coaxial EDF tail sitter drone',
+        body: 'Current main project.',
     },
     {
         kicker: 'Aetherius UAV',
-        title: 'Twin-boom airframe — picking it back up for a summer maiden',
+        title: 'Classical twin-boom airframe drone.',
         body: 'Avionics are in. Switched from RPi companion to SiK radio. One crash on the first attempt. Next flight this summer.',
     },
 ];
@@ -81,10 +81,10 @@ function Active() {
                         {a.kicker}
                     </span>
                     <div>
-                        <h3 className="m-0 text-base font-semibold tracking-[-0.005em]">
+                        <h3 className="m-0 text-base font-semibold tracking-tight-1">
                             {a.title}
                         </h3>
-                        <p className="mt-1 mb-0 text-[14.5px] leading-relaxed text-fg-muted max-w-[680px]">
+                        <p className="mt-1 mb-0 text-[14.5px] leading-relaxed text-fg-muted max-w-170">
                             {a.body}
                         </p>
                     </div>
@@ -101,6 +101,7 @@ function Active() {
 const BACK_BURNER = [
     'SprocketStats — down for maintenance, AI pivot being considered for next season.',
     'Aetherius GCS — v1 Python/FastAPI, v2 Tauri + Python, both shelved while airframe takes priority.',
+    'Harbinger — I learned enough c++, next step is to invest on electronics for the coil gun which I dont want to do right now.',
 ];
 
 function BackBurner() {

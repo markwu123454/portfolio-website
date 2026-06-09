@@ -26,29 +26,21 @@ import {
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Sprocket — FRC CAD',
+    title: 'Team Sprocket — FRC CAD',
     description:
-        'Two seasons of FRC CAD with Team 3473 Sprocket. Climb subsystem in 2025, full-bot ownership in 2026.',
+        'Two seasons of FRC CAD with Team 3473 Sprocket. Climb subsystem in 2025, indexer and integration in 2026.',
 };
 
 export default function SprocketFrcPage() {
     return (
         <Page>
-            <Crumbs
-                items={[
-                    { href: '/work', label: 'Work' },
-                    { label: 'Sprocket — FRC CAD' },
-                ]}
-            />
-
             <PageHeader
                 tag={['ARCHIVE', '2024–26', 'TEAM 3473']}
                 title="Sprocket — FRC CAD."
                 subtitle="Two seasons with Team 3473."
                 dek={
                     <>
-                        Climb subsystem in the 2025 Reefscape season, full-bot
-                        ownership in the 2026 Rebuilt season.
+                        Climb subsystem in the 2025 Reefscape season, Indexer subsystem in the 2026 Rebuilt season.
                     </>
                 }
                 after={
@@ -123,13 +115,13 @@ const RESOURCES: Resource[] = [
         kicker: 'GrabCAD',
         label:  'FRC Team 3473 — Reefscape (2025)',
         meta:   'release 1 · climb subsystem',
-        href:   'https://grabcad.com/library/frc-team-3473-reefscape-cad-release-1',
+        href:   'https://grabcad.com/library/frc-team-3473-reefscape-cad-1',
     },
     {
         kicker: 'GrabCAD',
         label:  'FRC Team 3473 — Rebuilt (2026)',
         meta:   'release 1 · full-bot',
-        href:   'https://grabcad.com/library/frc-team-3473-rebuilt-cad-release-1',
+        href:   'https://grabcad.com/library/frc-team-3473-rebuilt-cad-1',
     },
 ];
 

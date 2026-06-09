@@ -29,8 +29,8 @@ export const metadata: Metadata = {
    DATA
    ───────────────────────────────────────────────────────────────── */
 
-type Status = 'building' | 'shipped' | 'archive';
-type Domain = 'Robotics' | 'Drones' | 'Software' | 'Combat';
+type Status = 'building' | 'shipped' | 'archive' | 'paused';
+type Domain = 'Robotics' | 'Drones' | 'Software';
 type SortKey = 'recent' | 'name' | 'status';
 
 interface Project {
@@ -46,31 +46,98 @@ interface Project {
 }
 
 const PROJECTS: Project[] = [
-    { num: '01', href: '/work/harbinger',     title: 'Harbinger',               blurb: 'Embedded C++ turret with coilgun actuator and closed-loop heading control. Current main project.',          status: 'building', domain: 'Robotics', year: '2025 —',  recency: 100 },
-    { num: '02', href: '/work/aetherius',     title: 'Aetherius UAV',           blurb: 'Fixed-wing drone — Pixhawk avionics, MAVLink telemetry. Twin-boom in build.',                              status: 'building', domain: 'Drones',   year: '2024 —',  recency: 95  },
-    { num: '03', href: '/work/sprocketstats', title: 'SprocketStats',           blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events. AI transition ongoing.', status: 'shipped',  domain: 'Software', year: '2024 —',  recency: 90  },
-    { num: '04', href: '/work/sprocket-frc',  title: 'Sprocket — FRC CAD',      blurb: 'Two seasons with Team 3473. Climb subsystem then full-bot ownership.',                                     status: 'archive',  domain: 'Robotics', year: '2024–26', recency: 80  },
-    { num: '05', href: '/work/combat',        title: 'Team Infernope',          blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",                               status: 'archive',  domain: 'Combat',   year: '2020–24', recency: 70  },
+    {
+        num: '01',
+        href: '',
+        title: 'Caelifer',
+        blurb: 'Coaxial EDF tailsitter drone that aim to demonstrate control in hover without differential thrust.',
+        status: 'building',
+        domain: 'Drones',
+        year: '2026 —',
+        recency: 100
+    },
+    {
+        num: '02',
+        href: '/work/harbinger',
+        title: 'Harbinger',
+        blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
+        status: 'paused',
+        domain: 'Robotics',
+        year: '2025 —',
+        recency: 94
+    },
+    {
+        num: '03',
+        href: '',
+        title: 'Aetherius GCS',
+        blurb: 'A custom modern ground controls station dedicated to ArduPilot.',
+        status: 'paused',
+        domain: 'Software',
+        year: '2025 —',
+        recency: 93
+    },
+    {
+        num: '04',
+        href: '/work/aetherius',
+        title: 'Aetherius UAV',
+        blurb: 'Fixed-wing Twin-boom.',
+        status: 'building',
+        domain: 'Drones',
+        year: '2024 —',
+        recency: 95
+    },
+    {
+        num: '05',
+        href: '/work/sprocketstats',
+        title: 'SprocketStats',
+        blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events.',
+        status: 'shipped',
+        domain: 'Software',
+        year: '2024 —',
+        recency: 90
+    },
+    {
+        num: '06',
+        href: '/work/sprocket-frc',
+        title: 'Sprocket — FRC CAD',
+        blurb: 'Two seasons with Team 3473.',
+        status: 'archive',
+        domain: 'Robotics',
+        year: '2024–26',
+        recency: 80
+    },
+    {
+        num: '07',
+        href: '/work/combat',
+        title: 'Team Infernope',
+        blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",
+        status: 'archive',
+        domain: 'Robotics',
+        year: '2020–24',
+        recency: 70
+    },
 ];
 
 const STATUS_TONE: Record<Status, Tone> = {
     building: 'warn',
-    shipped:  'good',
-    archive:  'neutral',
+    shipped: 'good',
+    archive: 'neutral',
+    paused: 'neutral',
 };
 
 /* Order used by sort=status. Active first, archived last. */
 const STATUS_ORDER: Record<Status, number> = {
     building: 0,
-    shipped:  1,
-    archive:  2,
+    shipped: 1,
+    paused: 2,
+    archive: 3,
 };
 
-const DOMAINS: Array<'all' | Domain> = ['all', 'Robotics', 'Drones', 'Software', 'Combat'];
+const DOMAINS: Array<'all' | Domain> = ['all', 'Robotics', 'Drones', 'Software'];
 const SORTS: Array<{ key: SortKey; label: string }> = [
-    { key: 'recent', label: 'Recent' },
-    { key: 'name',   label: 'A–Z'    },
-    { key: 'status', label: 'Status' },
+    {key: 'recent', label: 'Recent'},
+    {key: 'name', label: 'A–Z'},
+    {key: 'status', label: 'Status'},
 ];
 
 /* ─────────────────────────────────────────────────────────────────
@@ -81,38 +148,38 @@ interface PageProps {
     searchParams: Promise<{ domain?: string; sort?: string }>;
 }
 
-export default async function WorkIndexPage({ searchParams }: PageProps) {
+export default async function WorkIndexPage({searchParams}: PageProps) {
     const params = await searchParams;
     const domain = parseDomain(params.domain);
-    const sort   = parseSort(params.sort);
+    const sort = parseSort(params.sort);
 
     const visible = applySort(applyFilter(PROJECTS, domain), sort);
 
     return (
         <Page>
             <PageHeader
-                tag={['WORK', '5 PROJECTS', '#003']}
-                title="Seven projects."
-                subtitle="Filter by domain."
-                dek="Status reflects current activity, not completion year. Click any row to read the case study."
+                tag={['WORK', '6 PROJECTS', '#003']}
+                title="Six projects."
+                subtitle="Take a look."
+                dek="Status reflects current activity, not completion year. Click any row to see more details."
             />
 
-            <Breakdown />
+            <Breakdown/>
 
-            <FilterBar activeDomain={domain} activeSort={sort} />
+            <FilterBar activeDomain={domain} activeSort={sort}/>
 
             {visible.length > 0 ? (
                 <ul className="list-none m-0 p-0">
                     {visible.map((p) => (
-                        <ProjectRow key={p.href} project={p} />
+                        <ProjectRow key={p.num} project={p}/>
                     ))}
                 </ul>
             ) : (
-                <EmptyState domain={domain} />
+                <EmptyState domain={domain}/>
             )}
 
             {domain !== 'all' && visible.length > 0 && (
-                <ResultMeta count={visible.length} domain={domain} />
+                <ResultMeta count={visible.length} domain={domain}/>
             )}
         </Page>
     );
@@ -171,9 +238,9 @@ function buildUrl(next: { domain?: 'all' | Domain; sort?: SortKey }): string {
 
 function Breakdown() {
     const counts: Array<{ status: Status; n: number; tone: Tone }> = [
-        { status: 'building', n: PROJECTS.filter((p) => p.status === 'building').length, tone: 'warn'    },
-        { status: 'shipped',  n: PROJECTS.filter((p) => p.status === 'shipped').length,  tone: 'good'    },
-        { status: 'archive',  n: PROJECTS.filter((p) => p.status === 'archive').length,  tone: 'neutral' },
+        {status: 'building', n: PROJECTS.filter((p) => p.status === 'building').length, tone: 'warn'},
+        {status: 'shipped', n: PROJECTS.filter((p) => p.status === 'shipped').length, tone: 'good'},
+        {status: 'archive', n: PROJECTS.filter((p) => p.status === 'archive').length, tone: 'neutral'},
     ];
     const active = counts[0].n + counts[1].n;
 
@@ -193,7 +260,7 @@ function Breakdown() {
                         <dt className="flex items-center gap-1.5 font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
                             <span
                                 aria-hidden
-                                className={`w-[5px] h-[5px] rounded-full shrink-0 ${
+                                className={`w-1.25 h-1.25 rounded-full shrink-0 ${
                                     {
                                         good: 'bg-good',
                                         warn: 'bg-warn',
@@ -239,7 +306,7 @@ function FilterBar({
                     return (
                         <Link
                             key={d}
-                            href={buildUrl({ domain: d, sort: activeSort })}
+                            href={buildUrl({domain: d, sort: activeSort})}
                             scroll={false}
                             aria-current={isActive ? 'page' : undefined}
                             className={`
@@ -265,7 +332,7 @@ function FilterBar({
                     return (
                         <Link
                             key={s.key}
-                            href={buildUrl({ domain: activeDomain, sort: s.key })}
+                            href={buildUrl({domain: activeDomain, sort: s.key})}
                             scroll={false}
                             aria-current={isActive ? 'page' : undefined}
                             className={`
@@ -293,7 +360,7 @@ function FilterBar({
             (status · year · arrow) below. Index number hidden.
    ═════════════════════════════════════════════════════════════════ */
 
-function ProjectRow({ project: p }: { project: Project }) {
+function ProjectRow({project: p}: { project: Project }) {
     return (
         <li className="border-t border-rule last:border-b last:border-rule">
             <Link
@@ -311,10 +378,10 @@ function ProjectRow({ project: p }: { project: Project }) {
 
                 {/* Title + blurb */}
                 <div className="min-w-0">
-                    <h3 className="m-0 text-[16px] font-semibold tracking-[-0.005em] group-hover:text-accent transition-colors">
+                    <h3 className="m-0 text-[16px] font-semibold tracking-tight-1 group-hover:text-accent transition-colors">
                         {p.title}
                     </h3>
-                    <p className="mt-1 mb-0 text-[13.5px] text-fg-muted leading-snug max-w-[640px]">
+                    <p className="mt-1 mb-0 text-[13.5px] text-fg-muted leading-snug max-w-160">
                         {p.blurb}
                     </p>
                 </div>
@@ -342,7 +409,7 @@ function ProjectRow({ project: p }: { project: Project }) {
    EMPTY STATE + RESULT META
    ═════════════════════════════════════════════════════════════════ */
 
-function EmptyState({ domain }: { domain: 'all' | Domain }) {
+function EmptyState({domain}: { domain: 'all' | Domain }) {
     return (
         <div className="border-t border-b border-rule py-12 text-center">
             <p className="m-0 text-fg-muted text-[14.5px]">
@@ -358,7 +425,7 @@ function EmptyState({ domain }: { domain: 'all' | Domain }) {
     );
 }
 
-function ResultMeta({ count, domain }: { count: number; domain: Domain }) {
+function ResultMeta({count, domain}: { count: number; domain: Domain }) {
     return (
         <p className="font-mono text-[11px] text-fg-soft tracking-mono mt-4 mb-0">
             {count} of {PROJECTS.length} · filtered by{' '}

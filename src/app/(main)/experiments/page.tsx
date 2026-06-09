@@ -82,14 +82,14 @@ const READY: Experiment[] = [
         href: '/experiments/snake',
         category: 'ALGORITHM',
         title: 'Snake',
-        blurb: 'Snake agent using an optimised Hamiltonian cycle — guaranteed to win.',
+        blurb: 'Snake agent using an optimised Hamiltonian cycle, it is guaranteed to win.',
         preview: SNAKE_PREVIEW,
     },
     {
         href: '/experiments/state-space',
         category: 'ALGORITHM',
         title: 'State Space',
-        blurb: 'Rush Hour board explorer — BFS over all reachable states, visualised in 3D.',
+        blurb: 'Rush Hour board explorer, BFS over all reachable states, visualised in 3D.',
         preview: STATE_SPACE_PREVIEW,
     },
 ];
@@ -112,7 +112,7 @@ export default function ExperimentsPage() {
                 tag={['EXPERIMENTS', `${READY.length + WIP.length} TOTAL`]}
                 title="Experiments —"
                 subtitle="interactive toys and visualisers."
-                dek="Built in an afternoon, kept because they're interesting."
+                dek="Online projects not as big as the others."
             />
 
             <GroupHeader tone="good" count={READY.length} label="READY" aside="Click to open" />
@@ -154,7 +154,7 @@ function GroupHeader({ tone, count, label, aside }: { tone: 'good' | 'warn'; cou
 function ReadyTile({ num, experiment: e }: { num: string; experiment: Experiment }) {
     return (
         <Link href={e.href} className="group block no-underline text-fg">
-            <div className="relative bg-bg-elev border border-rule rounded-md aspect-[4/3] overflow-hidden transition-colors duration-150 group-hover:border-rule-strong">
+            <div className="relative bg-bg-elev border border-rule rounded-md aspect-4/3 overflow-hidden transition-colors duration-150 group-hover:border-rule-strong">
                 <div className="absolute inset-0">{e.preview}</div>
                 <span className="absolute top-2 right-2 font-mono text-[10px] tracking-mono text-fg-soft bg-bg/70 px-1 rounded">
                     {num}
@@ -163,7 +163,7 @@ function ReadyTile({ num, experiment: e }: { num: string; experiment: Experiment
                     {e.category}
                 </span>
             </div>
-            <h3 className="mt-3 mb-1 text-[15px] font-semibold tracking-[-0.005em] group-hover:text-accent transition-colors">
+            <h3 className="mt-3 mb-1 text-[15px] font-semibold tracking-tight-1 group-hover:text-accent transition-colors">
                 {e.title}
             </h3>
             <p className="m-0 text-[13px] text-fg-muted leading-snug">{e.blurb}</p>
@@ -174,8 +174,8 @@ function ReadyTile({ num, experiment: e }: { num: string; experiment: Experiment
 function WipTile({ title, blurb }: { title: string; blurb: string }) {
     return (
         <div>
-            <div className="bg-bg-elev/60 border border-dashed border-rule rounded-md aspect-[4/3]" />
-            <h3 className="mt-3 mb-1 text-[15px] font-semibold tracking-[-0.005em] text-fg-muted">{title}</h3>
+            <div className="bg-bg-elev/60 border border-dashed border-rule rounded-md aspect-4/3" />
+            <h3 className="mt-3 mb-1 text-[15px] font-semibold tracking-tight-1 text-fg-muted">{title}</h3>
             <p className="m-0 text-[13px] text-fg-soft leading-snug">{blurb}</p>
         </div>
     );

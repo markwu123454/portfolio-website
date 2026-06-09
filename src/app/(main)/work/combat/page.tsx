@@ -31,7 +31,7 @@ import Image from 'next/image';
 export const metadata: Metadata = {
     title: 'Team Infernope',
     description:
-        'Three years of combat robotics. Twelve robots, real lessons, one end-of-year tournament win.',
+        'Three years of combat robotics. Twelve robots, one end-of-year tournament win.',
 };
 
 export default function CombatPage() {
@@ -39,7 +39,7 @@ export default function CombatPage() {
         <div data-theme="hazard">
             <div className="hazard-stripe" />
 
-            <main className="max-w-[1100px] mx-auto px-8 pb-12">
+            <main className="max-w-275 mx-auto px-8 pb-12">
                 <div className="pt-12">
                     <Crumbs
                         items={[
@@ -57,18 +57,17 @@ export default function CombatPage() {
                     </div>
 
                     <div className="grid md:grid-cols-[minmax(0,1fr)_320px] gap-12 items-start mb-10">
-                        <h1 className="m-0 font-mono uppercase font-semibold leading-[1.05] tracking-[0] text-[clamp(36px,4.5vw,52px)] max-w-[760px]">
+                        <h1 className="m-0 font-mono uppercase font-semibold leading-[1.05] tracking-normal text-[clamp(36px,4.5vw,52px)] max-w-190">
                             Team Infernope —{' '}
                             <br />
                             three years, twelve robots.
                         </h1>
 
                         <div>
-                            <p className="m-0 mb-4 text-[15.5px] leading-[1.65] text-fg-muted max-w-[420px]">
+                            <p className="m-0 mb-4 text-[15.5px] leading-[1.65] text-fg-muted max-w-105">
                                 Combat robotics, 1lb and 3lb classes. Run by Mark
-                                Duffield. Each robot was a deliberate step —
-                                voltage scaling, modular chassis, energy efficiency.
-                                End-of-year tournament: first place. The team is closed.
+                                Duffield. Each robot was built on the ones that came before.
+                                End-of-year tournament: first place.
                             </p>
                             <div className="flex gap-2 flex-wrap">
                                 <Tag>1lb · 3lb</Tag>
@@ -109,7 +108,7 @@ export default function CombatPage() {
                         title="Horizontal Spinner"
                         type="Horizontal Spinner"
                         result="Non-functional"
-                        description="The first attempt at a combat robot. Never operated successfully — marked the start of experimentation with chassis and drive systems."
+                        description="The first attempt at a combat robot. Never operated successfully, marked the start of experimentation with chassis and drive systems."
                         failed={['No functional drivetrain or weapon.', 'Lacked understanding of assembly fundamentals.']}
                         learned={['Use proper fasteners and alignments.', 'Begin testing small subsystems before full assembly.']}
                     />
@@ -131,7 +130,7 @@ export default function CombatPage() {
                         title="Thwack!"
                         type="Thwack Bot"
                         result="1–0–2 at end-of-year double elim."
-                        description="A simple thwack bot with interchangeable attachments designed for impact-based defense."
+                        description="A simple thwack bot with interchangeable attachments designed for offensive capabilities without an active weapon."
                         failed={['No active weapon.', 'Incorrect gear ratio made drive too slow for effective hits.']}
                         learned={['Designing 3D-printed wheel hubs with strong mounting interfaces and high traction.', 'Basic modular design.']}
                     />
@@ -151,8 +150,8 @@ export default function CombatPage() {
                         type="Dual-Disk Vertical Spinner"
                         result="Practice build"
                         description="A large double disk vertical spinner, emphasizing upward impact and wedge-driven control."
-                        failed={['Hard to balance.', '3D printing defects caused inconsistent wedge performance.']}
-                        learned={['CG calculations and optimization in Fusion 360.']}
+                        failed={['Hard to balance weapon CG.', '3D printing defects caused inconsistent wedge performance.']}
+                        learned={['Asymmetric weapon CG calculations and optimization in Fusion 360.']}
                     />
                 </Section>
 
@@ -161,7 +160,7 @@ export default function CombatPage() {
                         title="300g Bot"
                         type="Vertical Beater Bar (300g)"
                         result="Eliminated at quals"
-                        description="A 300g beater bar bot designed for the lower weight class while maintaining offensive capability. Strong design, unlucky bracket placement."
+                        description="A 300g beater bar bot designed for the lower weight class while using 1lb electronics. Strong design, unlucky bracket placement."
                         failed={['Strong design but unlucky tournament placement.']}
                         learned={['Pocketing chassis and 3D printing techniques reducing print weight', 'Uses weapon vortex for cooling electronics.']}
                     />
@@ -221,7 +220,7 @@ export default function CombatPage() {
                         title="Riptide"
                         type="Egg Beater (3lb) — CAD only"
                         result="Not built"
-                        description="A 3lb egg-beater inspired by Riptide (BattleBots) and Ares (NHRL). Never manufactured due to time constraints."
+                        description="A 3lb egg-beater inspired by Riptide (BattleBots) and Ares (NHRL). Never manufactured due to time and budget constraints."
                         failed={['Never manufactured due to time constraints.']}
                         learned={['First robot fully designed in Fusion 360 using mixed materials: UHMW and carbon fiber.']}
                     />
@@ -276,6 +275,8 @@ function RobotImages({ title, images }: { title: string; images: string[] }) {
                     <Image
                         src={src}
                         alt={`${title} ${images.length > 1 ? i + 1 : ''}`}
+                        width={800}
+                        height={600}
                         className="w-full h-auto object-contain"
                         loading="lazy"
                     />
@@ -311,7 +312,7 @@ function RobotEntry({ title, type, result, highlight, description, failed, learn
                 <h3 className="m-0 mb-2 text-[18px] font-semibold tracking-[-0.01em]">
                     {title}
                 </h3>
-                <p className="m-0 mb-5 text-[14.5px] leading-[1.65] text-fg-muted max-w-[640px]">
+                <p className="m-0 mb-5 text-[14.5px] leading-[1.65] text-fg-muted max-w-160">
                     {description}
                 </p>
 
@@ -335,7 +336,7 @@ function StencilCol({ label, tone, items }: { label: string; tone: 'red' | 'ambe
             </div>
             <ul className="list-none m-0 p-0 flex flex-col gap-1.5">
                 {items.map((it, i) => (
-                    <li key={i} className="flex items-baseline gap-2 text-[13.5px] text-fg-muted leading-[1.5]">
+                    <li key={i} className="flex items-baseline gap-2 text-[13.5px] text-fg-muted leading-normal">
                         <span aria-hidden className="text-fg-soft font-mono text-[11px] shrink-0">—</span>
                         {it}
                     </li>

@@ -29,7 +29,7 @@ export default function AboutPage() {
                 tag={['ABOUT', '2026', '#002']}
                 title="I lead with what I’m"
                 subtitle={<>looking for — biography is at the bottom.</>}
-                dek="Recruiters, professors, lab leads — read the top half. Friends and fellow students — read the bottom. Either way, the contact box on the home page works."
+                dek="Recruiters, professors, lab leads: read the top half. Friends and fellow students: read the bottom."
             />
 
             <Section num="01" title="What I’m looking for">
@@ -63,15 +63,14 @@ function LookingFor() {
     return (
         <div className="grid md:grid-cols-2 gap-8">
             <div>
-                <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-[460px]">
+                <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-115">
                     Summer 2026 internships in{' '}
                     <strong className="text-fg font-semibold">
                         robotics, drones, embedded systems
                     </strong>
-                    , or full-stack tooling that supports them. Comfortable on
+                    , or full-stack tooling. Comfortable with
                     hardware (Pixhawk, Arduino, ESP32, Pi) and software
-                    (TypeScript, Python, C++). Comfortable shipping things
-                    end-to-end.
+                    (TypeScript, Python, C++).
                 </p>
                 <div className="mt-6 flex gap-3 flex-wrap">
                     <Button href="/resume.pdf#view=FitV" variant="primary" arrow external>
@@ -85,11 +84,11 @@ function LookingFor() {
                     </Button>
                 </div>
             </div>
-            <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-[460px]">
+            <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-115">
                 Also open to{' '}
                 <strong className="text-fg font-semibold">research lab</strong>{' '}
-                applications — UROP, REU, equivalent. Most direct fit is autonomy,
-                mechatronics, or controls. I take notes seriously and document.
+                applications, UROP, REU, equivalent. Most direct fit is autonomy,
+                mechatronics, or controls.
             </p>
         </div>
     );
@@ -103,7 +102,7 @@ const SKILLS: Array<[string, string[]]> = [
     ['Software', ['TypeScript', 'Python', 'C++', 'React / Next.js', 'FastAPI', 'Tauri']],
     ['Hardware', ['Pixhawk 6X', 'Raspberry Pi 4', 'ESP32', 'Arduino', 'MAVLink']],
     ['CAD', ['SolidWorks (primary)', 'Onshape', 'Fusion 360']],
-    ['Workshop', ['3D printing', 'CNC (basic)', 'Soldering', 'Wiring looms']],
+    ['Workshop', ['3D printing', 'Soldering']],
 ];
 
 function Skills() {
@@ -138,11 +137,11 @@ function Skills() {
    ═════════════════════════════════════════════════════════════════ */
 
 const PRINCIPLES = [
-    'Document while you build, not after. The notes are part of the work.',
-    'Prototype to fail. The intake that didn’t survive bench testing taught more than the one that did.',
-    'Read other people’s CAD trees. The fastest way to learn an assembly is to take one apart.',
-    'Write more than you think you should. Code, READMEs, season debriefs, after-action reports.',
-    'Ship things that other people use. SprocketStats only mattered when 200 scouters relied on it.',
+    'Document while you build, not after.',
+    'Rapid prototyping. Fail faster.',
+    'Use everything available to you.',
+    'Rather write more than less.',
+    'Only make things with a purpose.',
 ];
 
 function HowIWork() {
@@ -170,26 +169,24 @@ function HowIWork() {
 function Biography() {
     return (
         <div className="grid md:grid-cols-[minmax(0,1fr)_320px] gap-12 items-start">
-            <div className="grid gap-4 max-w-[620px] text-[15.5px] leading-[1.7] text-fg-muted">
+            <div className="grid gap-4 max-w-155 text-[15.5px] leading-[1.7] text-fg-muted">
                 <p className="m-0">
-                    Diamond Bar, CA. Class of 2026. Started in VEX in middle school,
+                    Diamond Bar, CA. Class of 2026. Started in VEX and LEGO in middle school,
                     moved into{' '}
                     <strong className="text-fg font-semibold">combat robotics</strong>{' '}
                     for three years (Team Infernope — twelve robots), then FRC with{' '}
                     <strong className="text-fg font-semibold">Team 3473</strong> —
-                    first as CAD subteam, now also leading the scouting platform.
+                    first as CAD subteam, later also leading the scouting platform.
                 </p>
                 <p className="m-0">
-                    Fixed-wing UAVs are my current obsession — the{' '}
+                    UAVs are my current obsession: project{' '}
                     <strong className="text-fg font-semibold">Aetherius</strong>{' '}
-                    programme is in its fourth airframe revision. I write music when
-                    I’m not building.
+                    is currently preparing for test flight. I write music occasionally.
                 </p>
             </div>
             <Pullquote attribution="What this site is for">
-                The case for one student engineer, documented carefully enough that
-                recruiters, professors, and labs can read it without asking
-                follow-up questions.
+                My project demonstrations, documented so
+                recruiters, professors, and labs can see what I&#39;m capable of.
             </Pullquote>
         </div>
     );
@@ -217,10 +214,8 @@ function Pullquote({
    ═════════════════════════════════════════════════════════════════ */
 
 const ACKS: Array<[string, string]> = [
-    ['Combat', 'Mark Duffield — three years of mentorship at Infernope.'],
-    ['FRC', 'Gabriel Aguilar & Luis De La Cruz — Team 3473 leadership.'],
-    ['Aetherius', 'Self-directed; built on top of Pixhawk and the ArduPilot community.'],
-    ['This site', 'Built in a week to replace the previous one. Apologies if anything is broken.'],
+    ['Combat', 'Mark Duffield: three years of mentorship at Team Infernope.'],
+    ['FRC', 'Gabriel Aguilar & Luis De La Cruz: Team 3473 Mentors.'],
 ];
 
 function Acknowledgements() {

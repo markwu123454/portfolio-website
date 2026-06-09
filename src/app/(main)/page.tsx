@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
     return (
-        <main className="max-w-[1100px] mx-auto px-4 sm:px-8 pb-16 sm:pb-24">
+        <main className="max-w-275 mx-auto px-4 sm:px-8 pb-16 sm:pb-24">
             <Hero />
 
             <Section num="01" title="Featured work">
@@ -78,14 +78,14 @@ function Hero() {
                     </Tag>
                 </div>
 
-                <h1 className="m-0 font-semibold leading-[1.05] tracking-[-0.025em] max-w-[760px] text-[clamp(30px,5vw,56px)]">
+                <h1 className="m-0 font-semibold leading-[1.05] tracking-[-0.025em] max-w-190 text-[clamp(30px,5vw,56px)]">
                     Student engineer.{' '}
                     <span className="text-fg-muted font-medium">
                         I build robots, drones, and the software that runs them.
                     </span>
                 </h1>
 
-                <div className="mt-6 sm:mt-8 grid gap-2 max-w-[620px] text-base leading-[1.65] text-fg-muted">
+                <div className="mt-6 sm:mt-8 grid gap-2 max-w-155 text-base leading-[1.65] text-fg-muted">
                     <p className="m-0">
                         <strong className="text-fg font-semibold">Harbinger</strong>{' '}
                         — embedded C++ turret with a coilgun actuator and closed-loop heading control. Current main project.
@@ -123,7 +123,7 @@ function Telemetry({ className = '' }: { className?: string }) {
         ['Last shipped',    'SprocketStats v2'],
     ];
     return (
-        <aside className={`border border-rule rounded-md p-[18px] bg-bg-elev font-mono text-[11.5px] ${className}`}>
+        <aside className={`border border-rule rounded-md p-4.5 bg-bg-elev font-mono text-[11.5px] ${className}`}>
             <div className="flex justify-between items-baseline pb-3 mb-3 border-b border-rule text-fg-soft tracking-[0.16em] uppercase text-[10px]">
                 <span>Now</span>
                 <span>2026.05 · Diamond Bar</span>
@@ -215,7 +215,7 @@ function ProjectListing({ item }: { item: FeaturedItem }) {
                     <h3 className="m-0 text-[17px] sm:text-[19px] font-semibold tracking-[-0.01em] group-hover:text-accent transition-colors duration-150">
                         {item.title}
                     </h3>
-                    <p className="mt-1 mb-0 text-[14px] sm:text-[14.5px] leading-relaxed text-fg-muted max-w-[540px]">
+                    <p className="mt-1 mb-0 text-[14px] sm:text-[14.5px] leading-relaxed text-fg-muted max-w-135">
                         {item.dek}
                     </p>
                 </div>
@@ -264,7 +264,7 @@ function Timeline() {
                 <li
                     key={r.title}
                     className="
-                        py-4 sm:py-[18px] border-t border-rule
+                        py-4 sm:py-4.5 border-t border-rule
                         /* Mobile: date above content. Desktop: side-by-side */
                         flex flex-col gap-1
                         sm:grid sm:grid-cols-[120px_minmax(0,1fr)] sm:gap-6
@@ -274,10 +274,10 @@ function Timeline() {
                         {r.date}
                     </span>
                     <div>
-                        <h3 className="m-0 text-base font-semibold tracking-[-0.005em]">
+                        <h3 className="m-0 text-base font-semibold tracking-tight-1">
                             {r.title}
                         </h3>
-                        <p className="mt-1 mb-0 text-[14.5px] leading-relaxed text-fg-muted max-w-[580px]">
+                        <p className="mt-1 mb-0 text-[14.5px] leading-relaxed text-fg-muted max-w-145">
                             {r.body}
                         </p>
                     </div>
@@ -338,7 +338,7 @@ function Contact() {
 
     return (
         <div>
-            <p className="mt-0 mb-6 text-base text-fg-muted max-w-[620px] leading-relaxed">
+            <p className="mt-0 mb-6 text-base text-fg-muted max-w-155 leading-relaxed">
                 Email is best. Usually reply within a day. Resume on file — happy to
                 send the latest version.
             </p>
@@ -400,7 +400,7 @@ function Section({
                             {kicker}
                         </div>
                     )}
-                    <h2 className={`m-0 font-semibold tracking-[-0.015em] max-w-[720px] leading-tight ${kicker ? 'text-[18px] sm:text-[22px]' : 'text-[22px] sm:text-[28px]'}`}>
+                    <h2 className={`m-0 font-semibold tracking-tight-2 max-w-180 leading-tight ${kicker ? 'text-[18px] sm:text-[22px]' : 'text-[22px] sm:text-[28px]'}`}>
                         {title}
                     </h2>
                 </div>
@@ -412,7 +412,7 @@ function Section({
 
 function SectionFooter({ children }: { children: ReactNode }) {
     return (
-        <div className="mt-[18px] pt-3.5 border-t border-rule flex justify-end font-mono text-xs">
+        <div className="mt-4.5 pt-3.5 border-t border-rule flex justify-end font-mono text-xs">
             {children}
         </div>
     );
@@ -440,8 +440,8 @@ const TONE_DOT: Record<Tone, string> = {
 
 function StatusPill({ tone, children }: { tone: Tone; children: ReactNode }) {
     return (
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-px border border-rule rounded-full font-mono text-[10px] tracking-[0.1em] uppercase text-fg-muted whitespace-nowrap">
-            <span aria-hidden className={`w-[5px] h-[5px] rounded-full ${TONE_DOT[tone]}`} />
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-px border border-rule rounded-full font-mono text-[10px] tracking-widest uppercase text-fg-muted whitespace-nowrap">
+            <span aria-hidden className={`w-1.25 h-1.25 rounded-full ${TONE_DOT[tone]}`} />
             {children}
         </span>
     );

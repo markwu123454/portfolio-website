@@ -36,11 +36,11 @@ export default function ContactPage() {
             <PageHeader
                 tag={['CONTACT', '2026', '#005']}
                 title="Write any time."
-                subtitle="Recruiters, professors, lab leads — and other student engineers."
+                subtitle="Recruiters, professors, and other student."
                 dek={
                     <>
-                        Email is best. I read everything and reply within a day,
-                        usually faster. No form to fill out — please just send
+                        Email is best. I read and reply within a day,
+                        usually faster. No form to fill out, please just send
                         the message you want me to read.
                     </>
                 }
@@ -91,10 +91,10 @@ function PrimarySlab() {
                 >
                     me@markwu.org
                 </a>
-                <p className="mt-4 mb-0 text-[14.5px] text-fg-muted leading-relaxed max-w-[560px]">
+                <p className="mt-4 mb-0 text-[14.5px] text-fg-muted leading-relaxed max-w-140">
                     I read every message. Typical reply{' '}
                     <span className="text-fg font-medium">under 24 hours</span>{' '}
-                    on weekdays, longer during competition weekends or AP windows.
+                    on weekdays, longer during competition weekends.
                 </p>
             </div>
 
@@ -183,7 +183,7 @@ function Channels() {
                         <span className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
                             {c.kicker}
                         </span>
-                        <span className="text-[16px] text-fg font-medium tracking-[-0.005em] group-hover:text-accent transition-colors duration-150 truncate">
+                        <span className="text-[16px] text-fg font-medium tracking-tight-1 group-hover:text-accent transition-colors duration-150 truncate">
                             {c.label}
                         </span>
                         <span className="hidden md:inline font-mono text-[11px] text-fg-soft tracking-mono whitespace-nowrap">
@@ -211,10 +211,10 @@ function Channels() {
 function Logistics() {
     const ROWS: Array<[string, ReactNode]> = [
         ['Timezone',    'America/Los_Angeles · UTC−7 (PDT)'],
-        ['Based',       'Diamond Bar, CA · school-year'],
+        ['Based',       'Merced, CA'],
         ['Reply window','Weekdays · usually < 24h'],
         ['Languages',   'English · Mandarin'],
-        ['Last updated','2026.05.10'],
+        ['Last updated','2026.06.09'],
     ];
 
     return (
@@ -243,7 +243,7 @@ function Logistics() {
    sibling to the dl, mono only, no visual weight. */
 function Provenance() {
     return (
-        <aside className="border border-rule rounded-md p-4 bg-bg-elev w-full md:w-[280px] font-mono text-[11px] leading-relaxed">
+        <aside className="border border-rule rounded-md p-4 bg-bg-elev w-full md:w-70 font-mono text-[11px] leading-relaxed">
             <div className="flex justify-between items-baseline pb-2 mb-2 border-b border-rule text-fg-soft tracking-kicker uppercase text-[10px]">
                 <span>Identity</span>
                 <span>verified channels</span>
@@ -263,7 +263,7 @@ function Provenance() {
                 </li>
             </ul>
             <p className="mt-3 mb-0 text-fg-soft text-[10.5px] leading-snug">
-                Anyone claiming to be me from a different address — it
+                Anyone claiming to be me from a different address, it
                 isn&rsquo;t. Cross-check here.
             </p>
         </aside>

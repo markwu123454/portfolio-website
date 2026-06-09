@@ -296,10 +296,9 @@ export default function HarbingerPage() {
                         <p className="dek">
                             Closed-loop heading control on an ESP32, programmable
                             high-voltage driver, Qt desktop app over Bluetooth.
-                            Currently the main project.
                         </p>
                         <div className="chips">
-                            <span className="hb-pill warn"><span className="dot" />Building</span>
+                            <span className="hb-pill warn"><span className="dot" />Paused</span>
                             <span className="hb-tag">ESP32</span>
                             <span className="hb-tag">SimpleFOC</span>
                             <span className="hb-tag">C++</span>
@@ -378,7 +377,7 @@ export default function HarbingerPage() {
                                 <p>
                                     A differential turret driven by gimbal motors, controlled
                                     by an <strong>ESP32</strong> running <em>SimpleFOC</em>. A
-                                    Qt desktop app connects over Bluetooth — currently handles
+                                    Qt desktop app connects over Bluetooth, currently handles
                                     enable/disable and manual turret movement, with PID tuning
                                     and settings management coming next.
                                 </p>
@@ -400,7 +399,7 @@ export default function HarbingerPage() {
                                 <p>
                                     Three- or five-stage coilgun. Projectile is a steel ball
                                     bearing. The power supply is a programmable voltage
-                                    converter running 25–100&nbsp;V — varying output voltage is
+                                    converter running 25–200&nbsp;V, varying output voltage is
                                     the mechanism for controlling muzzle energy.
                                 </p>
                                 <p>

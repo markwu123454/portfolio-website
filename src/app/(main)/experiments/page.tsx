@@ -73,6 +73,31 @@ const STATE_SPACE_PREVIEW = (
     </div>
 );
 
+// Digital Footprint Mirror preview — a redacted paper record
+const FOOTPRINT_PREVIEW = (
+    <svg viewBox="0 0 360 270" preserveAspectRatio="xMidYMid slice" className="w-full h-full" aria-hidden>
+        <rect width={360} height={270} fill="#E9E7E1" />
+        {Array.from({ length: 9 }).map((_, i) => (
+            <line key={i} x1={0} x2={360} y1={28 * (i + 1)} y2={28 * (i + 1)} stroke="#78766E" strokeOpacity={0.12} />
+        ))}
+        <rect x={26} y={22} width={308} height={58} fill="#F2F0EA" stroke="#1A1A18" strokeWidth={2} />
+        <rect x={40} y={36} width={104} height={6} fill="#52514C" opacity={0.6} />
+        <rect x={40} y={50} width={168} height={16} fill="#1A1A18" />
+        <g transform="rotate(-9 286 50)">
+            <rect x={246} y={36} width={80} height={26} rx={2} fill="none" stroke="#C0362C" strokeWidth={3} />
+            <text x={286} y={54} textAnchor="middle" fontSize={12} fontWeight={700} fill="#C0362C"
+                  fontFamily="system-ui, sans-serif" letterSpacing={1}>ON FILE</text>
+        </g>
+        {([[104, 96, 178], [134, 72, 188], [164, 88, 150], [194, 60, 196], [224, 92, 132]] as const).map(([y, lw, bw], i) => (
+            <g key={i}>
+                <rect x={26} y={y} width={lw} height={6} fill="#52514C" opacity={0.55} />
+                <rect x={138} y={y - 5} width={bw} height={15} fill="#16150F" />
+                <line x1={26} x2={334} y1={y + 14} y2={y + 14} stroke="#CFCCC3" />
+            </g>
+        ))}
+    </svg>
+);
+
 /* ─────────────────────────────────────────────────────────────────
    Data
    ───────────────────────────────────────────────────────────────── */
@@ -91,6 +116,13 @@ const READY: Experiment[] = [
         title: 'State Space',
         blurb: 'Rush Hour board explorer, BFS over all reachable states, visualised in 3D.',
         preview: STATE_SPACE_PREVIEW,
+    },
+    {
+        href: '/experiments/digital-footprint',
+        category: 'PRIVACY',
+        title: 'Digital Footprint Mirror',
+        blurb: 'Everything you hand a site by just loading it, assembled into a disclosure record in front of you.',
+        preview: FOOTPRINT_PREVIEW,
     },
 ];
 

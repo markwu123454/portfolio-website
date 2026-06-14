@@ -251,10 +251,17 @@ function SnakePage() {
 
 
     return (
-        <div className="flex flex-col pb-4">
-            {/* Control Panel */}
-            <div className="sticky top-0 z-20 bg-[color-mix(in_srgb,var(--bg)_95%,transparent)] backdrop-blur-md border-b border-rule">
-                <div className="mx-auto px-8 py-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="flex flex-col">
+            <div className="flex flex-col lg:flex-row lg:min-h-[calc(100vh-53px)]">
+                {/* ── Left control rail (concept B) ── */}
+                <aside className="lg:w-[320px] lg:flex-none shrink-0 border-b lg:border-b-0 lg:border-r border-rule bg-bg-elev p-6 flex flex-col gap-5 box-border">
+                    <div>
+                        <div className="font-mono text-[11px] tracking-kicker uppercase text-accent flex items-center gap-2">
+                            <span>EXPERIMENT</span><span className="text-fg-soft">·</span><span>SNAKE</span>
+                        </div>
+                        <h1 className="mt-2.5 mb-1 text-[28px] font-semibold tracking-[-0.025em]">Snake</h1>
+                        <p className="m-0 text-[13px] text-fg-muted leading-snug">Optimised Hamiltonian cycle — it cannot lose.</p>
+                    </div>
 
                     <div className="flex items-center gap-2 bg-bg-elev border border-rule rounded-md p-3">
                         <button
@@ -294,37 +301,15 @@ function SnakePage() {
                         />
                     </div>
 
-                    <div className="bg-bg-elev border border-rule rounded-md p-3 flex flex-wrap gap-2">
-                        <button
-                            onClick={toggleShowPath}
-                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
-                                showPath
-                                    ? "bg-fg text-bg hover:opacity-90"
-                                    : "bg-zinc-800 hover:bg-zinc-700"
-                            }`}
-                        >
-                            Hamiltonian Path
-                        </button>
-                        <button
-                            onClick={toggleHighlightPath}
-                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
-                                highlightPath
-                                    ? "bg-warn text-bg hover:opacity-90"
-                                    : "bg-zinc-800 hover:bg-zinc-700"
-                            }`}
-                        >
-                            Head &rarr; Apple
-                        </button>
-                        <button
-                            onClick={() => setShowHeatmap(h => !h)}
-                            className={`flex-1 min-w-24 px-3 py-2 rounded-md text-sm ${
-                                showHeatmap
-                                    ? "bg-linear-to-r from-emerald-500 to-rose-500 text-bg hover:opacity-90"
-                                    : "bg-zinc-800 hover:bg-zinc-700"
-                            }`}
-                        >
-                            Heatmap
-                        </button>
+                    {/* Layer checklist — the rail's signature control */}
+                    <div>
+                        <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-2.5">Layers</div>
+                        <div className="flex flex-col gap-0.5">
+                            <LayerToggle on={showPath} color="var(--fg)" label="Hamiltonian path" onClick={toggleShowPath} />
+                            <LayerToggle on={highlightPath} color="#facc15" label="Head → apple" onClick={toggleHighlightPath} />
+                            <LayerToggle on={showHeatmap} color="#e879a6" label="Reachability heatmap" onClick={() => setShowHeatmap(h => !h)} />
+                            <LayerToggle on color="var(--fg-soft)" label="Grid" />
+                        </div>
                     </div>
 
                     <div className="bg-bg-elev border border-rule rounded-md p-3 grid grid-cols-2 gap-2 text-sm">
@@ -361,107 +346,117 @@ function SnakePage() {
                             />
                         </label>
                     </div>
-                </div>
-            </div>
 
-            {/* Stats */}
-            <div className="mx-auto w-full px-8 pt-3">
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-1 font-mono text-[11px] tracking-kicker uppercase text-fg-soft">
-                    <span>Steps <span className="text-fg">{steps.toLocaleString()}</span></span>
-                    <span>Apples <span className="text-fg">{apples}</span></span>
-                    <span>Filled <span className="text-fg">{filledPct}%</span></span>
-                    <span>Loops searched <span className="text-fg">{loopsSearched.toLocaleString()}</span></span>
-                    {won && <span className="text-emerald-400 font-semibold">Solved</span>}
-                </div>
-            </div>
+                    <div className="flex-1" />
 
-            {/* Grid */}
-            <div className="flex-1 grid place-items-center mt-2 px-8">
-                <div
-                    className="relative grid"
-                    style={{
-                        gridTemplateRows: `repeat(${rows}, 1fr)`,
-                        gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                        height: "min(75vw, 75vh)",
-                        aspectRatio: `${cols} / ${rows}`,
-                    }}
-                >
-                    {Array.from({length: rows * cols}).map((_, idx) => {
-                        let bg: string | undefined;
-                        if (heat && !heat.snakeSet.has(idx)) {
-                            const d = heat.dist[idx];
-                            const t = d < 0 ? 1 : heat.maxDist > 0 ? d / heat.maxDist : 0;
-                            bg = `hsla(${Math.round(120 * (1 - t))}, 70%, 50%, 0.2)`;
-                        }
-                        return (
-                            <div
-                                key={idx}
-                                className="border border-rule bg-bg"
-                                style={bg ? { backgroundColor: bg } : undefined}
-                            />
-                        );
-                    })}
-
-                    <svg
-                        className="absolute inset-0 pointer-events-none"
-                        viewBox={`0 0 ${cols * 100} ${rows * 100}`}
-                    >
-                        {showPath && (
-                            <polyline
-                                fill="none" stroke={showHeatmap ? "#d4d4d8" : "#333"} strokeWidth="4"
-                                points={[...hamiltonian.current, hamiltonian.current[0]].map(ptInt).join(" ")}
-                            />
-                        )}
-
-                        {highlightPath && !won && (
-                            <polyline
-                                fill="none" stroke="#facc15" strokeWidth="8"
-                                strokeLinecap="round" strokeLinejoin="round"
-                                points={pathFromHeadToApple(
-                                    hamiltonian.current, snake, apple, cols, hamiltonianPosMap.current
-                                ).map(ptInt).join(" ")}
-                            />
-                        )}
-
-                        <polyline
-                            fill="none" stroke="#22c55e" strokeWidth="60"
-                            strokeLinecap="round" strokeLinejoin="round"
-                            points={snake.map(ptInt).join(" ")}
-                        />
-
-                        {!won && (
-                            <circle
-                                cx={intC(apple, cols) * 100 + 50}
-                                cy={intR(apple, cols) * 100 + 50}
-                                r="26" fill="#dc2626"
-                            />
-                        )}
-
-                        {snake.length > 0 && (
-                            <circle
-                                cx={intC(snake[0], cols) * 100 + 50}
-                                cy={intR(snake[0], cols) * 100 + 50}
-                                r="34" fill="#16a34a"
-                            />
-                        )}
-
-                        {snake.length > 1 && (
-                            <circle
-                                cx={intC(snake[snake.length - 1], cols) * 100 + 50}
-                                cy={intR(snake[snake.length - 1], cols) * 100 + 50}
-                                r="24" fill="#15803d"
-                            />
-                        )}
-                    </svg>
-
+                    {/* Telemetry */}
+                    <div className="border-t border-rule pt-4 grid grid-cols-2 gap-x-6 gap-y-4">
+                        <Stat label="Steps" value={steps.toLocaleString()} />
+                        <Stat label="Apples" value={String(apples)} />
+                        <Stat label="Filled" value={`${filledPct}%`} />
+                        <Stat label="Loops searched" value={loopsSearched.toLocaleString()} />
+                    </div>
                     {won && (
-                        <div className="absolute inset-0 grid place-items-center pointer-events-none">
-                            <div className="px-5 py-3 rounded-lg border border-emerald-500 bg-[color-mix(in_srgb,var(--bg)_80%,transparent)] backdrop-blur-sm text-emerald-400 font-mono text-sm tracking-kicker uppercase text-center">
-                                Solved
-                                <div className="text-fg-soft text-[11px] mt-1">{steps.toLocaleString()} steps</div>
-                            </div>
-                        </div>
+                        <div className="font-mono text-[11px] tracking-kicker uppercase text-emerald-400 font-semibold">Solved · {steps.toLocaleString()} steps</div>
                     )}
+                </aside>
+
+                {/* ── Board ── */}
+                <div className="flex-1 min-w-0 flex flex-col p-6 lg:p-8">
+                    <div className="flex-1 grid place-items-center min-h-[60vh] lg:min-h-0">
+                        <div
+                            className="relative grid"
+                            style={{
+                                gridTemplateRows: `repeat(${rows}, 1fr)`,
+                                gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                                height: "82vh",
+                                width: `calc(82vh * ${cols} / ${rows})`,
+                                maxWidth: "100%",
+                                maxHeight: "100%",
+                                aspectRatio: `${cols} / ${rows}`,
+                            }}
+                        >
+                            {Array.from({length: rows * cols}).map((_, idx) => {
+                                let bg: string | undefined;
+                                if (heat && !heat.snakeSet.has(idx)) {
+                                    const d = heat.dist[idx];
+                                    const t = d < 0 ? 1 : heat.maxDist > 0 ? d / heat.maxDist : 0;
+                                    bg = `hsla(${Math.round(120 * (1 - t))}, 70%, 50%, 0.2)`;
+                                }
+                                return (
+                                    <div
+                                        key={idx}
+                                        className="border border-rule bg-bg"
+                                        style={bg ? { backgroundColor: bg } : undefined}
+                                    />
+                                );
+                            })}
+
+                            <svg
+                                className="absolute inset-0 pointer-events-none"
+                                viewBox={`0 0 ${cols * 100} ${rows * 100}`}
+                            >
+                                {showPath && (
+                                    <polyline
+                                        fill="none" stroke={showHeatmap ? "#d4d4d8" : "#333"} strokeWidth="4"
+                                        points={[...hamiltonian.current, hamiltonian.current[0]].map(ptInt).join(" ")}
+                                    />
+                                )}
+
+                                {highlightPath && !won && (
+                                    <polyline
+                                        fill="none" stroke="#facc15" strokeWidth="8"
+                                        strokeLinecap="round" strokeLinejoin="round"
+                                        points={pathFromHeadToApple(
+                                            hamiltonian.current, snake, apple, cols, hamiltonianPosMap.current
+                                        ).map(ptInt).join(" ")}
+                                    />
+                                )}
+
+                                <polyline
+                                    fill="none" stroke="#22c55e" strokeWidth="60"
+                                    strokeLinecap="round" strokeLinejoin="round"
+                                    points={snake.map(ptInt).join(" ")}
+                                />
+
+                                {!won && (
+                                    <circle
+                                        cx={intC(apple, cols) * 100 + 50}
+                                        cy={intR(apple, cols) * 100 + 50}
+                                        r="26" fill="#dc2626"
+                                    />
+                                )}
+
+                                {snake.length > 0 && (
+                                    <circle
+                                        cx={intC(snake[0], cols) * 100 + 50}
+                                        cy={intR(snake[0], cols) * 100 + 50}
+                                        r="34" fill="#16a34a"
+                                    />
+                                )}
+
+                                {snake.length > 1 && (
+                                    <circle
+                                        cx={intC(snake[snake.length - 1], cols) * 100 + 50}
+                                        cy={intR(snake[snake.length - 1], cols) * 100 + 50}
+                                        r="24" fill="#15803d"
+                                    />
+                                )}
+                            </svg>
+
+                            {won && (
+                                <div className="absolute inset-0 grid place-items-center pointer-events-none">
+                                    <div className="px-5 py-3 rounded-lg border border-emerald-500 bg-[color-mix(in_srgb,var(--bg)_80%,transparent)] backdrop-blur-sm text-emerald-400 font-mono text-sm tracking-kicker uppercase text-center">
+                                        Solved
+                                        <div className="text-fg-soft text-[11px] mt-1">{steps.toLocaleString()} steps</div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft text-center mt-4">
+                            {rows} × {cols} board · {cellCount} cells
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -507,6 +502,37 @@ function SnakePage() {
     );
 }
 
+
+function Stat({ label, value }: { label: string; value: string }) {
+    return (
+        <div>
+            <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-1">{label}</div>
+            <div className="font-mono text-[21px] font-medium leading-none text-fg tabular-nums tracking-[-0.01em]">{value}</div>
+        </div>
+    );
+}
+
+function LayerToggle({ on, color, label, onClick }: { on?: boolean; color: string; label: string; onClick?: () => void }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            disabled={!onClick}
+            className="flex items-center gap-2.5 px-2 py-1.75 rounded-md text-left transition-colors hover:bg-accent-soft disabled:cursor-default disabled:hover:bg-transparent"
+        >
+            <span
+                className="grid place-items-center w-3.75 h-3.75 rounded-sm border-[1.5px] shrink-0"
+                style={{ borderColor: on ? "var(--accent)" : "var(--rule-strong)", background: on ? "var(--accent)" : "transparent" }}
+            >
+                {on && (
+                    <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="var(--bg)" strokeWidth="2"><path d="M2 5l2 2 4-4" /></svg>
+                )}
+            </span>
+            <span className="w-2.25 h-2.25 rounded-xs shrink-0" style={{ background: color, opacity: on ? 1 : 0.35 }} />
+            <span className="text-[12.5px]" style={{ color: on ? "var(--fg)" : "var(--fg-soft)" }}>{label}</span>
+        </button>
+    );
+}
 
 export default function SnakePageRoute() {
     return <SnakePage />;

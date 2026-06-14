@@ -606,6 +606,10 @@ function RushHourUnitStepExplorer() {
     const [selectedNode, setSelectedNode] = useState<number | null>(null);   // current pointer in graph
     const [playPath, setPlayPath] = useState<number[]>([]);                  // path of node indices
 
+    // --- collapsible panel state ---
+    const [builderOpen, setBuilderOpen] = useState<boolean>(true);
+    const [explorerOpen, setExplorerOpen] = useState<boolean>(true);
+
     const subset = useMemo(
         () => (result ? buildSubset(result, vizDepth, vizNodes) : null),
         [result, vizDepth, vizNodes]
@@ -802,48 +806,73 @@ function RushHourUnitStepExplorer() {
 
     // --- layout ---
     return (
-        <div className="mx-auto max-w-[1100px] px-8 pt-12 pb-16">
-            <div className="font-mono text-[11px] tracking-kicker uppercase text-accent mb-4 flex items-center gap-2">
-                <span>EXPERIMENT</span>
-                <span className="text-fg-soft">·</span>
-                <span>STATE SPACE</span>
-            </div>
-            <h1 className="m-0 mb-2 text-[clamp(28px,4vw,40px)] font-semibold tracking-[-0.02em]">Rush Hour — State
-                Space Explorer</h1>
-            <p className="mb-8 text-[15px] text-fg-muted max-w-[640px] leading-relaxed">Build a board, run BFS to
-                enumerate all reachable states, then explore the state graph in 3D.</p>
+        <div className="flex flex-col">
+            {/* ── Immersive 3D explorer (concept B) ── */}
+            <section className="relative w-full h-[calc(100vh-53px)] min-h-165 bg-bg overflow-hidden border-b border-rule">
+                {/* top strip */}
+                <div className="absolute top-0 left-0 right-0 z-20 flex items-center gap-4 flex-wrap px-6 py-4 pointer-events-none bg-linear-to-b from-bg to-transparent">
+                    <div className="font-mono text-[11px] tracking-kicker uppercase text-accent flex items-center gap-2">
+                        <span>STATE SPACE</span><span className="text-fg-soft">·</span><span>3D EXPLORER</span>
+                    </div>
+                    <div className="flex-1" />
+                    {stats && (
+                        <div className="flex items-center gap-x-6 gap-y-1 flex-wrap font-mono text-[11px] tracking-kicker uppercase text-fg-soft">
+                            <span>States <span className="text-fg">{stats.states.toLocaleString()}</span></span>
+                            <span>Edges <span className="text-fg">{stats.edges.toLocaleString()}</span></span>
+                            <span>Branching <span className="text-fg">{stats.avg.toFixed(1)}</span></span>
+                        </div>
+                    )}
+                </div>
 
-            {/* Desktop-first: 3 columns on lg */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                {/* LEFT: Builder */}
-                <section className="lg:col-span-4 rounded-md border border-rule bg-bg-elev p-5 space-y-4">
-                    <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">Board Builder</h2>
-                    <div className="flex gap-3 items-center flex-wrap">
-                        <div className="flex items-center gap-2">
-                            <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Rows</label>
-                            <input
-                                type="number"
-                                className="w-20 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
-                                min={2}
-                                max={30}
-                                value={size.h}
-                                onChange={(e) => resizeGrid(parseInt(e.target.value || "0", 10), size.w)}
-                            />
+                {/* floating builder panel (top-left) */}
+                <section className="absolute z-10 top-16 left-3 lg:left-5 w-[min(300px,calc(100%-24px))] max-h-[calc(100%-150px)] overflow-y-auto rounded-xl border border-rule bg-[color-mix(in_srgb,var(--bg-elev)_82%,transparent)] backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+                    {/* header row */}
+                    <button
+                        type="button"
+                        onClick={() => setBuilderOpen((o) => !o)}
+                        aria-expanded={builderOpen}
+                        className="w-full flex items-center gap-2 px-5 py-3.5 border-b border-rule text-left hover:bg-[color-mix(in_srgb,var(--bg-elev)_50%,transparent)] transition-colors"
+                    >
+                        <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">Board Builder</h2>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" strokeWidth="2"
+                            className={`ml-auto h-4 w-4 text-fg-soft transition-transform ${builderOpen ? "" : "-rotate-90"}`}
+                        >
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
+
+                    {/* collapsible body */}
+                    <div className={`${builderOpen ? "block" : "hidden"} p-5 space-y-4`}>
+                        <div className="flex gap-3 items-center flex-wrap">
+                            <div className="flex items-center gap-2">
+                                <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Rows</label>
+                                <input
+                                    type="number"
+                                    className="w-20 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
+                                    min={2}
+                                    max={30}
+                                    value={size.h}
+                                    onChange={(e) => resizeGrid(parseInt(e.target.value || "0", 10), size.w)}
+                                />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Cols</label>
+                                <input
+                                    type="number"
+                                    className="w-20 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
+                                    min={2}
+                                    max={30}
+                                    value={size.w}
+                                    onChange={(e) => resizeGrid(size.h, parseInt(e.target.value || "0", 10))}
+                                />
+                            </div>
+                            <button onClick={clearGrid}
+                                    className="px-3 py-2 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors">Clear
+                            </button>
+
                         </div>
-                        <div className="flex items-center gap-2">
-                            <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Cols</label>
-                            <input
-                                type="number"
-                                className="w-20 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
-                                min={2}
-                                max={30}
-                                value={size.w}
-                                onChange={(e) => resizeGrid(size.h, parseInt(e.target.value || "0", 10))}
-                            />
-                        </div>
-                        <button onClick={clearGrid}
-                                className="px-3 py-2 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors">Clear
-                        </button>
                         {sel ? (
                             <div
                                 className="font-mono text-[10px] px-2 py-1 rounded bg-accent-soft text-accent border border-accent">Select
@@ -853,108 +882,107 @@ function RushHourUnitStepExplorer() {
                                 className="font-mono text-[10px] px-2 py-1 rounded border border-rule text-fg-soft">Click
                                 empty to start · click car to delete</div>
                         )}
-                    </div>
+                        {/* Builder grid */}
+                        <div
+                            className="grid gap-1 select-none"
+                            style={{gridTemplateColumns: `repeat(${size.w}, minmax(0, 1fr))`}}
+                        >
+                            {grid.map((row, r) =>
+                                row.map((ch, c) => {
+                                    const isSel = sel && sel.r === r && sel.c === c;
+                                    const isAllowed = allowed.has(`${r}-${c}`);
+                                    const bg =
+                                        ch === "." && isSel ? "#fde68a" :
+                                            ch === "." && isAllowed ? "#fef3c7" :
+                                                colorForId(ch);
 
-                    {/* Builder grid */}
-                    <div
-                        className="grid gap-1 select-none"
-                        style={{gridTemplateColumns: `repeat(${size.w}, minmax(0, 1fr))`}}
-                    >
-                        {grid.map((row, r) =>
-                            row.map((ch, c) => {
-                                const isSel = sel && sel.r === r && sel.c === c;
-                                const isAllowed = allowed.has(`${r}-${c}`);
-                                const bg =
-                                    ch === "." && isSel ? "#fde68a" :
-                                        ch === "." && isAllowed ? "#fef3c7" :
-                                            colorForId(ch);
+                                    return (
+                                        <div
+                                            key={`${r}-${c}`}
+                                            onClick={() => {
+                                                // --- DELETE path: clicking a non-empty cell always triggers your handler immediately
+                                                if (grid[r][c] !== ".") {
+                                                    onCellClick(r, c);          // your existing delete logic
+                                                    // also clear any pending selection/highlights
+                                                    setSel(null);
+                                                    setAllowed(new Set());
+                                                    return;
+                                                }
 
-                                return (
-                                    <div
-                                        key={`${r}-${c}`}
-                                        onClick={() => {
-                                            // --- DELETE path: clicking a non-empty cell always triggers your handler immediately
-                                            if (grid[r][c] !== ".") {
-                                                onCellClick(r, c);          // your existing delete logic
-                                                // also clear any pending selection/highlights
+                                                // --- PLACE path
+                                                // First click: start selection from an empty cell and compute allowed targets inline
+                                                if (!sel) {
+                                                    const ok = new Set<string>();
+                                                    // left
+                                                    for (let cc = c - 1; cc >= 0; cc--) {
+                                                        if (grid[r][cc] !== ".") break;
+                                                        ok.add(`${r}-${cc}`);
+                                                    }
+                                                    // right
+                                                    for (let cc = c + 1; cc < grid[0].length; cc++) {
+                                                        if (grid[r][cc] !== ".") break;
+                                                        ok.add(`${r}-${cc}`);
+                                                    }
+                                                    // up
+                                                    for (let rr = r - 1; rr >= 0; rr--) {
+                                                        if (grid[rr][c] !== ".") break;
+                                                        ok.add(`${rr}-${c}`);
+                                                    }
+                                                    // down
+                                                    for (let rr = r + 1; rr < grid.length; rr++) {
+                                                        if (grid[rr][c] !== ".") break;
+                                                        ok.add(`${rr}-${c}`);
+                                                    }
+                                                    setSel({r, c});
+                                                    setAllowed(ok);
+                                                    return;
+                                                }
+
+                                                // Second click: place only if clicking a highlighted empty cell; otherwise cancel
+                                                if (allowed.has(`${r}-${c}`)) onCellClick(r, c);
                                                 setSel(null);
                                                 setAllowed(new Set());
-                                                return;
-                                            }
-
-                                            // --- PLACE path
-                                            // First click: start selection from an empty cell and compute allowed targets inline
-                                            if (!sel) {
-                                                const ok = new Set<string>();
-                                                // left
-                                                for (let cc = c - 1; cc >= 0; cc--) {
-                                                    if (grid[r][cc] !== ".") break;
-                                                    ok.add(`${r}-${cc}`);
-                                                }
-                                                // right
-                                                for (let cc = c + 1; cc < grid[0].length; cc++) {
-                                                    if (grid[r][cc] !== ".") break;
-                                                    ok.add(`${r}-${cc}`);
-                                                }
-                                                // up
-                                                for (let rr = r - 1; rr >= 0; rr--) {
-                                                    if (grid[rr][c] !== ".") break;
-                                                    ok.add(`${rr}-${c}`);
-                                                }
-                                                // down
-                                                for (let rr = r + 1; rr < grid.length; rr++) {
-                                                    if (grid[rr][c] !== ".") break;
-                                                    ok.add(`${rr}-${c}`);
-                                                }
-                                                setSel({r, c});
-                                                setAllowed(ok);
-                                                return;
-                                            }
-
-                                            // Second click: place only if clicking a highlighted empty cell; otherwise cancel
-                                            if (allowed.has(`${r}-${c}`)) onCellClick(r, c);
-                                            setSel(null);
-                                            setAllowed(new Set());
-                                        }}
-                                        className={`aspect-square rounded-md border flex items-center justify-center cursor-pointer ${
-                                            ch === "." ? "border-dashed" : "border-solid"
-                                        } ${isAllowed ? "ring-1 ring-amber-300/70" : ""}`}
-                                        style={{background: bg, opacity: isAllowed ? 0.3 : 1}}
-                                        title={`(${r},${c}) ${ch === "." ? "empty" : ch}`}
-                                        data-allowed={isAllowed ? "1" : "0"}
-                                    >
-                                        <span className="text-xs font-mono opacity-60">{ch === "." ? "" : ch}</span>
-                                    </div>
-                                );
-                            })
-                        )}
-                    </div>
+                                            }}
+                                            className={`aspect-square rounded-md border flex items-center justify-center cursor-pointer ${
+                                                ch === "." ? "border-dashed" : "border-solid"
+                                            } ${isAllowed ? "ring-1 ring-amber-300/70" : ""}`}
+                                            style={{background: bg, opacity: isAllowed ? 0.3 : 1}}
+                                            title={`(${r},${c}) ${ch === "." ? "empty" : ch}`}
+                                            data-allowed={isAllowed ? "1" : "0"}
+                                        >
+                                            <span className="text-xs font-mono opacity-60">{ch === "." ? "" : ch}</span>
+                                        </div>
+                                    );
+                                })
+                            )}
+                        </div>
 
 
-                    {/* Text + Explore trigger */}
-                    <div className="space-y-2">
-                        <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Board
-                            text</label>
-                        <textarea
-                            className="w-full h-24 font-mono text-[12px] p-3 rounded border border-rule bg-bg text-fg focus:outline-none focus:border-rule-strong"
-                            value={boardText}
-                            onChange={(e) => {
-                                const v = e.target.value;
-                                setBoardText(v);
-                                syncGridFromText(v);
-                            }}
-                        />
-                        <div className="flex items-center gap-3">
-                            <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Max
-                                States</label>
-                            <input
-                                type="number"
-                                className="w-28 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
-                                value={maxStates}
-                                onChange={(e) => setMaxStates(parseInt(e.target.value || "0", 10))}
-                                min={1}
-                                step={1000}
-                            />
+                        {/* Text + Explore trigger */}
+                        <div className="space-y-2">
+                            {/*<label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Board
+                                text</label>
+                            <textarea
+                                className="w-full h-24 font-mono text-[12px] p-3 rounded border border-rule bg-bg text-fg focus:outline-none focus:border-rule-strong"
+                                value={boardText}
+                                onChange={(e) => {
+                                    const v = e.target.value;
+                                    setBoardText(v);
+                                    syncGridFromText(v);
+                                }}
+                            />*/}
+                            <div className="flex items-center gap-3">
+                                <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Max
+                                    States</label>
+                                <input
+                                    type="number"
+                                    className="w-28 px-2 py-1.5 rounded border border-rule bg-bg font-mono text-[12px] text-fg"
+                                    value={maxStates}
+                                    onChange={(e) => setMaxStates(parseInt(e.target.value || "0", 10))}
+                                    min={1}
+                                    step={1000}
+                                />
+                            </div>
                             <button
                                 onClick={handleExplore}
                                 className="ml-auto inline-flex items-center gap-2 px-4 py-2.5 rounded border border-fg bg-fg text-bg hover:opacity-90 font-mono text-[11px] tracking-kicker uppercase transition-opacity"
@@ -966,21 +994,16 @@ function RushHourUnitStepExplorer() {
                                 </svg>
                                 Explore (BFS)
                             </button>
-
+                            {error &&
+                                <div className="mt-2 font-mono text-[11px] text-bad whitespace-pre-wrap">{error}</div>}
                         </div>
-                        {error &&
-                            <div className="mt-2 font-mono text-[11px] text-bad whitespace-pre-wrap">{error}</div>}
                     </div>
-
-                    <p className="font-mono text-[10px] text-fg-soft">
-                        Rule: start+end on same row/col adds a car (length ≥2). Click car to delete.
-                    </p>
                 </section>
 
-                {/* MIDDLE: 3D + Stats */}
-                <section className="lg:col-span-5 rounded-md border border-rule bg-bg-elev p-5">
+                {/* floating view controls (bottom-right) */}
+                {/*<div className="absolute z-10 bottom-5 right-3 lg:right-5 w-[260px] max-w-[calc(100%-24px)] rounded-xl border border-rule bg-[color-mix(in_srgb,var(--bg-elev)_82%,transparent)] backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)] p-4">
                     <div className="flex items-center gap-3 flex-wrap mb-2">
-                        <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">State Graph</h2>
+                        <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">View</h2>
                         <label className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Depth</label>
                         <input type="number"
                                className="w-20 px-2 py-1 rounded border border-rule bg-bg font-mono text-[11px] text-fg"
@@ -1002,8 +1025,11 @@ function RushHourUnitStepExplorer() {
                                step={0.05} value={edgeAlpha} min={0} max={1}
                                onChange={(e) => setEdgeAlpha(parseFloat(e.target.value || "0.3"))}/>
                     </div>
+                </div>*/}
 
-                    <div className="w-full h-[480px] rounded-md overflow-hidden border border-rule bg-bg">
+                {/* full-bleed 3D graph */}
+                <div className="absolute inset-0 z-0">
+                    <div className="w-full h-full">
                         {result && subset ? (
                             <Canvas camera={{position: [6, 6, 6], fov: 50}}>
                                 <ambientLight intensity={0.6}/>
@@ -1056,146 +1082,170 @@ function RushHourUnitStepExplorer() {
                             </div>
                         )}
                     </div>
+                </div>
 
-                    <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-rule">
-                        <div className="rounded border border-rule bg-bg p-3 text-[13px] space-y-1">
-                            <h3 className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-2">Stats</h3>
-                            {!result ? (
-                                <p className="text-fg-soft text-[12px]">Run BFS first.</p>
-                            ) : (
-                                <>
-                                    <div>Grid: {model!.H}×{model!.W}</div>
-                                    <div>
-                                        Vehicles: {model!.vehicles.length}
-                                        <span className="text-gray-500">
-                                            {" "}
-                                            {model!.vehicles.map((v) => `${v.name}:${v.orient}${v.length}`).join(" ")}
-                                        </span>
-                                    </div>
-                                    <div>Reachable states: {stats!.states}</div>
-                                    <div>Total edges: {stats!.edges}</div>
-                                    <div>Branching
-                                        (avg/min/max): {stats!.avg.toFixed(3)} / {stats!.min} / {stats!.max}</div>
-                                </>
-                            )}
-                        </div>
-                        <div className="rounded border border-rule bg-bg p-3 font-mono text-[11px] text-fg-muted">
-                            <div>Path length: {Math.max(0, playPath.length - 1)}</div>
-                            <div>Selected node: {selectedNode ?? "-"}</div>
-                            {subset && (
-                                <div className="mt-2 text-[10px] text-fg-soft">
-                                    Rendering {subset.nodes.length} nodes / {subset.edges.length} edges (depth
-                                    ≤ {vizDepth}).<br/>
-                                    Click nodes to extend path; yellow edges = your moves.
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </section>
-
-                {/* RIGHT: Explorer (play board) */}
-                <section className="lg:col-span-3 rounded-md border border-rule bg-bg-elev p-5 space-y-3">
-                    <div className="flex items-center gap-2">
-                        <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">Explorer</h2>
-                        <div className="ml-auto flex gap-2">
-                            <button
-                                className="px-3 py-1.5 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors"
-                                onClick={() => {
-                                    if (!result) return;
-                                    jumpToNode(0, "reset");
-                                }}
-                                disabled={!result}
-                                title="Reset to start"
-                            >
-                                Reset
-                            </button>
-                            <button
-                                className="px-3 py-1.5 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors disabled:opacity-40"
-                                onClick={undoStep}
-                                disabled={playPath.length <= 1}
-                                title="Undo last step"
-                            >
-                                Undo
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* current board */}
-                    <div className="rounded border border-rule bg-bg p-3">
-                        {!result || !model || currentState == null ? (
-                            <div className="font-mono text-[11px] text-fg-soft">Run BFS, then pick a node.</div>
+                {/* legend / stats (bottom-left) */}
+                {/*<div
+                    className="absolute z-10 bottom-5 left-5 w-[420px] max-w-[calc(100%-40px)] hidden lg:grid grid-cols-2 gap-3 rounded-xl border border-rule bg-[color-mix(in_srgb,var(--bg-elev)_82%,transparent)] backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)] p-4">
+                    <div className="rounded border border-rule bg-bg p-3 text-[13px] space-y-1">
+                        <h3 className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-2">Stats</h3>
+                        {!result ? (
+                            <p className="text-fg-soft text-[12px]">Run BFS first.</p>
                         ) : (
-                            <BoardPreview model={model} state={currentState}/>
+                            <>
+                                <div>Grid: {model!.H}×{model!.W}</div>
+                                <div>
+                                    Vehicles: {model!.vehicles.length}
+                                    <span className="text-gray-500">
+                                            {" "}
+                                        {model!.vehicles.map((v) => `${v.name}:${v.orient}${v.length}`).join(" ")}
+                                        </span>
+                                </div>
+                                <div>Reachable states: {stats!.states}</div>
+                                <div>Total edges: {stats!.edges}</div>
+                                <div>Branching
+                                    (avg/min/max): {stats!.avg.toFixed(3)} / {stats!.min} / {stats!.max}</div>
+                            </>
                         )}
                     </div>
-
-                    {/* neighbors preview */}
-                    <div className="space-y-2">
-                        <h3 className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Neighbors</h3>
-                        {!result || selectedNode == null ? (
-                            <div className="font-mono text-[11px] text-fg-soft">No node selected.</div>
-                        ) : (
-                            <div className="max-h-114 overflow-y-auto">
-                                <div className="grid grid-cols-2 gap-2">
-                                    {neighborsOf(selectedNode).map((nIdx) => (
-                                        <button
-                                            key={nIdx}
-                                            onClick={() => jumpToNode(nIdx, "extend")}
-                                            className="rounded border border-rule bg-bg hover:border-rule-strong transition-colors"
-                                            title={`Go to node ${nIdx}`}
-                                        >
-                                            <MiniBoard model={model!} state={result.states[nIdx]}/>
-                                        </button>
-                                    ))}
-                                    {neighborsOf(selectedNode).length === 0 && (
-                                        <div className="font-mono text-[11px] text-fg-soft col-span-2">No outgoing
-                                            moves.</div>
-                                    )}
-                                </div>
+                    <div className="rounded border border-rule bg-bg p-3 font-mono text-[11px] text-fg-muted">
+                        <div>Path length: {Math.max(0, playPath.length - 1)}</div>
+                        <div>Selected node: {selectedNode ?? "-"}</div>
+                        {subset && (
+                            <div className="mt-2 text-[10px] text-fg-soft">
+                                Rendering {subset.nodes.length} nodes / {subset.edges.length} edges (depth
+                                ≤ {vizDepth}).<br/>
+                                Click nodes to extend path; yellow edges = your moves.
                             </div>
                         )}
                     </div>
-                </section>
-            </div>
-            {/* ── How to use ──────────────────────────────────────────── */}
-            <div className="mt-10 border-t border-rule pt-8 grid md:grid-cols-3 gap-8">
-                <HowToStep num="01" title="Build a board">
-                    Click any empty cell to start placing a vehicle, then click a second cell on the
-                    same row or column to set its length. Click an existing vehicle to delete it.
-                    Resize the grid with the Rows / Cols inputs, or edit the board text directly.
-                </HowToStep>
-                <HowToStep num="02" title="Run BFS">
-                    Hit <Mono>Explore (BFS)</Mono> to enumerate every board configuration reachable
-                    from your starting layout by sliding vehicles one step at a time. Max States caps
-                    the search — lower it if the graph is slow to compute.
-                </HowToStep>
-                <HowToStep num="03" title="Explore the graph">
-                    Each node in the 3D graph is one board configuration. Drag to rotate, scroll to
-                    zoom. Click a node to jump to it in the Explorer panel — the board on the right
-                    updates to show that state. Neighbour thumbnails show every valid one-step move.
-                    Yellow edges trace your path through the graph.
-                </HowToStep>
-            </div>
+                </div>*/}
+                {/* floating explorer (top-right) */}
+                <section className="absolute z-10 top-16 right-5 w-75 max-h-[calc(100%-150px)] overflow-y-auto hidden lg:block rounded-xl border border-rule bg-[color-mix(in_srgb,var(--bg-elev)_82%,transparent)] backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+                    {/* header row */}
+                    <button
+                        type="button"
+                        onClick={() => setExplorerOpen((o) => !o)}
+                        aria-expanded={explorerOpen}
+                        className="w-full flex items-center gap-2 px-5 py-3.5 border-b border-rule text-left hover:bg-[color-mix(in_srgb,var(--bg-elev)_50%,transparent)] transition-colors"
+                    >
+                        <h2 className="font-mono text-[11px] tracking-kicker uppercase text-fg-soft">Explorer</h2>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" strokeWidth="2"
+                            className={`ml-auto h-4 w-4 text-fg-soft transition-transform ${explorerOpen ? "" : "-rotate-90"}`}
+                        >
+                            <path d="M6 9l6 6 6-6"/>
+                        </svg>
+                    </button>
 
-            <dl className="mt-6 border-t border-rule">
-                <GlossaryItem term="State">
-                    One complete snapshot of the board — the position of every vehicle. Two states
-                    are the same if and only if all vehicles occupy identical positions.
-                </GlossaryItem>
-                <GlossaryItem term="Edge">
-                    A directed connection between two states that differ by exactly one vehicle
-                    moving one cell. The graph is symmetric: every move is reversible.
-                </GlossaryItem>
-                <GlossaryItem term="Depth / Max depth">
-                    BFS depth from the starting state. Depth 0 = your initial board. Depth 1 = all
-                    boards reachable in one move. Raising the depth slider shows more of the graph
-                    but can get slow above ~1000 nodes.
-                </GlossaryItem>
-                <GlossaryItem term="Branching factor">
-                    Average number of edges per node — how many valid moves exist from a typical
-                    board. Shown in Stats after BFS completes.
-                </GlossaryItem>
-            </dl>
+                    {/* collapsible body */}
+                    <div className={`${explorerOpen ? "block" : "hidden"} p-5 space-y-3`}>
+                        <div className="flex items-center gap-2">
+                            <div className="ml-auto flex gap-2">
+                                <button
+                                    className="px-3 py-1.5 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors"
+                                    onClick={() => {
+                                        if (!result) return;
+                                        jumpToNode(0, "reset");
+                                    }}
+                                    disabled={!result}
+                                    title="Reset to start"
+                                >
+                                    Reset
+                                </button>
+                                <button
+                                    className="px-3 py-1.5 rounded border border-rule bg-bg hover:border-rule-strong font-mono text-[11px] tracking-kicker uppercase transition-colors disabled:opacity-40"
+                                    onClick={undoStep}
+                                    disabled={playPath.length <= 1}
+                                    title="Undo last step"
+                                >
+                                    Undo
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* current board */}
+                        <div className="rounded border border-rule bg-bg p-3">
+                            {!result || !model || currentState == null ? (
+                                <div className="font-mono text-[11px] text-fg-soft">Run BFS, then pick a node.</div>
+                            ) : (
+                                <BoardPreview model={model} state={currentState}/>
+                            )}
+                        </div>
+
+                        {/* neighbors preview */}
+                        <div className="space-y-2">
+                            <h3 className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">Neighbors</h3>
+                            {!result || selectedNode == null ? (
+                                <div className="font-mono text-[11px] text-fg-soft">No node selected.</div>
+                            ) : (
+                                <div className="max-h-114 overflow-y-auto">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {neighborsOf(selectedNode).map((nIdx) => (
+                                            <button
+                                                key={nIdx}
+                                                onClick={() => jumpToNode(nIdx, "extend")}
+                                                className="rounded border border-rule bg-bg hover:border-rule-strong transition-colors"
+                                                title={`Go to node ${nIdx}`}
+                                            >
+                                                <MiniBoard model={model!} state={result.states[nIdx]}/>
+                                            </button>
+                                        ))}
+                                        {neighborsOf(selectedNode).length === 0 && (
+                                            <div className="font-mono text-[11px] text-fg-soft col-span-2">No outgoing
+                                                moves.</div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            {/* docs below the immersive view */}
+            <div className="mx-auto max-w-275 px-8 pb-16">
+                {/* ── How to use ──────────────────────────────────────────── */}
+                <div className="mt-10 border-t border-rule pt-8 grid md:grid-cols-3 gap-8">
+                    <HowToStep num="01" title="Build a board">
+                        Click any empty cell to start placing a vehicle, then click a second cell on the
+                        same row or column to set its length. Click an existing vehicle to delete it.
+                        Resize the grid with the Rows / Cols inputs.
+                    </HowToStep>
+                    <HowToStep num="02" title="Run BFS">
+                        Hit <Mono>Explore (BFS)</Mono> to enumerate every board configuration reachable
+                        from your starting layout by sliding vehicles one step at a time. Max States caps
+                        the search — lower it if the graph is slow to compute.
+                    </HowToStep>
+                    <HowToStep num="03" title="Explore the graph">
+                        Each node in the 3D graph is one board configuration. Drag to rotate, scroll to
+                        zoom. Click a node to jump to it in the Explorer panel — the board on the right
+                        updates to show that state. Neighbour thumbnails show every valid one-step move.
+                        Yellow edges trace your path through the graph.
+                    </HowToStep>
+                </div>
+
+                <dl className="mt-6 border-t border-rule">
+                    <GlossaryItem term="State">
+                        One complete snapshot of the board — the position of every vehicle. Two states
+                        are the same if and only if all vehicles occupy identical positions.
+                    </GlossaryItem>
+                    <GlossaryItem term="Edge">
+                        A directed connection between two states that differ by exactly one vehicle
+                        moving one cell. The graph is symmetric: every move is reversible.
+                    </GlossaryItem>
+                    <GlossaryItem term="Depth / Max depth">
+                        BFS depth from the starting state. Depth 0 = your initial board. Depth 1 = all
+                        boards reachable in one move. Raising the depth slider shows more of the graph
+                        but can get slow above ~1000 nodes.
+                    </GlossaryItem>
+                    <GlossaryItem term="Branching factor">
+                        Average number of edges per node — how many valid moves exist from a typical
+                        board. Shown in Stats after BFS completes.
+                    </GlossaryItem>
+                </dl>
+            </div>
         </div>
 
     );
@@ -1259,7 +1309,7 @@ function MiniBoard({model, state}: { model: BoardModel; state: number[] }) {
     const lines = renderState(model, state);
     return (
         <div
-            className="grid gap-[2px] p-2"
+            className="grid gap-0.5 p-2"
             style={{gridTemplateColumns: `repeat(${model.W}, minmax(0, 1fr))`}}
         >
             {lines.map((row, r) =>
@@ -1363,7 +1413,7 @@ const Preview1x1: React.FC = () => {
     return (
         <div className="aspect-square w-full rounded-xl overflow-hidden p-1">
             <div
-                className="grid h-full w-full gap-[2px]"
+                className="grid h-full w-full gap-0.5"
                 style={{gridTemplateColumns: `repeat(${W}, 1fr)`, gridTemplateRows: `repeat(${H}, 1fr)`}}
             >
                 {g.map((row, r) =>

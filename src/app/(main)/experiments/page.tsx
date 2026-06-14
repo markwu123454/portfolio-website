@@ -10,6 +10,8 @@ import { Page, PageHeader } from '@/app/components/site/primitives';
 import {Metadata} from "next";
 import React from "react";
 
+import { generateHamiltonianBasic } from './snake/snakeAlgo';
+
 export const metadata: Metadata = {
     title: 'Experiments',
     description: 'Interactive toys and algorithm visualisers.',
@@ -27,74 +29,113 @@ interface Experiment {
    Previews
    ───────────────────────────────────────────────────────────────── */
 
+/* ── 01 · Snake — real Hamiltonian cycle ─────────────────────────── */
+
+const SNAKE_ROWS = 9, SNAKE_COLS = 12, SNAKE_CELL = 30;
+const SNAKE_CYCLE = generateHamiltonianBasic(SNAKE_ROWS, SNAKE_COLS);
+const SNAKE_N = SNAKE_CYCLE.length;
+const SNAKE_HEAD = 58 % SNAKE_N;                 // any index — picks where the head sits
+const snakeXY = (v: number): [number, number] => [
+    (v % SNAKE_COLS) * SNAKE_CELL + SNAKE_CELL / 2,
+    Math.floor(v / SNAKE_COLS) * SNAKE_CELL + SNAKE_CELL / 2,
+];
+const snakePts = (cells: number[]) => cells.map(snakeXY).map(([x, y]) => `${x},${y}`).join(' ');
+// body = contiguous arc trailing the head; route = forward arc head→apple
+const SNAKE_BODY = Array.from({ length: 34 }, (_, i) => SNAKE_CYCLE[((SNAKE_HEAD - i) % SNAKE_N + SNAKE_N) % SNAKE_N]);
+const SNAKE_ROUTE = Array.from({ length: 10 }, (_, i) => SNAKE_CYCLE[(SNAKE_HEAD + i) % SNAKE_N]);
+const SNAKE_HEAD_XY = snakeXY(SNAKE_CYCLE[SNAKE_HEAD]);
+const SNAKE_TAIL_XY = snakeXY(SNAKE_BODY[SNAKE_BODY.length - 1]);
+const SNAKE_APPLE_XY = snakeXY(SNAKE_CYCLE[(SNAKE_HEAD + 9) % SNAKE_N]);
+
 const SNAKE_PREVIEW = (
-    <svg viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
-        {Array.from({ length: 36 }).map((_, i) => (
-            <rect key={i} x={(i % 6) * 60} y={Math.floor(i / 6) * 60} width={60} height={60} fill="var(--bg)" stroke="var(--rule)" strokeWidth={1} />
+    <svg viewBox={`0 0 ${SNAKE_COLS * SNAKE_CELL} ${SNAKE_ROWS * SNAKE_CELL}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        {Array.from({ length: SNAKE_ROWS * SNAKE_COLS }).map((_, i) => (
+            <rect key={i} x={(i % SNAKE_COLS) * SNAKE_CELL} y={Math.floor(i / SNAKE_COLS) * SNAKE_CELL}
+                  width={SNAKE_CELL} height={SNAKE_CELL} fill="var(--bg)" stroke="var(--rule)" strokeWidth={1} />
         ))}
-        <polyline fill="none" stroke="var(--rule-strong)" strokeWidth={2}
-                  points="30,30 90,30 150,30 210,30 270,30 330,30 330,90 270,90 210,90 150,90 90,90 30,90 30,150 90,150 150,150 210,150 270,150 330,150 330,210 270,210 210,210 150,210 90,210 30,210 30,270 90,270 150,270 210,270 270,270 330,270 330,330 270,330 210,330 150,330 90,330 30,330 30,30" />
-        <polyline fill="none" stroke="#facc15" strokeWidth={4} strokeLinecap="round"
-                  points="150,150 210,150 270,150 270,210 210,210 150,210 150,270" />
-        <polyline fill="none" stroke="#22c55e" strokeWidth={10} strokeLinecap="round" strokeLinejoin="round"
-                  points="150,150 90,150 90,90 150,90 210,90 270,90" />
-        <circle cx={270} cy={90} r={13} fill="#16a34a" />
-        <circle cx={150} cy={270} r={11} fill="#dc2626" />
+        <polyline fill="none" stroke="var(--rule-strong)" strokeWidth={2} strokeLinejoin="round"
+                  points={snakePts([...SNAKE_CYCLE, SNAKE_CYCLE[0]])} />
+        <polyline fill="none" stroke="#facc15" strokeWidth={SNAKE_CELL * 0.22} strokeLinecap="round" strokeLinejoin="round"
+                  points={snakePts(SNAKE_ROUTE)} />
+        <polyline fill="none" stroke="#22c55e" strokeWidth={SNAKE_CELL * 0.6} strokeLinecap="round" strokeLinejoin="round"
+                  points={snakePts(SNAKE_BODY)} />
+        <circle cx={SNAKE_APPLE_XY[0]} cy={SNAKE_APPLE_XY[1]} r={SNAKE_CELL * 0.3} fill="#dc2626" />
+        <circle cx={SNAKE_HEAD_XY[0]} cy={SNAKE_HEAD_XY[1]} r={SNAKE_CELL * 0.4} fill="#16a34a" />
+        <circle cx={SNAKE_TAIL_XY[0]} cy={SNAKE_TAIL_XY[1]} r={SNAKE_CELL * 0.28} fill="#15803d" />
     </svg>
 );
 
-// Rush Hour board preview — static 6×6 snapshot
-const RUSH_HOUR_BOARD = [
-    ['.','.','.','.','.','.' ],
-    ['.','.','.','.','.','.'],
-    ['.','.','.','.','.','.'],
-    ['.','.','A','A','.','.'],
-    ['.','.','C','B','.','.'],
-    ['.','.','C','B','.','.'],
-];
+/* ── 02 · State Space — projected 3D BFS state graph ─────────────── */
 
-function hsl(id: string) {
-    if (id === '.') return 'transparent';
-    const h = (id.charCodeAt(0) * 57) % 360;
-    return `hsl(${h} 65% 62%)`;
-}
+function ssRng(seed: number) { let a = seed >>> 0; return () => { a ^= a << 13; a ^= a >>> 17; a ^= a << 5; a >>>= 0; return a / 4294967296; }; }
+const SS_W = 360, SS_H = 270;
+const SS_NODES = (() => {
+    const r = ssRng(4117), n = 150;
+    const out: { parent: number; depth: number; x: number; y: number; z: number }[] = [];
+    for (let i = 0; i < n; i++) {
+        const parent = i === 0 ? -1 : Math.floor(r() * Math.max(1, i * 0.55));
+        const depth = parent < 0 ? 0 : out[parent].depth + 1;
+        const rad = 0.7 + depth * 0.66 + r() * 0.35;
+        const th = r() * Math.PI * 2, ph = Math.acos(2 * r() - 1);
+        out.push({ parent, depth, x: rad * Math.sin(ph) * Math.cos(th), y: rad * Math.sin(ph) * Math.sin(th), z: rad * Math.cos(ph) });
+    }
+    return out;
+})();
+const SS_PROJ = (() => {
+    const scale = 27, rotY = 0.7, rotX = 0.34, persp = 9, cx = SS_W / 2, cy = SS_H / 2;
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY), cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    return SS_NODES.map((nd) => {
+        const x1 = nd.x * cosY + nd.z * sinY, z1 = -nd.x * sinY + nd.z * cosY;
+        const y2 = nd.y * cosX + z1 * sinX, z2 = -nd.y * sinX + z1 * cosX;
+        const f = persp / (persp - z2);
+        return { sx: cx + x1 * scale * f, sy: cy + y2 * scale * f, f, z2 };
+    });
+})();
+const SS_MAXD = Math.max(...SS_NODES.map((n) => n.depth));
+const SS_PATH = (() => { const p: number[] = []; let cur = SS_NODES.length - 1; while (cur >= 0) { p.unshift(cur); cur = SS_NODES[cur].parent; } return p; })();
+const SS_PATHSET = new Set(SS_PATH);
+const SS_ORDER = SS_NODES.map((_, i) => i).sort((a, b) => SS_PROJ[a].z2 - SS_PROJ[b].z2);
 
 const STATE_SPACE_PREVIEW = (
-    <div className="w-full h-full p-3 grid" style={{ gridTemplateRows: 'repeat(6,1fr)', gridTemplateColumns: 'repeat(6,1fr)', gap: 3 }} aria-hidden>
-        {RUSH_HOUR_BOARD.map((row, r) =>
-            row.map((ch, c) => (
-                <div
-                    key={`${r}-${c}`}
-                    className={`rounded-[3px] border ${ch === '.' ? 'border-dashed border-rule' : 'border-rule'}`}
-                    style={{ background: hsl(ch) }}
-                />
-            ))
-        )}
-    </div>
+    <svg viewBox={`0 0 ${SS_W} ${SS_H}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        {SS_NODES.map((nd, i) => {
+            if (nd.parent < 0) return null;
+            const on = SS_PATHSET.has(i) && SS_PATHSET.has(nd.parent);
+            return <line key={`e${i}`} x1={SS_PROJ[nd.parent].sx} y1={SS_PROJ[nd.parent].sy} x2={SS_PROJ[i].sx} y2={SS_PROJ[i].sy}
+                         stroke={on ? 'var(--accent)' : 'var(--rule)'} strokeWidth={on ? 1.6 : Math.max(0.4, SS_PROJ[i].f * 0.5)} opacity={on ? 0.85 : 1} />;
+        })}
+        {SS_ORDER.map((i) => {
+            const onPath = SS_PATHSET.has(i), goal = i === SS_NODES.length - 1, root = i === 0;
+            return <circle key={i} cx={SS_PROJ[i].sx} cy={SS_PROJ[i].sy} r={Math.max(1.2, SS_PROJ[i].f * (onPath ? 3 : 2))}
+                           fill={goal ? 'var(--good)' : 'var(--accent)'}
+                           fillOpacity={goal || onPath ? 1 : 0.95 - (SS_NODES[i].depth / SS_MAXD) * 0.5}
+                           stroke={root ? 'var(--fg)' : 'none'} strokeWidth={root ? 1.5 : 0} />;
+        })}
+    </svg>
 );
 
-// Digital Footprint Mirror preview — a redacted paper record
+/* ── 03 · Digital Footprint — themed signal readout ──────────────── */
+
+const FOOT_ROWS: Array<[string, number, string?]> = [
+    ['IP ADDR', 0.62], ['LOCATION', 0.5], ['BROWSER', 0.74],
+    ['SCREEN', 0, '1512×982'], ['TIMEZONE', 0.44], ['BATTERY', 0.3], ['FONTS', 0.66],
+];
+
 const FOOTPRINT_PREVIEW = (
-    <svg viewBox="0 0 360 270" preserveAspectRatio="xMidYMid slice" className="w-full h-full" aria-hidden>
-        <rect width={360} height={270} fill="#E9E7E1" />
-        {Array.from({ length: 9 }).map((_, i) => (
-            <line key={i} x1={0} x2={360} y1={28 * (i + 1)} y2={28 * (i + 1)} stroke="#78766E" strokeOpacity={0.12} />
-        ))}
-        <rect x={26} y={22} width={308} height={58} fill="#F2F0EA" stroke="#1A1A18" strokeWidth={2} />
-        <rect x={40} y={36} width={104} height={6} fill="#52514C" opacity={0.6} />
-        <rect x={40} y={50} width={168} height={16} fill="#1A1A18" />
-        <g transform="rotate(-9 286 50)">
-            <rect x={246} y={36} width={80} height={26} rx={2} fill="none" stroke="#C0362C" strokeWidth={3} />
-            <text x={286} y={54} textAnchor="middle" fontSize={12} fontWeight={700} fill="#C0362C"
-                  fontFamily="system-ui, sans-serif" letterSpacing={1}>ON FILE</text>
-        </g>
-        {([[104, 96, 178], [134, 72, 188], [164, 88, 150], [194, 60, 196], [224, 92, 132]] as const).map(([y, lw, bw], i) => (
-            <g key={i}>
-                <rect x={26} y={y} width={lw} height={6} fill="#52514C" opacity={0.55} />
-                <rect x={138} y={y - 5} width={bw} height={15} fill="#16150F" />
-                <line x1={26} x2={334} y1={y + 14} y2={y + 14} stroke="#CFCCC3" />
-            </g>
-        ))}
+    <svg viewBox="0 0 360 270" preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        <text x={22} y={16} fontFamily="var(--font-mono)" fontSize={9.5} letterSpacing={2} fill="var(--fg-soft)">PASSIVE SIGNALS · 7</text>
+        {FOOT_ROWS.map(([label, frac, live], i) => {
+            const y = 26 + i * 30, x0 = 22, lw = 96;
+            return (
+                <g key={i}>
+                    <line x1={x0} x2={338} y1={y + 22} y2={y + 22} stroke="var(--rule)" />
+                    <text x={x0} y={y + 6} fontFamily="var(--font-mono)" fontSize={10} letterSpacing={1.5} fill="var(--fg-muted)">{label}</text>
+                    {live
+                        ? <text x={x0 + lw} y={y + 6} fontFamily="var(--font-mono)" fontSize={11} fill="var(--accent)">{live}</text>
+                        : <rect x={x0 + lw} y={y - 6} width={(338 - x0 - lw) * frac} height={13} rx={2} fill="var(--fg)" opacity={0.82} />}
+                </g>
+            );
+        })}
     </svg>
 );
 

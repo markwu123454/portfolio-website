@@ -139,6 +139,38 @@ const FOOTPRINT_PREVIEW = (
     </svg>
 );
 
+/* ── 04 · Pull Patience — rising probability curve ───────────────── */
+
+const PP_W = 360, PP_H = 270, PP_PL = 20, PP_PR = 14, PP_PT = 18, PP_PB = 20;
+const PP_IW = PP_W - PP_PL - PP_PR, PP_IH = PP_H - PP_PT - PP_PB;
+// a logistic-ish saving curve: flat, then soft-pity ramp, then plateau near 1
+const PP_CDF = (k: number) => 1 / (1 + Math.exp(-11 * (k - 0.62)));
+const PP_N = 60;
+const ppX = (t: number) => PP_PL + t * PP_IW;
+const ppY = (p: number) => PP_PT + (1 - p) * PP_IH;
+const PP_PTS = Array.from({length: PP_N + 1}, (_, i) => {
+    const t = i / PP_N;
+    return `${ppX(t).toFixed(1)},${ppY(PP_CDF(t)).toFixed(1)}`;
+}).join(" ");
+const PP_NOW = 0.44, PP_DL = 0.78;   // "now" and "deadline" points along x
+
+const PULL_PATIENCE_PREVIEW = (
+    <svg viewBox={`0 0 ${PP_W} ${PP_H}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        {[0, 0.5, 1].map((p) => (
+            <line key={p} x1={PP_PL} x2={PP_W - PP_PR} y1={ppY(p)} y2={ppY(p)} stroke="var(--rule)" />
+        ))}
+        <polygon points={`${PP_PL},${PP_PT + PP_IH} ${PP_PTS} ${(PP_PL + PP_IW).toFixed(1)},${PP_PT + PP_IH}`} fill="var(--accent-soft)" />
+        <polyline points={PP_PTS} fill="none" stroke="var(--accent)" strokeWidth={2.5} strokeLinejoin="round" />
+        {/* now */}
+        <line x1={ppX(PP_NOW)} x2={ppX(PP_NOW)} y1={PP_PT} y2={PP_PT + PP_IH} stroke="var(--fg-soft)" strokeWidth={1.5} />
+        <circle cx={ppX(PP_NOW)} cy={ppY(PP_CDF(PP_NOW))} r={4} fill="var(--fg)" />
+        {/* deadline */}
+        <line x1={ppX(PP_DL)} x2={ppX(PP_DL)} y1={PP_PT} y2={PP_PT + PP_IH} stroke="var(--good)" strokeWidth={1.5} />
+        <circle cx={ppX(PP_DL)} cy={ppY(PP_CDF(PP_DL))} r={4} fill="var(--good)" />
+        <text x={ppX(PP_DL) + 6} y={ppY(PP_CDF(PP_DL)) - 6} fontFamily="var(--font-mono)" fontSize={13} fill="var(--good)">78%</text>
+    </svg>
+);
+
 /* ─────────────────────────────────────────────────────────────────
    Data
    ───────────────────────────────────────────────────────────────── */
@@ -164,6 +196,13 @@ const READY: Experiment[] = [
         title: 'Digital Footprint Mirror',
         blurb: 'Everything you hand a site by just loading it, assembled into a disclosure record in front of you.',
         preview: FOOTPRINT_PREVIEW,
+    },
+    {
+        href: '/experiments/pull-patience',
+        category: 'PROBABILITY',
+        title: 'Pull Patience',
+        blurb: 'A local tracker for gacha savers: your pity, stash, and saving rate become a live chance of hitting the target by your deadline.',
+        preview: PULL_PATIENCE_PREVIEW,
     },
 ];
 

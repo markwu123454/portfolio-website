@@ -139,7 +139,7 @@ const FOOTPRINT_PREVIEW = (
     </svg>
 );
 
-/* ── 04 · Pull Patience — rising probability curve ───────────────── */
+/* ── 04 · Pull Planner — rising probability curve ───────────────── */
 
 const PP_W = 360, PP_H = 270, PP_PL = 20, PP_PR = 14, PP_PT = 18, PP_PB = 20;
 const PP_IW = PP_W - PP_PL - PP_PR, PP_IH = PP_H - PP_PT - PP_PB;
@@ -198,9 +198,9 @@ const READY: Experiment[] = [
         preview: FOOTPRINT_PREVIEW,
     },
     {
-        href: '/experiments/pull-patience',
+        href: '/experiments/pull-planner',
         category: 'PROBABILITY',
-        title: 'Pull Patience',
+        title: 'Pull Planner',
         blurb: 'A local tracker for gacha savers: your pity, stash, and saving rate become a live chance of hitting the target by your deadline.',
         preview: PULL_PATIENCE_PREVIEW,
     },

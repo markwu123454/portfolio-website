@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Pull Patience — /experiments/pull-patience
+ * Pull Planner — /experiments/pull-planner
  *
  * A local-only companion for gacha savers. On creation you lock the facts that
  * don't change (game, target, current pity, starting stash). After that you
@@ -131,9 +131,9 @@ export default function PullPatiencePage() {
             <aside className="lg:w-62.5 lg:flex-none shrink-0 border-b lg:border-b-0 lg:border-r border-rule bg-bg-elev p-5 flex flex-col gap-4 box-border">
                 <div>
                     <div className="font-mono text-[11px] tracking-kicker uppercase text-accent flex items-center gap-2">
-                        <span>EXPERIMENT</span><span className="text-fg-soft">·</span><span>PULL PATIENCE</span>
+                        <span>EXPERIMENT</span><span className="text-fg-soft">·</span><span>PULL PLANNER</span>
                     </div>
-                    <h1 className="mt-2.5 mb-1 text-[23px] font-semibold tracking-[-0.025em]">Pull Patience</h1>
+                    <h1 className="mt-2.5 mb-1 text-[23px] font-semibold tracking-[-0.025em]">Pull Planner</h1>
                     <p className="m-0 text-[12.5px] text-fg-muted leading-snug">Track your stash, project your rate, see your odds.</p>
                 </div>
 

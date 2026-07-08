@@ -62,7 +62,7 @@ export const GAMES: Game[] = [
         currencyName: "Polychrome",
         ticketName: "Encrypted Master Tape",
         currencyPerPull: 160,
-        expectedRate: 2.5,
+        expectedRate: 1.7,
         refundFactor: 1.15848,
     },
     {
@@ -73,7 +73,7 @@ export const GAMES: Game[] = [
         currencyName: "Polychrome",
         ticketName: "Boopon",
         currencyPerPull: 160,
-        expectedRate: 2.5,
+        expectedRate: 1.7,
         refundFactor: 1.15848,
     },
 ];

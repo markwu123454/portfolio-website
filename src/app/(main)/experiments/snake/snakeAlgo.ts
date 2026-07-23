@@ -571,48 +571,6 @@ export function bfsDistance(
 }
 
 
-// ── Heatmap overlay field (decoupled from the selection algorithm) ──
-// BFS from the apple over the CURRENT grid, treating the whole snake as a
-// wall. Each free cell gets its distance from the apple; cells the body has
-// sealed off stay -1. Purely a visualization of how the body blocks space.
-export function reachabilityField(
-    apple: number,
-    rows: number,
-    cols: number,
-    snake: number[]
-): { dist: Int32Array; maxDist: number } {
-    const total = rows * cols;
-    const blocked = new Uint8Array(total);
-    for (let i = 0; i < snake.length; i++) {
-        blocked[snake[i]] = 1;
-    }
-
-    const dist = new Int32Array(total).fill(-1);
-    if (apple < 0 || apple >= total || blocked[apple] === 1) {
-        return { dist, maxDist: 0 };
-    }
-    dist[apple] = 0;
-
-    const queue: number[] = [apple];
-    let qi = 0;
-    let maxDist = 0;
-
-    while (qi < queue.length) {
-        const cur = queue[qi++];
-        const cr = (cur / cols) | 0;
-        const cc = cur % cols;
-        const nd = dist[cur] + 1;
-
-        if (cc + 1 < cols) { const n = cur + 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
-        if (cc - 1 >= 0)   { const n = cur - 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
-        if (cr + 1 < rows) { const n = cur + cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
-        if (cr - 1 >= 0)   { const n = cur - cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; if (nd > maxDist) maxDist = nd; queue.push(n); } }
-    }
-
-    return { dist, maxDist };
-}
-
-
 export function pathFromHeadToApple(
     path: number[],
     snake: number[],
@@ -705,6 +663,10 @@ export function enforceGridRules(
 export type StateMsg = {
     type: "state";
     generation: number;
+    // Monotonic per-state token, bumped on every step and reset. A best is only
+    // safe to adopt for the state it was computed against, so the worker echoes
+    // this back and the UI ignores any best whose serial has been superseded.
+    serial: number;
     rows: number;
     cols: number;
     snake: number[];
@@ -712,10 +674,13 @@ export type StateMsg = {
     cycle: number[];
 };
 
-// worker → UI: the best cycle found so far for the last reported state.
+// worker → UI: the best cycle found so far for the last reported state. `serial`
+// identifies which state it targets, so the UI can reject stale results (a best
+// optimized for an earlier head/apple would otherwise force a long detour).
 export type BestMsg = {
     type: "best";
     generation: number;
+    serial: number;
     cycle: number[];
     score: number;
 };
@@ -741,6 +706,7 @@ export class SnakeSearch {
     snake: number[] = [];
     apple = -1;
     generation = -1;
+    serial = -1;
     best: number[] = [];
     bestScore = Infinity;
     generated = 0;
@@ -763,6 +729,7 @@ export class SnakeSearch {
         this.snake = msg.snake;
         this.apple = msg.apple;
         this.generation = msg.generation;
+        this.serial = msg.serial;
 
         const bfs = bfsDistance(this.snake[0], this.apple, this.rows, this.cols, this.snake);
         this.lowerBound = Number.isFinite(bfs) ? Math.max(bfs, 1) : 1;
@@ -815,7 +782,7 @@ export class SnakeSearch {
     }
 
     getBest(): BestMsg {
-        return { type: "best", generation: this.generation, cycle: this.best, score: this.bestScore };
+        return { type: "best", generation: this.generation, serial: this.serial, cycle: this.best, score: this.bestScore };
     }
 
     get idle(): boolean {

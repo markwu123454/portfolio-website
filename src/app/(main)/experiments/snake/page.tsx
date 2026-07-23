@@ -1,10 +1,10 @@
 "use client";
 
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {
     intC, intR,
     generateHamiltonianBasic, buildNextMap, buildPosMap,
-    normalizeHamiltonian, reachabilityField, pathFromHeadToApple,
+    normalizeHamiltonian, pathFromHeadToApple,
     randomFreeCell, isSubArc,
     sliderToSteps, digitsOnly, enforceGridRules,
 } from "./snakeAlgo";
@@ -31,7 +31,6 @@ function SnakePage() {
     const [running, setRunning] = useState(false);
     const [showPath, setShowPath] = useState(true);
     const [highlightPath, setHighlightPath] = useState(true);
-    const [showHeatmap, setShowHeatmap] = useState(false);
     const [stepsPerSecond, setStepsPerSecond] = useState(50);
 
     const [rowsInput, setRowsInput] = useState(String(rows));
@@ -45,8 +44,12 @@ function SnakePage() {
     // latest best each tick; refs (not state) carry the live snake/apple so the
     // loop and the worker stay in sync without re-rendering.
     const workerRef = useRef<Worker | null>(null);
-    const latestBestRef = useRef<{ cycle: number[]; generation: number } | null>(null);
+    const latestBestRef = useRef<{ cycle: number[]; generation: number; serial: number } | null>(null);
     const generationRef = useRef(0);
+    // Bumped on every posted state (each step + reset). A worker best is only
+    // adopted when its serial still matches the state the UI last posted, so a
+    // best computed for a stale head/apple can never force a long detour.
+    const stateSerialRef = useRef(0);
     const snakeRef = useRef(snake);
     const appleRef = useRef(apple);
 
@@ -60,21 +63,16 @@ function SnakePage() {
     const filledPct = Math.round((snake.length / cellCount) * 100);
 
 
-    const heat = useMemo(() => {
-        if (!showHeatmap) return null;
-        const { dist, maxDist } = reachabilityField(apple, rows, cols, snake);
-        return { dist, maxDist, snakeSet: new Set(snake) };
-    }, [showHeatmap, apple, rows, cols, snake]);
-
-
     // Re-base the worker on the latest state + the cycle the UI currently holds
     // (its new incumbent).
     const postState = useCallback((snk: number[], app: number) => {
         const w = workerRef.current;
         if (!w) return;
+        const serial = ++stateSerialRef.current;
         const msg: StateMsg = {
             type: "state",
             generation: generationRef.current,
+            serial,
             rows, cols,
             snake: snk,
             apple: app,
@@ -103,7 +101,12 @@ function SnakePage() {
         //    Hamiltonian cycle for the current snake. Otherwise keep the cycle
         //    we hold (still valid — the snake just slid along it).
         const lb = latestBestRef.current;
-        if (lb && lb.generation === generationRef.current && isSubArc(lb.cycle, prev)) {
+        if (
+            lb &&
+            lb.generation === generationRef.current &&
+            lb.serial === stateSerialRef.current &&
+            isSubArc(lb.cycle, prev)
+        ) {
             const norm = normalizeHamiltonian(lb.cycle, prev, cols);
             hamiltonian.current = norm;
             nextMap.current = buildNextMap(norm, cols);
@@ -180,7 +183,7 @@ function SnakePage() {
             const m = e.data;
             if (!m) return;
             if (m.type === "best") {
-                latestBestRef.current = { cycle: m.cycle, generation: m.generation };
+                latestBestRef.current = { cycle: m.cycle, generation: m.generation, serial: m.serial };
             } else if (m.type === "stats" && m.generation === generationRef.current) {
                 setLoopsSearched(m.generated);
             }
@@ -307,7 +310,6 @@ function SnakePage() {
                         <div className="flex flex-col gap-0.5">
                             <LayerToggle on={showPath} color="var(--fg)" label="Hamiltonian path" onClick={toggleShowPath} />
                             <LayerToggle on={highlightPath} color="#facc15" label="Head → apple" onClick={toggleHighlightPath} />
-                            <LayerToggle on={showHeatmap} color="#e879a6" label="Reachability heatmap" onClick={() => setShowHeatmap(h => !h)} />
                             <LayerToggle on color="var(--fg-soft)" label="Grid" />
                         </div>
                     </div>
@@ -376,21 +378,9 @@ function SnakePage() {
                                 aspectRatio: `${cols} / ${rows}`,
                             }}
                         >
-                            {Array.from({length: rows * cols}).map((_, idx) => {
-                                let bg: string | undefined;
-                                if (heat && !heat.snakeSet.has(idx)) {
-                                    const d = heat.dist[idx];
-                                    const t = d < 0 ? 1 : heat.maxDist > 0 ? d / heat.maxDist : 0;
-                                    bg = `hsla(${Math.round(120 * (1 - t))}, 70%, 50%, 0.2)`;
-                                }
-                                return (
-                                    <div
-                                        key={idx}
-                                        className="border border-rule bg-bg"
-                                        style={bg ? { backgroundColor: bg } : undefined}
-                                    />
-                                );
-                            })}
+                            {Array.from({length: rows * cols}).map((_, idx) => (
+                                <div key={idx} className="border border-rule bg-bg" />
+                            ))}
 
                             <svg
                                 className="absolute inset-0 pointer-events-none"
@@ -398,7 +388,7 @@ function SnakePage() {
                             >
                                 {showPath && (
                                     <polyline
-                                        fill="none" stroke={showHeatmap ? "#d4d4d8" : "#333"} strokeWidth="4"
+                                        fill="none" stroke="#333" strokeWidth="4"
                                         points={[...hamiltonian.current, hamiltonian.current[0]].map(ptInt).join(" ")}
                                     />
                                 )}
@@ -493,7 +483,6 @@ function SnakePage() {
                         <li><strong>Speed</strong> &mdash; how many moves per second to play</li>
                         <li><strong>Hamiltonian Path</strong> &mdash; show the full loop the snake is on</li>
                         <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>
-                        <li><strong>Heatmap</strong> &mdash; shade each square by how far it is from the apple around the snake, revealing space the body has walled off</li>
                         <li><strong>Rows / Cols</strong> &mdash; change the board size <em>(resets the game)</em></li>
                     </ul>
                 </section>

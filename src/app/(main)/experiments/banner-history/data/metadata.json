@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-07-26T05:10:19.405Z",
+  "source": "https://zzz.163.moe/",
+  "bannerChunk": "https://zzz.163.moe/_app/immutable/chunks/DtiN3UkL.js",
+  "bannerVar": "jr",
+  "fingerprint": [
+    "version",
+    "phase",
+    "startDate",
+    "endDate"
+  ],
+  "bannerCount": 41,
+  "versionCount": 19,
+  "versions": [
+    "1.0",
+    "1.1",
+    "1.2",
+    "1.3",
+    "1.4",
+    "1.5",
+    "1.6",
+    "1.7",
+    "2.0",
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.4",
+    "2.5",
+    "2.6",
+    "2.7",
+    "2.8",
+    "3.0",
+    "3.1"
+  ],
+  "dataHash": "5ae859eac292796fb1aa24408cd3fcb23508f005431450802637375a9fc26536",
+  "previousHash": "6c0b993b634c0270d59785571f8f443c84b28e1a6f3d23e994f0eb26bbbe777b",
+  "changed": true,
+  "coverage": {
+    "sRanks": "69/69",
+    "aRanks": "72/72"
+  },
+  "unmatched": {
+    "sRanks": [],
+    "aRanks": []
+  }
+}

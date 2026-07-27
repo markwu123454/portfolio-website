@@ -1,0 +1,2681 @@
+{
+  "generatedAt": "2026-07-26T05:10:18.885Z",
+  "source": "https://zzz.163.moe/",
+  "chunks": [
+    {
+      "url": "https://zzz.163.moe/_app/immutable/entry/start.BxHYj92U.js",
+      "name": "start.BxHYj92U.js",
+      "byteLength": 83,
+      "collectionCount": 0,
+      "collections": []
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/Dyaw7Ydt.js",
+      "name": "Dyaw7Ydt.js",
+      "byteLength": 31518,
+      "collectionCount": 5,
+      "collections": [
+        {
+          "name": "N",
+          "type": "object",
+          "count": 6,
+          "sampleKeys": [
+            "tap",
+            "hover",
+            "viewport",
+            "eager",
+            "off",
+            "false"
+          ],
+          "firstValue": 1
+        },
+        {
+          "name": "Fe",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            ""
+          ],
+          "firstValue": "<MemberExpression>"
+        },
+        {
+          "name": "nt",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            "v"
+          ],
+          "firstValue": "<ArrowFunctionExpression>"
+        },
+        {
+          "name": "C",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "url",
+            "page",
+            "navigating",
+            "updated"
+          ],
+          "firstValue": "<CallExpression>"
+        },
+        {
+          "name": "v",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "branch",
+            "error",
+            "url"
+          ],
+          "firstValue": []
+        }
+      ]
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/uEriP3Q1.js",
+      "name": "uEriP3Q1.js",
+      "byteLength": 2771,
+      "collectionCount": 0,
+      "collections": []
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/entry/app.Bx16Pt5x.js",
+      "name": "app.Bx16Pt5x.js",
+      "byteLength": 5731,
+      "collectionCount": 3,
+      "collections": [
+        {
+          "name": "ae",
+          "type": "array",
+          "count": 6,
+          "firstElementKeys": null,
+          "firstElement": "<ArrowFunctionExpression>"
+        },
+        {
+          "name": "le",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "/",
+            "/banners",
+            "/gachasim",
+            "/privacy"
+          ],
+          "firstValue": [
+            2
+          ]
+        },
+        {
+          "name": "ee",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "handleError",
+            "reroute",
+            "transport"
+          ],
+          "firstValue": "<ArrowFunctionExpression>"
+        }
+      ]
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/C1FmrZbK.js",
+      "name": "C1FmrZbK.js",
+      "byteLength": 1141,
+      "collectionCount": 0,
+      "collections": []
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/CuGX-GP0.js",
+      "name": "CuGX-GP0.js",
+      "byteLength": 6062,
+      "collectionCount": 0,
+      "collections": []
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/nodes/0.DWnnooQG.js",
+      "name": "0.DWnnooQG.js",
+      "byteLength": 197,
+      "collectionCount": 0,
+      "collections": []
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/z--PaeVT.js",
+      "name": "z--PaeVT.js",
+      "byteLength": 72539,
+      "collectionCount": 7,
+      "collections": [
+        {
+          "name": "Va",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "gacha-simulator",
+            "banner-history",
+            "discord",
+            "privacy-policy"
+          ],
+          "firstValue": {
+            "EN": "Gacha Simulator",
+            "JP": "ガチャシミュレーター",
+            "KR": "가챠 시뮬레이터",
+            "SCN": "抽卡模拟器",
+            "TCN": "扭蛋模擬器",
+            "ES": "Simulador de Gacha",
+            "RU": "Гача Симулятор",
+            "TH": "กาชาจำลอง",
+            "VI": "Trình giả lập Gacha",
+            "ID": "Simulator Gacha",
+            "FR": "Simulateur de Gacha",
+            "DE": "Gacha-Simulator"
+          }
+        },
+        {
+          "name": "wa",
+          "type": "object",
+          "count": 66,
+          "sampleKeys": [
+            "settings",
+            "agent/wengine",
+            "agents",
+            "wengines",
+            "bangboo",
+            "max",
+            "clear",
+            "confirm"
+          ],
+          "firstValue": {
+            "EN": "Settings",
+            "JP": "設定",
+            "KR": "설정",
+            "SCN": "设置",
+            "TCN": "設定",
+            "ES": "Configuración",
+            "RU": "Настройки",
+            "TH": "การตั้งค่า",
+            "VI": "Cài đặt",
+            "ID": "Pengaturan",
+            "FR": "Paramètres",
+            "DE": "Einstellungen"
+          }
+        },
+        {
+          "name": "Ka",
+          "type": "object",
+          "count": 10,
+          "sampleKeys": [
+            "alignments",
+            "view-guided-tour",
+            "agent-pity",
+            "wengine-pity",
+            "bangboo-pity",
+            "banner-inputs",
+            "signal-searches-input",
+            "simulations-input"
+          ],
+          "firstValue": {
+            "EN": "Rearrange the content to give more space for scrolling the page",
+            "JP": "ページをスクロールするためのスペースを増やすためにコンテンツの配置を変更してください",
+            "KR": "콘텐츠를 재배치하여 페이지 스크롤 공간을 확보하세요",
+            "SCN": "重新排列内容以提供更多滚动页面的空间",
+            "TCN": "重新安排內容以提供更多滾動頁面的空間",
+            "ES": "Reorganiza el contenido para dar más espacio al desplazarse por la página",
+            "RU": "Переставьте содержимое, чтобы освободить больше места для прокрутки страницы",
+            "TH": "จัดเรียงเนื้อหาใหม่เพื่อให้มีพื้นที่เลื่อนหน้ามากขึ้น",
+            "VI": "Sắp xếp lại nội dung để có thêm không gian cuộn trang",
+            "ID": "Atur ulang konten untuk memberi lebih banyak ruang untuk menggulir halaman",
+            "FR": "Réorganiser le contenu pour laisser plus d'espace pour faire défiler la page",
+            "DE": "Ordnen Sie den Inhalt neu, um mehr Platz zum Scrollen der Seite zu schaffen"
+          }
+        },
+        {
+          "name": "Fa",
+          "type": "object",
+          "count": 6,
+          "sampleKeys": [
+            "s-rank-duplicate",
+            "s-rank-max-copies",
+            "a-rank-nospace",
+            "no-targets",
+            "a-rank-not-set",
+            "a-rank-rescreening-slot"
+          ],
+          "firstValue": {
+            "EN": "This S-rank agent is already added",
+            "JP": "このSランクエージェントはすでに追加されています",
+            "KR": "이 S급 에이전트는 이미 추가되었습니다",
+            "SCN": "此 S 级代理人已添加",
+            "TCN": "這個 S 級代理人已經添加",
+            "ES": "Este Agente de Rango S ya está añadido",
+            "RU": "Этот Агент S-ранга уже добавлен",
+            "TH": "Agent S-Rank นี้ถูกเพิ่มแล้ว",
+            "VI": "Người Đại Diện S-Hạng này đã được thêm vào",
+            "ID": "Agen S-rank ini sudah ditambahkan",
+            "FR": "Cet agent de rang S est déjà ajouté",
+            "DE": "Dieser S-Rang-Agent ist bereits hinzugefügt"
+          }
+        },
+        {
+          "name": "za",
+          "type": "object",
+          "count": 10,
+          "sampleKeys": [
+            "step-1",
+            "step-2",
+            "step-3",
+            "step-4",
+            "step-5",
+            "step-6",
+            "step-7",
+            "step-8"
+          ],
+          "firstValue": {
+            "EN": [
+              "Select banner type",
+              "<br><br>",
+              "(arrow keys can navigate this tour on desktop)"
+            ],
+            "JP": [
+              "バナータイプを選択",
+              "<br><br>",
+              "矢印キーでデスクトップ上のこのツアーをナビゲートできます"
+            ],
+            "KR": [
+              "배너 유형 선택",
+              "<br><br>",
+              "(데스크톱에서 화살표 키로 이 투어를 탐색할 수 있습니다)"
+            ],
+            "SCN": [
+              "选择横幅类型",
+              "<br><br>",
+              "（箭头键可以在桌面上导航此导览）"
+            ],
+            "TCN": [
+              "選擇橫幅類型",
+              "<br><br>",
+              "（使用方向鍵可以在桌面上導航此導覽）"
+            ],
+            "ES": [
+              "Seleccionar tipo de banner",
+              "<br><br>",
+              "(las teclas de flecha pueden navegar por este recorrido en el escritorio)"
+            ],
+            "RU": [
+              "Выберите тип баннера",
+              "<br><br>",
+              "(клавиши со стрелками могут перемещать этот тур на рабочем столе)"
+            ],
+            "TH": [
+              "เลือกประเภทแบนเนอร์",
+              "<br><br>",
+              "(ปุ่มลูกศรสามารถใช้เพื่อเลื่อนดูทัวร์นี้บนเดสก์ท็อป)"
+            ],
+            "VI": [
+              "Chọn loại biểu ngữ",
+              "<br><br>",
+              "(các phím mũi tên có thể điều hướng tour này trên máy tính để bàn)"
+            ],
+            "ID": [
+              "Pilih jenis banner",
+              "<br><br>",
+              "(tombol panah dapat menavigasi tur ini di desktop)"
+            ],
+            "FR": [
+              "Choisir le type de bannière",
+              "<br><br>",
+              "(les touches fléchées peuvent naviguer dans cette visite sur un ordinateur de bu…"
+            ],
+            "DE": [
+              "Wählen Sie den Bannertyp",
+              "<br><br>",
+              "(Mit den Pfeiltasten können Sie diese Tour auf dem Desktop navigieren)"
+            ]
+          }
+        },
+        {
+          "name": "xa",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "percent",
+            "probability-base",
+            "probability-with-residual",
+            "probability-residual"
+          ],
+          "firstValue": {
+            "EN": "{0}%",
+            "JP": "{0}%",
+            "KR": "{0}%",
+            "SCN": "{0}%",
+            "TCN": "{0}%",
+            "ES": "{0}%",
+            "RU": "{0}%",
+            "TH": "{0}%",
+            "VI": "{0}%",
+            "ID": "{0}%",
+            "FR": "{0}%",
+            "DE": "{0}%"
+          }
+        },
+        {
+          "name": "na",
+          "type": "object",
+          "count": 7,
+          "sampleKeys": [
+            "page",
+            "label",
+            "tooltip",
+            "alert",
+            "tour",
+            "state-based",
+            "formatted"
+          ],
+          "firstValue": "<Identifier>"
+        }
+      ]
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/CjOZMx__.js",
+      "name": "CjOZMx__.js",
+      "byteLength": 227,
+      "collectionCount": 1,
+      "collections": [
+        {
+          "name": "b",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            "subscribe"
+          ],
+          "firstValue": "<FunctionExpression>"
+        }
+      ]
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/nodes/4.CerMlV_n.js",
+      "name": "4.CerMlV_n.js",
+      "byteLength": 425408,
+      "collectionCount": 41,
+      "collections": [
+        {
+          "name": "Xi",
+          "type": "object",
+          "count": 22,
+          "sampleKeys": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "firstValue": 0
+        },
+        {
+          "name": "dl",
+          "type": "array",
+          "count": 1,
+          "firstElementKeys": null,
+          "firstElement": "<SpreadElement>"
+        },
+        {
+          "name": "vc",
+          "type": "object",
+          "count": 27,
+          "sampleKeys": [
+            "x",
+            "Z",
+            "Y",
+            "X",
+            "W",
+            "V",
+            "U",
+            "A"
+          ],
+          "firstValue": "dark"
+        },
+        {
+          "name": "wc",
+          "type": "object",
+          "count": 148,
+          "sampleKeys": [
+            "OiceXe",
+            "antiquewEte",
+            "aqua",
+            "aquamarRe",
+            "azuY",
+            "beige",
+            "bisque",
+            "black"
+          ],
+          "firstValue": "f0f8ff"
+        },
+        {
+          "name": "Sc",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "",
+            "x",
+            "y"
+          ],
+          "firstValue": "<ArrowFunctionExpression>"
+        },
+        {
+          "name": "Ju",
+          "type": "array",
+          "count": 5,
+          "firstElementKeys": null,
+          "firstElement": "push"
+        },
+        {
+          "name": "Ua",
+          "type": "object",
+          "count": 31,
+          "sampleKeys": [
+            "linear",
+            "easeInQuad",
+            "easeOutQuad",
+            "easeInOutQuad",
+            "easeInCubic",
+            "easeOutCubic",
+            "easeInOutCubic",
+            "easeInQuart"
+          ],
+          "firstValue": "<ArrowFunctionExpression>"
+        },
+        {
+          "name": "kb",
+          "type": "array",
+          "count": 5,
+          "firstElementKeys": null,
+          "firstElement": "x"
+        },
+        {
+          "name": "Cb",
+          "type": "array",
+          "count": 3,
+          "firstElementKeys": null,
+          "firstElement": "color"
+        },
+        {
+          "name": "nh",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "values",
+            "numeric",
+            "logarithmic"
+          ],
+          "firstValue": "<FunctionExpression>"
+        },
+        {
+          "name": "ko",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            "formatters"
+          ],
+          "firstValue": "<Identifier>"
+        },
+        {
+          "name": "l_",
+          "type": "array",
+          "count": 4,
+          "firstElementKeys": null,
+          "firstElement": "top"
+        },
+        {
+          "name": "k_",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "boolean",
+            "color",
+            "number"
+          ],
+          "firstValue": "<FunctionExpression>"
+        },
+        {
+          "name": "K_",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            "_date"
+          ],
+          "firstValue": "<Identifier>"
+        },
+        {
+          "name": "ty",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "evaluateInteractionItems",
+            "modes"
+          ],
+          "firstValue": "<Identifier>"
+        },
+        {
+          "name": "vh",
+          "type": "array",
+          "count": 4,
+          "firstElementKeys": null,
+          "firstElement": "left"
+        },
+        {
+          "name": "_i",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "addBox",
+            "removeBox",
+            "configure",
+            "update"
+          ],
+          "firstValue": "<FunctionExpression>"
+        },
+        {
+          "name": "dy",
+          "type": "object",
+          "count": 9,
+          "sampleKeys": [
+            "touchstart",
+            "touchmove",
+            "touchend",
+            "pointerenter",
+            "pointerdown",
+            "pointermove",
+            "pointerup",
+            "pointerleave"
+          ],
+          "firstValue": "mousedown"
+        },
+        {
+          "name": "tv",
+          "type": "array",
+          "count": 5,
+          "firstElementKeys": null,
+          "firstElement": "top"
+        },
+        {
+          "name": "_l",
+          "type": "array",
+          "count": 7,
+          "firstElementKeys": null,
+          "firstElement": "rgb(54, 162, 235)"
+        },
+        {
+          "name": "zv",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "id",
+            "defaults",
+            "beforeLayout"
+          ],
+          "firstValue": "colors"
+        },
+        {
+          "name": "Ov",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "id",
+            "defaults",
+            "beforeElementsUpdate",
+            "destroy"
+          ],
+          "firstValue": "decimation"
+        },
+        {
+          "name": "t0",
+          "type": "object",
+          "count": 6,
+          "sampleKeys": [
+            "id",
+            "afterDatasetsUpdate",
+            "beforeDraw",
+            "beforeDatasetsDraw",
+            "beforeDatasetDraw",
+            "defaults"
+          ],
+          "firstValue": "filler"
+        },
+        {
+          "name": "o0",
+          "type": "object",
+          "count": 9,
+          "sampleKeys": [
+            "id",
+            "_element",
+            "start",
+            "stop",
+            "beforeUpdate",
+            "afterUpdate",
+            "afterEvent",
+            "defaults"
+          ],
+          "firstValue": "legend"
+        },
+        {
+          "name": "c0",
+          "type": "object",
+          "count": 8,
+          "sampleKeys": [
+            "id",
+            "_element",
+            "start",
+            "stop",
+            "beforeUpdate",
+            "defaults",
+            "defaultRoutes",
+            "descriptors"
+          ],
+          "firstValue": "title"
+        },
+        {
+          "name": "d0",
+          "type": "object",
+          "count": 7,
+          "sampleKeys": [
+            "id",
+            "start",
+            "stop",
+            "beforeUpdate",
+            "defaults",
+            "defaultRoutes",
+            "descriptors"
+          ],
+          "firstValue": "subtitle"
+        },
+        {
+          "name": "Ba",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "average",
+            "nearest"
+          ],
+          "firstValue": "<FunctionExpression>"
+        },
+        {
+          "name": "Fh",
+          "type": "object",
+          "count": 14,
+          "sampleKeys": [
+            "beforeTitle",
+            "title",
+            "afterTitle",
+            "beforeBody",
+            "beforeLabel",
+            "label",
+            "labelColor",
+            "labelTextColor"
+          ],
+          "firstValue": "<Identifier>"
+        },
+        {
+          "name": "_0",
+          "type": "object",
+          "count": 12,
+          "sampleKeys": [
+            "id",
+            "_element",
+            "positioners",
+            "afterInit",
+            "beforeUpdate",
+            "reset",
+            "afterDraw",
+            "afterEvent"
+          ],
+          "firstValue": "tooltip"
+        },
+        {
+          "name": "Ao",
+          "type": "object",
+          "count": 9,
+          "sampleKeys": [
+            "millisecond",
+            "second",
+            "minute",
+            "hour",
+            "day",
+            "week",
+            "month",
+            "quarter"
+          ],
+          "firstValue": {
+            "common": true,
+            "size": 1,
+            "steps": 1000
+          }
+        },
+        {
+          "name": "$0",
+          "type": "array",
+          "count": 4,
+          "firstElementKeys": null,
+          "firstElement": "<Identifier>"
+        },
+        {
+          "name": "Yh",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "capture",
+            "passive"
+          ],
+          "firstValue": false
+        },
+        {
+          "name": "Zo",
+          "type": "object",
+          "count": 1,
+          "sampleKeys": [
+            "initializeByDefault"
+          ],
+          "firstValue": true
+        },
+        {
+          "name": "pr",
+          "type": "object",
+          "count": 5,
+          "sampleKeys": [
+            "mount",
+            "pluginEvent",
+            "initializePlugins",
+            "getEventProperties",
+            "modifyOption"
+          ],
+          "firstValue": "<FunctionExpression>"
+        },
+        {
+          "name": "sx",
+          "type": "array",
+          "count": 1,
+          "firstElementKeys": null,
+          "firstElement": "evt"
+        },
+        {
+          "name": "Ux",
+          "type": "array",
+          "count": 4,
+          "firstElementKeys": null,
+          "firstElement": "top"
+        },
+        {
+          "name": "Pu",
+          "type": "array",
+          "count": 2,
+          "firstElementKeys": null,
+          "firstElement": "start"
+        },
+        {
+          "name": "Yx",
+          "type": "object",
+          "count": 4,
+          "sampleKeys": [
+            "left",
+            "right",
+            "bottom",
+            "top"
+          ],
+          "firstValue": "right"
+        },
+        {
+          "name": "qx",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "start",
+            "end"
+          ],
+          "firstValue": "end"
+        },
+        {
+          "name": "y1",
+          "type": "object",
+          "count": 10,
+          "sampleKeys": [
+            "convertOffsetParentRelativeRectToViewportRelativeRect",
+            "getDocumentElement",
+            "getClippingRect",
+            "getOffsetParent",
+            "getElementRects",
+            "getClientRects",
+            "getDimensions",
+            "getScale"
+          ],
+          "firstValue": "<Identifier>"
+        },
+        {
+          "name": "Hu",
+          "type": "object",
+          "count": 32,
+          "sampleKeys": [
+            "nextLabel",
+            "prevLabel",
+            "finishLabel",
+            "hidePrev",
+            "hideNext",
+            "dialogClass",
+            "allowDialogOverlap",
+            "dialogZ"
+          ],
+          "firstValue": "Next"
+        }
+      ]
+    },
+    {
+      "url": "https://zzz.163.moe/_app/immutable/chunks/DtiN3UkL.js",
+      "name": "DtiN3UkL.js",
+      "byteLength": 149733,
+      "collectionCount": 174,
+      "collections": [
+        {
+          "name": "A",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "B",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "T",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "P",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "z",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "O",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "E",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "k",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "j",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "N",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "M",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "F",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "H",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "I",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Y",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "J",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "V",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "K",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "G",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "W",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "x",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Z",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Q",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "X",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "q",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "$",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ee",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "te",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "re",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ae",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "se",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ne",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ie",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "oe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "le",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "me",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "_e",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "pe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ue",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "we",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "fe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ge",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Se",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "he",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Le",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Re",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ce",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "be",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ue",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "de",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ve",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ye",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ce",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "De",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ae",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Be",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Te",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Pe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ze",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Oe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ee",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ke",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "je",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ne",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Me",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Fe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "He",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ie",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ye",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Je",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ve",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ke",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ge",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "We",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "xe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ze",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Qe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Xe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "qe",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "$e",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "et",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "tt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "rt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "at",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "st",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "nt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "it",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ot",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "lt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "mt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "_t",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "pt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ut",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "wt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ft",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "gt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "St",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ht",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Lt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Rt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ct",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "bt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ut",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "dt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "vt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "yt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ct",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Dt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "At",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Bt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Tt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Pt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "zt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ot",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Et",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "kt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "jt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Nt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Mt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ft",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ht",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "It",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Yt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Jt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Vt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Kt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Gt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Wt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "xt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Zt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Qt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Xt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "qt",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "$t",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "er",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "tr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "rr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ar",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "sr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "nr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ir",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "or",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "lr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "mr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "_r",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "pr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "ur",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "wr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "fr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "gr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Sr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "hr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Lr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Rr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "cr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "br",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ur",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "dr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "vr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "yr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Cr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Dr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Ar",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Br",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Tr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Pr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "zr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Or",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "Er",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "kr",
+          "type": "object",
+          "count": 2,
+          "sampleKeys": [
+            "sources",
+            "img"
+          ],
+          "firstValue": "<ObjectExpression>"
+        },
+        {
+          "name": "jr",
+          "type": "array",
+          "count": 41,
+          "firstElementKeys": [
+            "version",
+            "phase",
+            "sRanks",
+            "aRanks",
+            "aWengines",
+            "startDate",
+            "endDate"
+          ],
+          "firstElement": {
+            "version": "1.0",
+            "phase": "1",
+            "sRanks": [
+              "Ellen Joe"
+            ],
+            "aRanks": [
+              "Anton",
+              "Soukaku"
+            ],
+            "aWengines": [
+              "Bashful Demon",
+              "Drill Rig Red Axis"
+            ],
+            "startDate": "2024-07-04",
+            "endDate": "2024-07-24"
+          }
+        },
+        {
+          "name": "Nr",
+          "type": "object",
+          "count": 57,
+          "sampleKeys": [
+            "Anby",
+            "Anton",
+            "Ben",
+            "Billy",
+            "Corin",
+            "Lucy",
+            "Nicole",
+            "Pan Yinhu"
+          ],
+          "firstValue": {
+            "EN": "Anby Demara",
+            "JP": "アンビーデマラ",
+            "KR": "엔비 데마라",
+            "SCN": "安比德玛拉",
+            "TCN": "安比德瑪拉",
+            "ES": "Anby Demara",
+            "RU": "Энби Демара",
+            "TH": "Anby Demara",
+            "VI": "Anby Demara",
+            "ID": "Anby Demara",
+            "FR": "Anby Demara",
+            "DE": "Anby Demara"
+          }
+        },
+        {
+          "name": "Mr",
+          "type": "object",
+          "count": 22,
+          "sampleKeys": [
+            "Attack",
+            "Stun",
+            "Anomaly",
+            "Support",
+            "Defense",
+            "Rupture",
+            "Physical",
+            "Fire"
+          ],
+          "firstValue": {
+            "EN": "Attack",
+            "JP": "強攻",
+            "KR": "강공",
+            "SCN": "强攻",
+            "TCN": "強攻",
+            "ES": "Atacante",
+            "RU": "Нападение",
+            "TH": "โจมตีรุนแรง",
+            "VI": "Tiên Phong",
+            "ID": "Attack",
+            "FR": "Attaque",
+            "DE": "Attacke"
+          }
+        },
+        {
+          "name": "ti",
+          "type": "object",
+          "count": 3,
+          "sampleKeys": [
+            "bannerHistory",
+            "characterNames",
+            "miscNames"
+          ],
+          "firstValue": "<Identifier>"
+        }
+      ]
+    }
+  ]
+}

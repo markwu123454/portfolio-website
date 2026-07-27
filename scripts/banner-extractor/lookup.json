@@ -1,0 +1,587 @@
+{
+  "agents": {
+    "1011": {
+      "name": "Anby",
+      "aliases": [
+        "anby demara"
+      ],
+      "element": "Electric",
+      "specialty": "Stun",
+      "rarity": "A",
+      "faction": "Cunning Hares"
+    },
+    "1021": {
+      "name": "Nekomata",
+      "aliases": [
+        "nekomiya mana"
+      ],
+      "element": "Physical",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Cunning Hares"
+    },
+    "1031": {
+      "name": "Nicole",
+      "aliases": [
+        "nicole demara"
+      ],
+      "element": "Ether",
+      "specialty": "Support",
+      "rarity": "A",
+      "faction": "Cunning Hares"
+    },
+    "1041": {
+      "name": "Soldier 11",
+      "aliases": [
+        "s11",
+        "soldier11"
+      ],
+      "element": "Fire",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Defense Force"
+    },
+    "1051": {
+      "name": "Yidhari",
+      "aliases": [
+        "yidhari murphy"
+      ],
+      "element": "Ice",
+      "specialty": "Rupture",
+      "rarity": "S",
+      "faction": "Spook Shack"
+    },
+    "1061": {
+      "name": "Corin",
+      "aliases": [
+        "corin wickes"
+      ],
+      "element": "Physical",
+      "specialty": "Attack",
+      "rarity": "A",
+      "faction": "Victoria Housekeeping Co."
+    },
+    "1071": {
+      "name": "Caesar",
+      "aliases": [
+        "caesar king"
+      ],
+      "element": "Physical",
+      "specialty": "Defense",
+      "rarity": "S",
+      "faction": "Sons of Calydon"
+    },
+    "1081": {
+      "name": "Billy",
+      "aliases": [
+        "billy kid"
+      ],
+      "element": "Physical",
+      "specialty": "Attack",
+      "rarity": "A",
+      "faction": "Cunning Hares"
+    },
+    "1091": {
+      "name": "Miyabi",
+      "aliases": [
+        "hoshimi miyabi",
+        "hoshimi"
+      ],
+      "element": "Ice",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Hollow Special Operations Section 6"
+    },
+    "1101": {
+      "name": "Koleda",
+      "aliases": [
+        "koleda belobog"
+      ],
+      "element": "Fire",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Belobog Heavy Industries"
+    },
+    "1111": {
+      "name": "Anton",
+      "aliases": [
+        "anton ivanov"
+      ],
+      "element": "Electric",
+      "specialty": "Attack",
+      "rarity": "A",
+      "faction": "Belobog Heavy Industries"
+    },
+    "1121": {
+      "name": "Ben",
+      "aliases": [
+        "ben bigger"
+      ],
+      "element": "Fire",
+      "specialty": "Defense",
+      "rarity": "A",
+      "faction": "Belobog Heavy Industries"
+    },
+    "1131": {
+      "name": "Soukaku",
+      "aliases": [
+        ""
+      ],
+      "element": "Ice",
+      "specialty": "Support",
+      "rarity": "A",
+      "faction": "Hollow Special Operations Section 6"
+    },
+    "1141": {
+      "name": "Lycaon",
+      "aliases": [
+        "von lycaon"
+      ],
+      "element": "Ice",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Victoria Housekeeping Co."
+    },
+    "1151": {
+      "name": "Lucy",
+      "aliases": [
+        "luciana de montefio",
+        "luciana",
+        "luciana montefio"
+      ],
+      "element": "Fire",
+      "specialty": "Support",
+      "rarity": "A",
+      "faction": "Sons of Calydon"
+    },
+    "1161": {
+      "name": "Lighter",
+      "aliases": [],
+      "element": "Fire",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Sons of Calydon"
+    },
+    "1171": {
+      "name": "Burnice",
+      "aliases": [
+        "burnice white"
+      ],
+      "element": "Fire",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Sons of Calydon"
+    },
+    "1181": {
+      "name": "Grace",
+      "aliases": [
+        "grace belobog"
+      ],
+      "element": "Electric",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Belobog Heavy Industries"
+    },
+    "1191": {
+      "name": "Ellen",
+      "aliases": [
+        "ellen joe"
+      ],
+      "element": "Ice",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Victoria Housekeeping Co."
+    },
+    "1201": {
+      "name": "Harumasa",
+      "aliases": [
+        "asaba harumasa"
+      ],
+      "element": "Electric",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Hollow Special Operations Section 6"
+    },
+    "1211": {
+      "name": "Rina",
+      "aliases": [
+        "alexandrina sebastiane",
+        "alexandrina"
+      ],
+      "element": "Electric",
+      "specialty": "Support",
+      "rarity": "S",
+      "faction": "Victoria Housekeeping Co."
+    },
+    "1221": {
+      "name": "Yanagi",
+      "aliases": [
+        "tsukishiro yanagi"
+      ],
+      "element": "Electric",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Hollow Special Operations Section 6"
+    },
+    "1241": {
+      "name": "Zhu Yuan",
+      "aliases": [
+        "zhuyuan"
+      ],
+      "element": "Ether",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Public Security"
+    },
+    "1251": {
+      "name": "Qingyi",
+      "aliases": [],
+      "element": "Electric",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "New Eridu Public Security"
+    },
+    "1261": {
+      "name": "Jane",
+      "aliases": [
+        "jane doe"
+      ],
+      "element": "Physical",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "New Eridu Public Security"
+    },
+    "1271": {
+      "name": "Seth",
+      "aliases": [
+        "seth lowell"
+      ],
+      "element": "Electric",
+      "specialty": "Defense",
+      "rarity": "A",
+      "faction": "New Eridu Public Security"
+    },
+    "1281": {
+      "name": "Piper",
+      "aliases": [
+        "piper wheel"
+      ],
+      "element": "Physical",
+      "specialty": "Anomaly",
+      "rarity": "A",
+      "faction": "Sons of Calydon"
+    },
+    "1291": {
+      "name": "Hugo",
+      "aliases": [
+        "hugo vlad"
+      ],
+      "element": "Ice",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Mockingbird"
+    },
+    "1301": {
+      "name": "Orphie & Magus",
+      "aliases": [
+        "orphie",
+        "magus",
+        "Orphie Magus",
+        "Orphie and Magus",
+        "Orpheus"
+      ],
+      "element": "Fire",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Defense Force"
+    },
+    "1311": {
+      "name": "Astra Yao",
+      "aliases": [
+        "astra"
+      ],
+      "element": "Ether",
+      "specialty": "Support",
+      "rarity": "S",
+      "faction": "Stars of Lyra"
+    },
+    "1321": {
+      "name": "Evelyn",
+      "aliases": [
+        "evelyn chevalier"
+      ],
+      "element": "Fire",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Stars of Lyra"
+    },
+    "1331": {
+      "name": "Vivian",
+      "aliases": [
+        "vivian banshee"
+      ],
+      "element": "Ether",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Mockingbird"
+    },
+    "1341": {
+      "name": "Zhao",
+      "aliases": [
+        "xiao zhao"
+      ],
+      "element": "Ice",
+      "specialty": "Defense",
+      "rarity": "S",
+      "faction": "Krampus Compliance Authority"
+    },
+    "1351": {
+      "name": "Pulchra",
+      "aliases": [
+        "pulchra fellini"
+      ],
+      "element": "Physical",
+      "specialty": "Stun",
+      "rarity": "A",
+      "faction": "Sons of Calydon"
+    },
+    "1361": {
+      "name": "Trigger",
+      "aliases": [],
+      "element": "Electric",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "New Eridu Defense Force"
+    },
+    "1371": {
+      "name": "Yixuan",
+      "aliases": [],
+      "element": "Ether",
+      "specialty": "Rupture",
+      "rarity": "S",
+      "faction": "Yunkui Summit"
+    },
+    "1381": {
+      "name": "Soldier 0 - Anby",
+      "aliases": [
+        "s0 anby",
+        "s0-anby",
+        "soldier 0 anby",
+        "soldier 0",
+        "sanby",
+        "s-anby",
+        "s0"
+      ],
+      "element": "Electric",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Defense Force"
+    },
+    "1391": {
+      "name": "Ju Fufu",
+      "aliases": [
+        "fufu"
+      ],
+      "element": "Fire",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Yunkui Summit"
+    },
+    "1401": {
+      "name": "Alice",
+      "aliases": [
+        "alice thymefield"
+      ],
+      "element": "Physical",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Spook Shack"
+    },
+    "1411": {
+      "name": "Yuzuha",
+      "aliases": [
+        "ukinami yuzuha"
+      ],
+      "element": "Physical",
+      "specialty": "Support",
+      "rarity": "S",
+      "faction": "Spook Shack"
+    },
+    "1421": {
+      "name": "Pan Yinhu",
+      "aliases": [
+        "pan",
+        "yinhu"
+      ],
+      "element": "Physical",
+      "specialty": "Defense",
+      "rarity": "A",
+      "faction": "Yunkui Summit"
+    },
+    "1431": {
+      "name": "Ye Shunguang",
+      "aliases": [
+        "xiaoguang",
+        "ye shung guang",
+        "shungguang"
+      ],
+      "element": "Physical",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Yunkui Summit"
+    },
+    "1441": {
+      "name": "Manato",
+      "aliases": [
+        "komano manato"
+      ],
+      "element": "Fire",
+      "specialty": "Rupture",
+      "rarity": "A",
+      "faction": "Spook Shack"
+    },
+    "1451": {
+      "name": "Lucia",
+      "aliases": [
+        "lucia elowen"
+      ],
+      "element": "Ether",
+      "specialty": "Support",
+      "rarity": "S",
+      "faction": "Spook Shack"
+    },
+    "1461": {
+      "name": "Seed",
+      "aliases": [
+        "flora"
+      ],
+      "element": "Electric",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Defense Force"
+    },
+    "1471": {
+      "name": "Banyue",
+      "aliases": [],
+      "element": "Fire",
+      "specialty": "Rupture",
+      "rarity": "S",
+      "faction": "Krampus Compliance Authority"
+    },
+    "1481": {
+      "name": "Dialyn",
+      "aliases": [],
+      "element": "Physical",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Krampus Compliance Authority"
+    },
+    "1491": {
+      "name": "Sunna",
+      "aliases": [],
+      "element": "Physical",
+      "specialty": "Support",
+      "rarity": "S",
+      "faction": "Angels of Delusion"
+    },
+    "1501": {
+      "name": "Aria",
+      "aliases": [],
+      "element": "Ether",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Angels of Delusion"
+    },
+    "1511": {
+      "name": "Nangong Yu",
+      "aliases": [
+        "nangong"
+      ],
+      "element": "Ether",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Angels of Delusion"
+    },
+    "1521": {
+      "name": "Cissia",
+      "aliases": [],
+      "element": "Electric",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "New Eridu Public Security"
+    },
+    "1531": {
+      "name": "Starlight - Billy",
+      "aliases": [
+        "starlight billy",
+        "starlight-billy",
+        "starlight knight billy",
+        "starlight knight - billy",
+        "sbilly",
+        "s-billy"
+      ],
+      "element": "Physical",
+      "specialty": "Rupture",
+      "rarity": "S",
+      "faction": "Cunning Hares"
+    },
+    "1541": {
+      "name": "Promeia",
+      "aliases": [],
+      "element": "Ice",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Krampus Compliance Authority"
+    },
+    "1551": {
+      "name": "Pyrois",
+      "aliases": [],
+      "element": "Ether",
+      "specialty": "Attack",
+      "rarity": "Special",
+      "faction": "Phaethon"
+    },
+    "1561": {
+      "name": "Velina",
+      "aliases": [
+        "velina airgid"
+      ],
+      "element": "Wind",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Roscaelifer External Strategy Department"
+    },
+    "1571": {
+      "name": "Norma",
+      "aliases": [
+        "norma hollowell"
+      ],
+      "element": "Fire",
+      "specialty": "Stun",
+      "rarity": "S",
+      "faction": "Roscaelifer External Strategy Department"
+    },
+    "1581": {
+      "name": "Remielle",
+      "aliases": [
+        "remielle dan",
+        "dan"
+      ],
+      "element": "Lumiflux",
+      "specialty": "Anomaly",
+      "rarity": "S",
+      "faction": "Covenant of Dayat"
+    },
+    "1591": {
+      "name": "Sigrid",
+      "aliases": [
+        "Sigrid de L'Azur",
+        "Sigrid L'Azur"
+      ],
+      "element": "Ice",
+      "specialty": "Attack",
+      "rarity": "S",
+      "faction": "Roscaelifer Airspace Patrol Department"
+    }
+  }
+}

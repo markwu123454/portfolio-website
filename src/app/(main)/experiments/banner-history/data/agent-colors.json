@@ -1,0 +1,338 @@
+{
+  "1011": {
+    "name": "Anby",
+    "accent": "#aece32",
+    "accentExtra": "#dcfa22",
+    "mindscape": "#dcfa22"
+  },
+  "1021": {
+    "name": "Nekomata",
+    "accent": "#ca4b3d",
+    "accentExtra": "#f7553b",
+    "mindscape": "#f7553b"
+  },
+  "1031": {
+    "name": "Nicole",
+    "accent": "#ff498c",
+    "accentExtra": "#ff7ca4",
+    "mindscape": "#ff7ca4"
+  },
+  "1041": {
+    "name": "Soldier 11",
+    "accent": "#ffc300",
+    "accentExtra": "#ffc91c",
+    "mindscape": "#ffc91c"
+  },
+  "1051": {
+    "name": "Yidhari",
+    "accent": "#ab373e",
+    "accentExtra": "#bb98e2",
+    "mindscape": "#bb98e2"
+  },
+  "1061": {
+    "name": "Corin",
+    "accent": "#b2b2b2",
+    "accentExtra": "#b642ff",
+    "mindscape": "#b642ff"
+  },
+  "1071": {
+    "name": "Caesar",
+    "accent": "#ffdd4f",
+    "accentExtra": "#d2ac47",
+    "mindscape": "#d2ac47"
+  },
+  "1081": {
+    "name": "Billy",
+    "accent": "#c94b3d",
+    "accentExtra": "#ff263b",
+    "mindscape": "#ff263b"
+  },
+  "1091": {
+    "name": "Miyabi",
+    "accent": "#22bdcc",
+    "accentExtra": "#0fa4c4",
+    "mindscape": "#0fa4c4"
+  },
+  "1101": {
+    "name": "Koleda",
+    "accent": "#d4d4d4",
+    "accentExtra": "#ff5a00",
+    "mindscape": "#ff5a00"
+  },
+  "1111": {
+    "name": "Anton",
+    "accent": "#d4d4d4",
+    "accentExtra": "#fe6600",
+    "mindscape": "#fe6600"
+  },
+  "1121": {
+    "name": "Ben",
+    "accent": "#d4d4d4",
+    "accentExtra": "#fa951c",
+    "mindscape": "#fa951c"
+  },
+  "1131": {
+    "name": "Soukaku",
+    "accent": "#22bdcc",
+    "accentExtra": "#00e4ff",
+    "mindscape": "#00e4ff"
+  },
+  "1141": {
+    "name": "Lycaon",
+    "accent": "#b2b2b2",
+    "accentExtra": "#a7acc7",
+    "mindscape": "#a7acc7"
+  },
+  "1151": {
+    "name": "Lucy",
+    "accent": "#ffdd4f",
+    "accentExtra": "#f5b635",
+    "mindscape": "#f5b635"
+  },
+  "1161": {
+    "name": "Lighter",
+    "accent": "#ffdd4f",
+    "accentExtra": "#c72b22",
+    "mindscape": "#c72b22"
+  },
+  "1171": {
+    "name": "Burnice",
+    "accent": "#ffdd4f",
+    "accentExtra": "#dfa337",
+    "mindscape": "#dfa337"
+  },
+  "1181": {
+    "name": "Grace",
+    "accent": "#d4d4d4",
+    "accentExtra": "#e46035",
+    "mindscape": "#e46035"
+  },
+  "1191": {
+    "name": "Ellen",
+    "accent": "#b2b2b2",
+    "accentExtra": "#fd3576",
+    "mindscape": "#fd3576"
+  },
+  "1201": {
+    "name": "Harumasa",
+    "accent": "#22bdcc",
+    "accentExtra": "#ffcc00",
+    "mindscape": "#ffcc00"
+  },
+  "1211": {
+    "name": "Rina",
+    "accent": "#b2b2b2",
+    "accentExtra": "#ee404f",
+    "mindscape": "#ee404f"
+  },
+  "1221": {
+    "name": "Yanagi",
+    "accent": "#22bdcc",
+    "accentExtra": "#ff7289",
+    "mindscape": "#ff7289"
+  },
+  "1241": {
+    "name": "Zhu Yuan",
+    "accent": "#0d75d9",
+    "accentExtra": "#0076d4",
+    "mindscape": "#0076d4"
+  },
+  "1251": {
+    "name": "Qingyi",
+    "accent": "#0d75d9",
+    "accentExtra": "#2ee0bc",
+    "mindscape": "#2ee0bc"
+  },
+  "1261": {
+    "name": "Jane",
+    "accent": "#91daed",
+    "accentExtra": "#fd3576",
+    "mindscape": "#fd3576"
+  },
+  "1271": {
+    "name": "Seth",
+    "accent": "#0d75d9",
+    "accentExtra": "#4b9ce4",
+    "mindscape": "#4b9ce4"
+  },
+  "1281": {
+    "name": "Piper",
+    "accent": "#ffdd4f",
+    "accentExtra": "#ffbc00",
+    "mindscape": "#ffbc00"
+  },
+  "1291": {
+    "name": "Hugo",
+    "accent": "#8076e9",
+    "accentExtra": "#f76662",
+    "mindscape": "#f76662"
+  },
+  "1301": {
+    "name": "Orphie & Magus",
+    "accent": "#db602a",
+    "accentExtra": "#e72d50",
+    "mindscape": "#e72d50"
+  },
+  "1311": {
+    "name": "Astra Yao",
+    "accent": "#eef7fd",
+    "accentExtra": "#de184f",
+    "mindscape": "#de184f"
+  },
+  "1321": {
+    "name": "Evelyn",
+    "accent": "#eef7fd",
+    "accentExtra": "#a76efa",
+    "mindscape": "#a76efa"
+  },
+  "1331": {
+    "name": "Vivian",
+    "accent": "#8076e9",
+    "accentExtra": "#a656f9",
+    "mindscape": "#a656f9"
+  },
+  "1341": {
+    "name": "Zhao",
+    "accent": "#56c3c1",
+    "accentExtra": "#ff6993",
+    "mindscape": "#ff6993"
+  },
+  "1351": {
+    "name": "Pulchra",
+    "accent": "#ff8916",
+    "accentExtra": "#ee8c23",
+    "mindscape": "#ee8c23"
+  },
+  "1361": {
+    "name": "Trigger",
+    "accent": "#ffc300",
+    "accentExtra": "#ffbe00",
+    "mindscape": "#ffbe00"
+  },
+  "1371": {
+    "name": "Yixuan",
+    "accent": "#f1cc4d",
+    "accentExtra": "#fac53b",
+    "mindscape": "#fac53b"
+  },
+  "1381": {
+    "name": "Soldier 0 - Anby",
+    "accent": "#ffbc2e",
+    "accentExtra": "#ffbc25",
+    "mindscape": "#ffbc25"
+  },
+  "1391": {
+    "name": "Ju Fufu",
+    "accent": "#ffbf16",
+    "accentExtra": "#efd050",
+    "mindscape": "#efd050"
+  },
+  "1401": {
+    "name": "Alice",
+    "accent": "#d54553",
+    "accentExtra": "#f43638",
+    "mindscape": "#f43638"
+  },
+  "1411": {
+    "name": "Yuzuha",
+    "accent": "#d54553",
+    "accentExtra": "#f43638",
+    "mindscape": "#f43638"
+  },
+  "1421": {
+    "name": "Pan Yinhu",
+    "accent": "#ffbf16",
+    "accentExtra": "#fdcb7a",
+    "mindscape": "#fdcb7a"
+  },
+  "1431": {
+    "name": "Ye Shunguang",
+    "accent": "#f5b42e",
+    "accentExtra": "#d84620",
+    "mindscape": "#d84620"
+  },
+  "1441": {
+    "name": "Manato",
+    "accent": "#ab373e",
+    "accentExtra": "#d7291d",
+    "mindscape": "#d7291d"
+  },
+  "1451": {
+    "name": "Lucia",
+    "accent": "#4bbbc0",
+    "accentExtra": "#2eaac7",
+    "mindscape": "#2eaac7"
+  },
+  "1461": {
+    "name": "Seed",
+    "accent": "#e9f1f2",
+    "accentExtra": "#f3c728",
+    "mindscape": "#f3c728"
+  },
+  "1471": {
+    "name": "Banyue",
+    "accent": "#adadad",
+    "accentExtra": "#daaf67",
+    "mindscape": "#daaf67"
+  },
+  "1481": {
+    "name": "Dialyn",
+    "accent": "#adadad",
+    "accentExtra": "#6efceb",
+    "mindscape": "#6efceb"
+  },
+  "1491": {
+    "name": "Sunna",
+    "accent": "#57ddca",
+    "accentExtra": "#fc9ab7",
+    "mindscape": "#d5ff63"
+  },
+  "1501": {
+    "name": "Aria",
+    "accent": "#65dcc9",
+    "accentExtra": "#21b79c",
+    "mindscape": "#fe6f95"
+  },
+  "1511": {
+    "name": "Nangong Yu",
+    "accent": "#57ddca",
+    "accentExtra": "#d158e3",
+    "mindscape": "#8f3ef4"
+  },
+  "1521": {
+    "name": "Cissia",
+    "accent": "#da3674",
+    "accentExtra": "#eb348e",
+    "mindscape": "#eb348e"
+  },
+  "1531": {
+    "name": "Starlight - Billy",
+    "accent": "#c94b3d",
+    "accentExtra": "#ff263b",
+    "mindscape": "#ff263b"
+  },
+  "1541": {
+    "name": "Promeia",
+    "accent": "#9c69ff",
+    "accentExtra": "#854aed",
+    "mindscape": "#854aed"
+  },
+  "1551": {
+    "name": "Pyrois",
+    "accent": "#e8e7ea",
+    "accentExtra": "#324ae8",
+    "mindscape": "#324ae8"
+  },
+  "1561": {
+    "name": "Velina",
+    "accent": "#e8e7ea",
+    "accentExtra": "#908aff",
+    "mindscape": "#908aff"
+  },
+  "1571": {
+    "name": "Norma",
+    "accent": "#e8e7ea",
+    "accentExtra": "#4a82e7",
+    "mindscape": "#4a82e7"
+  }
+}

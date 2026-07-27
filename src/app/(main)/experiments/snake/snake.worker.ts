@@ -1,50 +1,55 @@
-// Continuous cycle-search worker. Free-runs an anytime optimizer over the
-// latest state the UI reported, posting its best whenever it improves. The
-// UI samples that best on its own clock — compute never blocks the page.
+// Re-homing planner worker. Continuously banks snake-agnostic Hamiltonian
+// cycles for the current grid, and for the latest state the UI reports searches
+// that bank for the fastest safe way to re-home onto a cycle that reaches the
+// apple sooner than the one the UI is already following. The UI samples the
+// posted plan on its own clock — compute never blocks the page.
 
-import { SnakeSearch } from "./snakeAlgo";
-import type { StateMsg, StatsMsg } from "./snakeAlgo";
+import { SnakePlanner } from "./snakeAlgo";
+import type { StateMsg, StatsMsg, PreplanStateMsg } from "./snakeAlgo";
 
 // `self` is the worker global; cast to Worker for a DOM-lib-friendly
 // postMessage/onmessage signature without pulling in the webworker lib.
 const ctx = self as unknown as Worker;
 
-const search = new SnakeSearch();
+const planner = new SnakePlanner();
+let pendingPost = false;
 let lastPost = 0;
 let lastStatTime = 0;
 let lastStatCount = -1;
 
-ctx.onmessage = (e: MessageEvent<StateMsg>) => {
+ctx.onmessage = (e: MessageEvent<StateMsg | PreplanStateMsg>) => {
     const m = e.data;
-    if (m && m.type === "state") {
-        search.setState(m);
-    }
+    if (!m) return;
+    if (m.type === "state") planner.setState(m);
+    else if (m.type === "preplanState") planner.setPreplanState(m);
 };
 
 function loop() {
-    const improved = search.step(8);
+    if (planner.step()) pendingPost = true;
     const now = nowMs();
 
-    // Post on improvement, throttled — but always flush the final improvement
-    // that reaches the idle threshold so the UI gets the best cycle promptly.
-    if (improved && (now - lastPost >= 16 || search.idle)) {
-        ctx.postMessage(search.getBest());
+    // Post the latest improved plan, throttled — but never drop it, so an
+    // improvement found during the throttle window still reaches the UI.
+    if (pendingPost && now - lastPost >= 16) {
+        const plan = planner.getPlan();
+        if (plan) ctx.postMessage(plan);
+        const preplan = planner.getPreplan();
+        if (preplan) ctx.postMessage(preplan);
         lastPost = now;
+        pendingPost = false;
     }
 
-    // Progress ticker — only while actually generating, so an idle worker
-    // (or a paused board it has solved) stops nudging the UI to re-render.
-    if (now - lastStatTime >= 250 && search.generated !== lastStatCount) {
-        const stats: StatsMsg = { type: "stats", generation: search.generation, generated: search.generated };
+    // Progress ticker — cycles banked so far.
+    if (now - lastStatTime >= 250 && planner.generated !== lastStatCount) {
+        const stats: StatsMsg = { type: "stats", generation: planner.generation, generated: planner.generated };
         ctx.postMessage(stats);
-        lastStatCount = search.generated;
+        lastStatCount = planner.generated;
         lastStatTime = now;
     }
 
-    // Run flat out, yielding between bursts so incoming state messages get
-    // processed (and so the browser/OS can throttle it like any other busy
-    // task). When there's nothing left to improve, idle instead of spinning.
-    setTimeout(loop, search.idle ? 50 : 0);
+    // Spin while there is still cycle-banking to do; once the bank is full and
+    // we are only re-planning for new states, ease off to stay light on CPU.
+    setTimeout(loop, planner.bankFull ? 8 : 0);
 }
 
 function nowMs() {

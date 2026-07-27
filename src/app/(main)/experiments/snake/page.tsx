@@ -5,10 +5,10 @@ import {
     intC, intR,
     generateHamiltonianBasic, buildNextMap, buildPosMap,
     normalizeHamiltonian, pathFromHeadToApple,
-    randomFreeCell, isSubArc,
+    randomFreeCell, isSubArc, simulateSafe,
     sliderToSteps, digitsOnly, enforceGridRules,
 } from "./snakeAlgo";
-import type {StateMsg, BestMsg, StatsMsg} from "./snakeAlgo";
+import type {StateMsg, PlanMsg, StatsMsg, PreplanStateMsg, PreplanMsg} from "./snakeAlgo";
 
 
 function SnakePage() {
@@ -23,14 +23,18 @@ function SnakePage() {
     const [snake, setSnake] = useState<number[]>([
         hamiltonian.current[0], hamiltonian.current[1]
     ]);
-    const [apple, setApple] = useState<number>(() => {
-        const occupied = new Set(hamiltonian.current.slice(0, 2));
-        return randomFreeCell(rows, cols, occupied);
-    });
+    // Deterministic initial apple so server and client hydrate identically (no
+    // Math.random in render). resetBoard picks a real random cell on mount.
+    const [apple, setApple] = useState<number>(() =>
+        hamiltonian.current[hamiltonian.current.length - 1]
+    );
 
     const [running, setRunning] = useState(false);
+    const [showSnake, setShowSnake] = useState(true);
     const [showPath, setShowPath] = useState(true);
     const [highlightPath, setHighlightPath] = useState(true);
+    const [showApproach, setShowApproach] = useState(false);
+    const [showGrid, setShowGrid] = useState(true);
     const [stepsPerSecond, setStepsPerSecond] = useState(50);
 
     const [rowsInput, setRowsInput] = useState(String(rows));
@@ -38,20 +42,53 @@ function SnakePage() {
 
     const [steps, setSteps] = useState(0);
     const [loopsSearched, setLoopsSearched] = useState(0);
+    // The route the snake will actually walk to the apple — the executing plan's
+    // remaining path, or the arc along the current cycle when just following it.
+    const [route, setRoute] = useState<number[]>([]);
+    // Index into `route` where the on-loop settle begins (the "start point"): the
+    // stretch before it is the off-loop transition. 0 when just following the loop.
+    const [routeStart, setRouteStart] = useState(0);
+    // The full loop drawn in grey. During a re-home this is the target loop the
+    // snake is settling onto; otherwise the loop it is currently riding.
+    const [displayCycle, setDisplayCycle] = useState<number[]>(hamiltonian.current);
 
     // ── Worker + run-loop plumbing ──
-    // The search runs on a background thread (snake.worker). The UI samples its
-    // latest best each tick; refs (not state) carry the live snake/apple so the
-    // loop and the worker stay in sync without re-rendering.
+    // The planner runs on a background thread (snake.worker). By default the UI
+    // follows the cycle it currently holds (Phase A); when the worker posts a
+    // faster, verified re-homing plan the UI executes it instead. Refs (not
+    // state) carry the live snake/apple so the loop stays in sync without
+    // re-rendering.
     const workerRef = useRef<Worker | null>(null);
-    const latestBestRef = useRef<{ cycle: number[]; generation: number; serial: number } | null>(null);
+    const latestPlanRef = useRef<PlanMsg | null>(null);
+    // The re-homing plan currently being executed (off the current cycle). Null
+    // means we are on-cycle; once we commit to a plan we run it to the eat.
+    const execRef = useRef<{ path: number[]; index: number; cycle: number[]; entryIdx: number } | null>(null);
     const generationRef = useRef(0);
-    // Bumped on every posted state (each step + reset). A worker best is only
-    // adopted when its serial still matches the state the UI last posted, so a
-    // best computed for a stale head/apple can never force a long detour.
+    // Bumped on every posted state (each step + reset). A plan is only adopted
+    // when its serial still matches the state the UI last posted, so a plan
+    // computed for a stale head/apple can never be executed.
     const stateSerialRef = useRef(0);
     const snakeRef = useRef(snake);
     const appleRef = useRef(apple);
+
+    // ── Next-apple pre-planning ──
+    // The instant the state the snake will be in when it finishes eating the
+    // CURRENT apple becomes deterministic (a re-homing plan just got adopted, or
+    // it's walking a fixed Phase-A cycle toward a fixed apple), we pick the NEXT
+    // apple early and ask the worker to start re-homing for it right away — using
+    // the whole remaining approach as lead time, so a fast route is normally
+    // already sitting there the instant the real eat happens.
+    const preplanTokenRef = useRef(0);
+    const preplanRef = useRef<{ token: number; futureBody: number[]; apple: number; cycle: number[] } | null>(null);
+    const latestPreplanRef = useRef<PreplanMsg | null>(null);
+    // What future the current preplan request was computed against, so we only
+    // re-issue it when that future actually changes (a fresh plan adoption, or a
+    // new Phase-A apple) rather than every single step.
+    const preplanBasisRef = useRef<
+        | { kind: "exec"; path: number[] }
+        | { kind: "phaseA"; cycle: number[]; apple: number }
+        | null
+    >(null);
 
 
     const stepsPerSecondCalculated =
@@ -81,6 +118,26 @@ function SnakePage() {
         w.postMessage(msg);
     }, [rows, cols]);
 
+    // Ask the worker to start re-homing for a deterministic FUTURE state — see
+    // the preplan refs above.
+    const postPreplan = useCallback((futureBody: number[], futureApple: number, cycle: number[]) => {
+        const w = workerRef.current;
+        if (!w) return;
+        const token = ++preplanTokenRef.current;
+        preplanRef.current = { token, futureBody, apple: futureApple, cycle };
+        latestPreplanRef.current = null;
+        const msg: PreplanStateMsg = {
+            type: "preplanState",
+            generation: generationRef.current,
+            token,
+            rows, cols,
+            snake: futureBody,
+            apple: futureApple,
+            cycle,
+        };
+        w.postMessage(msg);
+    }, [rows, cols]);
+
 
     const stepOnce = useCallback(() => {
         if (finishedRef.current) {
@@ -97,33 +154,55 @@ function SnakePage() {
             return;
         }
 
-        // 1. Adopt the worker's latest best, but only if it is still a valid
-        //    Hamiltonian cycle for the current snake. Otherwise keep the cycle
-        //    we hold (still valid — the snake just slid along it).
-        const lb = latestBestRef.current;
-        if (
-            lb &&
-            lb.generation === generationRef.current &&
-            lb.serial === stateSerialRef.current &&
-            isSubArc(lb.cycle, prev)
-        ) {
-            const norm = normalizeHamiltonian(lb.cycle, prev, cols);
-            hamiltonian.current = norm;
-            nextMap.current = buildNextMap(norm, cols);
-            hamiltonianPosMap.current = buildPosMap(norm);
+        // 1. On-cycle (Phase A): consider adopting a faster re-homing plan. Once
+        //    we start executing one we commit to it until the eat — mid-transition
+        //    the snake is off any single cycle, so we never re-evaluate there.
+        if (!execRef.current) {
+            const pl = latestPlanRef.current;
+            if (
+                pl &&
+                pl.generation === generationRef.current &&
+                pl.serial === stateSerialRef.current &&
+                pl.path.length >= 2 &&
+                pl.path[0] === prev[0] &&
+                isSubArc(hamiltonian.current, prev) &&
+                simulateSafe(prev, curApple, pl.path, cols)
+            ) {
+                const pm = hamiltonianPosMap.current;
+                const arc = ((pm[curApple] - pm[prev[0]]) % total + total) % total;
+                if (pl.path.length - 1 < arc) {
+                    // The settle arc is the last `prev.length` cells; the entry
+                    // (start point where the route joins the loop) sits just before it.
+                    execRef.current = {
+                        path: pl.path, index: 0, cycle: pl.cycle,
+                        entryIdx: pl.path.length - prev.length - 1,
+                    };
+                }
+            }
         }
 
-        const head = prev[0];
-        const next = nextMap.current[head];
+        // 2. Next head cell: the plan's next step if executing, else one step
+        //    along the current cycle (the always-safe Phase-A fallback).
+        const ex = execRef.current;
+        let next: number;
+        if (ex && ex.path[ex.index + 1] !== undefined) {
+            next = ex.path[ex.index + 1];
+        } else {
+            execRef.current = null;
+            next = nextMap.current[prev[0]];
+        }
 
         // Final move that fills the board — finish before spawning an apple
         // onto a full grid (which would never find a free cell).
         if (prev.length === total - 1 && next === curApple) {
             finishedRef.current = true;
             const finalSnake = [next, ...prev];
+            execRef.current = null;
             snakeRef.current = finalSnake;
             setSnake(finalSnake);
             setSteps(s => s + 1);
+            setRoute([]);
+            setRouteStart(0);
             return;
         }
 
@@ -131,9 +210,50 @@ function SnakePage() {
         const nextSnake = [next, ...prev];
         if (!eats) nextSnake.pop();
 
+        // 3. Advance / finish the executing plan.
+        const exNow = execRef.current;
+        if (exNow) {
+            if (eats) {
+                // Settled onto the plan's cycle — the snake is now a contiguous
+                // sub-arc of it, so adopt it as the current cycle and go on-cycle.
+                const norm = normalizeHamiltonian(exNow.cycle, nextSnake, cols);
+                hamiltonian.current = norm;
+                nextMap.current = buildNextMap(norm, cols);
+                hamiltonianPosMap.current = buildPosMap(norm);
+                execRef.current = null;
+            } else {
+                exNow.index++;
+            }
+        }
+
         let nextApple = curApple;
         if (eats) {
-            nextApple = randomFreeCell(rows, cols, new Set(nextSnake));
+            // Prefer the apple we already pre-planned for: if the body we predicted
+            // we'd have at this exact eat matches what actually happened, the
+            // worker has (usually) had the whole approach to solve it, so a fast
+            // plan can be adopted immediately instead of waiting a step.
+            const pp = preplanRef.current;
+            const ppMatches = !!pp && pp.futureBody.length === nextSnake.length &&
+                pp.futureBody.every((c, i) => c === nextSnake[i]);
+
+            if (ppMatches) {
+                nextApple = pp!.apple;
+                const lp = latestPreplanRef.current;
+                if (
+                    lp &&
+                    lp.token === pp!.token &&
+                    lp.path.length >= 2 &&
+                    lp.path[0] === nextSnake[0] &&
+                    simulateSafe(nextSnake, nextApple, lp.path, cols)
+                ) {
+                    execRef.current = {
+                        path: lp.path, index: 0, cycle: lp.cycle,
+                        entryIdx: lp.path.length - nextSnake.length - 1,
+                    };
+                }
+            } else {
+                nextApple = randomFreeCell(rows, cols, new Set(nextSnake));
+            }
             appleRef.current = nextApple;
             setApple(nextApple);
         }
@@ -144,9 +264,62 @@ function SnakePage() {
         setSnake(nextSnake);
         setSteps(s => s + 1);
 
-        // 2. Hand the worker the new state + the cycle we now hold to refine.
+        // Highlight the route the snake will actually walk to the apple, and the
+        // point where it joins a loop to ride the rest of the way in.
+        const exAfter = execRef.current;
+        if (exAfter) {
+            setRoute(exAfter.path.slice(exAfter.index));
+            setRouteStart(Math.max(0, exAfter.entryIdx - exAfter.index));
+            setDisplayCycle(exAfter.cycle);
+        } else {
+            setDisplayCycle(hamiltonian.current);
+            // On the tick that eats, skip the route update: the naive head->apple
+            // walk around the whole loop to the brand-new apple would flash huge
+            // for one frame before the worker's re-homing plan (just requested
+            // below) arrives and shrinks it back down. Leave the prior (already
+            // mostly-consumed) route on screen until the next step resolves it.
+            if (!eats) {
+                setRoute(pathFromHeadToApple(hamiltonian.current, nextSnake, nextApple, cols, hamiltonianPosMap.current));
+                setRouteStart(0);
+            }
+        }
+
+        // 4. Hand the worker the new state + the cycle we now follow.
         postState(nextSnake, nextApple);
-    }, [rows, cols, postState]);
+
+        // 5. Once the future state past THIS apple is deterministic — a plan just
+        //    got committed, or we're walking a fixed Phase-A cycle toward a fixed
+        //    apple — pre-pick the next apple and ask the worker to start solving
+        //    for it now, so it has the rest of this approach as lead time. Skipped
+        //    near the very end of the board, where there may be no room to pick a
+        //    meaningful next apple at all.
+        if (nextSnake.length < total - 1) {
+            const exPost = execRef.current;
+            if (exPost) {
+                const basis = preplanBasisRef.current;
+                if (basis?.kind !== "exec" || basis.path !== exPost.path) {
+                    const s = nextSnake.length;
+                    const futureBody = exPost.path.slice(-(s + 1)).reverse();
+                    const futureApple = randomFreeCell(rows, cols, new Set(futureBody));
+                    preplanBasisRef.current = { kind: "exec", path: exPost.path };
+                    postPreplan(futureBody, futureApple, exPost.cycle);
+                }
+            } else {
+                const basis = preplanBasisRef.current;
+                if (basis?.kind !== "phaseA" || basis.cycle !== hamiltonian.current || basis.apple !== nextApple) {
+                    const cyc = hamiltonian.current;
+                    const pm = hamiltonianPosMap.current;
+                    const ai = pm[nextApple];
+                    const s = nextSnake.length;
+                    const futureBody: number[] = [];
+                    for (let i = 0; i <= s; i++) futureBody.push(cyc[((ai - i) % total + total) % total]);
+                    const futureApple = randomFreeCell(rows, cols, new Set(futureBody));
+                    preplanBasisRef.current = { kind: "phaseA", cycle: cyc, apple: nextApple };
+                    postPreplan(futureBody, futureApple, cyc);
+                }
+            }
+        }
+    }, [rows, cols, postState, postPreplan]);
 
 
     const resetBoard = useCallback(() => {
@@ -166,11 +339,18 @@ function SnakePage() {
         setApple(initialApple);
         setSteps(0);
         setLoopsSearched(0);
+        setRoute(pathFromHeadToApple(newHamiltonian, initialSnake, initialApple, cols, hamiltonianPosMap.current));
+        setRouteStart(0);
+        setDisplayCycle(newHamiltonian);
 
-        // New generation: stale worker results (tagged with the old one) are
+        // New generation: stale worker plans (tagged with the old one) are
         // ignored until the worker catches up to this board.
         generationRef.current += 1;
-        latestBestRef.current = null;
+        latestPlanRef.current = null;
+        execRef.current = null;
+        preplanRef.current = null;
+        latestPreplanRef.current = null;
+        preplanBasisRef.current = null;
         postState(initialSnake, initialApple);
     }, [rows, cols, postState]);
 
@@ -179,11 +359,15 @@ function SnakePage() {
     // exists when the first state is posted).
     useEffect(() => {
         const w = new Worker(new URL("./snake.worker.ts", import.meta.url), { type: "module" });
-        w.onmessage = (e: MessageEvent<BestMsg | StatsMsg>) => {
+        w.onmessage = (e: MessageEvent<PlanMsg | StatsMsg | PreplanMsg>) => {
             const m = e.data;
             if (!m) return;
-            if (m.type === "best") {
-                latestBestRef.current = { cycle: m.cycle, generation: m.generation, serial: m.serial };
+            if (m.type === "plan") {
+                latestPlanRef.current = m;
+            } else if (m.type === "preplan") {
+                if (preplanRef.current?.token === m.token && m.generation === generationRef.current) {
+                    latestPreplanRef.current = m;
+                }
             } else if (m.type === "stats" && m.generation === generationRef.current) {
                 setLoopsSearched(m.generated);
             }
@@ -264,6 +448,7 @@ function SnakePage() {
                         </div>
                         <h1 className="mt-2.5 mb-1 text-[28px] font-semibold tracking-[-0.025em]">Snake</h1>
                         <p className="m-0 text-[13px] text-fg-muted leading-snug">Optimised Hamiltonian cycle — it cannot lose.</p>
+                        <a href="/experiments/snake-versus" className="inline-block mt-2 font-mono text-[11px] tracking-kicker uppercase text-accent hover:underline">Versus mode →</a>
                     </div>
 
                     <div className="flex items-center gap-2 bg-bg-elev border border-rule rounded-md p-3">
@@ -308,9 +493,11 @@ function SnakePage() {
                     <div>
                         <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-2.5">Layers</div>
                         <div className="flex flex-col gap-0.5">
+                            <LayerToggle on={showSnake} color="#22c55e" label="Snake" onClick={() => setShowSnake(s => !s)} />
                             <LayerToggle on={showPath} color="var(--fg)" label="Hamiltonian path" onClick={toggleShowPath} />
                             <LayerToggle on={highlightPath} color="#facc15" label="Head → apple" onClick={toggleHighlightPath} />
-                            <LayerToggle on color="var(--fg-soft)" label="Grid" />
+                            <LayerToggle on={showApproach} color="#fb923c" label="Loop approach" onClick={() => setShowApproach(a => !a)} />
+                            <LayerToggle on={showGrid} color="var(--fg-soft)" label="Grid" onClick={() => setShowGrid(g => !g)} />
                         </div>
                     </div>
 
@@ -356,7 +543,7 @@ function SnakePage() {
                         <Stat label="Steps" value={steps.toLocaleString()} />
                         <Stat label="Apples" value={String(apples)} />
                         <Stat label="Filled" value={`${filledPct}%`} />
-                        <Stat label="Loops searched" value={loopsSearched.toLocaleString()} />
+                        <Stat label="Cycles banked" value={loopsSearched.toLocaleString()} />
                     </div>
                     {won && (
                         <div className="font-mono text-[11px] tracking-kicker uppercase text-emerald-400 font-semibold">Solved · {steps.toLocaleString()} steps</div>
@@ -379,7 +566,7 @@ function SnakePage() {
                             }}
                         >
                             {Array.from({length: rows * cols}).map((_, idx) => (
-                                <div key={idx} className="border border-rule bg-bg" />
+                                <div key={idx} className={showGrid ? "border border-rule bg-bg" : "bg-bg"} />
                             ))}
 
                             <svg
@@ -389,25 +576,40 @@ function SnakePage() {
                                 {showPath && (
                                     <polyline
                                         fill="none" stroke="#333" strokeWidth="4"
-                                        points={[...hamiltonian.current, hamiltonian.current[0]].map(ptInt).join(" ")}
+                                        points={[...displayCycle, displayCycle[0]].map(ptInt).join(" ")}
                                     />
                                 )}
 
-                                {highlightPath && !won && (
+                                {highlightPath && !won && route.length > 1 && (
                                     <polyline
-                                        fill="none" stroke="#facc15" strokeWidth="8"
+                                        fill="none" stroke="#facc15" strokeWidth="8" strokeOpacity="0.5"
                                         strokeLinecap="round" strokeLinejoin="round"
-                                        points={pathFromHeadToApple(
-                                            hamiltonian.current, snake, apple, cols, hamiltonianPosMap.current
-                                        ).map(ptInt).join(" ")}
+                                        points={route.map(ptInt).join(" ")}
                                     />
                                 )}
 
-                                <polyline
-                                    fill="none" stroke="#22c55e" strokeWidth="60"
-                                    strokeLinecap="round" strokeLinejoin="round"
-                                    points={snake.map(ptInt).join(" ")}
-                                />
+                                {showApproach && !won && route.length - routeStart > 1 && (
+                                    <>
+                                        <polyline
+                                            fill="none" stroke="#fb923c" strokeWidth="8"
+                                            strokeLinecap="round" strokeLinejoin="round"
+                                            points={route.slice(routeStart).map(ptInt).join(" ")}
+                                        />
+                                        <circle
+                                            cx={intC(route[routeStart], cols) * 100 + 50}
+                                            cy={intR(route[routeStart], cols) * 100 + 50}
+                                            r="20" fill="#fb923c"
+                                        />
+                                    </>
+                                )}
+
+                                {showSnake && (
+                                    <polyline
+                                        fill="none" stroke="#22c55e" strokeWidth="60"
+                                        strokeLinecap="round" strokeLinejoin="round"
+                                        points={snake.map(ptInt).join(" ")}
+                                    />
+                                )}
 
                                 {!won && (
                                     <circle
@@ -417,7 +619,7 @@ function SnakePage() {
                                     />
                                 )}
 
-                                {snake.length > 0 && (
+                                {showSnake && snake.length > 0 && (
                                     <circle
                                         cx={intC(snake[0], cols) * 100 + 50}
                                         cy={intR(snake[0], cols) * 100 + 50}
@@ -425,7 +627,7 @@ function SnakePage() {
                                     />
                                 )}
 
-                                {snake.length > 1 && (
+                                {showSnake && snake.length > 1 && (
                                     <circle
                                         cx={intC(snake[snake.length - 1], cols) * 100 + 50}
                                         cy={intR(snake[snake.length - 1], cols) * 100 + 50}
@@ -462,15 +664,19 @@ function SnakePage() {
                     </p>
                     <p className="leading-relaxed text-fg-muted mt-3">
                         A fixed loop is safe but slow, the snake would crawl through the whole
-                        board to reach each apple. So instead of sticking to one loop, the algorithm
-                        constantly searches for <em>different</em> loops: ones that reach the apple
-                        sooner, and that leave the most open space behind so the next apple is easy
-                        to get to as well.
+                        board to reach each apple. So a background thread keeps a <em>bank</em> of
+                        many different loops, and each time an apple appears it looks for the
+                        fastest way to hop onto a loop that reaches the apple sooner — planning the
+                        whole route so that the moment it eats, the body is lined up along a real
+                        loop again. Because it&rsquo;s not eating on the way there, the tail is
+                        always sliding forward, and the planner routes right through the space the
+                        tail is about to clear.
                     </p>
                     <p className="leading-relaxed text-fg-muted mt-3">
-                        That search runs on a background thread, continuously improving its best
-                        loop while the page stays responsive. Each move, the snake hops onto the
-                        best loop found so far and steps one square along it.
+                        Every candidate route is checked by simulating it move-by-move before the
+                        snake commits, and if none beats the loop it&rsquo;s already on, it simply
+                        keeps following that — so it is never in danger, and it moves whether or not
+                        the planner has found anything new.
                     </p>
                 </section>
 
@@ -481,8 +687,10 @@ function SnakePage() {
                         <li><strong>Step</strong> &mdash; advance by a single move</li>
                         <li><strong>Reset</strong> &mdash; resets the game</li>
                         <li><strong>Speed</strong> &mdash; how many moves per second to play</li>
+                        <li><strong>Snake</strong> &mdash; show or hide the snake itself (handy for seeing the loops underneath)</li>
                         <li><strong>Hamiltonian Path</strong> &mdash; show the full loop the snake is on</li>
                         <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>
+                        <li><strong>Loop approach</strong> &mdash; the part of that route which rides a Hamiltonian loop into the apple, with a dot where it joins the loop</li>
                         <li><strong>Rows / Cols</strong> &mdash; change the board size <em>(resets the game)</em></li>
                     </ul>
                 </section>

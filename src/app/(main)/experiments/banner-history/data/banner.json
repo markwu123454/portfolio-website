@@ -1,0 +1,2522 @@
+[
+  {
+    "version": "1.0",
+    "phase": "1",
+    "startDate": "2024-07-04",
+    "endDate": "2024-07-24",
+    "sRanks": [
+      {
+        "id": "1191",
+        "name": "Ellen",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Ellen Joe"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      },
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      }
+    ],
+    "aWengines": [
+      "Bashful Demon",
+      "Drill Rig Red Axis"
+    ],
+    "raw": {
+      "version": "1.0",
+      "phase": "1",
+      "sRanks": [
+        "Ellen Joe"
+      ],
+      "aRanks": [
+        "Anton",
+        "Soukaku"
+      ],
+      "aWengines": [
+        "Bashful Demon",
+        "Drill Rig Red Axis"
+      ],
+      "startDate": "2024-07-04",
+      "endDate": "2024-07-24"
+    }
+  },
+  {
+    "version": "1.0",
+    "phase": "2",
+    "startDate": "2024-07-24",
+    "endDate": "2024-08-13",
+    "sRanks": [
+      {
+        "id": "1241",
+        "name": "Zhu Yuan",
+        "element": "Ether",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Zhu Yuan"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      },
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      }
+    ],
+    "aWengines": [
+      "The Vault",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "1.0",
+      "phase": "2",
+      "sRanks": [
+        "Zhu Yuan"
+      ],
+      "aRanks": [
+        "Ben",
+        "Nicole"
+      ],
+      "aWengines": [
+        "The Vault",
+        "Big Cylinder"
+      ],
+      "startDate": "2024-07-24",
+      "endDate": "2024-08-13"
+    }
+  },
+  {
+    "version": "1.1",
+    "phase": "1",
+    "startDate": "2024-08-14",
+    "endDate": "2024-09-04",
+    "sRanks": [
+      {
+        "id": "1251",
+        "name": "Qingyi",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Qingyi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      },
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      }
+    ],
+    "aWengines": [
+      "Starlight Engine Replica",
+      "Housekeeper"
+    ],
+    "raw": {
+      "version": "1.1",
+      "phase": "1",
+      "sRanks": [
+        "Qingyi"
+      ],
+      "aRanks": [
+        "Billy",
+        "Corin"
+      ],
+      "aWengines": [
+        "Starlight Engine Replica",
+        "Housekeeper"
+      ],
+      "startDate": "2024-08-14",
+      "endDate": "2024-09-04"
+    }
+  },
+  {
+    "version": "1.1",
+    "phase": "2",
+    "startDate": "2024-09-04",
+    "endDate": "2024-09-25",
+    "sRanks": [
+      {
+        "id": "1261",
+        "name": "Jane",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Jane Doe"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1011",
+        "name": "Anby",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Anby"
+      },
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      }
+    ],
+    "aWengines": [
+      "Demara Battery Mark II",
+      "Peacekeeper Specialized"
+    ],
+    "raw": {
+      "version": "1.1",
+      "phase": "2",
+      "sRanks": [
+        "Jane Doe"
+      ],
+      "aRanks": [
+        "Anby",
+        "Seth"
+      ],
+      "aWengines": [
+        "Demara Battery Mark II",
+        "Peacekeeper Specialized"
+      ],
+      "startDate": "2024-09-04",
+      "endDate": "2024-09-25"
+    }
+  },
+  {
+    "version": "1.2",
+    "phase": "1",
+    "startDate": "2024-09-25",
+    "endDate": "2024-10-16",
+    "sRanks": [
+      {
+        "id": "1071",
+        "name": "Caesar",
+        "element": "Physical",
+        "specialty": "Defense",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Caesar"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "Drill Rig Red Axis",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "1.2",
+      "phase": "1",
+      "sRanks": [
+        "Caesar"
+      ],
+      "aRanks": [
+        "Anton",
+        "Piper"
+      ],
+      "aWengines": [
+        "Drill Rig Red Axis",
+        "Roaring Ride"
+      ],
+      "startDate": "2024-09-25",
+      "endDate": "2024-10-16"
+    }
+  },
+  {
+    "version": "1.2",
+    "phase": "2",
+    "startDate": "2024-10-16",
+    "endDate": "2024-11-05",
+    "sRanks": [
+      {
+        "id": "1171",
+        "name": "Burnice",
+        "element": "Fire",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Burnice"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      },
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      }
+    ],
+    "aWengines": [
+      "The Vault",
+      "Kaboom the Cannon"
+    ],
+    "raw": {
+      "version": "1.2",
+      "phase": "2",
+      "sRanks": [
+        "Burnice"
+      ],
+      "aRanks": [
+        "Nicole",
+        "Lucy"
+      ],
+      "aWengines": [
+        "The Vault",
+        "Kaboom the Cannon"
+      ],
+      "startDate": "2024-10-16",
+      "endDate": "2024-11-05"
+    }
+  },
+  {
+    "version": "1.3",
+    "phase": "1",
+    "startDate": "2024-11-06",
+    "endDate": "2024-11-27",
+    "sRanks": [
+      {
+        "id": "1221",
+        "name": "Yanagi",
+        "element": "Electric",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Yanagi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1011",
+        "name": "Anby",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Anby"
+      },
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      }
+    ],
+    "aWengines": [
+      "Demara Battery Mark II",
+      "Starlight Engine Replica"
+    ],
+    "raw": {
+      "version": "1.3",
+      "phase": "1",
+      "sRanks": [
+        "Yanagi"
+      ],
+      "aRanks": [
+        "Anby",
+        "Billy"
+      ],
+      "aWengines": [
+        "Demara Battery Mark II",
+        "Starlight Engine Replica"
+      ],
+      "startDate": "2024-11-06",
+      "endDate": "2024-11-27"
+    }
+  },
+  {
+    "version": "1.3",
+    "phase": "2",
+    "startDate": "2024-11-27",
+    "endDate": "2024-12-17",
+    "sRanks": [
+      {
+        "id": "1161",
+        "name": "Lighter",
+        "element": "Fire",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Lighter"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      },
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      }
+    ],
+    "aWengines": [
+      "Housekeeper",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "1.3",
+      "phase": "2",
+      "sRanks": [
+        "Lighter"
+      ],
+      "aRanks": [
+        "Corin",
+        "Ben"
+      ],
+      "aWengines": [
+        "Housekeeper",
+        "Big Cylinder"
+      ],
+      "startDate": "2024-11-27",
+      "endDate": "2024-12-17"
+    }
+  },
+  {
+    "version": "1.4",
+    "phase": "full",
+    "startDate": "2024-12-18",
+    "endDate": "2025-01-21",
+    "sRanks": [
+      {
+        "id": "1201",
+        "name": "Harumasa",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Harumasa"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      },
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      }
+    ],
+    "aWengines": [
+      "Kaboom the Cannon",
+      "Peacekeeper Specialized"
+    ],
+    "raw": {
+      "version": "1.4",
+      "phase": "full",
+      "sRanks": [
+        "Harumasa"
+      ],
+      "aRanks": [
+        "Lucy",
+        "Seth"
+      ],
+      "aWengines": [
+        "Kaboom the Cannon",
+        "Peacekeeper Specialized"
+      ],
+      "startDate": "2024-12-18",
+      "endDate": "2025-01-21"
+    }
+  },
+  {
+    "version": "1.4",
+    "phase": "full",
+    "startDate": "2024-12-18",
+    "endDate": "2025-01-21",
+    "sRanks": [
+      {
+        "id": "1091",
+        "name": "Miyabi",
+        "element": "Ice",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Miyabi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "Bashful Demon",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "1.4",
+      "phase": "full",
+      "sRanks": [
+        "Miyabi"
+      ],
+      "aRanks": [
+        "Soukaku",
+        "Piper"
+      ],
+      "aWengines": [
+        "Bashful Demon",
+        "Roaring Ride"
+      ],
+      "startDate": "2024-12-18",
+      "endDate": "2025-01-21"
+    }
+  },
+  {
+    "version": "1.5",
+    "phase": "1",
+    "startDate": "2025-01-22",
+    "endDate": "2025-02-12",
+    "sRanks": [
+      {
+        "id": "1311",
+        "name": "Astra Yao",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Stars of Lyra",
+        "raw": "Astra Yao"
+      },
+      {
+        "id": "1191",
+        "name": "Ellen",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Ellen Joe"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1011",
+        "name": "Anby",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Anby"
+      },
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      }
+    ],
+    "aWengines": [
+      "Demara Battery Mark II",
+      "Housekeeper"
+    ],
+    "raw": {
+      "version": "1.5",
+      "phase": "1",
+      "sRanks": [
+        "Astra Yao",
+        "Ellen Joe"
+      ],
+      "aRanks": [
+        "Anby",
+        "Corin"
+      ],
+      "aWengines": [
+        "Demara Battery Mark II",
+        "Housekeeper"
+      ],
+      "startDate": "2025-01-22",
+      "endDate": "2025-02-12"
+    }
+  },
+  {
+    "version": "1.5",
+    "phase": "2",
+    "startDate": "2025-02-12",
+    "endDate": "2025-03-11",
+    "sRanks": [
+      {
+        "id": "1321",
+        "name": "Evelyn",
+        "element": "Fire",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Stars of Lyra",
+        "raw": "Evelyn"
+      },
+      {
+        "id": "1251",
+        "name": "Qingyi",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Qingyi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      },
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      }
+    ],
+    "aWengines": [
+      "Drill Rig Red Axis",
+      "The Vault"
+    ],
+    "raw": {
+      "version": "1.5",
+      "phase": "2",
+      "sRanks": [
+        "Evelyn",
+        "Qingyi"
+      ],
+      "aRanks": [
+        "Anton",
+        "Nicole"
+      ],
+      "aWengines": [
+        "Drill Rig Red Axis",
+        "The Vault"
+      ],
+      "startDate": "2025-02-12",
+      "endDate": "2025-03-11"
+    }
+  },
+  {
+    "version": "1.6",
+    "phase": "1",
+    "startDate": "2025-03-12",
+    "endDate": "2025-04-02",
+    "sRanks": [
+      {
+        "id": "1381",
+        "name": "Soldier 0 - Anby",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Soldier 0 Anby"
+      },
+      {
+        "id": "1171",
+        "name": "Burnice",
+        "element": "Fire",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Burnice"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1351",
+        "name": "Pulchra",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Pulchra"
+      },
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      }
+    ],
+    "aWengines": [
+      "Box Cutter",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "1.6",
+      "phase": "1",
+      "sRanks": [
+        "Soldier 0 Anby",
+        "Burnice"
+      ],
+      "aRanks": [
+        "Pulchra",
+        "Ben"
+      ],
+      "aWengines": [
+        "Box Cutter",
+        "Big Cylinder"
+      ],
+      "startDate": "2025-03-12",
+      "endDate": "2025-04-02"
+    }
+  },
+  {
+    "version": "1.6",
+    "phase": "2",
+    "startDate": "2025-04-02",
+    "endDate": "2025-04-22",
+    "sRanks": [
+      {
+        "id": "1361",
+        "name": "Trigger",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Trigger"
+      },
+      {
+        "id": "1241",
+        "name": "Zhu Yuan",
+        "element": "Ether",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Zhu Yuan"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      },
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      }
+    ],
+    "aWengines": [
+      "Kaboom the Cannon",
+      "Starlight Engine Replica"
+    ],
+    "raw": {
+      "version": "1.6",
+      "phase": "2",
+      "sRanks": [
+        "Trigger",
+        "Zhu Yuan"
+      ],
+      "aRanks": [
+        "Lucy",
+        "Billy"
+      ],
+      "aWengines": [
+        "Kaboom the Cannon",
+        "Starlight Engine Replica"
+      ],
+      "startDate": "2025-04-02",
+      "endDate": "2025-04-22"
+    }
+  },
+  {
+    "version": "1.7",
+    "phase": "1",
+    "startDate": "2025-04-23",
+    "endDate": "2025-05-14",
+    "sRanks": [
+      {
+        "id": "1331",
+        "name": "Vivian",
+        "element": "Ether",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Mockingbird",
+        "raw": "Vivian"
+      },
+      {
+        "id": "1261",
+        "name": "Jane",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Jane Doe"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "Peacekeeper Specialized",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "1.7",
+      "phase": "1",
+      "sRanks": [
+        "Vivian",
+        "Jane Doe"
+      ],
+      "aRanks": [
+        "Seth",
+        "Piper"
+      ],
+      "aWengines": [
+        "Peacekeeper Specialized",
+        "Roaring Ride"
+      ],
+      "startDate": "2025-04-23",
+      "endDate": "2025-05-14"
+    }
+  },
+  {
+    "version": "1.7",
+    "phase": "2",
+    "startDate": "2025-05-14",
+    "endDate": "2025-06-05",
+    "sRanks": [
+      {
+        "id": "1291",
+        "name": "Hugo",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Mockingbird",
+        "raw": "Hugo"
+      },
+      {
+        "id": "1161",
+        "name": "Lighter",
+        "element": "Fire",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Lighter"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      },
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      }
+    ],
+    "aWengines": [
+      "Bashful Demon",
+      "Drill Rig Red Axis"
+    ],
+    "raw": {
+      "version": "1.7",
+      "phase": "2",
+      "sRanks": [
+        "Hugo",
+        "Lighter"
+      ],
+      "aRanks": [
+        "Soukaku",
+        "Anton"
+      ],
+      "aWengines": [
+        "Bashful Demon",
+        "Drill Rig Red Axis"
+      ],
+      "startDate": "2025-05-14",
+      "endDate": "2025-06-05"
+    }
+  },
+  {
+    "version": "2.0",
+    "phase": "1",
+    "startDate": "2025-06-06",
+    "endDate": "2025-06-25",
+    "sRanks": [
+      {
+        "id": "1371",
+        "name": "Yixuan",
+        "element": "Ether",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Yixuan"
+      },
+      {
+        "id": "1311",
+        "name": "Astra Yao",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Stars of Lyra",
+        "raw": "Astra Yao"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1421",
+        "name": "Pan Yinhu",
+        "element": "Physical",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Yunkui Summit",
+        "raw": "Pan Yinhu"
+      },
+      {
+        "id": "1351",
+        "name": "Pulchra",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Pulchra"
+      }
+    ],
+    "aWengines": [
+      "Tremor Trigram Vessel",
+      "Box Cutter"
+    ],
+    "raw": {
+      "version": "2.0",
+      "phase": "1",
+      "sRanks": [
+        "Yixuan",
+        "Astra Yao"
+      ],
+      "aRanks": [
+        "Pan Yinhu",
+        "Pulchra"
+      ],
+      "aWengines": [
+        "Tremor Trigram Vessel",
+        "Box Cutter"
+      ],
+      "startDate": "2025-06-06",
+      "endDate": "2025-06-25"
+    }
+  },
+  {
+    "version": "2.0",
+    "phase": "2",
+    "startDate": "2025-06-25",
+    "endDate": "2025-07-15",
+    "sRanks": [
+      {
+        "id": "1391",
+        "name": "Ju Fufu",
+        "element": "Fire",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Ju Fufu"
+      },
+      {
+        "id": "1071",
+        "name": "Caesar",
+        "element": "Physical",
+        "specialty": "Defense",
+        "rarity": "S",
+        "faction": "Sons of Calydon",
+        "raw": "Caesar"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      },
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      }
+    ],
+    "aWengines": [
+      "Big Cylinder",
+      "Housekeeper"
+    ],
+    "raw": {
+      "version": "2.0",
+      "phase": "2",
+      "sRanks": [
+        "Ju Fufu",
+        "Caesar"
+      ],
+      "aRanks": [
+        "Ben",
+        "Corin"
+      ],
+      "aWengines": [
+        "Big Cylinder",
+        "Housekeeper"
+      ],
+      "startDate": "2025-06-25",
+      "endDate": "2025-07-15"
+    }
+  },
+  {
+    "version": "2.1",
+    "phase": "1",
+    "startDate": "2025-07-16",
+    "endDate": "2025-08-06",
+    "sRanks": [
+      {
+        "id": "1411",
+        "name": "Yuzuha",
+        "element": "Physical",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Yuzuha"
+      },
+      {
+        "id": "1091",
+        "name": "Miyabi",
+        "element": "Ice",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Miyabi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      },
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      }
+    ],
+    "aWengines": [
+      "Roaring Ride",
+      "Starlight Engine Replica"
+    ],
+    "raw": {
+      "version": "2.1",
+      "phase": "1",
+      "sRanks": [
+        "Yuzuha",
+        "Miyabi"
+      ],
+      "aRanks": [
+        "Piper",
+        "Billy"
+      ],
+      "aWengines": [
+        "Roaring Ride",
+        "Starlight Engine Replica"
+      ],
+      "startDate": "2025-07-16",
+      "endDate": "2025-08-06"
+    }
+  },
+  {
+    "version": "2.1",
+    "phase": "2",
+    "startDate": "2025-08-06",
+    "endDate": "2025-09-03",
+    "sRanks": [
+      {
+        "id": "1401",
+        "name": "Alice",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Alice"
+      },
+      {
+        "id": "1221",
+        "name": "Yanagi",
+        "element": "Electric",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Yanagi"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      },
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      }
+    ],
+    "aWengines": [
+      "Peacekeeper Specialized",
+      "Bashful Demon"
+    ],
+    "raw": {
+      "version": "2.1",
+      "phase": "2",
+      "sRanks": [
+        "Alice",
+        "Yanagi"
+      ],
+      "aRanks": [
+        "Seth",
+        "Soukaku"
+      ],
+      "aWengines": [
+        "Peacekeeper Specialized",
+        "Bashful Demon"
+      ],
+      "startDate": "2025-08-06",
+      "endDate": "2025-09-03"
+    }
+  },
+  {
+    "version": "2.2",
+    "phase": "1",
+    "startDate": "2025-09-04",
+    "endDate": "2025-09-24",
+    "sRanks": [
+      {
+        "id": "1461",
+        "name": "Seed",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Seed"
+      },
+      {
+        "id": "1361",
+        "name": "Trigger",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Trigger"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1011",
+        "name": "Anby",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Anby"
+      },
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      }
+    ],
+    "aWengines": [
+      "Demara Battery Mark II",
+      "The Vault"
+    ],
+    "raw": {
+      "version": "2.2",
+      "phase": "1",
+      "sRanks": [
+        "Seed",
+        "Trigger"
+      ],
+      "aRanks": [
+        "Anby",
+        "Nicole"
+      ],
+      "aWengines": [
+        "Demara Battery Mark II",
+        "The Vault"
+      ],
+      "startDate": "2025-09-04",
+      "endDate": "2025-09-24"
+    }
+  },
+  {
+    "version": "2.2",
+    "phase": "2",
+    "startDate": "2025-09-24",
+    "endDate": "2025-10-14",
+    "sRanks": [
+      {
+        "id": "1301",
+        "name": "Orphie & Magus",
+        "element": "Fire",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Orpheus"
+      },
+      {
+        "id": "1321",
+        "name": "Evelyn",
+        "element": "Fire",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Stars of Lyra",
+        "raw": "Evelyn"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      },
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      }
+    ],
+    "aWengines": [
+      "Kaboom the Cannon",
+      "Drill Rig Red Axis"
+    ],
+    "raw": {
+      "version": "2.2",
+      "phase": "2",
+      "sRanks": [
+        "Orpheus",
+        "Evelyn"
+      ],
+      "aRanks": [
+        "Lucy",
+        "Anton"
+      ],
+      "aWengines": [
+        "Kaboom the Cannon",
+        "Drill Rig Red Axis"
+      ],
+      "startDate": "2025-09-24",
+      "endDate": "2025-10-14"
+    }
+  },
+  {
+    "version": "2.3",
+    "phase": "1",
+    "startDate": "2025-10-15",
+    "endDate": "2025-11-05",
+    "sRanks": [
+      {
+        "id": "1451",
+        "name": "Lucia",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Lucia"
+      },
+      {
+        "id": "1331",
+        "name": "Vivian",
+        "element": "Ether",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Mockingbird",
+        "raw": "Vivian"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1441",
+        "name": "Manato",
+        "element": "Fire",
+        "specialty": "Rupture",
+        "rarity": "A",
+        "faction": "Spook Shack",
+        "raw": "Manato"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "Grill O'Wisp",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "2.3",
+      "phase": "1",
+      "sRanks": [
+        "Lucia",
+        "Vivian"
+      ],
+      "aRanks": [
+        "Manato",
+        "Piper"
+      ],
+      "aWengines": [
+        "Grill O'Wisp",
+        "Roaring Ride"
+      ],
+      "startDate": "2025-10-15",
+      "endDate": "2025-11-05"
+    }
+  },
+  {
+    "version": "2.3",
+    "phase": "2",
+    "startDate": "2025-11-05",
+    "endDate": "2025-11-25",
+    "sRanks": [
+      {
+        "id": "1051",
+        "name": "Yidhari",
+        "element": "Ice",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Yidhari"
+      },
+      {
+        "id": "1391",
+        "name": "Ju Fufu",
+        "element": "Fire",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Ju Fufu"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1421",
+        "name": "Pan Yinhu",
+        "element": "Physical",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Yunkui Summit",
+        "raw": "Pan Yinhu"
+      },
+      {
+        "id": "1351",
+        "name": "Pulchra",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Pulchra"
+      }
+    ],
+    "aWengines": [
+      "Tremor Trigram Vessel",
+      "Box Cutter"
+    ],
+    "raw": {
+      "version": "2.3",
+      "phase": "2",
+      "sRanks": [
+        "Yidhari",
+        "Ju Fufu"
+      ],
+      "aRanks": [
+        "Pan Yinhu",
+        "Pulchra"
+      ],
+      "aWengines": [
+        "Tremor Trigram Vessel",
+        "Box Cutter"
+      ],
+      "startDate": "2025-11-05",
+      "endDate": "2025-11-25"
+    }
+  },
+  {
+    "version": "2.4",
+    "phase": "1",
+    "startDate": "2025-11-26",
+    "endDate": "2025-12-17",
+    "sRanks": [
+      {
+        "id": "1481",
+        "name": "Dialyn",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Krampus Compliance Authority",
+        "raw": "Dialyn"
+      },
+      {
+        "id": "1291",
+        "name": "Hugo",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Mockingbird",
+        "raw": "Hugo"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      },
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      }
+    ],
+    "aWengines": [
+      "Housekeeper",
+      "Starlight Engine Replica"
+    ],
+    "raw": {
+      "version": "2.4",
+      "phase": "1",
+      "sRanks": [
+        "Dialyn",
+        "Hugo"
+      ],
+      "aRanks": [
+        "Corin",
+        "Billy"
+      ],
+      "aWengines": [
+        "Housekeeper",
+        "Starlight Engine Replica"
+      ],
+      "startDate": "2025-11-26",
+      "endDate": "2025-12-17"
+    }
+  },
+  {
+    "version": "2.4",
+    "phase": "2",
+    "startDate": "2025-12-17",
+    "endDate": "2025-12-29",
+    "sRanks": [
+      {
+        "id": "1471",
+        "name": "Banyue",
+        "element": "Fire",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Krampus Compliance Authority",
+        "raw": "Banyue"
+      },
+      {
+        "id": "1191",
+        "name": "Ellen",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Ellen Joe"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      },
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      }
+    ],
+    "aWengines": [
+      "Bashful Demon",
+      "Peacekeeper Specialized"
+    ],
+    "raw": {
+      "version": "2.4",
+      "phase": "2",
+      "sRanks": [
+        "Banyue",
+        "Ellen Joe"
+      ],
+      "aRanks": [
+        "Soukaku",
+        "Seth"
+      ],
+      "aWengines": [
+        "Bashful Demon",
+        "Peacekeeper Specialized"
+      ],
+      "startDate": "2025-12-17",
+      "endDate": "2025-12-29"
+    }
+  },
+  {
+    "version": "2.5",
+    "phase": "full",
+    "startDate": "2025-12-30",
+    "endDate": "2026-02-05",
+    "sRanks": [
+      {
+        "id": "1341",
+        "name": "Zhao",
+        "element": "Ice",
+        "specialty": "Defense",
+        "rarity": "S",
+        "faction": "Krampus Compliance Authority",
+        "raw": "Zhao"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1011",
+        "name": "Anby",
+        "element": "Electric",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Anby"
+      },
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      }
+    ],
+    "aWengines": [
+      "Demara Battery Mark II",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "2.5",
+      "phase": "full",
+      "sRanks": [
+        "Zhao"
+      ],
+      "aRanks": [
+        "Anby",
+        "Ben"
+      ],
+      "aWengines": [
+        "Demara Battery Mark II",
+        "Big Cylinder"
+      ],
+      "startDate": "2025-12-30",
+      "endDate": "2026-02-05"
+    }
+  },
+  {
+    "version": "2.5",
+    "phase": "full",
+    "startDate": "2025-12-30",
+    "endDate": "2026-02-05",
+    "sRanks": [
+      {
+        "id": "1431",
+        "name": "Ye Shunguang",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Ye Shunguang"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      },
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      }
+    ],
+    "aWengines": [
+      "The Vault",
+      "Kaboom the Cannon"
+    ],
+    "raw": {
+      "version": "2.5",
+      "phase": "full",
+      "sRanks": [
+        "Ye Shunguang"
+      ],
+      "aRanks": [
+        "Nicole",
+        "Lucy"
+      ],
+      "aWengines": [
+        "The Vault",
+        "Kaboom the Cannon"
+      ],
+      "startDate": "2025-12-30",
+      "endDate": "2026-02-05"
+    }
+  },
+  {
+    "version": "2.5",
+    "phase": "2",
+    "startDate": "2026-01-21",
+    "endDate": "2026-02-05",
+    "sRanks": [
+      {
+        "id": "1401",
+        "name": "Alice",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Alice"
+      },
+      {
+        "id": "1381",
+        "name": "Soldier 0 - Anby",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Soldier 0 Anby"
+      },
+      {
+        "id": "1311",
+        "name": "Astra Yao",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Stars of Lyra",
+        "raw": "Astra Yao"
+      }
+    ],
+    "aRanks": [],
+    "aWengines": [],
+    "raw": {
+      "version": "2.5",
+      "phase": "2",
+      "sRanks": [
+        "Alice",
+        "Soldier 0 Anby",
+        "Astra Yao"
+      ],
+      "aRanks": [],
+      "aWengines": [],
+      "startDate": "2026-01-21",
+      "endDate": "2026-02-05",
+      "exclusiveRescreening": true
+    }
+  },
+  {
+    "version": "2.6",
+    "phase": "1",
+    "startDate": "2026-02-06",
+    "endDate": "2026-03-04",
+    "sRanks": [
+      {
+        "id": "1491",
+        "name": "Sunna",
+        "element": "Physical",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Angels of Delusion",
+        "raw": "Sunna"
+      },
+      {
+        "id": "1371",
+        "name": "Yixuan",
+        "element": "Ether",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Yixuan"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1061",
+        "name": "Corin",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Victoria Housekeeping Co.",
+        "raw": "Corin"
+      },
+      {
+        "id": "1081",
+        "name": "Billy",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Billy"
+      }
+    ],
+    "aWengines": [
+      "Housekeeper",
+      "Starlight Engine Replica"
+    ],
+    "raw": {
+      "version": "2.6",
+      "phase": "1",
+      "sRanks": [
+        "Sunna",
+        "Yixuan"
+      ],
+      "aRanks": [
+        "Corin",
+        "Billy"
+      ],
+      "aWengines": [
+        "Housekeeper",
+        "Starlight Engine Replica"
+      ],
+      "startDate": "2026-02-06",
+      "endDate": "2026-03-04"
+    }
+  },
+  {
+    "version": "2.6",
+    "phase": "2",
+    "startDate": "2026-03-04",
+    "endDate": "2026-03-23",
+    "sRanks": [
+      {
+        "id": "1501",
+        "name": "Aria",
+        "element": "Ether",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Angels of Delusion",
+        "raw": "Aria"
+      },
+      {
+        "id": "1411",
+        "name": "Yuzuha",
+        "element": "Physical",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Yuzuha"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1111",
+        "name": "Anton",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Anton"
+      },
+      {
+        "id": "1271",
+        "name": "Seth",
+        "element": "Electric",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "New Eridu Public Security",
+        "raw": "Seth"
+      }
+    ],
+    "aWengines": [
+      "Drill Rig Red Axis",
+      "Peacekeeper Specialized"
+    ],
+    "raw": {
+      "version": "2.6",
+      "phase": "2",
+      "sRanks": [
+        "Aria",
+        "Yuzuha"
+      ],
+      "aRanks": [
+        "Anton",
+        "Seth"
+      ],
+      "aWengines": [
+        "Drill Rig Red Axis",
+        "Peacekeeper Specialized"
+      ],
+      "startDate": "2026-03-04",
+      "endDate": "2026-03-23"
+    }
+  },
+  {
+    "version": "2.7",
+    "phase": "1",
+    "startDate": "2026-03-24",
+    "endDate": "2026-04-15",
+    "sRanks": [
+      {
+        "id": "1511",
+        "name": "Nangong Yu",
+        "element": "Ether",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Angels of Delusion",
+        "raw": "Nangong Yu"
+      },
+      {
+        "id": "1051",
+        "name": "Yidhari",
+        "element": "Ice",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Yidhari"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "The Vault",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "2.7",
+      "phase": "1",
+      "sRanks": [
+        "Nangong Yu",
+        "Yidhari"
+      ],
+      "aRanks": [
+        "Nicole",
+        "Piper"
+      ],
+      "aWengines": [
+        "The Vault",
+        "Roaring Ride"
+      ],
+      "startDate": "2026-03-24",
+      "endDate": "2026-04-15"
+    }
+  },
+  {
+    "version": "2.7",
+    "phase": "2",
+    "startDate": "2026-04-15",
+    "endDate": "2026-05-05",
+    "sRanks": [
+      {
+        "id": "1521",
+        "name": "Cissia",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Public Security",
+        "raw": "Cissia"
+      },
+      {
+        "id": "1461",
+        "name": "Seed",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Seed"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1351",
+        "name": "Pulchra",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Pulchra"
+      },
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      }
+    ],
+    "aWengines": [
+      "Box Cutter",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "2.7",
+      "phase": "2",
+      "sRanks": [
+        "Cissia",
+        "Seed"
+      ],
+      "aRanks": [
+        "Pulchra",
+        "Ben"
+      ],
+      "aWengines": [
+        "Box Cutter",
+        "Big Cylinder"
+      ],
+      "startDate": "2026-04-15",
+      "endDate": "2026-05-05"
+    }
+  },
+  {
+    "version": "2.8",
+    "phase": "1",
+    "startDate": "2026-05-06",
+    "endDate": "2026-05-27",
+    "sRanks": [
+      {
+        "id": "1541",
+        "name": "Promeia",
+        "element": "Ice",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Krampus Compliance Authority",
+        "raw": "Promeia"
+      },
+      {
+        "id": "1451",
+        "name": "Lucia",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Lucia"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1131",
+        "name": "Soukaku",
+        "element": "Ice",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Soukaku"
+      },
+      {
+        "id": "1151",
+        "name": "Lucy",
+        "element": "Fire",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Lucy"
+      }
+    ],
+    "aWengines": [
+      "Bashful Demon",
+      "Kaboom the Cannon"
+    ],
+    "raw": {
+      "version": "2.8",
+      "phase": "1",
+      "sRanks": [
+        "Promeia",
+        "Lucia"
+      ],
+      "aRanks": [
+        "Soukaku",
+        "Lucy"
+      ],
+      "aWengines": [
+        "Bashful Demon",
+        "Kaboom the Cannon"
+      ],
+      "startDate": "2026-05-06",
+      "endDate": "2026-05-27"
+    }
+  },
+  {
+    "version": "2.8",
+    "phase": "2",
+    "startDate": "2026-05-27",
+    "endDate": "2026-06-16",
+    "sRanks": [
+      {
+        "id": "1531",
+        "name": "Starlight - Billy",
+        "element": "Physical",
+        "specialty": "Rupture",
+        "rarity": "S",
+        "faction": "Cunning Hares",
+        "raw": "Starlight Billy"
+      },
+      {
+        "id": "1301",
+        "name": "Orphie & Magus",
+        "element": "Fire",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "New Eridu Defense Force",
+        "raw": "Orpheus"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1421",
+        "name": "Pan Yinhu",
+        "element": "Physical",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Yunkui Summit",
+        "raw": "Pan Yinhu"
+      },
+      {
+        "id": "1441",
+        "name": "Manato",
+        "element": "Fire",
+        "specialty": "Rupture",
+        "rarity": "A",
+        "faction": "Spook Shack",
+        "raw": "Manato"
+      }
+    ],
+    "aWengines": [
+      "Tremor Trigram Vessel",
+      "Grill O'Wisp"
+    ],
+    "raw": {
+      "version": "2.8",
+      "phase": "2",
+      "sRanks": [
+        "Starlight Billy",
+        "Orpheus"
+      ],
+      "aRanks": [
+        "Pan Yinhu",
+        "Manato"
+      ],
+      "aWengines": [
+        "Tremor Trigram Vessel",
+        "Grill O'Wisp"
+      ],
+      "startDate": "2026-05-27",
+      "endDate": "2026-06-16"
+    }
+  },
+  {
+    "version": "3.0",
+    "phase": "1",
+    "startDate": "2026-06-17",
+    "endDate": "2026-07-08",
+    "sRanks": [
+      {
+        "id": "1561",
+        "name": "Velina",
+        "element": "Wind",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Roscaelifer External Strategy Department",
+        "raw": "Velina"
+      },
+      {
+        "id": "1431",
+        "name": "Ye Shunguang",
+        "element": "Physical",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Yunkui Summit",
+        "raw": "Ye Shunguang"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1031",
+        "name": "Nicole",
+        "element": "Ether",
+        "specialty": "Support",
+        "rarity": "A",
+        "faction": "Cunning Hares",
+        "raw": "Nicole"
+      },
+      {
+        "id": "1281",
+        "name": "Piper",
+        "element": "Physical",
+        "specialty": "Anomaly",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Piper"
+      }
+    ],
+    "aWengines": [
+      "The Vault",
+      "Roaring Ride"
+    ],
+    "raw": {
+      "version": "3.0",
+      "phase": "1",
+      "sRanks": [
+        "Velina",
+        "Ye Shunguang"
+      ],
+      "aRanks": [
+        "Nicole",
+        "Piper"
+      ],
+      "aWengines": [
+        "The Vault",
+        "Roaring Ride"
+      ],
+      "startDate": "2026-06-17",
+      "endDate": "2026-07-08"
+    }
+  },
+  {
+    "version": "3.0",
+    "phase": "2",
+    "startDate": "2026-07-08",
+    "endDate": "2026-07-28",
+    "sRanks": [
+      {
+        "id": "1571",
+        "name": "Norma",
+        "element": "Fire",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Roscaelifer External Strategy Department",
+        "raw": "Norma"
+      },
+      {
+        "id": "1491",
+        "name": "Sunna",
+        "element": "Physical",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Angels of Delusion",
+        "raw": "Sunna"
+      }
+    ],
+    "aRanks": [
+      {
+        "id": "1351",
+        "name": "Pulchra",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "A",
+        "faction": "Sons of Calydon",
+        "raw": "Pulchra"
+      },
+      {
+        "id": "1121",
+        "name": "Ben",
+        "element": "Fire",
+        "specialty": "Defense",
+        "rarity": "A",
+        "faction": "Belobog Heavy Industries",
+        "raw": "Ben"
+      }
+    ],
+    "aWengines": [
+      "Box Cutter",
+      "Big Cylinder"
+    ],
+    "raw": {
+      "version": "3.0",
+      "phase": "2",
+      "sRanks": [
+        "Norma",
+        "Sunna"
+      ],
+      "aRanks": [
+        "Pulchra",
+        "Ben"
+      ],
+      "aWengines": [
+        "Box Cutter",
+        "Big Cylinder"
+      ],
+      "startDate": "2026-07-08",
+      "endDate": "2026-07-28"
+    }
+  },
+  {
+    "version": "3.1",
+    "phase": "full",
+    "startDate": "2026-07-29",
+    "endDate": "2026-09-08",
+    "sRanks": [
+      {
+        "id": "1581",
+        "name": "Remielle",
+        "element": "Lumiflux",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Covenant of Dayat",
+        "raw": "Remielle"
+      }
+    ],
+    "aRanks": [],
+    "aWengines": [],
+    "raw": {
+      "version": "3.1",
+      "phase": "full",
+      "sRanks": [
+        "Remielle"
+      ],
+      "aRanks": [],
+      "aWengines": [],
+      "startDate": "2026-07-29",
+      "endDate": "2026-09-08"
+    }
+  },
+  {
+    "version": "3.1",
+    "phase": "1",
+    "startDate": "2026-07-29",
+    "endDate": "2026-08-19",
+    "sRanks": [
+      {
+        "id": "1501",
+        "name": "Aria",
+        "element": "Ether",
+        "specialty": "Anomaly",
+        "rarity": "S",
+        "faction": "Angels of Delusion",
+        "raw": "Aria"
+      }
+    ],
+    "aRanks": [],
+    "aWengines": [],
+    "raw": {
+      "version": "3.1",
+      "phase": "1",
+      "sRanks": [
+        "Aria"
+      ],
+      "aRanks": [],
+      "aWengines": [],
+      "startDate": "2026-07-29",
+      "endDate": "2026-08-19"
+    }
+  },
+  {
+    "version": "3.1",
+    "phase": "2",
+    "startDate": "2026-08-19",
+    "endDate": "2026-09-08",
+    "sRanks": [
+      {
+        "id": "1591",
+        "name": "Sigrid",
+        "element": "Ice",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Roscaelifer Airspace Patrol Department",
+        "raw": "Sigrid"
+      }
+    ],
+    "aRanks": [],
+    "aWengines": [],
+    "raw": {
+      "version": "3.1",
+      "phase": "2",
+      "sRanks": [
+        "Sigrid"
+      ],
+      "aRanks": [],
+      "aWengines": [],
+      "startDate": "2026-08-19",
+      "endDate": "2026-09-08"
+    }
+  },
+  {
+    "version": "3.1",
+    "phase": "2",
+    "startDate": "2026-08-19",
+    "endDate": "2026-09-08",
+    "sRanks": [
+      {
+        "id": "1481",
+        "name": "Dialyn",
+        "element": "Physical",
+        "specialty": "Stun",
+        "rarity": "S",
+        "faction": "Krampus Compliance Authority",
+        "raw": "Dialyn"
+      },
+      {
+        "id": "1411",
+        "name": "Yuzuha",
+        "element": "Physical",
+        "specialty": "Support",
+        "rarity": "S",
+        "faction": "Spook Shack",
+        "raw": "Yuzuha"
+      },
+      {
+        "id": "1201",
+        "name": "Harumasa",
+        "element": "Electric",
+        "specialty": "Attack",
+        "rarity": "S",
+        "faction": "Hollow Special Operations Section 6",
+        "raw": "Harumasa"
+      }
+    ],
+    "aRanks": [],
+    "aWengines": [],
+    "raw": {
+      "version": "3.1",
+      "phase": "2",
+      "sRanks": [
+        "Dialyn",
+        "Yuzuha",
+        "Harumasa"
+      ],
+      "aRanks": [],
+      "aWengines": [],
+      "startDate": "2026-08-19",
+      "endDate": "2026-09-08",
+      "exclusiveRescreening": true
+    }
+  }
+]

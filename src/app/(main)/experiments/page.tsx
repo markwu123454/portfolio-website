@@ -171,6 +171,75 @@ const PULL_PATIENCE_PREVIEW = (
     </svg>
 );
 
+/* ── 05 · Snake Versus — two solvers race the same board ─────────── */
+
+const VS_R = 6, VS_C = 6, VS_CELL = 20, VS_BOARD = VS_R * VS_C, VS_TOP = 26;
+const VS_CYCLE = generateHamiltonianBasic(VS_R, VS_C);
+const VS_N = VS_CYCLE.length;
+const vsCell = (v: number): [number, number] => [(v % VS_C) * VS_CELL + VS_CELL / 2, Math.floor(v / VS_C) * VS_CELL + VS_CELL / 2];
+const vsPts = (cells: number[]) => cells.map(vsCell).map(([x, y]) => `${x},${y}`).join(' ');
+const vsBody = (hIdx: number, len: number) => Array.from({ length: len }, (_, i) => VS_CYCLE[((hIdx - i) % VS_N + VS_N) % VS_N]);
+
+function VsBoard({ dx, accent, hIdx, len, aIdx }: { dx: number; accent: string; hIdx: number; len: number; aIdx: number }) {
+    const [hx, hy] = vsCell(VS_CYCLE[hIdx]);
+    const [ax, ay] = vsCell(VS_CYCLE[aIdx]);
+    return (
+        <g transform={`translate(${dx},${VS_TOP})`}>
+            {Array.from({ length: VS_BOARD }).map((_, i) => (
+                <rect key={i} x={(i % VS_C) * VS_CELL} y={Math.floor(i / VS_C) * VS_CELL}
+                      width={VS_CELL} height={VS_CELL} fill="var(--bg)" stroke="var(--rule)" strokeWidth={1} />
+            ))}
+            <polyline fill="none" stroke={accent} strokeWidth={VS_CELL * 0.5} strokeLinecap="round" strokeLinejoin="round"
+                      points={vsPts(vsBody(hIdx, len))} />
+            <circle cx={hx} cy={hy} r={VS_CELL * 0.32} fill={accent} />
+            <circle cx={ax} cy={ay} r={VS_CELL * 0.24} fill="#dc2626" />
+            <text x={VS_C * VS_CELL / 2} y={VS_R * VS_CELL + 18} textAnchor="middle"
+                  fontFamily="var(--font-mono)" fontSize={11} letterSpacing={1.5} fill={accent}>
+                {accent === '#38bdf8' ? 'OLD' : 'NEW'}
+            </text>
+        </g>
+    );
+}
+
+const VERSUS_PREVIEW = (
+    <svg viewBox="0 0 272 196" preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        <VsBoard dx={0} accent="#38bdf8" hIdx={22} len={11} aIdx={27} />
+        <VsBoard dx={152} accent="#fb923c" hIdx={10} len={19} aIdx={14} />
+        <text x={136} y={VS_TOP + VS_R * VS_CELL / 2 + 5} textAnchor="middle"
+              fontFamily="var(--font-mono)" fontSize={14} letterSpacing={1} fill="var(--fg-soft)">VS</text>
+    </svg>
+);
+
+/* ── 06 · Banner History — rerun-cadence gantt ───────────────────── */
+
+const BH_ROWS = [
+    { y: 40, accent: '#7dd3fc', dots: [18, 70, 150, 250], drought: 330 },
+    { y: 78, accent: '#fb923c', dots: [40, 130, 300], drought: 300 },
+    { y: 116, accent: '#c084fc', dots: [95, 205], drought: 250 },
+    { y: 154, accent: '#4ade80', dots: [140, 210, 260, 315], drought: 340 },
+    { y: 192, accent: '#f87171', dots: [175, 285], drought: 250 },
+];
+const BH_VLINES = [18, 78, 138, 198, 258, 318];
+
+const BANNER_HISTORY_PREVIEW = (
+    <svg viewBox="0 0 360 232" preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        {BH_VLINES.map((vx) => (
+            <line key={vx} x1={vx} x2={vx} y1={20} y2={214} stroke="var(--rule)" strokeWidth={1} />
+        ))}
+        <line x1={330} x2={330} y1={20} y2={214} stroke="var(--accent)" strokeWidth={1.5} opacity={0.7} />
+        {BH_ROWS.map((r, i) => (
+            <g key={i}>
+                <line x1={r.dots[0]} x2={r.dots[r.dots.length - 1]} y1={r.y} y2={r.y} stroke={r.accent} strokeWidth={2} opacity={0.45} />
+                <line x1={r.dots[r.dots.length - 1]} x2={r.drought} y1={r.y} y2={r.y} stroke="var(--fg-soft)" strokeWidth={1} strokeDasharray="2 3" />
+                {r.dots.map((dx, j) => (
+                    <circle key={j} cx={dx} cy={r.y} r={j === 0 ? 5 : 3.6}
+                            fill={j === 0 ? 'var(--bg)' : r.accent} stroke={r.accent} strokeWidth={j === 0 ? 2.2 : 1} />
+                ))}
+            </g>
+        ))}
+    </svg>
+);
+
 /* ─────────────────────────────────────────────────────────────────
    Data
    ───────────────────────────────────────────────────────────────── */
@@ -182,6 +251,13 @@ const READY: Experiment[] = [
         title: 'Snake',
         blurb: 'Snake agent using an optimised Hamiltonian cycle, it is guaranteed to win.',
         preview: SNAKE_PREVIEW,
+    },
+    {
+        href: '/experiments/snake-versus',
+        category: 'ALGORITHM',
+        title: 'Snake Versus',
+        blurb: 'Two apple-chasing solvers — plus you — race the same board, step for step, at the same apples.',
+        preview: VERSUS_PREVIEW,
     },
     {
         href: '/experiments/state-space',
@@ -203,6 +279,13 @@ const READY: Experiment[] = [
         title: 'Pull Planner',
         blurb: 'A local tracker for gacha savers: your pity, stash, and saving rate become a live chance of hitting the target by your deadline.',
         preview: PULL_PATIENCE_PREVIEW,
+    },
+    {
+        href: '/experiments/banner-history',
+        category: 'DATA',
+        title: 'Banner History',
+        blurb: 'A ZZZ rerun-cadence tracker: every agent banner since 1.0, ranked by how overdue each one is for a rerun. Auto-scraped, self-updating.',
+        preview: BANNER_HISTORY_PREVIEW,
     },
 ];
 

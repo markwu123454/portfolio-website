@@ -1,6 +1,6 @@
 // ── Snake algorithm core ──
 // Pure, DOM-free logic shared by the page (rendering + light run loop) and the
-// Web Worker (continuous cycle search). No React imports belong in this file.
+// Web Worker (continuous cycle bank + re-homing planner). No React imports here.
 
 // ── Int-encoded cell helpers ──
 // A cell (r, c) is stored as the single integer r * cols + c.
@@ -47,161 +47,10 @@ export function generateHamiltonianBasic(rows: number, cols: number): number[] {
 }
 
 
-export function zipsToApple(
-    path: number[],
-    posMap: Int32Array,
-    snake: number[],
-    apple: number,
-    cols: number
-): boolean {
-    const headIndex = posMap[snake[0]];
-    const appleIndex = posMap[apple];
-
-    if (headIndex === -1 || appleIndex === -1) return false;
-    if (appleIndex <= headIndex) return false;
-
-    let prev = path[headIndex];
-
-    for (let i = headIndex + 1; i <= appleIndex; i++) {
-        const cur = path[i];
-
-        const dc = intC(cur, cols) - intC(prev, cols);
-        const dr = intR(cur, cols) - intR(prev, cols);
-
-        if (Math.abs(dc) + Math.abs(dr) !== 1) return false;
-
-        const ac = intC(apple, cols);
-        const ar = intR(apple, cols);
-        if (
-            Math.abs(intC(cur, cols) - ac) > Math.abs(intC(prev, cols) - ac) ||
-            Math.abs(intR(cur, cols) - ar) > Math.abs(intR(prev, cols) - ar)
-        ) {
-            return false;
-        }
-
-        prev = cur;
-    }
-
-    return true;
-}
-
-
-// Weight on post-eat space (φ) vs. route length (ρ) in the combined
-// objective. Tune via a headless sweep over mean steps-per-apple; 1.0 is
-// the neutral starting point where a unit of each excess trades evenly.
-export const LAMBDA = 1.0;
-
-// J within this margin of its ideal (0) counts as good enough — stop the
-// search and idle until the state next changes.
-export const STOP_EPS = 0.05;
-
-
-// Transparent reach field: BFS distance from the apple on the EMPTY grid
-// (body passable). Depends only on the apple, so it is computed once per
-// target and shared across candidates. Returns the field and its total.
-export function appleTransparentField(
-    apple: number,
-    rows: number,
-    cols: number
-): { d0: Int32Array; totalD0: number } {
-    const total = rows * cols;
-    const d0 = new Int32Array(total).fill(-1);
-    d0[apple] = 0;
-    const queue: number[] = [apple];
-    let qi = 0;
-    let totalD0 = 0;
-    while (qi < queue.length) {
-        const cur = queue[qi++];
-        const cr = (cur / cols) | 0;
-        const cc = cur % cols;
-        const nd = d0[cur] + 1;
-        if (cc + 1 < cols) { const n = cur + 1;    if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
-        if (cc - 1 >= 0)   { const n = cur - 1;    if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
-        if (cr + 1 < rows) { const n = cur + cols; if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
-        if (cr - 1 >= 0)   { const n = cur - cols; if (d0[n] === -1) { d0[n] = nd; totalD0 += nd; queue.push(n); } }
-    }
-    return { d0, totalD0 };
-}
-
-// φ for one candidate cycle: opaque reach-sum / transparent reach-sum, both
-// over the SAME post-eat free cells. The post-eat body is the L+1 cells
-// ending at the apple along the cycle; we flood from the apple around that
-// body. φ ≥ 1, equals 1 when the body forces no detour, and grows as the
-// cycle walls space off behind the apple. Sealed cells cap at the grid size.
-export function posteatSpaceRatio(
-    path: number[],
-    posMap: Int32Array,
-    snakeLen: number,
-    apple: number,
-    rows: number,
-    cols: number,
-    d0: Int32Array,
-    totalD0: number
-): number {
-    const N = path.length;
-    const appleIndex = posMap[apple];
-    if (appleIndex === -1) return 1;
-
-    const total = rows * cols;
-    const blocked = new Uint8Array(total);
-
-    let arcSumD0 = 0;
-    for (let i = 0; i <= snakeLen; i++) {
-        const cell = path[((appleIndex - i) % N + N) % N];
-        if (blocked[cell] === 0) {
-            blocked[cell] = 1;
-            arcSumD0 += d0[cell];
-        }
-    }
-
-    const A = totalD0 - arcSumD0;
-    if (A <= 0) return 1;
-
-    const dist = new Int32Array(total).fill(-1);
-    dist[apple] = 0;
-    const queue: number[] = [apple];
-    let qi = 0;
-    while (qi < queue.length) {
-        const cur = queue[qi++];
-        const cr = (cur / cols) | 0;
-        const cc = cur % cols;
-        const nd = dist[cur] + 1;
-        if (cc + 1 < cols) { const n = cur + 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
-        if (cc - 1 >= 0)   { const n = cur - 1;    if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
-        if (cr + 1 < rows) { const n = cur + cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
-        if (cr - 1 >= 0)   { const n = cur - cols; if (dist[n] === -1 && blocked[n] === 0) { dist[n] = nd; queue.push(n); } }
-    }
-
-    let B = 0;
-    for (let c = 0; c < total; c++) {
-        if (blocked[c] === 1) continue;
-        B += dist[c] === -1 ? total : dist[c];
-    }
-
-    return B / A;
-}
-
-// Combined objective J = (ρ - 1) + LAMBDA·(φ - 1) for one normalized cycle.
-// ρ = d_H(head, apple) / d*; φ = post-eat reach overhead. J ≥ 0, 0 = perfect.
-export function scoreCycle(
-    path: number[],
-    pm: Int32Array,
-    snakeLen: number,
-    apple: number,
-    rows: number,
-    cols: number,
-    lowerBound: number,
-    d0: Int32Array,
-    totalD0: number
-): number {
-    const dH = patternDistance(path, apple, pm);
-    if (!Number.isFinite(dH)) return Infinity;
-    const rho = dH / lowerBound;
-    const phi = posteatSpaceRatio(path, pm, snakeLen, apple, rows, cols, d0, totalD0);
-    return (rho - 1) + LAMBDA * (phi - 1);
-}
-
-
+// Random full-grid Hamiltonian cycle. With a trivial 1-cell placeholder snake
+// this produces a snake-agnostic cycle (it depends only on the grid), which is
+// what the worker banks. The `snake` suffix + `apple` params are kept for the
+// generator's forward-biting machinery; `apple` itself is unused.
 export function generateHamiltonian(
     rows: number,
     cols: number,
@@ -346,6 +195,8 @@ export function generateHamiltonian(
 }
 
 
+// Rotate a cycle so the snake's head is first, oriented so following it forward
+// moves away from the neck (never a reverse into the body).
 export function normalizeHamiltonian(
     path: number[],
     snake: number[],
@@ -395,132 +246,6 @@ export function buildPosMap(path: number[]): Int32Array {
     return map;
 }
 
-export function patternDistance(path: number[], apple: number, posMap?: Int32Array): number {
-    const ai = posMap ? posMap[apple] : path.indexOf(apple);
-    return ai === -1 ? Infinity : ai;
-}
-
-function is2x2Square(a: number, b: number, c: number, d: number, cols: number): boolean {
-    const rs = new Set([intR(a, cols), intR(b, cols), intR(c, cols), intR(d, cols)]);
-    const cs = new Set([intC(a, cols), intC(b, cols), intC(c, cols), intC(d, cols)]);
-    return rs.size === 2 && cs.size === 2;
-}
-
-function extend(from: number, to: number, cols: number, rows: number): number {
-    const dr = intR(to, cols) - intR(from, cols);
-    const dc = intC(to, cols) - intC(from, cols);
-    const nr = intR(to, cols) + dr;
-    const nc = intC(to, cols) + dc;
-    if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) return -1;
-    return toInt(nr, nc, cols);
-}
-
-function spliceByRemoveInsert(
-    path: number[],
-    indexMap: Int32Array,
-    cols: number,
-    A: number,
-    B: number,
-    C: number,
-    D: number,
-    Bp: number,
-    Cp: number
-): number[] | null {
-
-    const iB = indexMap[B];
-    const iC = indexMap[C];
-    const iBp = indexMap[Bp];
-    const iCp = indexMap[Cp];
-
-    if (iB === -1 || iC === -1 || iBp === -1 || iCp === -1) return null;
-
-    if (Math.abs(iB - iC) !== 1) return null;
-    if (Math.abs(iBp - iCp) !== 1) return null;
-
-    const removed = path.filter((_, i) => i !== iB && i !== iC);
-
-    const idxBp = removed.indexOf(Bp);
-    const idxCp = removed.indexOf(Cp);
-
-    if (idxBp === -1 || idxCp === -1) return null;
-
-    const insertAt = Math.min(idxBp, idxCp) + 1;
-
-    return [
-        ...removed.slice(0, insertAt),
-        C,
-        B,
-        ...removed.slice(insertAt),
-    ];
-}
-
-
-export function optimizeHamiltonianByBumps(
-    rawPath: number[],
-    snake: number[],
-    apple: number,
-    cols: number
-): number[] {
-    if (rawPath.length === 0) return rawPath;
-
-    const rows = (rawPath.length / cols) | 0;
-    const rawPm = buildPosMap(rawPath);
-    let path = normalizeHamiltonian(rawPath, snake, cols, rawPm);
-    const N = path.length;
-
-    const snakeSet = new Set<number>();
-    for (let i = 1; i < snake.length; i++) {
-        snakeSet.add(snake[i]);
-    }
-
-    while (true) {
-        let improved = false;
-
-        const indexMap = new Int32Array(N).fill(-1);
-        for (let i = 0; i < N; i++) indexMap[path[i]] = i;
-
-        const baseDist = patternDistance(path, apple, indexMap);
-
-        const segment = pathFromHeadToApple(path, snake, apple, cols, indexMap);
-
-        for (let si = 0; si + 3 < segment.length; si++) {
-            const A = segment[si];
-            const B = segment[si + 1];
-            const C = segment[si + 2];
-            const D = segment[si + 3];
-
-            if (!is2x2Square(A, B, C, D, cols)) continue;
-
-            const Bp = extend(A, B, cols, rows);
-            const Cp = extend(D, C, cols, rows);
-
-            if (Bp === -1 || Cp === -1) continue;
-
-            if (snakeSet.has(Bp) || snakeSet.has(Cp)) continue;
-
-            const newPath = spliceByRemoveInsert(
-                path, indexMap, cols,
-                A, B, C, D, Bp, Cp
-            );
-
-            if (!newPath) continue;
-
-            const newPosMap = buildPosMap(newPath);
-            const newDist = patternDistance(newPath, apple, newPosMap);
-
-            if (newDist === baseDist - 2) {
-                path = newPath;
-                improved = true;
-                break;
-            }
-        }
-
-        if (!improved) break;
-    }
-
-    return path;
-}
-
 
 export function randomFreeCell(
     rows: number,
@@ -534,43 +259,8 @@ export function randomFreeCell(
 }
 
 
-export function bfsDistance(
-    from: number,
-    to: number,
-    rows: number,
-    cols: number,
-    snake: number[]
-): number {
-    if (from === to) return 0;
-
-    const total = rows * cols;
-    const blocked = new Uint8Array(total);
-    for (let i = 1; i < snake.length; i++) {
-        blocked[snake[i]] = 1;
-    }
-
-    const dist = new Int32Array(total).fill(-1);
-    dist[from] = 0;
-
-    const queue: number[] = [from];
-    let qi = 0;
-
-    while (qi < queue.length) {
-        const cur = queue[qi++];
-        const cr = (cur / cols) | 0;
-        const cc = cur % cols;
-        const nd = dist[cur] + 1;
-
-        if (cc + 1 < cols) { const n = cur + 1;    if (dist[n] === -1 && !blocked[n]) { if (n === to) return nd; dist[n] = nd; queue.push(n); } }
-        if (cc - 1 >= 0)   { const n = cur - 1;    if (dist[n] === -1 && !blocked[n]) { if (n === to) return nd; dist[n] = nd; queue.push(n); } }
-        if (cr + 1 < rows) { const n = cur + cols;  if (dist[n] === -1 && !blocked[n]) { if (n === to) return nd; dist[n] = nd; queue.push(n); } }
-        if (cr - 1 >= 0)   { const n = cur - cols;  if (dist[n] === -1 && !blocked[n]) { if (n === to) return nd; dist[n] = nd; queue.push(n); } }
-    }
-
-    return Infinity;
-}
-
-
+// Walk a cycle forward from the head to the apple. Used to render the route the
+// snake takes when it is simply following its current cycle (Phase A).
 export function pathFromHeadToApple(
     path: number[],
     snake: number[],
@@ -601,9 +291,9 @@ export function pathFromHeadToApple(
 }
 
 
-// Is the snake a contiguous arc of the cycle (in either direction)? The UI
-// only adopts a worker cycle that passes this, which is what guarantees every
-// move stays on a Hamiltonian cycle containing the current snake.
+// Is the snake a contiguous arc of the cycle (in either direction)? True exactly
+// when the snake is "on" that cycle, so following it keeps every move on a
+// Hamiltonian cycle — the invariant that makes the game impossible to lose.
 export function isSubArc(cycle: number[], snake: number[], posMap?: Int32Array): boolean {
     const N = cycle.length;
     if (snake.length === 0 || snake.length > N) return false;
@@ -619,6 +309,149 @@ export function isSubArc(cycle: number[], snake: number[], posMap?: Int32Array):
         if (!fwd && !bwd) return false;
     }
     return fwd || bwd;
+}
+
+
+// ── Temporal (tail-aware) transition pathfinding ──
+// BFS from the head to a target cell that respects the snake's own body vacating
+// as it moves. While the snake is NOT eating, body cell snake[i] (head = index
+// 0) frees up after S - i moves, so a cell is enterable at BFS depth d when it
+// is off-body or already vacated (freeAt <= d). Reserved settle-arc cells are
+// hard-blocked — you can't walk the arc to get onto the arc. Conservative: it
+// may miss paths that would need a detour to burn time, which only costs
+// optimality — every path it returns is re-checked exactly by simulateSafe.
+export function temporalTransitionBFS(
+    head: number,
+    target: number,
+    snake: number[],
+    rows: number,
+    cols: number,
+    blocked: Uint8Array,
+): number[] | null {
+    const total = rows * cols;
+    const S = snake.length;
+    const freeAt = new Int32Array(total);            // 0 = off-body, free from the start
+    for (let i = 0; i < S; i++) freeAt[snake[i]] = S - i;
+
+    const prev = new Int32Array(total).fill(-1);
+    const depth = new Int32Array(total).fill(-1);
+    depth[head] = 0;
+    const queue: number[] = [head];
+    let qi = 0;
+
+    while (qi < queue.length) {
+        const cur = queue[qi++];
+        if (cur === target) break;
+        const d = depth[cur] + 1;
+        const cr = (cur / cols) | 0;
+        const cc = cur % cols;
+        let n: number;
+        if (cc + 1 < cols) { n = cur + 1;    if (depth[n] === -1 && (n === target || blocked[n] === 0) && freeAt[n] <= d) { depth[n] = d; prev[n] = cur; queue.push(n); } }
+        if (cc - 1 >= 0)   { n = cur - 1;    if (depth[n] === -1 && (n === target || blocked[n] === 0) && freeAt[n] <= d) { depth[n] = d; prev[n] = cur; queue.push(n); } }
+        if (cr + 1 < rows) { n = cur + cols; if (depth[n] === -1 && (n === target || blocked[n] === 0) && freeAt[n] <= d) { depth[n] = d; prev[n] = cur; queue.push(n); } }
+        if (cr - 1 >= 0)   { n = cur - cols; if (depth[n] === -1 && (n === target || blocked[n] === 0) && freeAt[n] <= d) { depth[n] = d; prev[n] = cur; queue.push(n); } }
+    }
+
+    if (depth[target] === -1) return null;
+    const path: number[] = [];
+    for (let c = target; c !== -1; c = prev[c]) path.push(c);
+    path.reverse();
+    return path;
+}
+
+
+// Exact safety check for a planned head→apple path. Simulate the snake walking
+// it cell by cell — the tail retracts on every non-eating step, the final step
+// onto the apple grows it — and reject any self-collision or stray early apple.
+// A path is safe to execute iff this returns true. O(path length).
+export function simulateSafe(
+    snake: number[],
+    apple: number,
+    path: number[],
+    cols: number,
+): boolean {
+    if (path.length < 2 || path[0] !== snake[0]) return false;
+    const body = snake.slice();                      // head-first
+    const occ = new Set(body);
+    for (let i = 1; i < path.length; i++) {
+        const cell = path[i];
+        if (!intAdj(path[i - 1], cell, cols)) return false;
+        const isLast = i === path.length - 1;
+        if (cell === apple && !isLast) return false; // the apple may only sit at the very end
+        if (!isLast) {                               // non-eating move: the tail frees a cell
+            occ.delete(body[body.length - 1]);
+            body.pop();
+        }
+        if (occ.has(cell)) return false;             // would collide with the body
+        occ.add(cell);
+        body.unshift(cell);
+    }
+    return path[path.length - 1] === apple;
+}
+
+
+// A cached Hamiltonian cycle in the worker's bank: the cell sequence plus its
+// position lookup. Cycles are snake-agnostic (grid-only), so they stay valid for
+// every state and can be reused across steps and apples.
+export type BankEntry = { cycle: number[]; pos: Int32Array };
+
+// One re-homing plan: the full head→apple path to walk, and the Hamiltonian
+// cycle the snake becomes a contiguous sub-arc of the instant it eats — which is
+// what keeps the win guaranteed no matter where the next apple lands.
+export type ReHomePlan = { path: number[]; cycle: number[] };
+
+// Search the bank for the fastest SAFE re-homing plan that reaches the apple in
+// fewer than `maxSteps` moves (the incumbent to beat — normally the cost of just
+// following the current cycle). For each cycle we try both travel directions:
+// the settle arc is the S cells ending at the apple; its far end is the entry
+// the head must reach. Returns null when nothing beats `maxSteps`.
+export function planReHome(
+    snake: number[],
+    apple: number,
+    rows: number,
+    cols: number,
+    bank: BankEntry[],
+    maxSteps: number,
+): ReHomePlan | null {
+    const N = rows * cols;
+    const S = snake.length;
+    const head = snake[0];
+    let best: ReHomePlan | null = null;
+    let bestSteps = maxSteps;
+
+    for (const { cycle, pos } of bank) {
+        const ai = pos[apple];
+        if (ai === -1) continue;
+        for (const dir of [1, -1] as const) {
+            const entryIdx = ((ai - dir * S) % N + N) % N;
+            const entry = cycle[entryIdx];
+
+            // Settle arc: the S cells from just past the entry up to the apple.
+            // Reserve them so the transition can't walk through the arc it will
+            // later trace.
+            const settle: number[] = [];
+            const blocked = new Uint8Array(N);
+            let idx = entryIdx;
+            for (let s = 0; s < S; s++) {
+                idx = ((idx + dir) % N + N) % N;
+                const cell = cycle[idx];
+                settle.push(cell);
+                blocked[cell] = 1;
+            }
+
+            const trans = temporalTransitionBFS(head, entry, snake, rows, cols, blocked);
+            if (!trans) continue;
+
+            const path = trans.concat(settle);       // head … entry, entry+dir … apple
+            const steps = path.length - 1;
+            if (steps >= bestSteps) continue;
+            if (!simulateSafe(snake, apple, path, cols)) continue;
+
+            best = { path, cycle };
+            bestSteps = steps;
+        }
+    }
+    return best;
 }
 
 
@@ -658,14 +491,14 @@ export function enforceGridRules(
 
 
 // ── Worker message protocol ──
-// UI → worker: the current target + the cycle the UI holds (the incumbent to
-// refine from). Sent every step and on reset.
+// UI → worker: the live state plus the cycle the UI is currently following (the
+// Phase-A baseline the worker must beat). Sent every step and on reset.
 export type StateMsg = {
     type: "state";
     generation: number;
-    // Monotonic per-state token, bumped on every step and reset. A best is only
-    // safe to adopt for the state it was computed against, so the worker echoes
-    // this back and the UI ignores any best whose serial has been superseded.
+    // Monotonic per-state token, bumped on every step and reset. A plan is only
+    // safe to adopt for the exact state it was computed against, so the worker
+    // echoes it back and the UI drops any plan whose serial has been superseded.
     serial: number;
     rows: number;
     cols: number;
@@ -674,56 +507,92 @@ export type StateMsg = {
     cycle: number[];
 };
 
-// worker → UI: the best cycle found so far for the last reported state. `serial`
-// identifies which state it targets, so the UI can reject stale results (a best
-// optimized for an earlier head/apple would otherwise force a long detour).
-export type BestMsg = {
-    type: "best";
+// worker → UI: a re-homing plan that reaches the apple faster than following the
+// current cycle. The UI adopts it only if the serial and head still match and it
+// re-passes simulateSafe; otherwise it just keeps following its current cycle.
+export type PlanMsg = {
+    type: "plan";
     generation: number;
     serial: number;
+    path: number[];
     cycle: number[];
-    score: number;
 };
 
-// worker → UI: lightweight progress, posted while the search is active.
+// worker → UI: lightweight progress — how many cycles are banked so far.
 export type StatsMsg = {
     type: "stats";
     generation: number;
     generated: number;
 };
 
+// UI → worker: ask the worker to start solving, in advance, the re-homing
+// problem for a FUTURE state — the body + apple the snake will have the instant
+// it finishes eating the apple it's walking toward right now. That future state
+// is fully deterministic (Phase-A follows a fixed cycle to a fixed apple; a
+// committed re-homing plan always finishes on a fixed settle arc), so it can be
+// requested the moment it becomes known, giving the worker the entire remaining
+// approach as lead time — the real plan is ready the instant the eat actually
+// happens instead of needing a post-eat round trip. `token` identifies this
+// specific speculative request; superseded the moment the future it predicts
+// changes (a plan gets adopted, or the live apple changes).
+export type PreplanStateMsg = {
+    type: "preplanState";
+    generation: number;
+    token: number;
+    rows: number;
+    cols: number;
+    snake: number[];
+    apple: number;
+    cycle: number[];
+};
 
-const nowMs = () =>
-    (typeof performance !== "undefined" ? performance.now() : Date.now());
+// worker → UI: the speculative plan solved for a PreplanStateMsg's future state.
+export type PreplanMsg = {
+    type: "preplan";
+    generation: number;
+    token: number;
+    path: number[];
+    cycle: number[];
+};
 
-// Anytime optimizer driven by the worker. `setState` re-targets it to the
-// latest snake/apple and re-bases its incumbent onto the cycle the UI holds;
-// `step` refines toward min-J for a time budget; `getBest` reports the
-// incumbent. It never mutates `best` in place, so a posted cycle is stable.
-export class SnakeSearch {
+
+// How many random cycles to keep on hand. They never go stale (grid-only), so
+// once the bank is full the worker stops generating and just re-plans. More
+// cycles = more re-homing options (though each plan pass scans them all).
+const BANK_CAP = 256;
+
+// The worker's engine. It banks snake-agnostic Hamiltonian cycles and, for the
+// latest reported state, searches that bank for the fastest safe re-homing plan
+// that beats simply following the UI's current cycle. Generation never blocks
+// movement — the UI always has its current cycle to fall back on — so a slow
+// generator costs only speed, never the guarantee.
+export class SnakePlanner {
     rows = 0;
     cols = 0;
     snake: number[] = [];
     apple = -1;
     generation = -1;
     serial = -1;
-    best: number[] = [];
-    bestScore = Infinity;
     generated = 0;
 
-    private lowerBound = 1;
-    private d0: Int32Array = new Int32Array(0);
-    private totalD0 = 0;
+    private bank: BankEntry[] = [];
+    private maxSteps = Infinity;         // Phase-A cost to beat (current-cycle arc length)
+    private plan: ReHomePlan | null = null;
+    private planSteps = Infinity;
     private ready = false;
 
+    // Speculative re-homing search for a future (not-yet-real) state, run
+    // alongside the live search above against the same bank.
+    private preplanToken = -1;
+    private preplanSnake: number[] = [];
+    private preplanApple = -1;
+    private preplanMaxSteps = Infinity;
+    private preplanPlan: ReHomePlan | null = null;
+    private preplanSteps = Infinity;
+    private preplanReady = false;
+
     setState(msg: StateMsg): void {
-        const appleChanged =
-            msg.apple !== this.apple ||
-            msg.rows !== this.rows ||
-            msg.cols !== this.cols;
-
-        if (msg.generation !== this.generation) this.generated = 0;
-
+        const sizeChanged = msg.rows !== this.rows || msg.cols !== this.cols;
         this.rows = msg.rows;
         this.cols = msg.cols;
         this.snake = msg.snake;
@@ -731,61 +600,110 @@ export class SnakeSearch {
         this.generation = msg.generation;
         this.serial = msg.serial;
 
-        const bfs = bfsDistance(this.snake[0], this.apple, this.rows, this.cols, this.snake);
-        this.lowerBound = Number.isFinite(bfs) ? Math.max(bfs, 1) : 1;
+        if (sizeChanged) { this.bank = []; this.generated = 0; }
 
-        if (appleChanged || this.d0.length !== this.rows * this.cols) {
-            const f = appleTransparentField(this.apple, this.rows, this.cols);
-            this.d0 = f.d0;
-            this.totalD0 = f.totalD0;
-        }
+        // Phase-A baseline: steps to reach the apple by just following the cycle
+        // the UI holds. Any plan we post has to be shorter than this.
+        const N = this.rows * this.cols;
+        const pos = buildPosMap(msg.cycle);
+        const hi = pos[this.snake[0]];
+        const ai = pos[this.apple];
+        this.maxSteps = (hi === -1 || ai === -1) ? Infinity : ((ai - hi) % N + N) % N;
 
-        // Re-base the incumbent onto the cycle the UI is using (valid for this
-        // snake). No progress is lost: when the UI adopts our best each tick,
-        // that best is exactly what comes back here.
-        this.best = normalizeHamiltonian(msg.cycle, this.snake, this.cols, buildPosMap(msg.cycle));
-        this.bestScore = this.scoreOf(this.best);
+        // New state ⇒ the previous plan no longer applies.
+        this.plan = null;
+        this.planSteps = Infinity;
         this.ready = true;
     }
 
-    private scoreOf(path: number[]): number {
-        return scoreCycle(
-            path, buildPosMap(path), this.snake.length,
-            this.apple, this.rows, this.cols, this.lowerBound, this.d0, this.totalD0
-        );
+    // Register a speculative future state to solve for. Ignored if it's already
+    // stale by the time it arrives (a reset bumped the generation past it).
+    setPreplanState(msg: PreplanStateMsg): void {
+        if (msg.generation !== this.generation) return;
+        this.preplanToken = msg.token;
+        this.preplanSnake = msg.snake;
+        this.preplanApple = msg.apple;
+
+        const N = this.rows * this.cols;
+        const pos = buildPosMap(msg.cycle);
+        const hi = pos[this.preplanSnake[0]];
+        const ai = pos[this.preplanApple];
+        this.preplanMaxSteps = (hi === -1 || ai === -1) ? Infinity : ((ai - hi) % N + N) % N;
+
+        this.preplanPlan = null;
+        this.preplanSteps = Infinity;
+        this.preplanReady = true;
     }
 
-    // Refine for ~budgetMs of wall-clock; returns whether the incumbent improved.
-    step(budgetMs: number): boolean {
+    private enrich(): void {
+        try {
+            const raw = generateHamiltonian(this.rows, this.cols, [0], this.apple);
+            if (raw.length === 0) return;
+            this.bank.push({ cycle: raw, pos: buildPosMap(raw) });
+            if (this.bank.length > BANK_CAP) this.bank.shift();
+            this.generated++;
+        } catch {
+            // discard a failed generation attempt
+        }
+    }
+
+    // Bank a couple of cycles (until the bank is full) and re-plan for the
+    // current state plus the speculative future state, if any; returns whether
+    // either search found a strictly better plan.
+    step(): boolean {
         if (!this.ready) return false;
+        if (this.bank.length < BANK_CAP) { this.enrich(); this.enrich(); }
+
         let improved = false;
-        const start = nowMs();
-        do {
-            if (this.bestScore <= STOP_EPS) break;   // nothing to gain — idle
-            try {
-                const raw = generateHamiltonian(this.rows, this.cols, this.snake, this.apple);
-                if (raw.length === 0) continue;
-                this.generated++;
-                const norm = normalizeHamiltonian(raw, this.snake, this.cols, buildPosMap(raw));
-                const cand = optimizeHamiltonianByBumps(norm, this.snake, this.apple, this.cols);
-                const score = this.scoreOf(cand);
-                if (score < this.bestScore) {
-                    this.best = cand;
-                    this.bestScore = score;
-                    improved = true;
-                }
-            } catch {
-                // discard a bad candidate, keep searching
+
+        const found = planReHome(
+            this.snake, this.apple, this.rows, this.cols, this.bank,
+            Math.min(this.planSteps, this.maxSteps),
+        );
+        if (found) {
+            this.plan = found;
+            this.planSteps = found.path.length - 1;
+            improved = true;
+        }
+
+        if (this.preplanReady) {
+            const preFound = planReHome(
+                this.preplanSnake, this.preplanApple, this.rows, this.cols, this.bank,
+                Math.min(this.preplanSteps, this.preplanMaxSteps),
+            );
+            if (preFound) {
+                this.preplanPlan = preFound;
+                this.preplanSteps = preFound.path.length - 1;
+                improved = true;
             }
-        } while (nowMs() - start < budgetMs);
+        }
+
         return improved;
     }
 
-    getBest(): BestMsg {
-        return { type: "best", generation: this.generation, serial: this.serial, cycle: this.best, score: this.bestScore };
+    getPlan(): PlanMsg | null {
+        if (!this.plan) return null;
+        return {
+            type: "plan",
+            generation: this.generation,
+            serial: this.serial,
+            path: this.plan.path,
+            cycle: this.plan.cycle,
+        };
     }
 
-    get idle(): boolean {
-        return this.ready && this.bestScore <= STOP_EPS;
+    getPreplan(): PreplanMsg | null {
+        if (!this.preplanPlan) return null;
+        return {
+            type: "preplan",
+            generation: this.generation,
+            token: this.preplanToken,
+            path: this.preplanPlan.path,
+            cycle: this.preplanPlan.cycle,
+        };
+    }
+
+    get bankFull(): boolean {
+        return this.bank.length >= BANK_CAP;
     }
 }

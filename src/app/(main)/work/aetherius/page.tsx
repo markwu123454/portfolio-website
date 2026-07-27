@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Aetherius UAV — Mark Wu",
     description:
-        "Fixed-wing UAV build — twin-boom foam/CF airframe with self-sourced avionics. Pixhawk 6X, SiK telemetry, QGroundControl. Pre-maiden.",
+        "Fixed-wing UAV build — twin-boom foam/CF airframe with self-sourced avionics. Pixhawk 6X, SiK telemetry, custom Tauri-based GCS. Pre-maiden.",
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -275,7 +275,8 @@ export default function AetheriusPage() {
                     <div className="right">
                         <p className="dek">
                             Off-the-shelf twin-boom foam/CF airframe with self-sourced
-                            avionics. One short flight before a crash; not counting that. Next attempt planned for summer.
+                            avionics. No flight yet — ground and bench testing, first attempt
+                            planned for summer.
                         </p>
                         <div className="chips">
                             <span className="ae-pill warn"><span className="dot" />Building</span>
@@ -370,12 +371,14 @@ export default function AetheriusPage() {
                             <div className="sec-head">
                                 <span className="num">03 —</span>
                                 <h2>Flight status</h2>
-                                <span className="label-right">1 attempt · pre-maiden</span>
+                                <span className="label-right">Pre-maiden</span>
                             </div>
                             <div className="prose">
                                 <p>
-                                    One flight attempt. The plane flew for a few seconds before
-                                    crashing. Doesn&#39;t count. Next flight planned for summer.
+                                    No physical flight yet. SITL-validated so far: parameter
+                                    read/write, pre-arm checks, telemetry streaming, arming, and
+                                    the takeoff command. Full mission-sequence testing is still in
+                                    progress. First flight attempt planned for summer.
                                 </p>
                             </div>
                         </section>
@@ -385,14 +388,15 @@ export default function AetheriusPage() {
                             <div className="sec-head">
                                 <span className="num">04 —</span>
                                 <h2>Ground control station</h2>
-                                <span className="label-right">Shelved</span>
+                                <span className="label-right">v3 in progress</span>
                             </div>
                             <div className="prose">
                                 <p>
-                                    A custom GCS was started in parallel. <em>v1</em> was a
+                                    A custom GCS was built in parallel. <em>v1</em> was a
                                     Python / FastAPI hosted web app; <em>v2</em> was a Tauri
-                                    desktop app with a Python backend. Both are paused for now
-                                    while the airframe takes priority. May return to it.
+                                    desktop app with a Python backend. <em>v3</em>, also
+                                    Tauri-based, is in active development and talks to ArduPilot
+                                    over Tauri&#39;s built-in IPC.
                                 </p>
                             </div>
                         </section>

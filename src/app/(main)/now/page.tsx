@@ -19,7 +19,7 @@ export default function NowPage() {
     return (
         <Page>
             <PageHeader
-                tag={['NOW', 'JUN 2026', '#005']}
+                tag={['NOW', 'JUL 2026', '#005']}
                 title="What I’m working on"
                 subtitle="this month."
                 dek={
@@ -59,13 +59,18 @@ export default function NowPage() {
 const ACTIVE = [
     {
         kicker: 'Caelifer',
-        title: 'Coaxial EDF tail sitter drone',
-        body: 'Current main project.',
+        title: 'Coaxial EDF tailsitter drone',
+        body: 'One of three projects in active development right now.',
     },
     {
-        kicker: 'Aetherius UAV',
-        title: 'Classical twin-boom airframe drone.',
-        body: 'Avionics are in. Switched from RPi companion to SiK radio. One crash on the first attempt. Next flight this summer.',
+        kicker: 'Aetherius',
+        title: 'Twin-boom airframe + custom GCS',
+        body: 'Airframe in ground/bench testing — avionics are in, switched from an RPi companion to a SiK radio, no flight yet. GCS is on its third revision (Tauri); full mission-sequence testing still in progress.',
+    },
+    {
+        kicker: 'Femto',
+        title: 'Native file-viewer suite',
+        body: 'FemtoJSON, FemtoDot, FemtoNote on a shared Tauri + Svelte framework. Most recently active project.',
     },
 ];
 
@@ -100,8 +105,7 @@ function Active() {
 
 const BACK_BURNER = [
     'SprocketStats — down for maintenance, AI pivot being considered for next season.',
-    'Aetherius GCS — v1 Python/FastAPI, v2 Tauri + Python, both shelved while airframe takes priority.',
-    'Harbinger — I learned enough c++, next step is to invest on electronics for the coil gun which I dont want to do right now.',
+    'Harbinger — learned enough C++; next step is investing in electronics for the coilgun, which is on hold for now.',
 ];
 
 function BackBurner() {
@@ -158,8 +162,8 @@ function Learning() {
 function UpdateMeta() {
     return (
         <div className="mt-16 flex justify-between font-mono text-[11px] tracking-mono text-fg-soft">
-            <span>— /now · last updated 2026.05.10</span>
-            <span>Next update: 2026.06.01</span>
+            <span>— /now · last updated 2026.07.26</span>
+            <span>Next update: 2026.08.01</span>
         </div>
     );
 }

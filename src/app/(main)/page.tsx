@@ -87,15 +87,15 @@ function Hero() {
 
                 <div className="mt-6 sm:mt-8 grid gap-2 max-w-155 text-base leading-[1.65] text-fg-muted">
                     <p className="m-0">
-                        <strong className="text-fg font-semibold">Harbinger</strong>{' '}
-                        — embedded C++ turret with a coilgun actuator and closed-loop heading control. Current main project.
+                        <strong className="text-fg font-semibold">SprocketStats</strong>{' '}
+                        — real-time FRC scouting and analytics, deployed at 3 competitions.
                     </p>
                     <p className="m-0">
-                        <strong className="text-fg font-semibold">Aetherius</strong>{' '}
-                        — fixed-wing UAV, fourth airframe revision in build.
+                        <strong className="text-fg font-semibold">Team Infernope</strong>{' '}
+                        — twelve combat robots over three years, 1st place at the end-of-year tournament.
                     </p>
                     <p className="m-0">
-                        Three years of combat robotics and two FRC seasons before that.
+                        Actively building: Femto, Aetherius GCS, and Caelifer.
                     </p>
                 </div>
 
@@ -118,7 +118,7 @@ function Hero() {
 function Telemetry({ className = '' }: { className?: string }) {
     const ITEMS: Array<[string, string]> = [
         ['Status',          'Open · internships + labs'],
-        ['Active projects', '2'],
+        ['Active projects', '3'],
         ['Robots built',    '12 combat + 2 FRC'],
         ['Last shipped',    'SprocketStats v2'],
     ];
@@ -154,36 +154,44 @@ interface FeaturedItem {
     year: string;
 }
 
-// Order: active first, then shipped/ongoing, then archive.
-// Harbinger leads — it's the current main project.
+// Order: main projects first (SprocketStats, Infernope — the ones with
+// finished, defensible results), then what's actively being built
+// (Femto, Aetherius, Caelifer).
 const FEATURED: FeaturedItem[] = [
     {
-        num: '02',
-        href: '/work/aetherius',
-        title: 'Aetherius UAV',
-        dek: 'Fixed-wing drone, twin boom. Pixhawk 6X, MAVLink telemetry.',
-        status: 'building', tone: 'warn', year: '2024 —',
-    },
-    {
         num: '01',
-        href: '/work/harbinger',
-        title: 'Harbinger',
-        dek: 'Differential turret with coilgun actuator and closed-loop heading control. Current main project.',
-        status: 'paused', tone: 'warn', year: '2025 —',
-    },
-    {
-        num: '03',
         href: '/work/sprocketstats',
         title: 'SprocketStats',
         dek: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events \'26. AI integration in progress.',
         status: 'shipped', tone: 'good', year: '2024 —',
     },
     {
-        num: '04',
+        num: '02',
         href: '/work/combat',
         title: 'Team Infernope — Combat',
         dek: 'Twelve robots over three years. 1st place, end-of-year tournament \'24. Closed.',
         status: 'archive', tone: 'neutral', year: '2020–24',
+    },
+    {
+        num: '03',
+        href: '/work',
+        title: 'Femto',
+        dek: 'Native file-viewer suite — FemtoJSON, FemtoDot, FemtoNote — on a shared Tauri + Svelte framework.',
+        status: 'building', tone: 'warn', year: '2026 —',
+    },
+    {
+        num: '04',
+        href: '/work/aetherius',
+        title: 'Aetherius',
+        dek: 'Custom Tauri-based GCS, third revision in progress. Twin-boom airframe in ground/bench testing.',
+        status: 'building', tone: 'warn', year: '2024 —',
+    },
+    {
+        num: '05',
+        href: '/work',
+        title: 'Caelifer',
+        dek: 'Coaxial EDF tailsitter drone, demonstrating hover control without differential thrust.',
+        status: 'building', tone: 'warn', year: '2026 —',
     },
 ];
 
@@ -295,7 +303,7 @@ function Currently() {
     const ROWS: Array<[string, ReactNode]> = [
         ['Class of',  'Diamond Bar HS · 2026'],
         ['Looking',   'Internships · lab placements · Summer 2026'],
-        ['Building',  'Harbinger · Aetherius UAV'],
+        ['Building',  'Femto · Aetherius GCS · Caelifer'],
         ['Stack',     'C++ · TypeScript · Python'],
         ['Hardware',  'Pixhawk · RPi · ESP32 · Arduino'],
         ['CAD',       'SolidWorks · Onshape'],

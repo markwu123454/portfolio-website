@@ -65,9 +65,11 @@ export default function CombatPage() {
 
                         <div>
                             <p className="m-0 mb-4 text-[15.5px] leading-[1.65] text-fg-muted max-w-105">
-                                Combat robotics, 1lb and 3lb classes. Run by Mark
-                                Duffield. Each robot was built on the ones that came before.
-                                End-of-year tournament: first place.
+                                Combat robotics, 1lb and 3lb classes, mentored by Mark Duffield.
+                                I captained my own line of robots — a loose club roster where a
+                                few teammates built and ran their own robots too, and I helped
+                                with those alongside mine. Each of my robots was built on the
+                                ones that came before. End-of-year tournament: first place.
                             </p>
                             <div className="flex gap-2 flex-wrap">
                                 <Tag>1lb · 3lb</Tag>

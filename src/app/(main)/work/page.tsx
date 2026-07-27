@@ -1,7 +1,7 @@
 /**
  * Work — /work
  *
- * Server component. Index of all 7 projects with a stats breakdown
+ * Server component. Index of all 8 projects with a stats breakdown
  * row, domain filters, and sort. Filter + sort state lives in the
  * URL (?domain=robotics&sort=name) so the page stays server-rendered
  * and links are shareable.
@@ -19,9 +19,9 @@ import {
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Work — 7 projects',
+    title: 'Work — 8 projects',
     description:
-        'Seven projects. Filter by domain. Status reflects current activity, not completion year.',
+        'Eight projects. Filter by domain. Status reflects current activity, not completion year.',
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -48,41 +48,41 @@ const PROJECTS: Project[] = [
     {
         num: '01',
         href: '',
+        title: 'Femto',
+        blurb: 'Native file-viewer suite — FemtoJSON, FemtoDot, FemtoNote — on a shared Tauri + Svelte framework.',
+        status: 'building',
+        domain: 'Software',
+        year: '2026 —',
+        recency: 101
+    },
+    {
+        num: '02',
+        href: '',
         title: 'Caelifer',
-        blurb: 'Coaxial EDF tailsitter drone that aim to demonstrate control in hover without differential thrust.',
+        blurb: 'Coaxial EDF tailsitter drone that aims to demonstrate control in hover without differential thrust.',
         status: 'building',
         domain: 'Drones',
         year: '2026 —',
         recency: 100
     },
     {
-        num: '02',
-        href: '/work/harbinger',
-        title: 'Harbinger',
-        blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
-        status: 'paused',
-        domain: 'Robotics',
-        year: '2025 —',
-        recency: 94
-    },
-    {
         num: '03',
-        href: '',
-        title: 'Aetherius GCS',
-        blurb: 'A custom modern ground controls station dedicated to ArduPilot.',
-        status: 'paused',
-        domain: 'Software',
-        year: '2025 —',
-        recency: 93
-    },
-    {
-        num: '04',
         href: '/work/aetherius',
         title: 'Aetherius UAV',
         blurb: 'Fixed-wing Twin-boom.',
         status: 'building',
         domain: 'Drones',
         year: '2024 —',
+        recency: 96
+    },
+    {
+        num: '04',
+        href: '/work/aetherius',
+        title: 'Aetherius GCS',
+        blurb: 'A custom modern ground control station dedicated to ArduPilot, third revision in progress.',
+        status: 'building',
+        domain: 'Software',
+        year: '2025 —',
         recency: 95
     },
     {
@@ -97,6 +97,16 @@ const PROJECTS: Project[] = [
     },
     {
         num: '06',
+        href: '/work/harbinger',
+        title: 'Harbinger',
+        blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
+        status: 'paused',
+        domain: 'Robotics',
+        year: '2025 —',
+        recency: 60
+    },
+    {
+        num: '07',
         href: '/work/sprocket-frc',
         title: 'Sprocket — FRC CAD',
         blurb: 'Two seasons with Team 3473.',
@@ -106,7 +116,7 @@ const PROJECTS: Project[] = [
         recency: 80
     },
     {
-        num: '07',
+        num: '08',
         href: '/work/combat',
         title: 'Team Infernope',
         blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",
@@ -157,8 +167,8 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
     return (
         <Page>
             <PageHeader
-                tag={['WORK', '7 PROJECTS', '#003']}
-                title="Seven projects."
+                tag={['WORK', '8 PROJECTS', '#003']}
+                title="Eight projects."
                 subtitle="Take a look."
                 dek="Status reflects current activity, not completion year. Click any row to see more details."
             />

@@ -197,7 +197,7 @@ const IMG = {
     earlierApp:   { src: "/sprocket/Screenshot 2026-04-03 205309.png", w: 985,  h: 487  },
     sliderClose:  { src: "/sprocket/img.png",                          w: 503,  h: 898  },
     matchReview: { src: "/sprocket/scouting_2026.png", w: 1919, h: 914 },
-    yoloTracking: { src: "/sprocket/img_1.png",                        w: 2879, h: 1799 },
+    poseTracking: { src: "/sprocket/img_1.png",                        w: 2879, h: 1799 },
 } as const;
 
 export default function SprocketStatsPage() {
@@ -256,8 +256,8 @@ export default function SprocketStatsPage() {
                         <span className="k">Teams scouted</span>
                     </div>
                     <div className="stat">
-                        <span className="v">&gt; 90<sup>%</sup></span>
-                        <span className="k">Win/loss accuracy · 2026</span>
+                        <span className="v">~ 87<sup>%</sup></span>
+                        <span className="k">Win/loss accuracy</span>
                     </div>
                 </div>
 
@@ -395,12 +395,13 @@ export default function SprocketStatsPage() {
                             weighted by how accurately it predicts past matches, then aggregated.
                         </p>
                         <p>
-                            Win/loss prediction accuracy in 2026: <strong>&gt; 90%</strong>. For
-                            context, Statbotics, the most widely used FRC analytics platform,
-                            reaches roughly 80% on the same task, based on observed usage and a
-                            Chief Delphi thread discussing its limitations. Score prediction uses
-                            a skewed distribution model, more complex than win/loss, and not
-                            reducible to a single accuracy figure.
+                            Win/loss prediction accuracy: <strong>~87%</strong> across roughly 90
+                            late-qualification and playoff matches. A two-proportion significance
+                            test against the Statbotics EPA baseline over the same set found no
+                            statistically significant difference at 95% confidence — statistically
+                            indistinguishable from EPA, not better. Score prediction uses a skewed
+                            distribution model, more complex than win/loss, and not reducible to a
+                            single accuracy figure.
                         </p>
                     </div>
                 </section>
@@ -456,12 +457,12 @@ export default function SprocketStatsPage() {
                     <div className="prose">
                         <p>
                             For the 2026–27 season the team is considering moving from{" "}
-                            <em>human-centric</em> to <em>AI-centric</em> scouting. YOLO-based
-                            robot tracking is already in development. The plan is to integrate
-                            MTMCT(multi-target multi-camera tracking) and related algorithms
-                            to eliminate human error from data sources entirely. If this
-                            direction holds, there may not be an outward-facing web app next
-                            season.
+                            <em>human-centric</em> to <em>AI-centric</em> scouting. HRNet-based
+                            robot pose tracking for alliance detection is already in development.
+                            The plan is to integrate MTMCT(multi-target multi-camera tracking)
+                            and related algorithms to eliminate human error from data sources
+                            entirely. If this direction holds, there may not be an outward-facing
+                            web app next season.
                         </p>
                     </div>
 
@@ -469,18 +470,18 @@ export default function SprocketStatsPage() {
                         <div className="frame">
                             <div className="img-wrap">
                                 <Image
-                                    src={IMG.yoloTracking.src}
-                                    width={IMG.yoloTracking.w}
-                                    height={IMG.yoloTracking.h}
-                                    alt="YOLO-based robot tracking in development — bounding boxes and per-robot identity tracking on competition footage."
+                                    src={IMG.poseTracking.src}
+                                    width={IMG.poseTracking.w}
+                                    height={IMG.poseTracking.h}
+                                    alt="HRNet-based robot pose tracking in development — keypoint estimation and per-robot identity tracking on competition footage."
                                     sizes="(max-width: 720px) 100vw, 968px"
                                 />
                             </div>
                         </div>
                         <figcaption>
                             <span className="num">Fig. 5.1 —</span>
-                            YOLO-based robot tracking, in-development. Bounding boxes and
-                            per-robot identity tracking on competition footage; precursor to a
+                            HRNet-based robot pose tracking, in-development. Keypoint estimation
+                            and per-robot identity tracking on competition footage; precursor to a
                             multi-camera tracking pipeline.
                         </figcaption>
                     </figure>

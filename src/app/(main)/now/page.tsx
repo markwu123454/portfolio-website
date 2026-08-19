@@ -19,7 +19,7 @@ export default function NowPage() {
     return (
         <Page>
             <PageHeader
-                tag={['NOW', 'JUL 2026', '#005']}
+                tag={['NOW', 'AUG 2026', '#006']}
                 title="What I’m working on"
                 subtitle="this month."
                 dek={
@@ -58,19 +58,24 @@ export default function NowPage() {
 
 const ACTIVE = [
     {
-        kicker: 'Caelifer',
-        title: 'Coaxial EDF tailsitter drone',
-        body: 'One of three projects in active development right now.',
+        kicker: 'Aetherius UAV',
+        title: 'First flight done, now make it fly properly',
+        body: 'Flew on the 18th: two self-propelled takeoffs, about ten seconds of airtime combined, second one ended in a hard landing after a prop split. Airframe repairable, electronics fine. Next is longer flights and an actual tuning pass.',
     },
     {
-        kicker: 'Aetherius',
-        title: 'Twin-boom airframe + custom GCS',
-        body: 'Airframe in ground/bench testing — avionics are in, switched from an RPi companion to a SiK radio, no flight yet. GCS is on its third revision (Tauri); full mission-sequence testing still in progress.',
+        kicker: 'Aetherius GCS',
+        title: 'Ground station, third revision',
+        body: 'Handled the real flight: firmware, calibration, failsafes, prearm, arming, mode switching, live dashboard. Covers ArduCopter and ArduPlane. Mission support works against SITL; flying a real autonomous mission is the next thing to prove.',
     },
     {
-        kicker: 'Femto',
-        title: 'Native file-viewer suite',
-        body: 'FemtoJSON, FemtoDot, FemtoNote on a shared Tauri + Svelte framework. Most recently active project.',
+        kicker: 'SprocketStats Scouting',
+        title: 'Computer-vision rebuild',
+        body: 'Homography field mapping, HRNet pose estimation, YOLO + ByteTrack detection and tracking, broadcast alignment by audio and template matching, and an RNN for path categorization. Standalone modules right now, wiring them together is the work.',
+    },
+    {
+        kicker: 'sprocketstats.com',
+        title: 'Team platform, still live',
+        body: 'In use by Team 3473. Has grown past scouting into team operations: member ID cards and manufacturing machine authorization.',
     },
 ];
 
@@ -104,8 +109,10 @@ function Active() {
    ═════════════════════════════════════════════════════════════════ */
 
 const BACK_BURNER = [
-    'SprocketStats — down for maintenance, AI pivot being considered for next season.',
-    'Harbinger — learned enough C++; next step is investing in electronics for the coilgun, which is on hold for now.',
+    'Caelifer — bench stage, untouched for a while. No thrust measurement or hover test yet.',
+    'Harbinger — next step is investing in electronics for the coilgun, which is on hold for now.',
+    'Femto — the file-viewer suite ships from GitHub; no site page, and I am too lazy to write one.',
+    'Crowd Flow — finished as a prototype. Not planning to revisit it, but it still works and it is still fun to watch.',
 ];
 
 function BackBurner() {
@@ -131,8 +138,9 @@ function BackBurner() {
    ═════════════════════════════════════════════════════════════════ */
 
 const LEARNING: Array<[string, ReactNode]> = [
-    ['Practicing', 'C++ — embedded, on ESP32'],
+    ['Starting', 'Mechanical engineering at UC Merced — aerospace emphasis'],
     ['Practicing', 'Electronics — power circuits, high-voltage drivers for coilgun'],
+    ['Practicing', 'Rust — working knowledge, mostly through the GCS backend'],
     ['Considering', 'KiCad or Solidworks Electronics — if coilgun PCB design gets serious'],
     ['Considering', 'Betaflight'],
 ];
@@ -162,8 +170,8 @@ function Learning() {
 function UpdateMeta() {
     return (
         <div className="mt-16 flex justify-between font-mono text-[11px] tracking-mono text-fg-soft">
-            <span>— /now · last updated 2026.07.26</span>
-            <span>Next update: 2026.08.01</span>
+            <span>— /now · last updated 2026.08.18</span>
+            <span>Next update: 2026.09.01</span>
         </div>
     );
 }

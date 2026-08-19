@@ -73,8 +73,8 @@ function Identity() {
     return (
         <div className="font-mono text-[11px] text-fg-muted leading-relaxed">
             <div className="text-fg mb-2 tracking-mono">MARK WU · 2026</div>
-            <div>Diamond Bar, CA</div>
-            <div>Class of 2026</div>
+            <div>Merced, CA</div>
+            <div>UC Merced · 2030</div>
         </div>
     );
 }

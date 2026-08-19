@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Harbinger — Mark Wu",
+    title: "Harbinger",
     description:
         "Differential turret with a coilgun actuator. ESP32 + SimpleFOC control, programmable high-voltage driver, Qt desktop app over Bluetooth.",
 };

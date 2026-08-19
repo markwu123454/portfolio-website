@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "SprocketStats — Mark Wu",
+    title: "SprocketStats Scouting",
     description:
         "A full-stack scouting platform for FRC — ensemble prediction, field-mapped input, and a guest sharing system that turns scouted data into a team-facing tool.",
 };
@@ -174,6 +174,30 @@ const styles = `
 .ss-pill .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--fg-soft); }
 .ss-pill.good .dot { background: var(--good); }
 
+/* Module table */
+.ss-modules {
+  width: 100%; border-collapse: collapse; margin: 24px 0 28px;
+  font-size: 14px;
+}
+.ss-modules th {
+  text-align: left; font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg-soft); font-weight: 400;
+  padding: 0 16px 10px 0; border-bottom: 1px solid var(--rule-strong);
+}
+.ss-modules td {
+  padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule);
+  color: var(--fg-muted); vertical-align: top; line-height: 1.5;
+}
+.ss-modules td:first-child { color: var(--fg); font-weight: 500; white-space: nowrap; }
+.ss-modules td:last-child {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--fg-soft); white-space: nowrap;
+}
+@media (max-width: 720px) {
+  .ss-modules td:last-child, .ss-modules th:last-child { display: none; }
+}
+
 /* Note (C.09) */
 .ss-note {
   margin: 24px 0; padding: 14px 18px;
@@ -209,7 +233,7 @@ export default function SprocketStatsPage() {
                 {/* ─ PageHeader ───────────────────────────────────────── */}
                 <div className="ss-page-header">
                     <div className="kicker">Work · Software · 2024 —</div>
-                    <h1>SprocketStats</h1>
+                    <h1>SprocketStats Scouting</h1>
                     <p className="dek">
                         A full-stack scouting platform for FRC, built to close the gap between
                         raw match data and real alliance decisions. Ensemble prediction,
@@ -223,8 +247,8 @@ export default function SprocketStatsPage() {
                     <div className="pair">
                         <div className="k">Status</div>
                         <div className="v">
-                            <span className="ss-pill good"><span className="dot" />Shipped</span>
-                            <span className="dim">down for maintenance · pre-season</span>
+                            <span className="ss-pill good"><span className="dot" />Live</span>
+                            <span className="dim">in use · sprocketstats.com</span>
                         </div>
                     </div>
                     <div className="pair">
@@ -237,22 +261,22 @@ export default function SprocketStatsPage() {
                     </div>
                     <div className="pair">
                         <div className="k">Team</div>
-                        <div className="v">5 members</div>
+                        <div className="v">Sprocket scouting subteam</div>
                     </div>
                 </div>
 
                 {/* ─ Stat strip ───────────────────────────────────────── */}
                 <div className="ss-stat-strip" aria-label="Headline stats">
                     <div className="stat">
-                        <span className="v">218</span>
-                        <span className="k">Matches scouted</span>
+                        <span className="v">411</span>
+                        <span className="k">Robot-match records</span>
                     </div>
                     <div className="stat">
                         <span className="v">3</span>
                         <span className="k">Events</span>
                     </div>
                     <div className="stat">
-                        <span className="v">70<sup>+</sup></span>
+                        <span className="v">73</span>
                         <span className="k">Teams scouted</span>
                     </div>
                     <div className="stat">
@@ -452,17 +476,54 @@ export default function SprocketStatsPage() {
                     <div className="sec-head">
                         <span className="num">05 —</span>
                         <h2>What&#39;s next</h2>
-                        <span className="label-right">2026 — 27 · AI pivot</span>
+                        <span className="label-right">v3 · CV rebuild</span>
                     </div>
                     <div className="prose">
                         <p>
-                            For the 2026–27 season the team is considering moving from{" "}
-                            <em>human-centric</em> to <em>AI-centric</em> scouting. HRNet-based
-                            robot pose tracking for alliance detection is already in development.
-                            The plan is to integrate MTMCT(multi-target multi-camera tracking)
-                            and related algorithms to eliminate human error from data sources
-                            entirely. If this direction holds, there may not be an outward-facing
-                            web app next season.
+                            v3 is a computer-vision rebuild aimed at collecting the data
+                            automatically instead of asking a person to watch a match and tap
+                            buttons. It is <strong>a set of standalone modules under active
+                            development</strong> — not an integrated pipeline, not deployed, and
+                            not benchmarked. Nothing below has an accuracy or throughput number
+                            attached to it yet, deliberately.
+                        </p>
+                        <table className="ss-modules">
+                            <thead>
+                                <tr><th>Module</th><th>What it does</th><th>Stage</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Homography</td>
+                                    <td>Maps a camera view into field coordinates</td>
+                                    <td>In development</td>
+                                </tr>
+                                <tr>
+                                    <td>Broadcast alignment</td>
+                                    <td>Locates a given match inside a stream, by audio matching plus template matching</td>
+                                    <td>In development</td>
+                                </tr>
+                                <tr>
+                                    <td>HRNet keypoints</td>
+                                    <td>Robot pose estimation</td>
+                                    <td>In development</td>
+                                </tr>
+                                <tr>
+                                    <td>YOLO + ByteTrack</td>
+                                    <td>Robot detection and multi-object tracking</td>
+                                    <td>Earlier stage</td>
+                                </tr>
+                                <tr>
+                                    <td>RNN</td>
+                                    <td>Robot path analysis and categorization</td>
+                                    <td>Earlier stage</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            Multi-camera tracking (MTMCT) is architecture I am designing, not code
+                            that runs. Integration is the next real step. Whether an outward-facing
+                            scouting app exists next season is still an open question — the{" "}
+                            <a href="/work/sprocketstats-com">team platform</a> stays either way.
                         </p>
                     </div>
 

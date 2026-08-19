@@ -3,9 +3,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Aetherius UAV — Mark Wu",
+    title: "Aetherius UAV",
     description:
-        "Fixed-wing UAV build — twin-boom foam/CF airframe with self-sourced avionics. Pixhawk 6X, SiK telemetry, custom Tauri-based GCS. Pre-maiden.",
+        "Fixed-wing UAV build — twin-boom foam/CF airframe with self-sourced avionics. Pixhawk 6X, SiK telemetry, custom Tauri-based GCS. First flight 2026.08.18.",
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -96,6 +96,7 @@ const styles = `
 }
 .ae-pill .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--fg-soft); }
 .ae-pill.warn .dot { background: var(--warn); }
+.ae-pill.good .dot { background: var(--good); }
 
 .ae-tag {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
@@ -230,7 +231,8 @@ const styles = `
 
 /* ─── Image manifest ────────────────────────────────────────── */
 const IMG = {
-    plane: { src: "/aetherius/dd2f2ce996d5ddd75e8cf7fc5e3e01f1.jpg", w: 985, h: 738 },
+    plane:    { src: "/aetherius/dd2f2ce996d5ddd75e8cf7fc5e3e01f1.jpg", w: 985,  h: 738  },
+    airborne: { src: "/aetherius/flight-airborne.png",                  w: 1909, h: 1030 },
 } as const;
 
 /* ─── TOC source of truth ───────────────────────────────────── */
@@ -275,11 +277,11 @@ export default function AetheriusPage() {
                     <div className="right">
                         <p className="dek">
                             Off-the-shelf twin-boom foam/CF airframe with self-sourced
-                            avionics. No flight yet — ground and bench testing, first attempt
-                            planned for summer.
+                            avionics. Flew for the first time on 2026.08.18. Two
+                            self-propelled takeoffs, about ten seconds of airtime combined.
                         </p>
                         <div className="chips">
-                            <span className="ae-pill warn"><span className="dot" />Building</span>
+                            <span className="ae-pill good"><span className="dot" />Flown</span>
                             <span className="ae-tag">Fixed-wing</span>
                             <span className="ae-tag">Pixhawk 6X</span>
                         </div>
@@ -301,7 +303,7 @@ export default function AetheriusPage() {
                         <span className="k">Flight controller</span>
                     </div>
                     <div className="stat">
-                        <span className="v">Pre-maiden</span>
+                        <span className="v">Flown · 2026.08.18</span>
                         <span className="k">Stage</span>
                     </div>
                 </div>
@@ -371,16 +373,52 @@ export default function AetheriusPage() {
                             <div className="sec-head">
                                 <span className="num">03 —</span>
                                 <h2>Flight status</h2>
-                                <span className="label-right">Pre-maiden</span>
+                                <span className="label-right">Flown</span>
                             </div>
                             <div className="prose">
                                 <p>
-                                    No physical flight yet. SITL-validated so far: parameter
-                                    read/write, pre-arm checks, telemetry streaming, arming, and
-                                    the takeoff command. Full mission-sequence testing is still in
-                                    progress. First flight attempt planned for summer.
+                                    It flew on <strong>2026.08.18</strong>. Two flights, plus one
+                                    aborted attempt between them, for roughly{" "}
+                                    <strong>ten seconds of airtime combined</strong>. Both takeoffs
+                                    were self-propelled. No bungee, no catapult, no hand launch.
+                                </p>
+                                <p>
+                                    The first flight was the cautious one: a downhill takeoff to
+                                    about a metre, held briefly, landed gently. The attempt after
+                                    it ended on the ground when a wing tip caught and swung the
+                                    aircraft sharply off heading. The third run was the ambitious
+                                    one and reached roughly five metres. Then the field ran out
+                                    of space, and a propeller split mid-flight, so it came down
+                                    hard either way.
+                                </p>
+                                <p>
+                                    Damage was minor airframe only. No electronics were lost, and
+                                    the failed propeller was a cheap knockoff. The honest summary:
+                                    it got itself off the ground under its own power and flew,
+                                    briefly, twice. That is a first flight, not a validated
+                                    airframe. There has been no sustained cruise, no altitude
+                                    hold, no autonomous mission, and no tuning campaign.
                                 </p>
                             </div>
+
+                            <figure className="ae-fig">
+                                <div className="frame">
+                                    <div className="img-wrap">
+                                        <Image
+                                            src={IMG.airborne.src}
+                                            width={IMG.airborne.w}
+                                            height={IMG.airborne.h}
+                                            alt="Aetherius airborne over a park, banking left, roughly five metres up."
+                                            sizes="(max-width: 880px) 100vw, 1068px"
+                                        />
+                                    </div>
+                                </div>
+                                <figcaption>
+                                    <span className="num">Fig. 3.1 —</span>
+                                    Second flight, 2026.08.18. Roughly five metres up and banking;
+                                    moments later a prop split and the flight ended.
+                                </figcaption>
+                            </figure>
                         </section>
 
                         {/* 04 */}
@@ -388,15 +426,19 @@ export default function AetheriusPage() {
                             <div className="sec-head">
                                 <span className="num">04 —</span>
                                 <h2>Ground control station</h2>
-                                <span className="label-right">v3 in progress</span>
+                                <span className="label-right">Own page →</span>
                             </div>
                             <div className="prose">
                                 <p>
-                                    A custom GCS was built in parallel. <em>v1</em> was a
-                                    Python / FastAPI hosted web app; <em>v2</em> was a Tauri
-                                    desktop app with a Python backend. <em>v3</em>, also
-                                    Tauri-based, is in active development and talks to ArduPilot
-                                    over Tauri&#39;s built-in IPC.
+                                    A custom GCS was built in parallel, and it handled this
+                                    aircraft&#39;s first flight: firmware, calibration, failsafes
+                                    and trims beforehand, then prearm checks, arming, mode
+                                    switching and the live dashboard on the day. The plane itself
+                                    was flown on RC sticks; the ground station did not fly it.
+                                </p>
+                                <p>
+                                    It has since grown past what fits on this page.{" "}
+                                    <Link href="/work/aetherius-gcs">Aetherius GCS →</Link>
                                 </p>
                             </div>
                         </section>

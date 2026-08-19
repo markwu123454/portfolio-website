@@ -19,9 +19,9 @@ import {
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Work — 8 projects',
+    title: 'Work',
     description:
-        'Eight projects. Filter by domain. Status reflects current activity, not completion year.',
+        'Every project, filterable by domain. Status reflects current activity, not completion year.',
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -42,61 +42,84 @@ interface Project {
     year: string;
     /** Numeric recency key — higher = more recent. Used by sort=recent. */
     recency: number;
+    /** Set when href points off-site — renders a plain anchor, opens in a new tab. */
+    external?: boolean;
 }
 
 const PROJECTS: Project[] = [
     {
         num: '01',
-        href: '',
-        title: 'Femto',
-        blurb: 'Native file-viewer suite — FemtoJSON, FemtoDot, FemtoNote — on a shared Tauri + Svelte framework.',
-        status: 'building',
-        domain: 'Software',
-        year: '2026 —',
-        recency: 101
-    },
-    {
-        num: '02',
-        href: '',
-        title: 'Caelifer',
-        blurb: 'Coaxial EDF tailsitter drone that aims to demonstrate control in hover without differential thrust.',
+        href: '/work/aetherius',
+        title: 'Aetherius UAV',
+        blurb: 'Twin-boom fixed-wing. First flight 2026.08.18. Two self-propelled takeoffs, ~10s of airtime combined.',
         status: 'building',
         domain: 'Drones',
-        year: '2026 —',
+        year: '2024 —',
         recency: 100
     },
     {
-        num: '03',
-        href: '/work/aetherius',
-        title: 'Aetherius UAV',
-        blurb: 'Fixed-wing Twin-boom.',
-        status: 'building',
-        domain: 'Drones',
-        year: '2024 —',
-        recency: 96
-    },
-    {
-        num: '04',
-        href: '/work/aetherius',
+        num: '02',
+        href: '/work/aetherius-gcs',
         title: 'Aetherius GCS',
-        blurb: 'A custom modern ground control station dedicated to ArduPilot, third revision in progress.',
+        blurb: 'Custom ArduPilot ground station. ArduCopter + ArduPlane, in-app firmware flashing, full calibration, missions, Lua IDE.',
         status: 'building',
         domain: 'Software',
         year: '2025 —',
-        recency: 95
+        recency: 99
     },
     {
-        num: '05',
+        num: '03',
         href: '/work/sprocketstats',
-        title: 'SprocketStats',
-        blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at events.',
+        title: 'SprocketStats Scouting',
+        blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Deployed at 3 competitions.',
         status: 'shipped',
         domain: 'Software',
         year: '2024 —',
-        recency: 90
+        recency: 95
+    },
+    {
+        num: '04',
+        href: '/work/sprocketstats-com',
+        title: 'sprocketstats.com',
+        blurb: 'The team-facing platform. Scouting data plus team operations: member ID cards and manufacturing machine authorization.',
+        status: 'shipped',
+        domain: 'Software',
+        year: '2024 —',
+        recency: 94
+    },
+    {
+        num: '05',
+        href: 'https://github.com/markwu123454/FemtoJSON',
+        title: 'Femto',
+        blurb: 'Native file-viewer suite — FemtoJSON, FemtoDot, FemtoNote — on a shared Tauri + Svelte framework. Source on GitHub.',
+        status: 'building',
+        domain: 'Software',
+        year: '2026 —',
+        recency: 90,
+        external: true
     },
     {
         num: '06',
+        href: '/work/crowd-flow',
+        title: 'Crowd Flow',
+        blurb: 'Crowd simulation prototype in Godot. Continuum plus social force model moved onto the GPU. ~2,000 agents at 60fps at 2× speed.',
+        status: 'archive',
+        domain: 'Software',
+        year: '2026',
+        recency: 88
+    },
+    {
+        num: '07',
+        href: '/work/caelifer',
+        title: 'Caelifer',
+        blurb: 'Coaxial EDF tailsitter drone that aims to demonstrate control in hover without differential thrust.',
+        status: 'paused',
+        domain: 'Drones',
+        year: '2026 —',
+        recency: 85
+    },
+    {
+        num: '08',
         href: '/work/harbinger',
         title: 'Harbinger',
         blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
@@ -106,7 +129,7 @@ const PROJECTS: Project[] = [
         recency: 60
     },
     {
-        num: '07',
+        num: '09',
         href: '/work/sprocket-frc',
         title: 'Sprocket — FRC CAD',
         blurb: 'Two seasons with Team 3473.',
@@ -116,7 +139,7 @@ const PROJECTS: Project[] = [
         recency: 80
     },
     {
-        num: '08',
+        num: '10',
         href: '/work/combat',
         title: 'Team Infernope',
         blurb: "Twelve combat robots over three years. 1st place, end-of-year tournament.",
@@ -167,8 +190,8 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
     return (
         <Page>
             <PageHeader
-                tag={['WORK', '8 PROJECTS', '#003']}
-                title="Eight projects."
+                tag={['WORK', `${PROJECTS.length} PROJECTS`, '#003']}
+                title={`${PROJECTS.length} projects.`}
                 subtitle="Take a look."
                 dek="Status reflects current activity, not completion year. Click any row to see more details."
             />
@@ -370,10 +393,14 @@ function FilterBar({
    ═════════════════════════════════════════════════════════════════ */
 
 function ProjectRow({project: p}: { project: Project }) {
+    const Wrapper = p.external ? 'a' : Link;
+    const linkProps = p.external
+        ? {href: p.href, target: '_blank', rel: 'noopener noreferrer'}
+        : {href: p.href};
     return (
         <li className="border-t border-rule last:border-b last:border-rule">
-            <Link
-                href={p.href}
+            <Wrapper
+                {...linkProps}
                 className="
                     py-4 text-fg no-underline group
                     flex flex-col gap-1.5
@@ -409,7 +436,7 @@ function ProjectRow({project: p}: { project: Project }) {
                         ↗
                     </span>
                 </div>
-            </Link>
+            </Wrapper>
         </li>
     );
 }

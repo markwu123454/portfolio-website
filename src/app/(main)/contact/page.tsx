@@ -27,7 +27,7 @@ import {Metadata} from "next";
 export const metadata: Metadata = {
     title: 'Contact — Mark Wu',
     description:
-        'Email, GitHub, LinkedIn, resume. Open to internships and lab placements for Summer 2026.',
+        'Email, GitHub, LinkedIn, resume. Open to research labs and internships for Summer 2027.',
 };
 
 export default function ContactPage() {
@@ -47,7 +47,7 @@ export default function ContactPage() {
                 after={
                     <div className="flex flex-wrap gap-2.5">
                         <Tag variant="accent">Open · internships + labs</Tag>
-                        <Tag variant="outline">Available — Summer 2026</Tag>
+                        <Tag variant="outline">Available — Summer 2027</Tag>
                     </div>
                 }
             />
@@ -174,7 +174,7 @@ const CHANNELS: Channel[] = [
     {
         kicker: 'Resume',
         label: 'resume.pdf',
-        meta: 'one page · updated 2026.05',
+        meta: 'one page · updated 2026.08',
         href: '/resume.pdf#view=FitV',
         glyph: '↓',
         external: true,
@@ -230,7 +230,7 @@ function Logistics() {
         ['Based',       'Merced, CA'],
         ['Reply window','Weekdays · usually < 24h'],
         ['Languages',   'English · Mandarin'],
-        ['Last updated','2026.06.09'],
+        ['Last updated','2026.08.18'],
     ];
 
     return (

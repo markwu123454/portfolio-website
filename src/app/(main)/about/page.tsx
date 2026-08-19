@@ -64,13 +64,14 @@ function LookingFor() {
         <div className="grid md:grid-cols-2 gap-8">
             <div>
                 <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-115">
-                    Summer 2026 internships in{' '}
+                    Research lab positions during the semester, and Summer 2027
+                    internships in{' '}
                     <strong className="text-fg font-semibold">
                         robotics, drones, embedded systems
                     </strong>
                     , or full-stack tooling. Comfortable with
                     hardware (Pixhawk, Arduino, ESP32, Pi) and software
-                    (TypeScript, Python, C++).
+                    (TypeScript, Python).
                 </p>
                 <div className="mt-6 flex gap-3 flex-wrap">
                     <Button href="/resume.pdf#view=FitV" variant="primary" arrow external>
@@ -99,15 +100,16 @@ function LookingFor() {
    ═════════════════════════════════════════════════════════════════ */
 
 const SKILLS: Array<[string, string[]]> = [
-    ['Software', ['TypeScript', 'Python', 'C++', 'React / Next.js', 'FastAPI', 'Tauri']],
-    ['Hardware', ['Pixhawk 6X', 'Raspberry Pi 4', 'ESP32', 'Arduino', 'MAVLink']],
+    ['Software', ['TypeScript', 'Python', 'React / Next.js', 'FastAPI', 'Tauri']],
+    ['Familiar', ['Rust', 'C++']],
+    ['Hardware', ['Pixhawk 6X + 6C', 'Raspberry Pi 4', 'ESP32', 'Arduino', 'MAVLink']],
     ['CAD', ['SolidWorks (primary)', 'Onshape', 'Fusion 360']],
     ['Workshop', ['3D printing', 'Soldering']],
 ];
 
 function Skills() {
     return (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-x-8 gap-y-10">
             {SKILLS.map(([heading, items]) => (
                 <div key={heading}>
                     <div className="font-mono text-[11px] tracking-kicker uppercase text-accent mb-4 pb-2 border-b border-rule">
@@ -171,8 +173,9 @@ function Biography() {
         <div className="grid md:grid-cols-[minmax(0,1fr)_320px] gap-12 items-start">
             <div className="grid gap-4 max-w-155 text-[15.5px] leading-[1.7] text-fg-muted">
                 <p className="m-0">
-                    Diamond Bar, CA. Class of 2026. Started in VEX and LEGO in middle school,
-                    moved into{' '}
+                    Merced, CA, by way of Diamond Bar and before that Shenzhen. Incoming
+                    mechanical engineering student at UC Merced, aerospace emphasis, class
+                    of 2030. Started in VEX and LEGO in middle school, moved into{' '}
                     <strong className="text-fg font-semibold">combat robotics</strong>{' '}
                     for three years (Team Infernope — twelve robots), then FRC with{' '}
                     <strong className="text-fg font-semibold">Team 3473</strong> —
@@ -181,7 +184,8 @@ function Biography() {
                 <p className="m-0">
                     UAVs are my current obsession: project{' '}
                     <strong className="text-fg font-semibold">Aetherius</strong>{' '}
-                    is currently preparing for test flight. I write music occasionally.
+                    made its first flight in August 2026. Briefly, twice, off its own
+                    power. I write music occasionally.
                 </p>
             </div>
             <Pullquote attribution="What this site is for">

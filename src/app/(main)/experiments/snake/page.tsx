@@ -666,7 +666,7 @@ function SnakePage() {
                         A fixed loop is safe but slow, the snake would crawl through the whole
                         board to reach each apple. So a background thread keeps a <em>bank</em> of
                         many different loops, and each time an apple appears it looks for the
-                        fastest way to hop onto a loop that reaches the apple sooner — planning the
+                        fastest way to hop onto a loop that reaches the apple sooner, planning the
                         whole route so that the moment it eats, the body is lined up along a real
                         loop again. Because it&rsquo;s not eating on the way there, the tail is
                         always sliding forward, and the planner routes right through the space the
@@ -675,7 +675,7 @@ function SnakePage() {
                     <p className="leading-relaxed text-fg-muted mt-3">
                         Every candidate route is checked by simulating it move-by-move before the
                         snake commits, and if none beats the loop it&rsquo;s already on, it simply
-                        keeps following that — so it is never in danger, and it moves whether or not
+                        keeps following that, so it is never in danger, and it moves whether or not
                         the planner has found anything new.
                     </p>
                 </section>
@@ -683,15 +683,15 @@ function SnakePage() {
                 <section>
                     <h2 className="text-[22px] font-semibold tracking-tight-2 mb-2">Controls</h2>
                     <ul className="list-disc list-inside space-y-1 text-fg-muted">
-                        <li><strong>Run / Pause</strong> &mdash; start or halt the simulation</li>
-                        <li><strong>Step</strong> &mdash; advance by a single move</li>
-                        <li><strong>Reset</strong> &mdash; resets the game</li>
-                        <li><strong>Speed</strong> &mdash; how many moves per second to play</li>
-                        <li><strong>Snake</strong> &mdash; show or hide the snake itself (handy for seeing the loops underneath)</li>
-                        <li><strong>Hamiltonian Path</strong> &mdash; show the full loop the snake is on</li>
-                        <li><strong>Head &rarr; Apple</strong> &mdash; highlight the route to the next apple</li>
-                        <li><strong>Loop approach</strong> &mdash; the part of that route which rides a Hamiltonian loop into the apple, with a dot where it joins the loop</li>
-                        <li><strong>Rows / Cols</strong> &mdash; change the board size <em>(resets the game)</em></li>
+                        <li><strong>Run / Pause</strong>: start or halt the simulation</li>
+                        <li><strong>Step</strong>: advance by a single move</li>
+                        <li><strong>Reset</strong>: resets the game</li>
+                        <li><strong>Speed</strong>: how many moves per second to play</li>
+                        <li><strong>Snake</strong>: show or hide the snake itself (handy for seeing the loops underneath)</li>
+                        <li><strong>Hamiltonian Path</strong>: show the full loop the snake is on</li>
+                        <li><strong>Head &rarr; Apple</strong>: highlight the route to the next apple</li>
+                        <li><strong>Loop approach</strong>: the part of that route which rides a Hamiltonian loop into the apple, with a dot where it joins the loop</li>
+                        <li><strong>Rows / Cols</strong>: change the board size <em>(resets the game)</em></li>
                     </ul>
                 </section>
             </div>

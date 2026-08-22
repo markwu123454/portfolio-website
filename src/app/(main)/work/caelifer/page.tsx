@@ -11,6 +11,7 @@
  *     geometry check, not a source of validated drag numbers.
  */
 
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import {
     Page,
@@ -20,7 +21,6 @@ import {
     StatStrip,
     ArrowLink,
     Figure,
-    FigurePlaceholder,
 } from '@/app/components/site/primitives';
 
 export const metadata: Metadata = {
@@ -28,13 +28,6 @@ export const metadata: Metadata = {
     description:
         'Coaxial contra-rotating EDF VTOL. An optimisation target, cruise efficiency, against three constraints: hover capable, tube launchable, no exposed propellers.',
 };
-
-const CONSTRAINTS: Array<[string, string]> = [
-    ['Optimise for', 'Cruise efficiency'],
-    ['Constraint 01', 'Must be hover capable'],
-    ['Constraint 02', 'Must be tube launchable'],
-    ['Constraint 03', 'No exposed propellers'],
-];
 
 export default function CaeliferPage() {
     return (
@@ -58,7 +51,7 @@ export default function CaeliferPage() {
                 items={[
                     { label: 'Airframe', value: '100mm finless tube' },
                     { label: 'Propulsion', value: '70mm coaxial EDF pair · 6S' },
-                    { label: 'Peak draw', value: '180A — ~4.0kW' },
+                    { label: 'Peak draw', value: '180A · ~4.0kW' },
                     { label: 'Stage', value: 'Bench · paused' },
                 ]}
             />
@@ -66,14 +59,20 @@ export default function CaeliferPage() {
             <Section num="01" title="The brief I set myself">
                 <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
                     <p className="m-0">
-                        For a plane, I find an optimisation target and a set of
+                        For planes, I like to find an optimisation target and a set of
                         limitations, and the less conventional the combination is the
                         better. For this one:
                     </p>
                 </div>
 
                 <dl className="m-0 mt-2 mb-6">
-                    {CONSTRAINTS.map(([k, v]) => (
+                    {(
+                        [
+                            ['Optimise for', 'Cruise efficiency'],
+                            ['Constraint 01', 'Must be hover capable'],
+                            ['Constraint 02', 'Must be tube launchable']
+                        ] as Array<[string, string]>
+                    ).map(([k, v]) => (
                         <div
                             key={k}
                             className="grid grid-cols-[130px_minmax(0,1fr)] gap-4 py-3 border-t border-rule items-baseline"
@@ -107,12 +106,41 @@ export default function CaeliferPage() {
                 <Figure
                     caption={
                         <>
-                            <span className="text-fg-muted">Fig. 1.1 —</span> Airframe CAD and
-                            bench stack. Renders pending.
+                            <span className="text-fg-muted">Fig. 1.1: </span> Full airframe,
+                            transparent render.
                         </>
                     }
                 >
-                    <FigurePlaceholder label="Caelifer — CAD renders pending" />
+                    <div className="bg-bg-elev border border-rule overflow-hidden max-w-100 mx-auto">
+                        <Image
+                            src="/caelifer/cad-transparent.png"
+                            width={671}
+                            height={1040}
+                            alt="Caelifer airframe CAD, transparent render showing the internal contra-rotating EDF pair and exhaust fins."
+                            sizes="(max-width: 720px) 100vw, 400px"
+                            className="w-full h-auto block"
+                        />
+                    </div>
+                </Figure>
+
+                <Figure
+                    caption={
+                        <>
+                            <span className="text-fg-muted">Fig. 1.2: </span> Flow Simulation
+                            over the airframe.
+                        </>
+                    }
+                >
+                    <div className="bg-bg-elev border border-rule overflow-hidden max-w-100 mx-auto">
+                        <Image
+                            src="/caelifer/flow-sim.png"
+                            width={1017}
+                            height={1104}
+                            alt="SolidWorks Flow Simulation airflow visualization over the Caelifer airframe, qualitative only."
+                            sizes="(max-width: 720px) 100vw, 400px"
+                            className="w-full h-auto block"
+                        />
+                    </div>
                 </Figure>
             </Section>
 
@@ -124,11 +152,6 @@ export default function CaeliferPage() {
                         pack, roughly 4.0kW. The flight controller is a Pixhawk 6C running
                         ArduCopter, flashed and configured with my own{' '}
                         <ArrowLink href="/work/aetherius-gcs">ground station</ArrowLink>.
-                    </p>
-                    <p className="m-0">
-                        What has <em>not</em> happened: no thrust measurement, so
-                        thrust-to-weight is unvalidated. No hover test. The ~1.5kg weight is
-                        an estimate off the model, not a number off a scale.
                     </p>
                     <p className="m-0">
                         It&#39;s paused because I like the other two more at the moment, so

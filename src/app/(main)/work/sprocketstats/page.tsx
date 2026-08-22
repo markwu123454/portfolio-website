@@ -1,553 +1,479 @@
-import Image from "next/image";
-import type { Metadata } from "next";
+import Image from 'next/image';
+import type { Metadata } from 'next';
+import {
+    Page,
+    PageHeader,
+    Section,
+    Crumbs,
+    StatStrip,
+    Tag,
+    StatusPill,
+    Figure,
+    FigurePlaceholder,
+    TOCLayout,
+} from '@/app/components/site/primitives';
 
 export const metadata: Metadata = {
-    title: "SprocketStats Scouting",
+    title: 'SprocketStats Scouting',
     description:
-        "A full-stack scouting platform for FRC — ensemble prediction, field-mapped input, and a guest sharing system that turns scouted data into a team-facing tool.",
+        'A full-stack scouting platform for FRC. Ensemble prediction, field-mapped input, and a guest sharing system that turns scouted data into a team-facing tool.',
 };
 
-/* ─────────────────────────────────────────────────────────────────
-   Page-local styles. Tokens come from the global stylesheet
-   (redesign/tokens.css) loaded in the root layout — this page
-   only defines layout primitives specific to /work/sprocketstats.
-   ───────────────────────────────────────────────────────────────── */
-const styles = `
-.ss-page { max-width: 1080px; margin: 0 auto; padding: 56px 56px 96px; }
-@media (max-width: 720px) { .ss-page { padding: 32px 24px 64px; } }
+const TOC = [
+    { id: 's01', num: '01', label: 'Why it exists' },
+    { id: 's02', num: '02', label: 'The scouting app' },
+    { id: 's03', num: '03', label: 'Analysis + prediction' },
+    { id: 's04', num: '04', label: 'Data presentation' },
+    { id: 's05', num: '05', label: 'Homography' },
+    { id: 's06', num: '06', label: 'Broadcast alignment' },
+    { id: 's07', num: '07', label: 'YOLO + ByteTrack' },
+    { id: 's08', num: '08', label: 'HRNet keypoints' },
+    { id: 's09', num: '09', label: 'RNN' },
+] as const;
 
-/* PageHeader (L.02) */
-.ss-page-header { margin-bottom: 40px; }
-.ss-page-header .kicker {
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 16px;
+function PartDivider({ label }: { label: string }) {
+    return (
+        <div className="pt-16 max-[880px]:pt-12 border-t border-rule-strong">
+            <div className="font-mono text-[11px] tracking-kicker uppercase text-accent mt-6">
+                {label}
+            </div>
+        </div>
+    );
 }
-.ss-page-header h1 {
-  margin: 0 0 14px; font-size: 44px; font-weight: 600;
-  letter-spacing: -0.02em; line-height: 1.05;
-}
-.ss-page-header .dek {
-  margin: 0; font-size: 17px; line-height: 1.55;
-  color: var(--fg-muted); max-width: 640px;
-}
-
-/* MetaRow (C.03) */
-.ss-meta-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px 32px;
-  padding: 20px 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 40px;
-}
-.ss-meta-row .pair { display: flex; flex-direction: column; gap: 4px; }
-.ss-meta-row .k {
-  font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--fg-soft);
-}
-.ss-meta-row .v {
-  font-size: 14px; color: var(--fg);
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-}
-.ss-meta-row .v .dim { color: var(--fg-muted); font-size: 13px; }
-
-/* StatStrip */
-.ss-stat-strip {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-  border: 1px solid var(--rule); border-radius: 4px;
-  margin-bottom: 40px; overflow: hidden;
-}
-.ss-stat-strip .stat {
-  padding: 22px 20px; border-right: 1px solid var(--rule);
-  display: flex; flex-direction: column; gap: 6px;
-}
-.ss-stat-strip .stat:last-child { border-right: 0; }
-.ss-stat-strip .stat .v {
-  font-family: var(--font-mono); font-weight: 500;
-  font-size: 26px; letter-spacing: -0.01em;
-  color: var(--fg); line-height: 1;
-}
-.ss-stat-strip .stat .v sup {
-  font-size: 13px; color: var(--fg-muted);
-  margin-left: 2px; vertical-align: super;
-}
-.ss-stat-strip .stat .k {
-  font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--fg-soft);
-}
-@media (max-width: 720px) {
-  .ss-stat-strip { grid-template-columns: repeat(2, 1fr); }
-  .ss-stat-strip .stat:nth-child(2) { border-right: 0; }
-  .ss-stat-strip .stat:nth-child(1),
-  .ss-stat-strip .stat:nth-child(2) { border-bottom: 1px solid var(--rule); }
-}
-
-/* Tech-stack tag row (I.02 outline) */
-.ss-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 56px; }
-.ss-tag {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
-  padding: 4px 9px; border: 1px solid var(--rule-strong);
-  border-radius: 3px; color: var(--fg-muted);
-}
-
-/* Section (L.03) */
-.ss-sec { margin-bottom: 64px; scroll-margin-top: 80px; }
-.ss-sec .sec-head {
-  display: flex; align-items: baseline; gap: 12px;
-  padding-bottom: 14px; margin-bottom: 24px;
-  border-bottom: 1px solid var(--rule);
-}
-.ss-sec .sec-head .num {
-  font-family: var(--font-mono); font-size: 12px;
-  letter-spacing: 0.16em; color: var(--accent);
-  font-weight: 500; flex-shrink: 0;
-}
-.ss-sec .sec-head h2 {
-  margin: 0; font-size: 28px; font-weight: 600;
-  letter-spacing: -0.015em; line-height: 1.15;
-}
-.ss-sec .sec-head .label-right {
-  margin-left: auto;
-  font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--fg-soft); align-self: center;
-}
-.ss-sec .prose { max-width: 720px; }
-.ss-sec .prose p {
-  margin: 0 0 1em;
-  font-size: 15.5px; line-height: 1.7; color: var(--fg);
-}
-.ss-sec .prose em { color: var(--fg-muted); font-style: italic; }
-.ss-sec .prose strong { font-weight: 600; }
-
-/* Figure (C.02) */
-.ss-fig {
-  margin: 32px 0; padding: 16px 0;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-.ss-fig .frame {
-  background: var(--bg-elev);
-  border: 1px solid var(--rule);
-  position: relative; overflow: hidden;
-}
-.ss-fig .frame .img-wrap {
-  position: relative; width: 100%;
-  display: block; line-height: 0;
-}
-.ss-fig .frame .img-wrap img {
-  width: 100% !important; height: auto !important;
-  display: block;
-}
-.ss-fig figcaption {
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.04em; line-height: 1.55;
-  color: var(--fg-soft); margin-top: 12px;
-}
-.ss-fig figcaption .num { color: var(--fg-muted); margin-right: 4px; }
-
-.ss-fig-pair {
-  display: grid; grid-template-columns: 1.65fr 1fr;
-  gap: 16px; align-items: stretch;
-}
-.ss-fig-pair .frame { height: 100%; display: flex; }
-.ss-fig-pair .frame .img-wrap { width: 100%; align-self: center; }
-@media (max-width: 720px) {
-  .ss-fig-pair { grid-template-columns: 1fr; }
-}
-
-.ss-fig-portrait { max-width: 380px; margin: 0 auto; }
-
-/* StatusPill (I.01) */
-.ss-pill {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 3px 10px 3px 8px;
-  border: 1px solid var(--rule-strong); border-radius: 999px;
-  color: var(--fg-muted);
-}
-.ss-pill .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--fg-soft); }
-.ss-pill.good .dot { background: var(--good); }
-
-/* Module table */
-.ss-modules {
-  width: 100%; border-collapse: collapse; margin: 24px 0 28px;
-  font-size: 14px;
-}
-.ss-modules th {
-  text-align: left; font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--fg-soft); font-weight: 400;
-  padding: 0 16px 10px 0; border-bottom: 1px solid var(--rule-strong);
-}
-.ss-modules td {
-  padding: 11px 16px 11px 0; border-bottom: 1px solid var(--rule);
-  color: var(--fg-muted); vertical-align: top; line-height: 1.5;
-}
-.ss-modules td:first-child { color: var(--fg); font-weight: 500; white-space: nowrap; }
-.ss-modules td:last-child {
-  font-family: var(--font-mono); font-size: 11px;
-  color: var(--fg-soft); white-space: nowrap;
-}
-@media (max-width: 720px) {
-  .ss-modules td:last-child, .ss-modules th:last-child { display: none; }
-}
-
-/* Note (C.09) */
-.ss-note {
-  margin: 24px 0; padding: 14px 18px;
-  border-left: 3px solid var(--accent);
-  background: var(--accent-soft);
-}
-.ss-note .title {
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 4px;
-}
-.ss-note p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--fg); }
-`;
-
-/* ─── Image manifest ──────────────────────────────────────────
-   Public-folder paths and intrinsic dimensions, kept together so
-   any future re-shoot of an asset just updates this map.
-   ───────────────────────────────────────────────────────────── */
-const IMG = {
-    currentApp:   { src: "/sprocket/Screenshot 2026-05-10 075229.png", w: 2559, h: 1599 },
-    earlierApp:   { src: "/sprocket/Screenshot 2026-04-03 205309.png", w: 985,  h: 487  },
-    sliderClose:  { src: "/sprocket/img.png",                          w: 503,  h: 898  },
-    matchReview: { src: "/sprocket/scouting_2026.png", w: 1919, h: 914 },
-    poseTracking: { src: "/sprocket/img_1.png",                        w: 2879, h: 1799 },
-} as const;
 
 export default function SprocketStatsPage() {
     return (
-        <>
-            <style>{styles}</style>
+        <Page>
+            <Crumbs
+                items={[
+                    { href: '/work', label: 'Work' },
+                    { href: '/work?domain=Software', label: 'Software' },
+                    { label: 'SprocketStats Scouting' },
+                ]}
+            />
 
-            <main className="notebook ss-page">
-                {/* ─ PageHeader ───────────────────────────────────────── */}
-                <div className="ss-page-header">
-                    <div className="kicker">Work · Software · 2024 —</div>
-                    <h1>SprocketStats Scouting</h1>
-                    <p className="dek">
-                        A full-stack scouting platform for FRC, built to close the gap between
-                        raw match data and real alliance decisions. Ensemble prediction,
-                        field-mapped input, and a guest sharing system that turns scouted data
-                        into a team-facing tool.
-                    </p>
-                </div>
+            <PageHeader
+                tag={['PROJECT', 'SOFTWARE', '2024 —']}
+                title="SprocketStats Scouting"
+                dek="The scouting side of SprocketStats."
+            />
 
-                {/* ─ MetaRow ──────────────────────────────────────────── */}
-                <div className="ss-meta-row">
-                    <div className="pair">
-                        <div className="k">Status</div>
-                        <div className="v">
-                            <span className="ss-pill good"><span className="dot" />Live</span>
-                            <span className="dim">in use · sprocketstats.com</span>
-                        </div>
-                    </div>
-                    <div className="pair">
-                        <div className="k">Domain</div>
-                        <div className="v">Software</div>
-                    </div>
-                    <div className="pair">
-                        <div className="k">Year</div>
-                        <div className="v">2024 — present</div>
-                    </div>
-                    <div className="pair">
-                        <div className="k">Team</div>
-                        <div className="v">Sprocket scouting subteam</div>
-                    </div>
-                </div>
+            <StatStrip
+                items={[
+                    { label: 'Status', value: 'Live · in use' },
+                    { label: 'Team', value: 'Sprocket scouting subteam' },
+                    { label: 'Scouted', value: '411 records · 73 teams · 3 events' },
+                    { label: 'Accuracy', value: '~87% win/loss prediction' },
+                ]}
+            />
 
-                {/* ─ Stat strip ───────────────────────────────────────── */}
-                <div className="ss-stat-strip" aria-label="Headline stats">
-                    <div className="stat">
-                        <span className="v">411</span>
-                        <span className="k">Robot-match records</span>
-                    </div>
-                    <div className="stat">
-                        <span className="v">3</span>
-                        <span className="k">Events</span>
-                    </div>
-                    <div className="stat">
-                        <span className="v">73</span>
-                        <span className="k">Teams scouted</span>
-                    </div>
-                    <div className="stat">
-                        <span className="v">~ 87<sup>%</sup></span>
-                        <span className="k">Win/loss accuracy</span>
-                    </div>
-                </div>
+            <div className="flex flex-wrap gap-1.5 mt-6" aria-label="Tech stack">
+                {['React', 'TypeScript', 'Tailwind', 'FastAPI', 'Tauri', 'Python'].map((t) => (
+                    <Tag key={t} variant="outline">{t}</Tag>
+                ))}
+            </div>
 
-                {/* ─ Tech stack ───────────────────────────────────────── */}
-                <div className="ss-tag-row" aria-label="Tech stack">
-                    {["React", "TypeScript", "Tailwind", "FastAPI", "C# WPF", "Python"].map((t) => (
-                        <span key={t} className="ss-tag">{t}</span>
-                    ))}
-                </div>
+            <TOCLayout toc={TOC}>
+                <PartDivider label="2025" />
 
-                {/* ─ 01 — Why it exists ───────────────────────────────── */}
-                <section className="ss-sec" id="s01">
-                    <div className="sec-head">
-                        <span className="num">01 —</span>
-                        <h2>Why it exists</h2>
-                        <span className="label-right">Context</span>
-                    </div>
-                    <div className="prose">
-                        <p>
+                <Section num="01" id="s01" title="Why it exists">
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4 mt-6">
+                        <p className="m-0">
                             During the 2025 season Sprocket was using an older scouting app,
                             effectively a glorified Google Form. It collected less data, was
-                            harder to use, had worse analysis, and had a critical security flaw:
-                            all data was downloadable without authentication. That app is now
-                            taken down.
+                            harder to use, had worse analysis, and the security was so bad I was able to download the scouting data unauthenticated without much effort.
+                            That app is now taken down.
                         </p>
-                        <p>
-                            SprocketStats was built to replace it with a real GUI. The core goal
+                        <p className="m-0">
+                            Over the summer I decided to create my own scouting appto replace it. The core goal
                             was better data collection, better data quality, and tighter
-                            integration across the entire scouting workflow — from getting event
+                            integration across the entire scouting workflow, from getting event
                             data, to match scouting, pit scouting, analysis, presentation, and
                             sharing, not just more of the same.
                         </p>
                     </div>
-                </section>
 
-                {/* ─ 02 — The scouting app ────────────────────────────── */}
-                <section className="ss-sec" id="s02">
-                    <div className="sec-head">
-                        <span className="num">02 —</span>
-                        <h2>The scouting app</h2>
-                        <span className="label-right">2025 → 2026</span>
-                    </div>
-                    <div className="prose">
-                        <p>
-                            Built for FRC <em>Reefscape</em> (2025) and rebuilt for{" "}
-                            <em>Rebuilt</em> (2026). In 2026 the main UX challenge was shot
-                            volume: robots in this game shoot at very high throughput, so the
-                            original +1 / +2 / +5 / +10 button approach was replaced with a
-                            slider scouters can drag or click rapidly. The app also includes a
-                            field illustration where scouters input shooting location and
-                            activate task buttons (defense, traversal, shooting, intaking, and
-                            so on). Drew inspiration from <em>Lovat</em>, the scouting app
-                            developed by FRC team 8033.
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 1.1: </span> The old
+                                scouting app, taken down after this project replaced it.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/Screenshot 2026-08-13 205523.png"
+                                width={837}
+                                height={815}
+                                alt="Screenshot of the old 2025 scouting app that SprocketStats replaced."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+                </Section>
+
+                <PartDivider label="2026" />
+
+                <Section num="02" id="s02" title="The scouting app">
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4 mt-6">
+                        <p className="m-0">
+                            Built for FRC <em className="text-fg-muted italic">Reefscape</em> (2025) and
+                            updated for <em className="text-fg-muted italic">Rebuilt</em> (2026). In 2026
+                            the main UX challenge was shot volume: robots in this game shoot at very
+                            high throughput, so the original +1 / +2 / +5 / +10 button approach was
+                            replaced with a slider scouters can drag or click rapidly. The app also
+                            includes a field illustration where scouters input shooting location and
+                            activate task buttons (defense, traversal, shooting, intaking, and so on).
+                            Drew inspiration from <em className="text-fg-muted italic">Lovat</em>, the
+                            scouting app developed by FRC team 8033.
                         </p>
                     </div>
 
-                    <figure className="ss-fig">
-                        <div className="frame">
-                            <div className="img-wrap">
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 2.1:</span> Current scouting
+                                app, second event of the 2026 season. Field illustration on the
+                                right; task panel and shot slider on the left.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/Screenshot 2026-05-10 075229.png"
+                                width={2559}
+                                height={1599}
+                                alt="Current scouting app, second event of the 2026 season — task panel and shot slider on the left, field illustration on the right."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 2.2: </span> Earlier full-app
+                                design (left) and the shot-volume slider in close-up (right). The
+                                slider replaced four discrete +N buttons after testing showed shot
+                                rates that broke the button-tapping model.
+                            </>
+                        }
+                    >
+                        <div className="grid grid-cols-[1.65fr_1fr] gap-4 items-stretch max-[720px]:grid-cols-1">
+                            <div className="bg-bg-elev border border-rule overflow-hidden flex">
                                 <Image
-                                    src={IMG.currentApp.src}
-                                    width={IMG.currentApp.w}
-                                    height={IMG.currentApp.h}
-                                    alt="Current scouting app, second event of the 2026 season — task panel and shot slider on the left, field illustration on the right."
-                                    sizes="(max-width: 720px) 100vw, 968px"
-                                    priority
+                                    src="/sprocket/Screenshot 2026-04-03 205309.png"
+                                    width={985}
+                                    height={487}
+                                    alt="Earlier full-app design, with the original +N button approach for shot counting."
+                                    sizes="(max-width: 720px) 100vw, 600px"
+                                    className="w-full h-auto self-center"
+                                />
+                            </div>
+                            <div className="bg-bg-elev border border-rule overflow-hidden flex">
+                                <Image
+                                    src="/sprocket/img.png"
+                                    width={503}
+                                    height={898}
+                                    alt="Close-up of the shot-volume slider that replaced the +N buttons."
+                                    sizes="(max-width: 720px) 100vw, 360px"
+                                    className="w-full h-auto self-center"
                                 />
                             </div>
                         </div>
-                        <figcaption>
-                            <span className="num">Fig. 2.1 —</span>
-                            Current scouting app, second event of the 2026 season. Field
-                            illustration on the right; task panel and shot slider on the left.
-                        </figcaption>
-                    </figure>
+                    </Figure>
 
-                    <figure className="ss-fig">
-                        <div className="ss-fig-pair">
-                            <div className="frame">
-                                <div className="img-wrap">
-                                    <Image
-                                        src={IMG.earlierApp.src}
-                                        width={IMG.earlierApp.w}
-                                        height={IMG.earlierApp.h}
-                                        alt="Earlier full-app design, with the original +N button approach for shot counting."
-                                        sizes="(max-width: 720px) 100vw, 600px"
-                                    />
-                                </div>
-                            </div>
-                            <div className="frame">
-                                <div className="img-wrap">
-                                    <Image
-                                        src={IMG.sliderClose.src}
-                                        width={IMG.sliderClose.w}
-                                        height={IMG.sliderClose.h}
-                                        alt="Close-up of the shot-volume slider that replaced the +N buttons."
-                                        sizes="(max-width: 720px) 100vw, 360px"
-                                    />
-                                </div>
-                            </div>
+                    <div className="border-l-2 border-accent bg-accent-soft px-4.5 py-3.5 mt-6">
+                        <div className="font-mono text-[10.5px] tracking-kicker uppercase text-accent mb-1">
+                            UX change · between events
                         </div>
-                        <figcaption>
-                            <span className="num">Fig. 2.2 —</span>
-                            Earlier full-app design (left) and the shot-volume slider in close-up
-                            (right). The slider replaced four discrete +N buttons after testing
-                            showed shot rates that broke the button-tapping model.
-                        </figcaption>
-                    </figure>
-
-                    <div className="prose">
-                        <div className="ss-note">
-                            <div className="title">UX change · between events</div>
-                            <p>
-                                Task buttons changed from <em>click-to-activate</em> to{" "}
-                                <em>hold-to-activate</em>, removing one interaction per task,
-                                less physical and mental load on scouters across a six-hour event
-                                day.
-                            </p>
-                        </div>
+                        <p className="m-0 text-[14.5px] leading-[1.6] text-fg">
+                            Task buttons changed from <em className="italic">click-to-activate</em> to{' '}
+                            <em className="italic">hold-to-activate</em>, removing one interaction per
+                            state, less physical and mental load on scouters across an event
+                            day.
+                        </p>
                     </div>
-                </section>
+                </Section>
 
-                {/* ─ 03 — Analysis + prediction ───────────────────────── */}
-                <section className="ss-sec" id="s03">
-                    <div className="sec-head">
-                        <span className="num">03 —</span>
-                        <h2>Analysis + prediction</h2>
-                        <span className="label-right">Ensemble · ~15 params</span>
-                    </div>
-                    <div className="prose">
-                        <p>
-                            An ensemble algorithm with roughly 15 designated output parameters
-                            across robots, past matches, and future matches. Each data source,
-                            Statbotics, match scouting data, pit scouting data, and so on, is
+                <Section num="03" id="s03" title="Analysis + prediction">
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            An ensemble algorithm with roughly 15 output parameters
+                            across match result, alliance performance, and robot performance. Each data source,
+                            including Statbotics, match scouting data, pit scouting data, and so on, is
                             weighted by how accurately it predicts past matches, then aggregated.
                         </p>
-                        <p>
-                            Win/loss prediction accuracy: <strong>~87%</strong> across roughly 90
-                            late-qualification and playoff matches. A two-proportion significance
-                            test against the Statbotics EPA baseline over the same set found no
-                            statistically significant difference at 95% confidence — statistically
-                            indistinguishable from EPA, not better. Score prediction uses a skewed
-                            distribution model, more complex than win/loss, and not reducible to a
-                            single accuracy figure.
+                        <p className="m-0">
+                            Win/loss prediction accuracy: <strong className="text-fg font-semibold">~87%</strong> across
+                            roughly 90 late-qualification and playoff matches. A two-proportion
+                            significance test against the Statbotics EPA baseline over the same set
+                            found no statistically significant difference at 95% confidence,
+                            statistically indistinguishable from EPA.
                         </p>
                     </div>
-                </section>
+                </Section>
 
-                {/* ─ 04 — Data presentation ───────────────────────────── */}
-                <section className="ss-sec" id="s04">
-                    <div className="sec-head">
-                        <span className="num">04 —</span>
-                        <h2>Data presentation</h2>
-                        <span className="label-right">In-app</span>
-                    </div>
-                    <div className="prose">
-                        <p>
+                <Section num="04" id="s04" title="Data presentation">
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
                             Presentation lives inside the same app. A guest system lets a
                             scouter share a passcode or QR code with alliance partners or future
                             teammates so they get read-only access to the relevant slice of data
                             without an account.
                         </p>
-                        <p>
+                        <p className="m-0">
                             Pages include per-team profiles, past match reviews, future match
-                            previews, full robot rankings, and an alliance selection simulator{" "}
-                            <em>(in progress).</em>
+                            previews, full robot rankings, and an alliance selection simulator{' '}
+                            <em className="text-fg-muted italic">(in progress).</em>
                         </p>
                     </div>
 
-                    <figure className="ss-fig">
-                        <div className="frame">
-                            <div className="img-wrap">
-                                <Image
-                                    src={IMG.matchReview.src}
-                                    width={IMG.matchReview.w}
-                                    height={IMG.matchReview.h}
-                                    alt="Match review screen from the data-presentation side of the app."
-                                    sizes="(max-width: 720px) 100vw, 1936px"
-                                />
-                            </div>
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 4.1: </span> Match review
+                                screen from the data-presentation side of the app. Per-match
+                                breakdown of scouted task counts and contributions.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/scouting_2026.png"
+                                width={1919}
+                                height={914}
+                                alt="Match review screen from the data-presentation side of the app."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
                         </div>
-                        <figcaption>
-                            <span className="num">Fig. 4.1 —</span>
-                            Match review screen from the data-presentation side of the app.
-                            Per-match breakdown of scouted task counts and contributions.
-                        </figcaption>
-                    </figure>
-                </section>
+                    </Figure>
+                </Section>
 
-                {/* ─ 05 — What's next ─────────────────────────────────── */}
-                <section className="ss-sec" id="s05">
-                    <div className="sec-head">
-                        <span className="num">05 —</span>
-                        <h2>What&#39;s next</h2>
-                        <span className="label-right">v3 · CV rebuild</span>
+                <PartDivider label="2027" />
+
+                <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4 mt-6">
+                    <p className="m-0">
+                        v3 is a new scouting pipeline aimed at collecting more data automatically instead of asking a person to watch a match and tap
+                        buttons. It is currently under active development to prepare for 2026 off season and 2027, it&#39;s not yet deployed or tested.
+                    </p>
+                </div>
+
+                <Section num="05" id="s05" title="Homography">
+                    <div className="flex items-center gap-2 mb-4">
+                        <StatusPill tone="warn">In development</StatusPill>
                     </div>
-                    <div className="prose">
-                        <p>
-                            v3 is a computer-vision rebuild aimed at collecting the data
-                            automatically instead of asking a person to watch a match and tap
-                            buttons. It is <strong>a set of standalone modules under active
-                            development</strong> — not an integrated pipeline, not deployed, and
-                            not benchmarked. Nothing below has an accuracy or throughput number
-                            attached to it yet, deliberately.
-                        </p>
-                        <table className="ss-modules">
-                            <thead>
-                                <tr><th>Module</th><th>What it does</th><th>Stage</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Homography</td>
-                                    <td>Maps a camera view into field coordinates</td>
-                                    <td>In development</td>
-                                </tr>
-                                <tr>
-                                    <td>Broadcast alignment</td>
-                                    <td>Locates a given match inside a stream, by audio matching plus template matching</td>
-                                    <td>In development</td>
-                                </tr>
-                                <tr>
-                                    <td>HRNet keypoints</td>
-                                    <td>Robot pose estimation</td>
-                                    <td>In development</td>
-                                </tr>
-                                <tr>
-                                    <td>YOLO + ByteTrack</td>
-                                    <td>Robot detection and multi-object tracking</td>
-                                    <td>Earlier stage</td>
-                                </tr>
-                                <tr>
-                                    <td>RNN</td>
-                                    <td>Robot path analysis and categorization</td>
-                                    <td>Earlier stage</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p>
-                            Multi-camera tracking (MTMCT) is architecture I am designing, not code
-                            that runs. Integration is the next real step. Whether an outward-facing
-                            scouting app exists next season is still an open question — the{" "}
-                            <a href="/work/sprocketstats-com">team platform</a> stays either way.
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            What homography tries to solve is given a camera, find where the
+                            field is, so in the future everything done on the pixels can map to
+                            the field. We use AprilTags to detect the locations of the field,
+                            and by referencing the official AprilTag layout we can solve for
+                            camera intrinsics, then solve for the position of the camera
+                            relative to the field.
                         </p>
                     </div>
 
-                    <figure className="ss-fig">
-                        <div className="frame">
-                            <div className="img-wrap">
-                                <Image
-                                    src={IMG.poseTracking.src}
-                                    width={IMG.poseTracking.w}
-                                    height={IMG.poseTracking.h}
-                                    alt="HRNet-based robot pose tracking in development — keypoint estimation and per-robot identity tracking on competition footage."
-                                    sizes="(max-width: 720px) 100vw, 968px"
-                                />
-                            </div>
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 5.1: </span> AprilTags
+                                detected in webcast footage, used to solve for the field
+                                position.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/webcast-apriltags.png"
+                                width={1934}
+                                height={720}
+                                alt="AprilTags detected in webcast footage, used to solve for the field position."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
                         </div>
-                        <figcaption>
-                            <span className="num">Fig. 5.1 —</span>
-                            HRNet-based robot pose tracking, in-development. Keypoint estimation
-                            and per-robot identity tracking on competition footage; precursor to a
-                            multi-camera tracking pipeline.
-                        </figcaption>
-                    </figure>
-                </section>
-            </main>
-        </>
+                    </Figure>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 5.2: </span> Camera solve
+                                across multiple broadcast angles.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/multi-camera-solve.png"
+                                width={1168}
+                                height={615}
+                                alt="Camera solve across multiple broadcast angles, mapped into a shared field coordinate system."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+                </Section>
+
+                <Section num="06" id="s06" title="Broadcast alignment">
+                    <div className="flex items-center gap-2 mb-4">
+                        <StatusPill tone="warn">In development</StatusPill>
+                    </div>
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            Broadcast is used to capture information from the webcast specific
+                            data, like scoring events on the overlay, and audio cues, we use a
+                            template matching algorithm to read the letters with higher accuracy
+                            than naive OCR, and we use the combination of clock and audio cues
+                            to determine match start and end time.
+                        </p>
+                    </div>
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 6.1: </span> View splitting within frame to separate each camera for separate processing.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/img_1.png"
+                                width={1920}
+                                height={1080}
+                                alt="View splitting within frame to separate each camera for separate processing."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 6.2: </span> Template matching debug view, used to test letter-reading accuracy against the webcast overlay
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/img_2.png"
+                                width={678}
+                                height={558}
+                                alt="Template matching debug view, used to test letter-reading accuracy against the webcast overlay"
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+                </Section>
+
+                <Section num="07" id="s07" title="YOLO + ByteTrack">
+                    <div className="flex items-center gap-2 mb-4">
+                        <StatusPill tone="neutral">Earlier stage</StatusPill>
+                    </div>
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            YOLO is used to identify the existence of robots and track them,
+                            since YOLO only need to see parts of the robot and there&#39;s
+                            better tracking algorithms, it&#39;s harder to lose a robot, so we
+                            use YOLO to ID the robots, then use HRNet to pinpoint the location
+                            of the robots instead of estimating.
+                        </p>
+                    </div>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 7.1: </span> YOLO +
+                                ByteTrack robot detection and tracking on competition footage.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/img_1.png"
+                                width={2879}
+                                height={1799}
+                                alt="YOLO + ByteTrack robot detection and tracking on competition footage."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+                </Section>
+
+                <Section num="08" id="s08" title="HRNet keypoints">
+                    <div className="flex items-center gap-2 mb-4">
+                        <StatusPill tone="warn">In development</StatusPill>
+                    </div>
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            HRNet is used to identify the location of robots on the field, we
+                            labeled keypoints and trained a heatmap model to output where
+                            robots are on screen, and combined with YOLO and homography can
+                            output where robots are.
+                        </p>
+                    </div>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 8.1: </span> HRNet keypoint
+                                output on competition footage.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/img.png"
+                                width={1620}
+                                height={906}
+                                alt="HRNet keypoint output on competition footage."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+
+                    <Figure
+                        caption={
+                            <>
+                                <span className="text-fg-muted">Fig. 8.2: </span> Robot
+                                positions from HRNet output, transformed onto field coordinates.
+                            </>
+                        }
+                    >
+                        <div className="bg-bg-elev border border-rule overflow-hidden">
+                            <Image
+                                src="/sprocket/v3/field-trajectories.png"
+                                width={1086}
+                                height={594}
+                                alt="Robot positions from HRNet output, transformed onto field coordinates."
+                                sizes="(max-width: 880px) 100vw, 1080px"
+                                className="w-full h-auto block"
+                            />
+                        </div>
+                    </Figure>
+                </Section>
+
+                <Section num="09" id="s09" title="RNN">
+                    <div className="flex items-center gap-2 mb-4">
+                        <StatusPill tone="neutral">Earlier stage</StatusPill>
+                    </div>
+                    <div className="max-w-160 text-[15.5px] leading-[1.7] text-fg-muted grid gap-4">
+                        <p className="m-0">
+                            RNN is currently not finished, but it&#39;ll take the output robot
+                            tracks, and do frame categorization and scoring event correlation to
+                            output a robot&#39;s behavior during a match.
+                        </p>
+                    </div>
+                </Section>
+            </TOCLayout>
+        </Page>
     );
 }

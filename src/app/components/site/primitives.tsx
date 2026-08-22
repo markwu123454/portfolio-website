@@ -78,12 +78,14 @@ interface SectionProps {
     title: string;
     /** Optional small uppercase eyebrow above the title. */
     kicker?: string;
+    /** Anchor id — set to make this section a TOCLayout/TOC jump target. */
+    id?: string;
     children: ReactNode;
 }
 
-export function Section({ num, title, kicker, children }: SectionProps) {
+export function Section({ num, title, kicker, id, children }: SectionProps) {
     return (
-        <section className="pt-14 mt-2">
+        <section id={id} className="pt-14 mt-2 scroll-mt-24">
             <header className="flex items-baseline gap-4 pb-3.5 mb-6 border-b border-rule-strong">
                 <span className="font-mono text-xs tracking-[0.16em] text-accent shrink-0">
                     {num} —
@@ -105,6 +107,44 @@ export function Section({ num, title, kicker, children }: SectionProps) {
             </header>
             {children}
         </section>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TOCLayout — article + sticky "On this page" sidebar, for pages
+   with enough sections to need in-page jump links. Wrap Section
+   children in the default slot; pass the matching toc list.
+   ───────────────────────────────────────────────────────────────── */
+
+export function TOCLayout({
+                              toc,
+                              children,
+                          }: {
+    toc: ReadonlyArray<{ id: string; num: string; label: string }>;
+    children: ReactNode;
+}) {
+    return (
+        <div className="grid grid-cols-[minmax(0,1fr)_240px] gap-12 mt-2 max-[880px]:grid-cols-1 max-[880px]:gap-8">
+            <article className="min-w-0">{children}</article>
+            <aside aria-label="On this page" className="self-start text-[13px] min-[881px]:sticky min-[881px]:top-24">
+                <div className="border-t border-rule pt-3.5">
+                    <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-3">On this page</div>
+                    <ul className="list-none m-0 p-0 flex flex-col gap-1.5">
+                        {toc.map((t) => (
+                            <li key={t.id}>
+                                <a
+                                    href={`#${t.id}`}
+                                    className="text-[13px] text-fg-muted no-underline transition-colors duration-150 hover:text-accent"
+                                >
+                                    <span className="font-mono text-[10.5px] text-fg-soft mr-2 tracking-[0.06em]">{t.num}</span>
+                                    {t.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </aside>
+        </div>
     );
 }
 
@@ -382,5 +422,19 @@ export function FigurePlaceholder({
                 {label}
             </span>
         </div>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Placeholder — visible marker for prose that still needs to be
+   written up in full. Distinct styling from real content (dashed
+   border, italic, muted) so it reads as unfinished at a glance.
+   ───────────────────────────────────────────────────────────────── */
+
+export function Placeholder({ children }: { children: ReactNode }) {
+    return (
+        <p className="m-0 max-w-160 text-[14.5px] leading-[1.65] text-fg-soft italic border border-dashed border-rule-strong rounded p-4">
+            {children}
+        </p>
     );
 }

@@ -232,13 +232,12 @@ export default function HomePage() {
             {/* ─ 04 — Contact ─────────────────────────────────────── */}
             <Section
                 num="04"
-                title="Recruiters, professors, lab leads, and other student engineers, reach out any time."
+                title="Reach out any time."
                 kicker="GET IN TOUCH"
             >
                 <div>
                     <p className="mt-0 mb-6 text-base text-fg-muted max-w-155 leading-relaxed">
-                        Email is best. Usually reply within a day. Resume on file — happy to
-                        send the latest version.
+                        Email preferably, you can check out this website or my github while you wait.
                     </p>
 
                     <ul className="list-none m-0 p-0">

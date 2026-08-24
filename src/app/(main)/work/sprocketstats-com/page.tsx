@@ -84,7 +84,7 @@ export default function SprocketStatsComPage() {
                 <Figure
                     caption={
                         <>
-                            <span className="text-fg-muted">Fig. 1.1 —</span> The old
+                            <span className="text-fg-muted">Fig. 1.1:</span>{` `}The old
                             site&#39;s home page, before it was replaced.
                         </>
                     }
@@ -105,7 +105,7 @@ export default function SprocketStatsComPage() {
                 <Figure
                     caption={
                         <>
-                            <span className="text-fg-muted">Fig. 1.2 —</span> Sign in.
+                            <span className="text-fg-muted">Fig. 1.2:</span> Sign in.
                             School email only, the sponsor credited in product, and the
                             season art behind it.
                         </>

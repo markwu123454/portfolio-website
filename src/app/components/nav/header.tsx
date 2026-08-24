@@ -198,8 +198,6 @@ function Wordmark() {
                 MW
             </span>
             <span className="text-sm font-semibold tracking-[-0.01em]">Mark Wu</span>
-            {/* Hide tagline on very small screens */}
-            <span className="hidden sm:inline text-[13px] text-fg-muted font-normal">— student engineer</span>
         </Link>
     );
 }

@@ -58,15 +58,14 @@ export default function CombatPage() {
 
                     <div className="grid md:grid-cols-[minmax(0,1fr)_320px] gap-12 items-start mb-10">
                         <h1 className="m-0 font-mono uppercase font-semibold leading-[1.05] tracking-normal text-[clamp(36px,4.5vw,52px)] max-w-190">
-                            Team Infernope —{' '}
+                            Team Infernope:{' '}
                             <br />
                             three years, twelve robots.
                         </h1>
 
                         <div>
                             <p className="m-0 mb-4 text-[15.5px] leading-[1.65] text-fg-muted max-w-105">
-                                Combat robotics, 1lb and 3lb classes, mentored by Mark Duffield.
-                                I captained my own line of robots — a loose club roster where a
+                                I captained my own line of robots: a loose club roster where a
                                 few teammates built and ran their own robots too, and I helped
                                 with those alongside mine. Each of my robots was built on the
                                 ones that came before. End-of-year tournament: first place.
@@ -74,22 +73,6 @@ export default function CombatPage() {
                             <div className="flex gap-2 flex-wrap">
                                 <Tag>1lb · 3lb</Tag>
                                 <Tag>Year 1 — Year 3</Tag>
-                                <a
-                                    href="https://teaminfernope.wordpress.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-2.5 py-0.5 rounded-sm border border-rule font-mono text-[11px] tracking-mono text-fg-muted hover:text-accent transition-colors"
-                                >
-                                    Legacy site ↗
-                                </a>
-                                <a
-                                    href="https://www.youtube.com/@TeamInfernope/featured"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center px-2.5 py-0.5 rounded-sm border border-rule font-mono text-[11px] tracking-mono text-fg-muted hover:text-accent transition-colors"
-                                >
-                                    YouTube ↗
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -104,6 +87,64 @@ export default function CombatPage() {
                         ]}
                     />
                 </div>
+
+                <Section num="EXT" title="Links" kicker="External">
+                    <p className="m-0 mb-6 text-[14.5px] leading-[1.65] text-fg-muted max-w-160">
+                        These are the original resources I made back in middle school.
+                    </p>
+                    <ul className="list-none m-0 p-0 border-t border-rule">
+                        <li className="border-b border-rule">
+                            <a
+                                href="https://teaminfernope.wordpress.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="
+                                    grid grid-cols-[100px_minmax(0,1fr)_auto_28px]
+                                    gap-4 md:gap-6 py-6
+                                    text-fg no-underline items-baseline group
+                                "
+                            >
+                                <span className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
+                                    Blog
+                                </span>
+                                <span className="text-[19px] font-medium tracking-tight-1 group-hover:text-accent transition-colors duration-150 truncate">
+                                    teaminfernope.wordpress.com
+                                </span>
+                                <span className="hidden md:inline font-mono text-[11px] text-fg-soft tracking-mono whitespace-nowrap">
+                                    legacy site · build logs · full robot history
+                                </span>
+                                <span aria-hidden className="font-mono text-accent text-lg text-right">
+                                    ↗
+                                </span>
+                            </a>
+                        </li>
+                        <li className="border-b border-rule">
+                            <a
+                                href="https://www.youtube.com/@TeamInfernope/featured"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="
+                                    grid grid-cols-[100px_minmax(0,1fr)_auto_28px]
+                                    gap-4 md:gap-6 py-6
+                                    text-fg no-underline items-baseline group
+                                "
+                            >
+                                <span className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft">
+                                    Video
+                                </span>
+                                <span className="text-[19px] font-medium tracking-tight-1 group-hover:text-accent transition-colors duration-150 truncate">
+                                    youtube.com/@TeamInfernope
+                                </span>
+                                <span className="hidden md:inline font-mono text-[11px] text-fg-soft tracking-mono whitespace-nowrap">
+                                    match footage · build videos
+                                </span>
+                                <span aria-hidden className="font-mono text-accent text-lg text-right">
+                                    ↗
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </Section>
 
                 <Section num="Y1" title="Year 1">
                     <RobotEntry

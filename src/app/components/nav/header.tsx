@@ -7,10 +7,10 @@
  * nav item from the current pathname so callers don't pass it.
  *
  * Desktop:
- *   [ MW · Mark Wu — student engineer ]   [ Work Experiments Now About Contact | ● Open ]
+ *   [ MW · Mark Wu ]   [ Work Experiments Now About Contact ]
  *
  * Mobile:
- *   [ MW · Mark Wu ]   [ ● Open | ☰ ]
+ *   [ MW · Mark Wu ]   [ ☰ ]
  *   → hamburger opens a full-screen drawer with all nav links
  *
  * Music removed from nav — it's a small single page, accessible via
@@ -54,11 +54,11 @@ export function Header() {
                     backdrop-saturate-150 backdrop-blur-md
                 "
             >
-                <div className="max-w-[1100px] mx-auto px-4 sm:px-8 py-[14px] flex items-center justify-between gap-6">
+                <div className="max-w-275 mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between gap-6">
                     <Wordmark />
 
                     {/* Desktop nav */}
-                    <nav className="hidden md:flex items-center gap-[22px]">
+                    <nav className="hidden md:flex items-center gap-5.5">
                         <NavLink href="/work" active={active === 'work'}>Work</NavLink>
                         <NavLink href="/experiments" active={active === 'experiments'}>Experiments</NavLink>
                         <NavLink href="/now"     active={active === 'now'}>Now</NavLink>
@@ -82,10 +82,10 @@ export function Header() {
                             "
                         >
                             {/* Animated hamburger → X */}
-                            <span className="relative flex flex-col gap-[5px] w-[18px]">
+                            <span className="relative flex flex-col gap-1.25 w-4.5">
                                 <span className={`block h-[1.5px] w-full bg-current rounded-full origin-center transition-transform duration-200 ${drawerOpen ? 'translate-y-[6.5px] rotate-45' : ''}`} />
                                 <span className={`block h-[1.5px] w-full bg-current rounded-full transition-opacity duration-200 ${drawerOpen ? 'opacity-0' : ''}`} />
-                                <span className={`block h-[1.5px] w-full bg-current rounded-full origin-center transition-transform duration-200 ${drawerOpen ? '-translate-y-[6.5px] -rotate-45' : ''}`} />
+                                <span className={`block h-[1.5px] w-full bg-current rounded-full origin-center transition-transform duration-200 ${drawerOpen ? 'translate-y-[-6.5px] -rotate-45' : ''}`} />
                             </span>
                         </button>
                     </div>
@@ -118,7 +118,7 @@ export function Header() {
                 `}
             >
                 {/* Drawer header */}
-                <div className="flex items-center justify-between px-5 py-[14px] border-b border-rule">
+                <div className="flex items-center justify-between px-5 py-3.5 border-b border-rule">
                     <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-fg-soft">
                         Navigation
                     </span>
@@ -187,11 +187,11 @@ function Wordmark() {
         <Link
             href="/"
             aria-label="Mark Wu — home"
-            className="inline-flex items-baseline gap-[10px] no-underline text-fg"
+            className="inline-flex items-baseline gap-2.5 no-underline text-fg"
         >
             <span
                 aria-hidden
-                className="font-mono text-[11px] tracking-kicker text-accent border border-rule-strong rounded-sm px-[6px] py-[3px]"
+                className="font-mono text-[11px] tracking-kicker text-accent border border-rule-strong rounded-sm px-1.5 py-0.75"
             >
                 MW
             </span>
@@ -254,7 +254,7 @@ function DrawerLink({
         >
             {children}
             {active && (
-                <span aria-hidden className="w-[5px] h-[5px] rounded-full bg-accent shrink-0" />
+                <span aria-hidden className="w-1.25 h-1.25 rounded-full bg-accent shrink-0" />
             )}
         </Link>
     );
@@ -264,7 +264,7 @@ function ActiveIndicator() {
     return (
         <span
             aria-hidden
-            className="absolute left-0 right-0 -bottom-[2px] h-[2px] bg-accent rounded-full"
+            className="absolute left-0 right-0 -bottom-0.5 h-0.5 bg-accent rounded-full"
         />
     );
 }

@@ -29,7 +29,6 @@ import {
     Crumbs,
     StatStrip,
     Figure,
-    Placeholder,
 } from '@/app/components/site/primitives';
 
 export const metadata: Metadata = {

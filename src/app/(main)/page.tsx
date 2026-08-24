@@ -296,7 +296,7 @@ function Section({
 }) {
     return (
         <section className="pt-12 sm:pt-16 mt-2">
-            <header className="flex items-baseline gap-4 pb-3.5 mb-6 border-b border-rule-strong">
+            <header className="flex items-baseline gap-4 pb-3.5 border-b border-rule-strong">
                 <span className="font-mono text-xs tracking-[0.16em] text-accent shrink-0">
                     {num} —
                 </span>

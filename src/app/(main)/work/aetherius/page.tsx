@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 /* ─── Asset manifest ────────────────────────────────────────── */
 const IMG = {
-    plane:    { src: "/aetherius/dd2f2ce996d5ddd75e8cf7fc5e3e01f1.jpg", w: 985,  h: 738  },
-    airborne: { src: "/aetherius/flight-airborne.png",                  w: 1909, h: 1030 },
+    plane:    { src: "/aetherius/hero-airframe.jpg",     w: 985,  h: 738  },
+    airborne: { src: "/aetherius/flight-02-airborne.png", w: 1909, h: 1030 },
 } as const;
 
 const VIDEO = {

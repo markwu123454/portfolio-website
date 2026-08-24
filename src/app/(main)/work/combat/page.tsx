@@ -250,20 +250,20 @@ export default function CombatPage() {
    ═════════════════════════════════════════════════════════════════ */
 
 const ROBOT_IMAGES: Record<string, string[]> = {
-    'Horizontal Spinner': ['/infernope/Screenshot 2025-10-27 201510.png'],
-    'Experimental Shell Spinners': ['/infernope/Screenshot 2025-10-27 210335.png', '/infernope/Screenshot 2025-10-27 205318.png'],
-    'Thwack!': ['/infernope/Screenshot 2025-10-27 220111.png', '/infernope/Screenshot 2025-10-27 220153.png'],
-    'Doomstone': ['/infernope/Screenshot 2025-10-27 215736.png'],
-    'Vert': ['/infernope/Screenshot 2025-10-27 205543.png'],
-    '300g Bot': ['/infernope/Screenshot 2025-10-27 202823.png', '/infernope/Screenshot 2025-10-27 222440.png'],
-    'Right Angle': ['/infernope/Screenshot 2025-10-27 202504.png'],
-    'Good Game': ['/infernope/Screenshot 2025-10-27 221114.png', '/infernope/Screenshot 2025-10-27 221553.png', '/infernope/Weixin Image_20251027221936_84_27.jpg', '/infernope/Weixin Image_20251027221938_85_27.jpg'],
-    'MAD': ['/infernope/Screenshot 2025-10-27 215322.png', '/infernope/Weixin Image_20251027221940_87_27.jpg', '/infernope/Screenshot 2025-10-27 222312.png', '/infernope/Screenshot 2025-10-27 215647.png'],
-    'Hello Kitty': ['/infernope/Screenshot 2025-10-27 220835.png'],
-    'The Reynolds Pamphlet': ['/infernope/Screenshot 2025-10-27 220655.png'],
-    'One and Two': ['/infernope/Screenshot 2025-10-28 124532.png'],
-    'Riptide': ['/infernope/Screenshot 2025-10-27 223235.png'],
-    'OP': ['/infernope/Screenshot 2025-10-27 203121.png', '/infernope/img.png'],
+    'Horizontal Spinner': ['/infernope/horizontal-spinner.png'],
+    'Experimental Shell Spinners': ['/infernope/shell-spinners-01.png', '/infernope/shell-spinners-02.png'],
+    'Thwack!': ['/infernope/thwack-01.png', '/infernope/thwack-02.png'],
+    'Doomstone': ['/infernope/doomstone.png'],
+    'Vert': ['/infernope/vert.png'],
+    '300g Bot': ['/infernope/300g-bot-01.png', '/infernope/300g-bot-02.png'],
+    'Right Angle': ['/infernope/right-angle.png'],
+    'Good Game': ['/infernope/good-game-01.png', '/infernope/good-game-02.png', '/infernope/good-game-03.jpg', '/infernope/good-game-04.jpg'],
+    'MAD': ['/infernope/mad-01.png', '/infernope/mad-02.jpg', '/infernope/mad-03.png', '/infernope/mad-04.png'],
+    'Hello Kitty': ['/infernope/hello-kitty.png'],
+    'The Reynolds Pamphlet': ['/infernope/reynolds-pamphlet.png'],
+    'One and Two': ['/infernope/one-and-two.png'],
+    'Riptide': ['/infernope/riptide.png'],
+    'OP': ['/infernope/op-01.png', '/infernope/op-02.png'],
 };
 
 

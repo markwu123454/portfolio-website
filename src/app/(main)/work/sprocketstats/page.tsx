@@ -103,7 +103,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/Screenshot 2026-08-13 205523.png"
+                                src="/sprocket/scouting-app-2025-old.png"
                                 width={837}
                                 height={815}
                                 alt="Screenshot of the old 2025 scouting app that SprocketStats replaced."
@@ -142,7 +142,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/Screenshot 2026-05-10 075229.png"
+                                src="/sprocket/scouting-app-2026-event2.png"
                                 width={2559}
                                 height={1599}
                                 alt="Current scouting app, second event of the 2026 season — task panel and shot slider on the left, field illustration on the right."
@@ -165,7 +165,7 @@ export default function SprocketStatsPage() {
                         <div className="grid grid-cols-[1.65fr_1fr] gap-4 items-stretch max-[720px]:grid-cols-1">
                             <div className="bg-bg-elev border border-rule overflow-hidden flex">
                                 <Image
-                                    src="/sprocket/Screenshot 2026-04-03 205309.png"
+                                    src="/sprocket/scouting-app-2026-early-design.png"
                                     width={985}
                                     height={487}
                                     alt="Earlier full-app design, with the original +N button approach for shot counting."
@@ -175,7 +175,7 @@ export default function SprocketStatsPage() {
                             </div>
                             <div className="bg-bg-elev border border-rule overflow-hidden flex">
                                 <Image
-                                    src="/sprocket/img.png"
+                                    src="/sprocket/shot-slider-closeup.png"
                                     width={503}
                                     height={898}
                                     alt="Close-up of the shot-volume slider that replaced the +N buttons."
@@ -243,7 +243,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/scouting_2026.png"
+                                src="/sprocket/scouting-2026.png"
                                 width={1919}
                                 height={914}
                                 alt="Match review screen from the data-presentation side of the app."
@@ -342,7 +342,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/v3/img_1.png"
+                                src="/sprocket/v3/broadcast-view-split.png"
                                 width={1920}
                                 height={1080}
                                 alt="View splitting within frame to separate each camera for separate processing."
@@ -361,7 +361,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/v3/img_2.png"
+                                src="/sprocket/v3/template-matching-debug.png"
                                 width={678}
                                 height={558}
                                 alt="Template matching debug view, used to test letter-reading accuracy against the webcast overlay"
@@ -396,7 +396,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/img_1.png"
+                                src="/sprocket/yolo-bytetrack-tracking.png"
                                 width={2879}
                                 height={1799}
                                 alt="YOLO + ByteTrack robot detection and tracking on competition footage."
@@ -430,7 +430,7 @@ export default function SprocketStatsPage() {
                     >
                         <div className="bg-bg-elev border border-rule overflow-hidden">
                             <Image
-                                src="/sprocket/v3/img.png"
+                                src="/sprocket/v3/hrnet-keypoints.png"
                                 width={1620}
                                 height={906}
                                 alt="HRNet keypoint output on competition footage."

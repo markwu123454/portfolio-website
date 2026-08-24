@@ -64,12 +64,10 @@ export function Header() {
                         <NavLink href="/now"     active={active === 'now'}>Now</NavLink>
                         <NavLink href="/about"   active={active === 'about'}>About</NavLink>
                         <NavLink href="/contact" active={active === 'contact'}>Contact</NavLink>
-                        <AvailabilityPill />
                     </nav>
 
                     {/* Mobile right side */}
                     <div className="flex md:hidden items-center gap-3">
-                        <AvailabilityPill />
                         <button
                             aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
                             aria-expanded={drawerOpen}
@@ -268,28 +266,5 @@ function ActiveIndicator() {
             aria-hidden
             className="absolute left-0 right-0 -bottom-[2px] h-[2px] bg-accent rounded-full"
         />
-    );
-}
-
-/* Live availability indicator. Pulsing green dot signals open status. */
-function AvailabilityPill() {
-    return (
-        <span
-            className="
-                inline-flex items-center gap-2
-                pl-2 pr-2.5 py-1
-                border border-rule rounded-full
-                font-mono text-[10px] tracking-[0.08em] uppercase
-                text-fg-muted whitespace-nowrap
-            "
-        >
-            <span aria-hidden className="relative inline-flex w-[6px] h-[6px]">
-                <span className="absolute inset-0 rounded-full bg-good opacity-60 animate-ping" />
-                <span className="relative inline-block w-[6px] h-[6px] rounded-full bg-good" />
-            </span>
-            {/* Shorten label on very small screens */}
-            <span className="hidden sm:inline">Open · Summer &#39;26</span>
-            <span className="sm:hidden">Open</span>
-        </span>
     );
 }

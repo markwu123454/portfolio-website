@@ -84,7 +84,7 @@ export default function HarbingerPage() {
             >
                 <div className="bg-bg-elev border border-rule overflow-hidden">
                     <Image
-                        src="/harbinger/img.png"
+                        src="/harbinger/electronics-bay.png"
                         width={2880}
                         height={2160}
                         alt="Harbinger electronics bay — ESP32 control board, motor drivers, and supporting electronics."

@@ -4,15 +4,15 @@ import type { ReactNode } from 'react';
 export const metadata: Metadata = {
     metadataBase: new URL('https://markwu.org'),
     title: {
-        default: 'Mark Wu — student engineer',
+        default: 'Mark Wu, UC Merced Undergrad',
         template: '%s · Mark Wu',
     },
     description:
-        'Student engineer. Robots, drones, and the software that runs them. Class of 2026, FRC 3473.',
+        'Robots, drones, and the software that runs them. Class of 2030.',
     openGraph: {
-        title: 'Mark Wu — student engineer',
+        title: 'Mark Wu, UC Merced Undergrad',
         description:
-            'Robots, drones, and the software that runs them. Class of 2026, FRC 3473.',
+            'Robots, drones, and the software that runs them. Class of 2030.',
         type: 'website',
     },
 };

@@ -55,7 +55,7 @@ const FLIGHTS: FlightEntry[] = [
     },
     {
         num: "01", date: "2026.08.18", status: "good", label: "Flown",
-        body: "Started on the sidewalk, downhill. Took off, climbed to about a metre, roughly 3 seconds of flight.",
+        body: "Started on the sidewalk, downhill. Took off, climbed to about a meter, roughly 3 seconds of flight.",
     },
     {
         num: "02", date: "2026.08.18", status: "good", label: "Flown",
@@ -257,14 +257,14 @@ export default function AetheriusPage() {
                                                     src={IMG.airborne.src}
                                                     width={IMG.airborne.w}
                                                     height={IMG.airborne.h}
-                                                    alt="Aetherius airborne over a park, banking left, roughly five metres up."
+                                                    alt="Aetherius airborne over a park, banking left, roughly five meters up."
                                                     sizes="(max-width: 880px) 100vw, 1068px"
                                                     className="w-full h-auto block"
                                                 />
                                             </div>
                                             <figcaption className="font-mono text-[11px] tracking-mono leading-[1.55] text-fg-soft mt-3">
                                                 <span className="text-fg-muted mr-1">Fig. 3.1 —</span>
-                                                Flight 2, 2026.08.18. Roughly five metres up and climbing;
+                                                Flight 2, 2026.08.18. Roughly five meters up and climbing;
                                                 moments later a prop broke and the flight ended.
                                             </figcaption>
                                         </figure>

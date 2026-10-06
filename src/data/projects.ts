@@ -2,7 +2,7 @@
  * Single source of truth for every project on the site.
  *
  * Used by:
- *   - /work            (work/page.tsx)          — the full filterable index
+ *   - /projects        (projects/page.tsx)      — the full filterable index
  *   - /                (page.tsx, home)          — the "Featured work" list,
  *                                                   via the `featured` field
  *
@@ -23,7 +23,7 @@ export interface Project {
     status: Status;
     domain: Domain;
     year: string;
-    /** Numeric recency key — higher = more recent. Used by /work's sort=recent. */
+    /** Numeric recency key — higher = more recent. Used by /projects' sort=recent. */
     recency: number;
     /** Set when href points off-site — renders a plain anchor, opens in a new tab. */
     external?: boolean;
@@ -32,13 +32,13 @@ export interface Project {
      * Lower number = shown first. Omit to leave it off the homepage.
      */
     featured?: number;
-    /** Overrides the status word shown on the homepage only (the /work index always shows `status` as-is). */
+    /** Overrides the status word shown on the homepage only (the /projects index always shows `status` as-is). */
     homeLabel?: string;
     /** Overrides the status dot color shown on the homepage only. */
     homeTone?: Tone;
-    /** Set to include this project in /now's "Active" section. */
+    /** Written for the retired /now page (archive/now-page.tsx). Not rendered anywhere now. */
     nowUpdate?: { title: string; body: string };
-    /** Set to include this project in /now's "On the back burner" section. */
+    /** Written for the retired /now page (archive/now-page.tsx). Not rendered anywhere now. */
     backBurnerNote?: string;
 }
 
@@ -53,12 +53,12 @@ export const STATUS_TONE: Record<Status, Tone> = {
 export const PROJECTS: Project[] = [
     {
         num: '01',
-        href: '/work/aetherius',
+        href: '/projects/aetherius',
         title: 'Aetherius UAV',
         blurb: 'Twin-boom fixed-wing. It actually flies!',
         status: 'building',
         domain: 'Drones',
-        year: '2024 —',
+        year: '2025 – present',
         recency: 100,
         featured: 1,
         homeLabel: 'flown',
@@ -70,12 +70,12 @@ export const PROJECTS: Project[] = [
     },
     {
         num: '02',
-        href: '/work/aetherius-gcs',
+        href: '/projects/aetherius-gcs',
         title: 'Aetherius GCS',
         blurb: 'Custom ArduPilot ground station. ArduCopter + ArduPlane, in-app firmware flashing, full calibration, missions, Lua IDE.',
         status: 'building',
         domain: 'Software',
-        year: '2025 —',
+        year: '2025 – present',
         recency: 99,
         featured: 2,
         nowUpdate: {
@@ -85,12 +85,12 @@ export const PROJECTS: Project[] = [
     },
     {
         num: '03',
-        href: '/work/sprocketstats',
+        href: '/projects/sprocketstats',
         title: 'SprocketStats Scouting',
         blurb: 'Real-time scouting + analytics for FRC. React, FastAPI, Postgres. Used at 3 competitions.',
         status: 'building',
         domain: 'Software',
-        year: '2024 —',
+        year: '2024 – present',
         recency: 95,
         featured: 3,
         nowUpdate: {
@@ -100,12 +100,12 @@ export const PROJECTS: Project[] = [
     },
     {
         num: '04',
-        href: '/work/sprocketstats-com',
+        href: '/projects/sprocketstats-com',
         title: 'sprocketstats.com',
         blurb: 'The team-facing platform. Scouting plus team operations.',
         status: 'shipped',
         domain: 'Software',
-        year: '2024 —',
+        year: '2024 – present',
         recency: 94,
         featured: 4,
         homeLabel: 'live',
@@ -116,19 +116,29 @@ export const PROJECTS: Project[] = [
     },
     {
         num: '05',
+        href: '/projects/mercedtime',
+        title: 'MercedTime',
+        blurb: '||Chrome extension that replaces UC Merced’s registration pages: class search, schedules built around your preferences, degree progress.||',
+        status: 'building',
+        domain: 'Software',
+        year: '2026 – present',
+        recency: 97,
+    },
+    {
+        num: '06',
         href: 'https://github.com/markwu123454/FemtoJSON',
         title: 'Femto',
         blurb: 'Three orders of magnitude smaller than pico, Femto is a native file-viewer suite: FemtoJSON, FemtoDot, and more to come.',
         status: 'paused',
         domain: 'Software',
-        year: '2026 —',
+        year: '2026 – present',
         recency: 85,
         external: true,
         backBurnerNote: 'Source and release on GitHub.',
     },
     {
-        num: '06',
-        href: '/work/crowd-flow',
+        num: '07',
+        href: '/projects/crowd-flow',
         title: 'Crowd Flow',
         blurb: 'Crowd simulation game in Godot.',
         status: 'archive',
@@ -138,30 +148,30 @@ export const PROJECTS: Project[] = [
         backBurnerNote: 'Prototype. Not planning to revisit it, but it still works and it is still fun to watch.',
     },
     {
-        num: '07',
-        href: '/work/caelifer',
+        num: '08',
+        href: '/projects/caelifer',
         title: 'Caelifer',
         blurb: 'Coaxial EDF tailsitter drone with a novel control system.',
         status: 'paused',
         domain: 'Drones',
-        year: '2026 —',
+        year: '2026 – present',
         recency: 85,
         backBurnerNote: 'bench testing, will revisit after Aetherius, probably.',
     },
     {
-        num: '08',
-        href: '/work/harbinger',
+        num: '09',
+        href: '/projects/harbinger',
         title: 'Harbinger',
         blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
         status: 'paused',
         domain: 'Robotics',
-        year: '2025 —',
+        year: '2025 – present',
         recency: 60,
         backBurnerNote: 'only differential geared base, got advice to not build it into a turret.',
     },
     {
-        num: '09',
-        href: '/work/sprocket-frc',
+        num: '10',
+        href: '/projects/sprocket-frc',
         title: 'FRC Team 3473: Team Sprocket',
         blurb: 'Two seasons of robot design with Team 3473.',
         status: 'archive',
@@ -170,8 +180,8 @@ export const PROJECTS: Project[] = [
         recency: 80,
     },
     {
-        num: '10',
-        href: '/work/combat',
+        num: '11',
+        href: '/projects/infernope',
         title: 'Team Infernope',
         blurb: 'Three years and twelve combat robots later, I got 1st place at the end-of-year tournament.',
         status: 'archive',

@@ -1,5 +1,5 @@
 /**
- * Work — /work
+ * Projects — /projects
  *
  * Server component. Index of all projects with a stats breakdown row,
  * domain filters, and sort. Filter + sort state lives in the URL
@@ -23,7 +23,7 @@ import { PROJECTS, STATUS_TONE, type Domain, type Status } from '@/data/projects
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: 'Work',
+    title: 'Projects',
     description:
         'Every project, filterable by domain. Status reflects current activity, not completion year.',
 };
@@ -39,14 +39,14 @@ function buildUrl(next: { domain?: 'all' | Domain; sort?: SortKey }): string {
     if (next.domain && next.domain !== 'all') sp.set('domain', next.domain.toLowerCase());
     if (next.sort && next.sort !== 'recent') sp.set('sort', next.sort);
     const q = sp.toString();
-    return q ? `/work?${q}` : '/work';
+    return q ? `/projects?${q}` : '/projects';
 }
 
 interface PageProps {
     searchParams: Promise<{ domain?: string; sort?: string }>;
 }
 
-export default async function WorkIndexPage({searchParams}: PageProps) {
+export default async function ProjectsIndexPage({searchParams}: PageProps) {
     const params = await searchParams;
 
     // Domain/sort parsed narrowly so bad input falls back to defaults.
@@ -77,7 +77,7 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
     return (
         <Page>
             <PageHeader
-                tag={['WORK', `${PROJECTS.length} PROJECTS`, '#003']}
+                tag={['PROJECTS', `${PROJECTS.length} PROJECTS`, '#003']}
                 title={`${PROJECTS.length} projects.`}
                 subtitle="Take a look."
                 dek="This page may lag behind actual progress, so if you want to know the most up to date info, reach out to me directly."
@@ -196,7 +196,7 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
                                     className="
                                         py-4 text-fg no-underline group
                                         flex flex-col gap-1.5
-                                        sm:grid sm:grid-cols-[40px_minmax(0,1fr)_120px_100px_24px] sm:gap-6 sm:items-baseline
+                                        sm:grid sm:grid-cols-[40px_minmax(0,1fr)_120px_116px_24px] sm:gap-6 sm:items-baseline
                                     "
                                 >
                                     {/* Index number — desktop only */}
@@ -239,7 +239,7 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
                         No projects in <span className="text-fg font-medium">{domain}</span> yet.
                     </p>
                     <Link
-                        href="/work"
+                        href="/projects"
                         className="inline-block mt-3 font-mono text-[11px] tracking-kicker uppercase text-accent no-underline hover:underline underline-offset-4"
                     >
                         ← Show all
@@ -252,7 +252,7 @@ export default async function WorkIndexPage({searchParams}: PageProps) {
                     {visible.length} of {PROJECTS.length} · filtered by{' '}
                     <span className="text-fg-muted">{domain.toLowerCase()}</span>
                     {' · '}
-                    <Link href="/work" className="text-accent no-underline hover:underline underline-offset-4">
+                    <Link href="/projects" className="text-accent no-underline hover:underline underline-offset-4">
                         clear
                     </Link>
                 </p>

@@ -29,3 +29,4 @@ Disallow: /
 
 # opt-out
 Content-Signal: search=yes,ai-train=no
+Sitemap: https://markwu.org/sitemap.xml

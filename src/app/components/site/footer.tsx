@@ -6,8 +6,7 @@
  *
  *   [ name + locale ]   [ work links ]   [ writing links ]   [ contact ]
  *
- * The EOF line below it (— MARK WU · 2026 · v1 / EOF) is the
- * existing `Footnote` component in layout.tsx. Keep both.
+ * The version / EOF line sits in the same block, under a hairline.
  */
 
 import Link from 'next/link';
@@ -15,15 +14,19 @@ import type { ReactNode } from 'react';
 
 export function Footer() {
     return (
-        <footer className="w-full max-w-[1100px] mx-auto px-8 pt-12 pb-2 mt-3 border-t border-rule">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 text-[13px]">
+        <footer className="w-full max-w-275 mx-auto px-4 sm:px-8 pt-6 pb-6 mt-3 border-t border-rule">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 text-[13px] leading-snug">
                 <Column>
-                    <Identity />
+                    <div className="font-mono text-[11px] text-fg-muted leading-relaxed">
+                        <div className="text-fg mb-1 tracking-mono">MARK WU · 2026</div>
+                        <div>Merced, CA</div>
+                        <div>UC Merced · 2030</div>
+                    </div>
                 </Column>
 
                 <Column heading="Work">
-                    <FLink href="/work">All projects</FLink>
-                    <FLink href="/now">Now</FLink>
+                    <FLink href="/projects">All projects</FLink>
+                    <FLink href="/experiments">Experiments</FLink>
                 </Column>
 
                 <Column heading="Writing">
@@ -46,6 +49,11 @@ export function Footer() {
                     </FLink>
                 </Column>
             </div>
+
+            <div className="flex justify-between items-baseline mt-6 pt-3 border-t border-rule font-mono text-[11px] tracking-mono text-fg-soft">
+                <span>— v1 · 2026.05</span>
+                <span>EOF</span>
+            </div>
         </footer>
     );
 }
@@ -58,23 +66,13 @@ function Column({
     children: ReactNode;
 }) {
     return (
-        <div className="flex flex-col gap-1.5">
+        <div className="flex flex-col gap-1">
             {heading && (
-                <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-2">
+                <div className="font-mono text-[10px] tracking-kicker uppercase text-fg-soft mb-1">
                     {heading}
                 </div>
             )}
             {children}
-        </div>
-    );
-}
-
-function Identity() {
-    return (
-        <div className="font-mono text-[11px] text-fg-muted leading-relaxed">
-            <div className="text-fg mb-2 tracking-mono">MARK WU · 2026</div>
-            <div>Merced, CA</div>
-            <div>UC Merced · 2030</div>
         </div>
     );
 }

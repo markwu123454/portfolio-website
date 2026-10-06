@@ -14,7 +14,7 @@
  *   → hamburger opens a full-screen drawer with all nav links
  *
  * Music removed from nav — it's a small single page, accessible via
- * /work or direct URL. Search hint removed — no implementation behind it.
+ * /projects or direct URL. Search hint removed — no implementation behind it.
  */
 
 import Link from 'next/link';
@@ -59,9 +59,8 @@ export function Header() {
 
                     {/* Desktop nav */}
                     <nav className="hidden md:flex items-center gap-5.5">
-                        <NavLink href="/work" active={active === 'work'}>Work</NavLink>
+                        <NavLink href="/projects" active={active === 'projects'}>Projects</NavLink>
                         <NavLink href="/experiments" active={active === 'experiments'}>Experiments</NavLink>
-                        <NavLink href="/now"     active={active === 'now'}>Now</NavLink>
                         <NavLink href="/about"   active={active === 'about'}>About</NavLink>
                         <NavLink href="/contact" active={active === 'contact'}>Contact</NavLink>
                     </nav>
@@ -133,14 +132,11 @@ export function Header() {
 
                 {/* Drawer links */}
                 <nav className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-1">
-                    <DrawerLink href="/work" active={active === 'work'} onClick={() => setDrawerOpen(false)}>
-                        Work
+                    <DrawerLink href="/projects" active={active === 'projects'} onClick={() => setDrawerOpen(false)}>
+                        Projects
                     </DrawerLink>
                     <DrawerLink href="/experiments" active={active === 'experiments'} onClick={() => setDrawerOpen(false)}>
                         Experiments
-                    </DrawerLink>
-                    <DrawerLink href="/now" active={active === 'now'} onClick={() => setDrawerOpen(false)}>
-                        Now
                     </DrawerLink>
                     <DrawerLink href="/about" active={active === 'about'} onClick={() => setDrawerOpen(false)}>
                         About
@@ -163,16 +159,15 @@ export function Header() {
 
 /* ─────────────────────────────────────────────────────────────────
    Routing → active-key resolver. Longest-prefix match so
-   /work/harbinger still highlights "Work".
+   /projects/harbinger still highlights "Projects".
    ───────────────────────────────────────────────────────────────── */
 
-type ActiveKey = 'home' | 'work' | 'experiments' | 'now' | 'about' | 'contact';
+type ActiveKey = 'home' | 'projects' | 'experiments' | 'about' | 'contact';
 
 function routeToKey(pathname: string | null): ActiveKey {
     if (!pathname || pathname === '/') return 'home';
-    if (pathname.startsWith('/work'))        return 'work';
+    if (pathname.startsWith('/projects'))    return 'projects';
     if (pathname.startsWith('/experiments')) return 'experiments';
-    if (pathname.startsWith('/now'))         return 'now';
     if (pathname.startsWith('/about'))       return 'about';
     if (pathname.startsWith('/contact'))     return 'contact';
     return 'home';

@@ -10,7 +10,7 @@
  * layout order — both JSX and the data behind it — since nothing here
  * is used from more than one place. Section/SectionFooter/ArrowLink/
  * Tag/Button are genuinely reused, so those stay as functions, and
- * PROJECTS stays in data/projects.ts since /work and /now use it too.
+ * PROJECTS stays in data/projects.ts since /projects uses it too.
  */
 
 import Link from 'next/link';
@@ -63,7 +63,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="mt-8 sm:mt-10 flex gap-3 flex-wrap items-center">
-                        <Button href="/work" variant="primary" arrow>See work</Button>
+                        <Button href="/projects" variant="primary" arrow>See projects</Button>
                         <Button href="/resume.pdf#view=FitV" variant="ghost" external>Resume.pdf</Button>
                         {/* Email hint — only meaningful where there's room */}
                         <span className="hidden sm:inline font-mono text-xs text-fg-soft ml-1">
@@ -150,7 +150,7 @@ export default function HomePage() {
                         })}
                 </ul>
                 <SectionFooter>
-                    <ArrowLink href="/work">All projects</ArrowLink>
+                    <ArrowLink href="/projects">All projects</ArrowLink>
                 </SectionFooter>
             </Section>
 
@@ -197,9 +197,6 @@ export default function HomePage() {
                         </li>
                     ))}
                 </ul>
-                <SectionFooter>
-                    <ArrowLink href="/now">What I&#39;m doing now</ArrowLink>
-                </SectionFooter>
             </Section>
 
             {/* ─ 03 — Currently ───────────────────────────────────── */}

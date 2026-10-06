@@ -84,3 +84,8 @@ html {
     outline-offset: 2px;
     border-radius: 2px;
 }
+/* Project gallery: the active dot fills over one auto-advance interval. */
+@keyframes gallery-progress {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}

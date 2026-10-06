@@ -10,6 +10,11 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    // Retired /work pages, kept for their text. Not built or routed.
+    ignores: ["archive/**"],
+  },
+
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 
   {

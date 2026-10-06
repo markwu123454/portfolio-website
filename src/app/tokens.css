@@ -89,7 +89,7 @@
 
 /* ─────────────────────────────────────────────────────────────────
    3. HAZARD — DARK (default)
-   Used by /work/combat. Amber + red on near-black.
+   Formerly used by /work/combat (now /projects/infernope); currently unused. Amber + red on near-black.
    ───────────────────────────────────────────────────────────────── */
 [data-theme="hazard"] {
     --bg:           #0d0d0d;

@@ -47,7 +47,7 @@ export default function AboutPage() {
                             <Button href="mailto:me@markwu.org" variant="ghost" external>
                                 me@markwu.org
                             </Button>
-                            <Button href="/work" variant="link" arrow>
+                            <Button href="/projects" variant="link" arrow>
                                 See work
                             </Button>
                         </div>

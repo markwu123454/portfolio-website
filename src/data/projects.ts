@@ -118,7 +118,7 @@ export const PROJECTS: Project[] = [
         num: '05',
         href: '/projects/mercedtime',
         title: 'MercedTime',
-        blurb: '||Chrome extension that replaces UC Merced’s registration pages: class search, schedules built around your preferences, degree progress.||',
+        blurb: 'Chrome extension that replaces UC Merced’s registration pages: class search, schedules built around your preferences, degree progress.',
         status: 'building',
         domain: 'Software',
         year: '2026 – present',

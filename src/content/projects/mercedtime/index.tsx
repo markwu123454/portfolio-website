@@ -21,7 +21,7 @@ export default defineProject({
     thumb: banner,
 
     stack: ['React', 'Vite', 'Chrome MV3', 'IndexedDB'],
-    links: [{ kind: 'site', label: 'Chrome Web Store', href: 'https://chromewebstore.google.com/detail/hjppipajfmgbkocbjejafmmdommjbnpg' }],
+    links: [{ kind: 'site', label: 'Chrome Web Store', href: 'https://chromewebstore.google.com/detail/hjppipajfmgbkocbjejafmmdommjbnpg?utm_source=portfolio-website-project' }],
     stats: [
         { label: 'Platform', value: 'Chrome extension' },
         { label: 'Replaces', value: 'Banner + uAchieve' },

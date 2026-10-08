@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
             { source: '/work/:slug*', destination: '/projects/:slug*', statusCode: 301 },
             // /now was retired; send old links home.
             { source: '/now', destination: '/', statusCode: 301 },
+            // Unlisted short link to the MercedTime Chrome extension. 307 so browsers don't cache it.
+            {
+                source: '/mt',
+                destination: 'https://chromewebstore.google.com/detail/hjppipajfmgbkocbjejafmmdommjbnpg?utm_source=portfolio-quick-redirect',
+                statusCode: 307,
+            },
         ];
     },
     async headers() {

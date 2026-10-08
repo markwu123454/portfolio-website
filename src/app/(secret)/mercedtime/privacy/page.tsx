@@ -43,7 +43,7 @@ export default function MercedTimePrivacyPage() {
             <style>{CSS}</style>
             <div className="brand">Merced<span>Time</span></div>
             <h1>Privacy policy</h1>
-            <p className="updated">Last updated October 6, 2026</p>
+            <p className="updated">Last updated October 7, 2026 (version 1.0.0)</p>
 
             <p>
                 MercedTime is a Chrome extension for UC Merced students. It is an independent student project and is not
@@ -75,12 +75,21 @@ export default function MercedTimePrivacyPage() {
                 from Banner or uAchieve before you agree.
             </p>
 
+            <h2>Notifications</h2>
+            <p>
+                MercedTime can notify you when a new semester is posted, and a day before and when your registration time
+                opens. To do this it checks Banner’s public list of semesters every two hours while Chrome is running, even
+                when MercedTime isn’t open. That request does not send your cookies or anything about you. Registration
+                reminders are worked out on your computer from the registration time MercedTime last read. You can turn
+                notifications off in Settings.
+            </p>
+
             <h2>What is stored</h2>
             <p>
-                Your plan and settings are saved in Chrome’s sync storage for the extension. If you are signed in to Chrome
-                with sync turned on, Chrome copies them to your other computers through your Google account, the same way
-                it syncs your bookmarks. They go to Google as part of Chrome sync, never to the developer. Without Chrome
-                sync they stay on your computer.
+                Your plan and settings, including the courses you watch for open seats, are saved in Chrome’s sync storage
+                for the extension. If you are signed in to Chrome with sync turned on, Chrome copies them to your other
+                computers through your Google account, the same way it syncs your bookmarks. They go to Google as part of
+                Chrome sync, never to the developer. Without Chrome sync they stay on your computer.
             </p>
             <p>The following is saved in your browser’s extension storage on your computer only:</p>
             <ul>
@@ -90,6 +99,8 @@ export default function MercedTimePrivacyPage() {
                     your latest registrations and registration status, so your schedule still shows when your Banner
                     session has ended
                 </li>
+                <li>the degree requirements downloaded for the Roadmap</li>
+                <li>the list of semesters seen on Banner, and which reminders have already been shown, so none shows twice</li>
                 <li>
                     a short log of your last few sign-ins: the addresses of the pages they went through (without anything
                     after the “?”) and whether each check found you signed in, to help fix sign-in problems
@@ -98,10 +109,16 @@ export default function MercedTimePrivacyPage() {
 
             <h2>What is shared</h2>
             <p>
-                Nothing is sent to the developer or to any third party. The only copy that leaves your computer is the plan
-                and settings Chrome sync carries for you, as described above. The extension has no server, no analytics, no
-                advertising, and no tracking. Data is not sold, not transferred, and not used for anything other than
-                showing it to you in the extension.
+                Nothing about you is sent to the developer or to any third party. The only copy that leaves your computer is
+                the plan and settings Chrome sync carries for you, as described above. The extension has no analytics, no
+                advertising, and no tracking.
+            </p>
+            <p>
+                The Degree page’s Roadmap needs the catalog’s degree requirements. When MercedTime opens, it downloads every
+                program’s requirements from a database the developer runs on Neon (neon.tech). The request asks for the
+                whole list and carries nothing about you: not your major, courses or name. Like any web request it reveals
+                your IP address to Neon. The Roadmap is then worked out on your computer. Data is not sold, not
+                transferred, and not used for anything other than showing it to you in the extension.
             </p>
 
             <h2>Limited Use disclosure</h2>
@@ -124,6 +141,11 @@ export default function MercedTimePrivacyPage() {
             <h2>Contact</h2>
             <p>
                 <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+            </p>
+            <p>
+                The bug report and feature request buttons in Settings open an email in your own email app, addressed to
+                the developer. Nothing is sent unless you send that email yourself. It includes the extension and Chrome
+                version and the semester you were viewing, which you can see and edit before sending.
             </p>
         </main>
     );

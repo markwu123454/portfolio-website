@@ -43,7 +43,7 @@ export default function MercedTimePrivacyPage() {
             <style>{CSS}</style>
             <div className="brand">Merced<span>Time</span></div>
             <h1>Privacy policy</h1>
-            <p className="updated">Last updated October 7, 2026 (version 1.0.0)</p>
+            <p className="updated">Last updated October 10, 2026 (version 1.0.1)</p>
 
             <p>
                 MercedTime is a Chrome extension for UC Merced students. It is an independent student project and is not
@@ -52,8 +52,7 @@ export default function MercedTimePrivacyPage() {
 
             <h2>What the extension does with data</h2>
             <p>
-                The extension reads pages and data from Banner (reg-prod.ec.ucmerced.edu) and uAchieve
-                (ucmerced.uachieve.com) using the sign-in you already have in your browser, and shows it to you in its own
+                The extension reads pages and data from UCM Registration (reg-prod.ec.ucmerced.edu) and My Degree Path (ucmerced.uachieve.com) using the sign-in you already have in your browser, and shows it to you in its own
                 page. It reads your registrations, registration status, course catalog, and degree audit.
             </p>
             <p>MercedTime never sees or stores your password. Sign-in happens on the university’s own pages.</p>
@@ -62,26 +61,29 @@ export default function MercedTimePrivacyPage() {
             <ul>
                 <li>
                     Personal academic information: your registrations, registration status, degree audit and course
-                    history, read from Banner and uAchieve.
+                    history, read from UCM Registration and My Degree Path.
                 </li>
                 <li>Website content: the pages and data returned by reg-prod.ec.ucmerced.edu and ucmerced.uachieve.com.</li>
                 <li>
-                    Page addresses: the extension sees when the browser opens Banner’s registration menu page or returns
-                    from Banner’s sign-in, so it can open MercedTime. Addresses are not saved.
+                    Page addresses: the extension sees when the browser opens UCM Registration’s menu page or returns from its sign-in, so it can open MercedTime. Addresses are not saved.
                 </li>
             </ul>
             <p>
                 The extension shows a disclosure and asks for your agreement the first time it opens. It reads nothing
-                from Banner or uAchieve before you agree.
+                from UCM Registration or My Degree Path before you agree.
             </p>
 
             <h2>Notifications</h2>
             <p>
-                MercedTime can notify you when a new semester is posted, and a day before and when your registration time
-                opens. To do this it checks Banner’s public list of semesters every two hours while Chrome is running, even
-                when MercedTime isn’t open. That request does not send your cookies or anything about you. Registration
-                reminders are worked out on your computer from the registration time MercedTime last read. You can turn
-                notifications off in Settings.
+                MercedTime can notify you when a new semester is posted, a day before and when your
+                registration time opens, and when a course you watch fills up or gets an open seat. To do this it
+                checks UCM Registration’s public list of semesters every two hours while Chrome is
+                running, even when MercedTime isn’t open. For each course you watch, it also asks UCM
+                Registration how many seats the course’s sections have: every two hours, and every ten
+                minutes while your registration window is open. These requests carry only the semester
+                and the course’s section numbers (CRNs); they do not send your cookies or anything about
+                you. Registration reminders are worked out on your computer from the registration time
+                MercedTime last read. You can turn notifications off in Settings.
             </p>
 
             <h2>What is stored</h2>
@@ -96,11 +98,11 @@ export default function MercedTimePrivacyPage() {
                 <li>downloaded course catalogs</li>
                 <li>the latest degree audit and course history the extension read</li>
                 <li>
-                    your latest registrations and registration status, so your schedule still shows when your Banner
-                    session has ended
+                    your latest registrations and registration status, so your schedule still shows when your UCM Registration sign-in has ended
                 </li>
                 <li>the degree requirements downloaded for the Roadmap</li>
-                <li>the list of semesters seen on Banner, and which reminders have already been shown, so none shows twice</li>
+                <li>the list of semesters seen on UCM Registration, and which reminders have already been shown, so none shows twice</li>
+                <li>the seats last seen in each course you watch, so you are notified only when they change</li>
                 <li>
                     a short log of your last few sign-ins: the addresses of the pages they went through (without anything
                     after the “?”) and whether each check found you signed in, to help fix sign-in problems
@@ -123,7 +125,7 @@ export default function MercedTimePrivacyPage() {
 
             <h2>Limited Use disclosure</h2>
             <p>
-                The use of information received from Banner and uAchieve will adhere to the Chrome Web Store User Data
+                The use of information received from UCM Registration and My Degree Path will adhere to the Chrome Web Store User Data
                 Policy, including the Limited Use requirements. The data is used only to provide the extension’s single
                 purpose of showing you your catalog, schedule, plan and degree audit. It is not transferred to others,
                 except where required by law. It is not used for advertising. No person reads it. Your registrations, degree
@@ -133,9 +135,13 @@ export default function MercedTimePrivacyPage() {
             <h2>Removing your data</h2>
             <p>
                 Removing the extension from Chrome deletes the data saved on your computer. To delete the plan and settings
-                kept by Chrome sync, use Chrome’s own option to clear synced data. The data in Banner and uAchieve is not
-                changed by the extension, except that “Run a new audit” asks uAchieve to run an audit, the same as pressing
+                kept by Chrome sync, use Chrome’s own option to clear synced data. The data in UCM Registration and My Degree Path is not changed by the extension, except that “Run a new audit” asks My Degree Path to run an audit, the same as pressing
                 its own button.
+            </p>
+
+            <h2>Terms</h2>
+            <p>
+                Using MercedTime is also subject to its <a href="/mercedtime/terms">terms of use</a>.
             </p>
 
             <h2>Contact</h2>

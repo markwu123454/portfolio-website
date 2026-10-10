@@ -92,7 +92,6 @@ export const PROJECTS: Project[] = [
         domain: 'Software',
         year: '2024 – present',
         recency: 95,
-        featured: 3,
         nowUpdate: {
             title: 'Computer-vision rebuild',
             body: 'Rebuilding the scouting pipeline to integrate machine learning algorithms, currently building for the 2026 off-season.',
@@ -107,7 +106,6 @@ export const PROJECTS: Project[] = [
         domain: 'Software',
         year: '2024 – present',
         recency: 94,
-        featured: 4,
         homeLabel: 'live',
         nowUpdate: {
             title: 'Team operations and scouting platform.',
@@ -123,6 +121,7 @@ export const PROJECTS: Project[] = [
         domain: 'Software',
         year: '2026 – present',
         recency: 97,
+        featured: 3,
     },
     {
         num: '06',
@@ -188,6 +187,5 @@ export const PROJECTS: Project[] = [
         domain: 'Robotics',
         year: '2020–24',
         recency: 20,
-        featured: 5,
     },
 ];

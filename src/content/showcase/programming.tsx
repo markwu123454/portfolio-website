@@ -27,7 +27,7 @@ export default defineShowcase({
 
     feature: {
         title: 'Aetherius GCS',
-        caption: 'ArduPilot ground station in Rust and React. It has run every flight of my drone.',
+        caption: 'Rust + React ArduPilot ground station, in the loop on every Aetherius flight.',
         media: (
             <Shot
                 src={gcs}
@@ -54,7 +54,7 @@ export default defineShowcase({
         },
         {
             title: 'MercedTime',
-            caption: 'Chrome extension replacing UC Merced’s registration pages.',
+            caption: 'Chrome extension replacing the read side of UC Merced’s registration.',
             media: <Shot src={findClasses} alt="Find classes: a searchable course list with open seats, times and a section detail panel." />,
             href: '/projects/mercedtime',
             span: 'wide',
@@ -66,8 +66,8 @@ export default defineShowcase({
             href: '/projects/mercedtime',
         },
         {
-            title: 'Degree audit',
-            caption: 'Degree progress merged with your plan.',
+            title: 'Degree roadmap',
+            caption: 'Unofficial roadmap from the audit and your plan.',
             media: <Shot src={degree} alt="Degree: the degree audit with each requirement marked done, in progress, planned or needed." />,
             href: '/projects/mercedtime',
         },
@@ -85,7 +85,7 @@ export default defineShowcase({
         },
         {
             title: 'Crowd Flow',
-            caption: 'About 2,000 agents at 60 fps on the GPU in Godot.',
+            caption: '~2,000 agents at 60 fps (2× speed) on the GPU in Godot. Informal numbers.',
             media: <Shot src={crowd} alt="Crowd Flow at 18:45: dense green crowds streaming toward four exits of the plaza." />,
             href: '/projects/crowd-flow',
             span: 'wide',

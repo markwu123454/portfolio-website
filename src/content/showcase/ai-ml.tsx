@@ -17,13 +17,13 @@ export default defineShowcase({
     topic: 'AI / ML',
     title: 'Scouting from video.',
     subtitle: 'Computer vision for FRC.',
-    description: 'Applied ML: robot detection and tracking, keypoint models, camera solves and match prediction for FRC scouting.',
+    description: 'Applied ML for FRC scouting: match prediction, and a computer-vision rebuild with broadcast alignment and field mapping done and robot detection, tracking and pose unfinished.',
 
     stats: [
         { label: 'Prediction', value: '~87% win/loss' },
         { label: 'vs Statbotics', value: 'No sig. difference' },
         { label: 'Models', value: 'YOLO · ByteTrack · HRNet' },
-        { label: 'Data', value: '411 records · 73 teams' },
+        { label: 'Data', value: '218 matches · 73 teams' },
     ],
 
     feature: {
@@ -42,7 +42,7 @@ export default defineShowcase({
     tiles: [
         {
             title: 'Robot tracking',
-            caption: 'YOLO and ByteTrack follow every robot through the match.',
+            caption: 'YOLO + ByteTrack detection and tracking, unfinished at handoff.',
             media: <Shot src={tracking} alt="Competition broadcast with a labelled box around every robot, such as “blue 0.82” and “red 0.86”." />,
             href: '/projects/sprocketstats',
             span: 'wide',
@@ -75,7 +75,7 @@ export default defineShowcase({
         },
         {
             title: 'Keypoints',
-            caption: 'HRNet finds each robot’s geometric centre.',
+            caption: 'HRNet pose estimation for each robot’s centre, unfinished at handoff.',
             media: <Shot src={keypoints} alt="Reefscape broadcast frame from the Curie Division, used for HRNet keypoint detection." />,
             href: '/projects/sprocketstats',
         },
@@ -99,7 +99,7 @@ export default defineShowcase({
         },
         {
             title: 'Scouting app',
-            caption: 'The manual input v3 is built to replace.',
+            caption: 'The manual input v3 was meant to replace.',
             media: <Shot src={scoutingApp} alt="Scouting app mid-match: task buttons on the left, field map in the middle, made and missed shot sliders on the right." />,
             href: '/projects/sprocketstats',
         },

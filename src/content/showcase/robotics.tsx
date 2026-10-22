@@ -28,7 +28,7 @@ export default defineShowcase({
 
     feature: {
         title: 'Team 3473, 2026',
-        caption: 'Rebuilt season. I designed its storage and indexer.',
+        caption: 'Rebuilt season. I designed its indexer, storage and superstructure.',
         media: <CadRender src={rebuilt} alt="CAD of Team 3473’s 2026 Rebuilt robot with purple TEAM SPROCKET bumpers." priority sizes="(max-width: 768px) 100vw, 1100px" />,
         href: '/projects/sprocket-frc',
     },
@@ -43,7 +43,7 @@ export default defineShowcase({
         },
         {
             title: 'Team 3473, 2025',
-            caption: 'I designed the climb subsystem.',
+            caption: 'I designed the intake and climb subsystems.',
             media: <Shot src={robotPits} fit="contain" alt="Team 3473’s 2025 robot on the pit floor: a tall elevator, white intake rollers and blue 3473 bumpers." />,
             href: '/projects/sprocket-frc',
             span: 'tall',

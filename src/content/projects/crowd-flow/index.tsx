@@ -8,7 +8,7 @@ export default defineProject({
     slug: 'crowd-flow',
     title: 'Crowd Flow',
     subtitle: 'an idea I wrote down and then actually built.',
-    summary: 'Crowd simulation in Godot, built on two crowd-dynamics papers implemented on the GPU.',
+    summary: 'Shelved crowd-simulation prototype in Godot: an existing hybrid continuum and social-force model, with the per-agent work moved into GPU shaders.',
     domain: 'Software',
     status: 'archived',
     years: { start: 2026, end: 2026 },
@@ -22,7 +22,7 @@ export default defineProject({
     stats: [
         { label: 'Engine', value: 'Godot' },
         { label: 'Model', value: 'Two papers, 2001 + 2011' },
-        { label: 'Scale', value: '~2,000 agents · 60 fps' },
+        { label: 'Scale (informal)', value: '~2,000 agents · 60 fps at 2×' },
     ],
 
     highlights: [
@@ -43,11 +43,11 @@ export default defineProject({
             date: '2026', kind: 'milestone', label: 'Stopped', title: 'Shelved',
             body: 'Optimizations hid a block, I can’t get performance where I wanted it, and I didn’t think I could build a game I’d enjoy.',
         },
-        { date: '2026', kind: 'release', title: 'Moved to Godot and the GPU', body: 'About 2,000 agents at 60 fps, running at 2× speed.' },
+        { date: '2026', kind: 'release', title: 'Moved to Godot and the GPU', body: 'About 2,000 agents at 60 fps, running at 2× speed. Informal, single-machine numbers from different builds, not a controlled benchmark.' },
         { date: '2026', kind: 'release', title: 'Python prototype', body: 'Both papers implemented faithfully: about 1,000 agents at 13 fps.' },
     ],
 
     outlook: {
-        now: 'It runs without bugs, but most of it is unfinished. Feel free to fork the repo and try or continue it.',
+        now: 'What exists runs without bugs, but most of it is unfinished. The source is public to read; there are no setup docs and none are planned.',
     },
 });

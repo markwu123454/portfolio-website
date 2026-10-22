@@ -239,7 +239,7 @@ export default function ContactPage() {
                                 ['Timezone', 'America/Los_Angeles · UTC−7 (PDT)'],
                                 ['Based', 'Merced, CA'],
                                 ['Languages', 'English · Mandarin'],
-                                ['Last updated', '2026.08.20'],
+                                ['Last updated', '2026.10.21'],
                             ] as Array<[string, ReactNode]>
                         ).map(([k, v]) => (
                             <div

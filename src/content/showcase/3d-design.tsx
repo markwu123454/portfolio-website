@@ -23,7 +23,7 @@ export default defineShowcase({
     stats: [
         { label: 'Primary', value: 'SolidWorks' },
         { label: 'Also', value: 'Fusion 360 · Onshape' },
-        { label: 'Designed', value: '12+ combat · 2 FRC' },
+        { label: 'Designed', value: '12 combat · 5 FRC subsystems' },
         { label: 'Since', value: '2020' },
     ],
 
@@ -36,22 +36,22 @@ export default defineShowcase({
 
     tiles: [
         {
-            title: 'Reefscape climb',
-            caption: 'Climb subsystem on Team 3473’s 2025 robot.',
+            title: 'Reefscape intake + climb',
+            caption: 'Intake and climb subsystems on Team 3473’s 2025 robot.',
             media: <CadRender src={reefscape} alt="CAD of Team 3473’s 2025 Reefscape robot: a tall elevator on purple bumpers." />,
             href: '/projects/sprocket-frc',
             span: 'wide',
         },
         {
             title: 'Caelifer',
-            caption: 'Coaxial EDF tailsitter in a 100 mm tube.',
+            caption: 'Coaxial EDF tailsitter in a 150 mm tube.',
             media: <CadRender src={caelifer} alt="Transparent CAD render of Caelifer: a tall tube with a rounded nose, the EDF pair and fins visible inside." />,
             href: '/projects/caelifer',
             span: 'tall',
         },
         {
             title: 'Rebuilt indexer',
-            caption: 'Storage and indexer on the 2026 robot.',
+            caption: 'Indexer, storage and superstructure on the 2026 robot.',
             media: <CadRender src={rebuilt} alt="CAD of Team 3473’s 2026 Rebuilt robot with purple TEAM SPROCKET bumpers." />,
             href: '/projects/sprocket-frc',
         },

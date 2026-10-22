@@ -36,8 +36,8 @@ export default function AboutPage() {
                 <div className="grid md:grid-cols-2 gap-8">
                     <div>
                         <p className="m-0 text-[15.5px] leading-[1.65] text-fg-muted max-w-115">
-                            Research lab positions during the semester, and Summer 2027
-                            internships in robotics, drones, embedded systems, or full-stack tooling. Comfortable with
+                            Summer 2027 internships, REUs, and lab placements in robotics, drones,
+                            embedded systems, or full-stack tooling. Comfortable with
                             hardware (Pixhawk, Arduino, ESP32, Pi) and software (TypeScript, Python, Rust).
                         </p>
                         <div className="mt-6 flex gap-3 flex-wrap">
@@ -116,9 +116,13 @@ export default function AboutPage() {
                 <div className="grid md:grid-cols-[minmax(0,1fr)_320px] gap-12 items-start">
                     <div className="grid gap-4 max-w-155 text-[15.5px] leading-[1.7] text-fg-muted">
                         <p className="m-0">
-                            Incoming mechanical engineering student at UC Merced, aerospace emphasis, class
-                            of 2030. I started engineering with VEX IQ and LEGO EV3 in middle school, moved on to combat robotics
-                            for three years, then FRC with Team 3473, first as CAD subteam, later also leading the scouting platform.
+                            Mechanical engineering student at UC Merced, aerospace emphasis, with a minor in Data
+                            Science and Computing, class of 2030. I started engineering with VEX IQ and LEGO EV3 in middle school, moved on to combat robotics
+                            for three years, then FRC with Team 3473, on the CAD subteam and as the scouting app’s technical lead.
+                        </p>
+                        <p className="m-0">
+                            At UC Merced I’m an undergraduate researcher in Carpin’s lab, on the Robotics Society’s BattleBots
+                            team, and in AIAA on the Design/Build/Fly, UAV, and CubeSat subteams.
                         </p>
                         <p className="m-0">
                             My current obsession is with drones and autonomous programs. I remix music occasionally.

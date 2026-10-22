@@ -7,7 +7,7 @@ export default defineProject({
     slug: 'aetherius-gcs',
     title: 'Aetherius GCS',
     subtitle: 'a modern ground station for ArduPilot.',
-    summary: 'Desktop ground station for ArduCopter and ArduPlane.',
+    summary: 'Desktop ground station for ArduCopter and ArduPlane: firmware flashing, calibration, setup, prearm, missions and a Lua IDE.',
     domain: 'Software',
     status: 'building',
     years: { start: 2025 },
@@ -58,12 +58,12 @@ export default defineProject({
             body: 'Reused the Python MAVLink code from v1, plus a fully reconfigurable panel system that turned out to be a too complicated. Not public.',
         },
         {
-            kind: 'release', label: 'v1', title: 'Python on localhost',
+            kind: 'release', label: 'v1', title: 'Python / FastAPI web app',
             body: 'Depended on a Raspberry Pi companion computer next to the flight controller, and was never flown.',
         },
     ],
 
     outlook: {
-        now: 'v3 has handled every Aetherius flight so far. Mission support works against the simulator (SITL) but yet to test it in flight.',
+        now: 'v3 has been the ground station in the loop for every Aetherius flight so far, and flashed and set up the Pixhawk 6C on Caelifer. Piloting is on the RC transmitter. Mission support works against the simulator (SITL); no mission has been flown yet.',
     },
 });

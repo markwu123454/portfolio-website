@@ -7,7 +7,7 @@ export default defineProject({
     slug: 'caelifer',
     title: 'Caelifer',
     subtitle: 'a target, three constraints, and whatever they force.',
-    summary: 'Coaxial EDF tailsitter in a finless tube, with a novel control system.',
+    summary: 'Tube-launchable coaxial EDF tailsitter in a 150 mm finless airframe, steered by servo-actuated exhaust vanes with no external control surfaces.',
     domain: 'Drones',
     status: 'paused',
     statusNote: 'bench testing',
@@ -26,9 +26,10 @@ export default defineProject({
     stack: ['SolidWorks', 'Pixhawk 6C', 'ArduCopter'],
     links: [{ kind: 'related', label: 'Aetherius GCS', href: '/projects/aetherius-gcs' }],
     stats: [
-        { label: 'Airframe', value: '100 mm finless tube' },
+        { label: 'Airframe', value: '150 mm finless tube' },
         { label: 'Propulsion', value: '70 mm coaxial EDF · 6S' },
-        { label: 'Peak draw', value: '180 A · ~4.0 kW' },
+        { label: 'Weight', value: '~1.5 kg (estimated)' },
+        { label: 'Tested', value: 'Bench only · no hover' },
     ],
 
     highlights: [
@@ -43,16 +44,16 @@ export default defineProject({
                 />
             ),
             caption:
-                'Requirements for the drone. Contra-rotating EDFs cancel each other’s torque and straighten out the airflow in the end, and the fins sit inside the exhaust because that’s where control authority comes from in a hover.',
+                'Requirements for the drone. Contra-rotating EDFs cancel each other’s torque and straighten out the airflow in the end, and servo-actuated vanes sit inside the exhaust because that’s where control authority comes from in a hover.',
         },
         {
             media: <Shot src={flowSim} fit="contain" alt="SolidWorks Flow Simulation: streamlines flowing past a cutaway of Caelifer’s nose and tube." />,
-            caption: 'SolidWorks Flow Simulation, still figuring out how to interpret the results.',
+            caption: 'SolidWorks Flow Simulation, used qualitatively to catch geometry that would spike drag. Not for drag numbers: layer lines on the printed part would throw them off anyway.',
         },
     ],
 
     outlook: {
-        now: 'Propulsion and avionics are on the bench: a Pixhawk 6C on ArduCopter, set up with my ground station.',
+        now: 'Propulsion and avionics have been bench tested at low speed with props and at high speed without them, never high speed with props. Current draw hasn’t been measured yet (the manufacturer lists 178 A at stall). Flight controller is a Pixhawk 6C on ArduCopter, set up with my ground station.',
         restart: ['Backburner, working a bit at a time.'],
     },
 });

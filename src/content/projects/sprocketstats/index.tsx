@@ -13,12 +13,12 @@ export default defineProject({
     subtitle: 'real-time scouting for FRC.',
     summary: 'Scouting app, prediction and data sharing for Team 3473. Predicts match results as well as Statbotics does.',
     description:
-        'A full-stack scouting platform for FRC: field-mapped input, ensemble match prediction, and guest sharing for alliance partners. Now adding automatic scouting from match video.',
+        'A full-stack scouting platform for FRC: field-mapped input, ensemble match prediction, and guest sharing for alliance partners. Handed off to Team 3473 with a computer-vision rebuild partway done.',
     domain: 'Software',
-    status: 'building',
-    statusNote: 'v3 in development',
-    years: { start: 2024 },
-    role: 'Creator and alumni',
+    status: 'archived',
+    statusNote: 'handed off',
+    years: { start: 2024, end: 2026 },
+    role: 'Architect · de facto technical lead',
     affiliation: 'FRC Team 3473',
 
     hero: (
@@ -30,10 +30,10 @@ export default defineProject({
     ),
     thumb: scoutingApp,
 
-    stack: ['React', 'TypeScript', 'FastAPI', 'Tauri', 'Python'],
+    stack: ['React', 'TypeScript', 'Tailwind', 'FastAPI', 'PostgreSQL (Neon)', 'Fly.io'],
     links: [{ kind: 'related', label: 'sprocketstats.com', href: '/projects/sprocketstats-com' }],
     stats: [
-        { label: 'Records', value: '411' },
+        { label: 'Matches', value: '218' },
         { label: 'Teams', value: '73' },
         { label: 'Events', value: '3' },
         { label: 'Win/loss', value: '~87% predicted' },
@@ -52,29 +52,33 @@ export default defineProject({
         },
         {
             media: <Shot src={tracking} alt="Competition broadcast with a labelled box around every robot, such as “blue 0.82” and “red 0.86”." />,
-            tag: 'v3 · early',
-            caption: 'YOLO + ByteTrack identifies and tracks each robot. It only needs to see part of a robot, so it’s harder to lose one compared to other models.',
+            tag: 'v3 · unfinished',
+            caption: 'YOLO + ByteTrack robot detection and tracking. Still in development when I handed the project off.',
         },
         {
             media: <Shot src={keypoints} alt="Reefscape broadcast frame from the Curie Division, used for HRNet keypoint detection." />,
-            tag: 'v3 · in development',
-            caption: 'An HRNet model trained on labelled keypoints pinpoints geometric center of the robot.',
+            tag: 'v3 · unfinished',
+            caption: 'HRNet pose estimation, trained on labelled keypoints to find each robot’s geometric centre. Still in development at handoff.',
         },
         {
             media: <Shot src={trajectories} alt="Top-down field map covered in red and blue robot paths." />,
             tag: 'v3 · in development',
-            caption: 'Robot positions from HRNet, transformed onto field coordinates.',
+            caption: 'Robot positions mapped onto field coordinates through the homography, which is finished; the HRNet positions feeding it were not.',
         },
     ],
 
     milestones: [
         {
-            date: '2026', kind: 'milestone', label: 'In development', tone: 'warn', title: 'v3: automatic scouting from video',
-            body: 'Camera solve, broadcast reading and robot tracking, aimed at the 2026 off-season and 2027.',
+            date: '2026', kind: 'milestone', label: 'Handed off', title: 'Handed off to the team',
+            body: 'I’m now an alumnus; the remaining team members have the project.',
+        },
+        {
+            date: '2026', kind: 'milestone', label: 'Partly done', tone: 'warn', title: 'v3: automatic scouting from video',
+            body: 'Done: webcast matching, audio alignment, custom template-matching OCR for the broadcast, and homography field mapping. Unfinished at handoff: HRNet pose estimation, YOLO + ByteTrack detection and tracking, and an RNN for path categorization.',
         },
         {
             date: '2026', kind: 'event', label: '~87%', tone: 'good', title: 'Prediction on par with Statbotics',
-            body: 'Win/loss over about 90 late-qualification and playoff matches; no significant difference from EPA at 95% confidence.',
+            body: 'Random Forest + K-Means ensemble, trained only on earlier matches from the event. Win/loss over about 90 late-qualification and playoff matches; no significant difference from Statbotics EPA at 95% confidence.',
         },
         {
             date: '2026', kind: 'release', title: 'Updated for the Rebuilt season',
@@ -87,11 +91,6 @@ export default defineProject({
     ],
 
     outlook: {
-        now: 'v3 is the focus: collecting data from match video instead of asking people to tap buttons. It’s mostly the new members working on it while I’m guiding the direction',
-        next: [
-            'Finish tracking',
-            'An RNN that turns robot tracks into behaviour per match',
-            'Alliance selection simulator',
-        ],
+        now: 'I architected it and wrote the majority of the code; three teammates contributed with my direction and code review. It ran live at 3 competitions, including both 2026 CA district events, logging 218 matches across 73 teams. Since graduating I’ve handed it to the team and don’t expect to work on it further.',
     },
 });

@@ -21,7 +21,7 @@ import { PROJECTS, STATUS_TONE } from '@/data/projects';
 export const metadata: Metadata = {
     title: 'Mark Wu',
     description:
-        'I design and build robots, drones, and the software that powers them. Looking for internships and lab I can contribute to.',
+        'I design and build robots, drones, and the software that powers them. Looking for Summer 2027 internships, REUs, and lab placements.',
 };
 
 /* ═════════════════════════════════════════════════════════════════
@@ -54,11 +54,11 @@ export default function HomePage() {
                         <strong className="text-fg text-lg font-semibold">What I&#39;m most proud of: </strong>
                         <p className="m-0">
                             <strong className="text-fg font-semibold">SprocketStats</strong>
-                            : FRC scouting website live at sprocketstats.com. Handles team operations and scouting.
+                            : FRC scouting platform I architected and wrote most of. Used at 3 competitions, now handed off to Team 3473.
                         </p>
                         <p className="m-0">
                             <strong className="text-fg font-semibold">Project Aetherius</strong>
-                            : A Unmanned Flying Vehicle(UAV) and Ground Control Station(GCS).
+                            : A fixed-wing UAV and the ground control station (GCS) I wrote for it.
                         </p>
                     </div>
 
@@ -76,15 +76,15 @@ export default function HomePage() {
                 <aside className="hidden md:block border border-rule rounded-md p-4.5 bg-bg-elev font-mono text-[11.5px]">
                     <div className="flex justify-between items-baseline pb-3 mb-3 border-b border-rule text-fg-soft tracking-[0.16em] uppercase text-[10px]">
                         <span>Now</span>
-                        <span>2026.08 · Merced</span>
+                        <span>2026.10 · Merced</span>
                     </div>
                     <dl className="m-0 grid gap-2.5">
                         {(
                             [
                                 ['Status', 'Open · internships + labs'],
-                                ['Active projects', '4'],
-                                ['Robots built', '12 combat + 2 FRC'],
-                                ['Last shipped', 'sprocketstats.com'],
+                                ['Active projects', '3'],
+                                ['Combat robots', '12'],
+                                ['Last shipped', 'MercedTime v1.2.1'],
                             ] as Array<[string, string]>
                         ).map(([k, v]) => (
                             <div key={k} className="flex justify-between items-baseline gap-3">
@@ -159,9 +159,14 @@ export default function HomePage() {
                 <ul className="list-none m-0 p-0">
                     {[
                         {
+                            date: '2026.10',
+                            title: 'MercedTime on the Chrome Web Store',
+                            body: 'Published, now at v1.2.1. 19 users as of 2026-10-17.',
+                        },
+                        {
                             date: '2026.08',
-                            title: 'Aetherius UAV: Successful flight',
-                            body: 'Aetherius successfully took off and flew on the 18 and 19 of August, demonstrating air worthiness of the aircraft and flight readiness of the ground control station.',
+                            title: 'Aetherius UAV: First flight',
+                            body: 'Two self-propelled takeoffs on August 18, about 10 seconds of combined airtime, with my own ground station in the loop. Flown more since in FBWA, on RC.',
                         },
                         {
                             date: '2026.08',
@@ -205,9 +210,10 @@ export default function HomePage() {
                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 m-0">
                     {(
                         [
-                            ['School', 'UC Merced · ME w/ AE emphasis · 2030'],
-                            ['Looking', 'Research labs · internships'],
-                            ['Building', 'Aetherius UAV + GCS · SprocketStats'],
+                            ['School', 'UC Merced · ME w/ AE emphasis · DSC minor · 2030'],
+                            ['Member', 'Carpin lab (undergrad researcher) · Robotics Society · AIAA'],
+                            ['Looking', 'Summer 2027 internships · REUs · labs'],
+                            ['Building', 'Aetherius UAV + GCS · MercedTime'],
                             ['Stack', 'TypeScript · Python'],
                             ['Hardware', 'Pixhawk · RPi · ESP32 · Arduino'],
                             ['CAD', 'SolidWorks · Fusion 360'],

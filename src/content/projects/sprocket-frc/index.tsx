@@ -10,12 +10,12 @@ export default defineProject({
     slug: 'sprocket-frc',
     title: 'Team Sprocket',
     subtitle: 'two seasons with Team 3473.',
-    summary: 'CAD member for Team 3473 in the Reefscape and Rebuilt seasons.',
+    summary: 'CAD subteam member for Team 3473 in the Reefscape and Rebuilt seasons, and the person running the team’s laser cutter.',
     description: 'Two seasons of FRC CAD with Team 3473 Sprocket. ',
     domain: 'Robotics',
     status: 'archived',
     years: { start: 2024, end: 2026 },
-    role: 'CAD: climb (2025), indexer (2026)',
+    role: 'CAD subteam · scouting app technical lead',
     affiliation: 'FRC Team 3473',
 
     hero: (
@@ -34,13 +34,14 @@ export default defineProject({
         { kind: 'cad', label: 'Rebuilt CAD (2026)', href: 'https://grabcad.com/library/frc-team-3473-rebuilt-cad-1' },
     ],
     stats: [
-        { label: '2025 · Reefscape', value: 'Climb subsystem' },
-        { label: '2026 · Rebuilt', value: 'Storage / indexer' },
+        { label: '2025 · Reefscape', value: 'Intake · climb' },
+        { label: '2026 · Rebuilt', value: 'Indexer · storage · superstructure' },
+        { label: 'Printed parts, 2026', value: '~1 kg PLA · ~3 kg TPU' },
     ],
 
     awards: [
-        { place: 'Impact Award', what: 'Team award', detail: 'Won by Team 3473 in 2025' },
-        { place: 'Engineering Inspiration', what: 'Team award', detail: 'Won by Team 3473 in 2026' },
+        { place: 'Impact Award', what: 'Team award', detail: 'Won by Team 3473’s business subteam in 2025; I did CAD and fabrication support for them' },
+        { place: 'Engineering Inspiration', what: 'Team award', detail: 'Won by Team 3473’s business subteam in 2026; I did CAD and fabrication support for them' },
     ],
 
     // Two rows, one per season: CAD on the left, the built robot on the right.
@@ -65,7 +66,8 @@ export default defineProject({
     ],
 
     milestones: [
-        { date: '2026', kind: 'event', title: 'Rebuilt season', body: 'Designed the storage and indexer subsystem.' },
-        { date: '2025', kind: 'event', title: 'Reefscape season', body: 'Designed the climb subsystem.' },
+        { date: '2026', kind: 'event', title: 'Rebuilt season', body: 'Designed the indexer, storage and superstructure. Pushed for wider use of 3D printing; the team leaned heavily on its Bambu H2D, and the robot carries roughly 1 kg of PLA and 3 kg of TPU in printed parts.' },
+        { date: '2025', kind: 'event', title: 'Laser cutter back in service', body: 'Repaired the team’s 60 W CO2 laser cutter for the second season, then ran it for plywood and acrylic.' },
+        { date: '2025', kind: 'event', title: 'Reefscape season', body: 'Designed the intake and climb subsystems.' },
     ],
 });

@@ -20,15 +20,15 @@ export default defineShowcase({
     description: 'UAV work: the Aetherius fixed-wing, a custom ArduPilot ground station, and the Caelifer coaxial EDF tailsitter.',
 
     stats: [
-        { label: 'Flying since', value: '2026.08.18' },
-        { label: 'Flights', value: '4 flown' },
+        { label: 'First flight', value: '2026.08.18' },
+        { label: 'Day one', value: '2 takeoffs · ~10 s' },
         { label: 'Autopilot', value: 'ArduPilot · Pixhawk 6X' },
         { label: 'Ground station', value: 'My own' },
     ],
 
     feature: {
         title: 'Aetherius UAV',
-        caption: 'Flight 05: one and a half loops, about 20 s in the air.',
+        caption: 'A later flight in FBWA, flown on RC with my own ground station in the loop.',
         media: <LoopVideo src={FLIGHT_05} poster={airborne} alt="Aetherius in the air over a grass park." sizes="(max-width: 768px) 100vw, 1100px" />,
         href: '/projects/aetherius',
     },
@@ -43,7 +43,7 @@ export default defineShowcase({
         },
         {
             title: 'Caelifer',
-            caption: 'Coaxial EDF tailsitter in a 100 mm tube.',
+            caption: 'Coaxial EDF tailsitter in a 150 mm tube.',
             media: <CadRender src={caelifer} alt="Transparent CAD render of Caelifer: a tall tube with a rounded nose, the EDF pair and fins visible inside." />,
             href: '/projects/caelifer',
             span: 'tall',
@@ -80,12 +80,12 @@ export default defineShowcase({
         },
         {
             title: 'Flight log',
-            caption: 'Each flight fixed what ended the one before.',
+            caption: 'First day: two takeoffs, ~10 s combined, one aborted roll.',
             media: (
                 <Brief
                     items={[
-                        ['Flight 01', '~1 m for ~3 s'],
-                        ['Flight 05', '~20 s · 1.5 loops'],
+                        ['Flight 01', '~1 m · clean landing'],
+                        ['Flight 02', '~5 m · prop split'],
                     ]}
                 />
             ),

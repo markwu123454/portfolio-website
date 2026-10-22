@@ -46,8 +46,8 @@ export default defineProject({
     // TODO: dates.
     milestones: [
         {
-            kind: 'release', title: 'Sign-in moved to popup OAuth',
-            body: 'Google’s sign-in button randomly failed to load, and redirect OAuth flashed the screen in the mobile app. The popup fixed both.',
+            kind: 'release', title: 'Sign-in moved to redirect OAuth',
+            body: 'Google sign-in uses a redirect flow instead of a popup, because the popup proved unreliable inside the installed PWA.',
         },
         {
             kind: 'release', title: 'Attendance moved in',
@@ -60,11 +60,6 @@ export default defineProject({
     ],
 
     outlook: {
-        now: 'Live and in use by Team 3473 for scouting and attendance.',
-        next: [
-            'RFID check-in and check-out',
-            '8-digit backup codes that offline devices can verify with a checksum',
-            'RFID access control on the new manufacturing machines',
-        ],
+        now: 'Live, and handed off to Team 3473. I don’t expect to do further work on it.',
     },
 });

@@ -1255,7 +1255,7 @@ function HowToStep({num, title, children}: { num: string; title: string; childre
     return (
         <div>
             <div className="flex items-baseline gap-3 mb-2 pb-2 border-b border-rule">
-                <span className="font-mono text-[11px] tracking-kicker text-accent">{num} —</span>
+                <span className="font-mono text-[11px] tracking-kicker text-accent">{num}</span>
                 <h3 className="font-semibold text-[15px] tracking-[-0.005em]">{title}</h3>
             </div>
             <p className="text-[14px] text-fg-muted leading-[1.65]">{children}</p>

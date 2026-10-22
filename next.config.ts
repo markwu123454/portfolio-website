@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
             { source: '/work/:slug*', destination: '/projects/:slug*', statusCode: 301 },
             // /now was retired; send old links home.
             { source: '/now', destination: '/', statusCode: 301 },
+            // MercedTime's privacy policy and terms moved to their own site. Older extension builds
+            // and the Chrome Web Store listing still link to /mercedtime/privacy and /mercedtime/terms.
+            { source: '/mercedtime/:path*', destination: 'https://mercedtime.com/:path*', statusCode: 301 },
             // Unlisted short link to the MercedTime Chrome extension. 307 so browsers don't cache it.
             {
                 source: '/mt',

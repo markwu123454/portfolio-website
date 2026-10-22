@@ -88,7 +88,7 @@ export function Section({ num, title, kicker, id, children }: SectionProps) {
         <section id={id} className="pt-14 mt-2 scroll-mt-24">
             <header className="flex items-baseline gap-4 pb-3.5 mb-6 border-b border-rule-strong">
                 <span className="font-mono text-xs tracking-[0.16em] text-accent shrink-0">
-                    {num} —
+                    {num}
                 </span>
                 <div className="min-w-0 flex-1">
                     {kicker && (

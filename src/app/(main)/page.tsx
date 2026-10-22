@@ -295,7 +295,7 @@ function Section({
         <section className="pt-12 sm:pt-16 mt-2">
             <header className="flex items-baseline gap-4 pb-3.5 border-b border-rule-strong">
                 <span className="font-mono text-xs tracking-[0.16em] text-accent shrink-0">
-                    {num} —
+                    {num}
                 </span>
                 <div className="min-w-0 flex-1">
                     {kicker && (

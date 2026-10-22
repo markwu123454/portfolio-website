@@ -210,32 +210,38 @@ const VERSUS_PREVIEW = (
     </svg>
 );
 
-/* ── 06 · Banner History — rerun-cadence gantt ───────────────────── */
+/* ── 06 · UI Collection — a gust across a character field ───────── */
 
-const BH_ROWS = [
-    { y: 40, accent: '#7dd3fc', dots: [18, 70, 150, 250], drought: 330 },
-    { y: 78, accent: '#fb923c', dots: [40, 130, 300], drought: 300 },
-    { y: 116, accent: '#c084fc', dots: [95, 205], drought: 250 },
-    { y: 154, accent: '#4ade80', dots: [140, 210, 260, 315], drought: 340 },
-    { y: 192, accent: '#f87171', dots: [175, 285], drought: 250 },
-];
-const BH_VLINES = [18, 78, 138, 198, 258, 318];
+const UI_COLS = 36, UI_ROWS = 15, UI_CW = 10, UI_RH = 18;
+const UI_RAMP = '.,-~:;=!*#$@';
+const UI_RIPPLE = { x: 262, y: 168, r: 58 };
+const UI_CELLS = (() => {
+    const out: { x: number; y: number; ch: string; o: number; ring: boolean }[] = [];
+    for (let r = 0; r < UI_ROWS; r++) {
+        for (let c = 0; c < UI_COLS; c++) {
+            const x = c * UI_CW + UI_CW / 2, y = r * UI_RH + UI_RH * 0.72;
+            // keep clear of the tile's number badge and category label
+            if ((x > 318 && y < 30) || (x < 70 && y > 244)) continue;
+            // along / across a heading ~20° below horizontal
+            const u = x * 0.94 + y * 0.34, w = -x * 0.34 + y * 0.94;
+            const wave = Math.sin(u / 52 + 1.6 * Math.sin(w / 41)) * Math.cos(w / 33 + 0.9 * Math.sin(u / 87));
+            const gust = Math.min(1, Math.max(0, (wave - 0.3) / 0.6));
+            const d = Math.hypot(x - UI_RIPPLE.x, (y - UI_RIPPLE.y) * 1.15);
+            const ring = Math.exp(-((d - UI_RIPPLE.r) ** 2) / 90);
+            const isRing = ring > 0.35 && ring > gust;
+            const v = isRing ? ring : gust * 0.8;
+            if (v < 0.15) continue;
+            out.push({ x, y, ch: UI_RAMP[Math.min(UI_RAMP.length - 1, Math.floor(v * UI_RAMP.length))], o: isRing ? 0.95 : 0.2 + 0.6 * v, ring: isRing });
+        }
+    }
+    return out;
+})();
 
-const BANNER_HISTORY_PREVIEW = (
-    <svg viewBox="0 0 360 232" preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
-        {BH_VLINES.map((vx) => (
-            <line key={vx} x1={vx} x2={vx} y1={20} y2={214} stroke="var(--rule)" strokeWidth={1} />
-        ))}
-        <line x1={330} x2={330} y1={20} y2={214} stroke="var(--accent)" strokeWidth={1.5} opacity={0.7} />
-        {BH_ROWS.map((r, i) => (
-            <g key={i}>
-                <line x1={r.dots[0]} x2={r.dots[r.dots.length - 1]} y1={r.y} y2={r.y} stroke={r.accent} strokeWidth={2} opacity={0.45} />
-                <line x1={r.dots[r.dots.length - 1]} x2={r.drought} y1={r.y} y2={r.y} stroke="var(--fg-soft)" strokeWidth={1} strokeDasharray="2 3" />
-                {r.dots.map((dx, j) => (
-                    <circle key={j} cx={dx} cy={r.y} r={j === 0 ? 5 : 3.6}
-                            fill={j === 0 ? 'var(--bg)' : r.accent} stroke={r.accent} strokeWidth={j === 0 ? 2.2 : 1} />
-                ))}
-            </g>
+const UI_COLLECTION_PREVIEW = (
+    <svg viewBox={`0 0 ${UI_COLS * UI_CW} ${UI_ROWS * UI_RH}`} preserveAspectRatio="xMidYMid meet" className="w-full h-full" aria-hidden>
+        {UI_CELLS.map((cell, i) => (
+            <text key={i} x={cell.x} y={cell.y} textAnchor="middle" fontFamily="var(--font-mono)" fontSize={11}
+                  fill={cell.ring ? 'var(--accent)' : 'var(--fg-muted)'} opacity={cell.o}>{cell.ch}</text>
         ))}
     </svg>
 );
@@ -281,11 +287,11 @@ const READY: Experiment[] = [
         preview: PULL_PATIENCE_PREVIEW,
     },
     {
-        href: '/experiments/banner-history',
-        category: 'DATA',
-        title: 'Banner History',
-        blurb: 'A ZZZ rerun-cadence tracker: every agent banner since 1.0, ranked by how overdue each one is for a rerun. Auto-scraped, self-updating.',
-        preview: BANNER_HISTORY_PREVIEW,
+        href: '/experiments/ui-collection',
+        category: 'UI',
+        title: 'UI Collection',
+        blurb: 'Interface details found in the wild, each running live with credit to where it shipped.',
+        preview: UI_COLLECTION_PREVIEW,
     },
 ];
 

@@ -14,7 +14,6 @@ const STATIC_PATHS = [
     '/about',
     '/contact',
     '/experiments',
-    '/experiments/banner-history',
     '/experiments/digital-footprint',
     '/experiments/pull-planner',
     '/experiments/snake',

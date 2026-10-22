@@ -6,10 +6,7 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "lint": "next lint",
-    "extract:banners": "node scripts/banner-extractor/extract.mjs",
-    "process:icons": "node scripts/banner-extractor/process-icons.mjs",
-    "fetch:agent-icons": "node scripts/banner-extractor/fetch-agent-icons.mjs"
+    "lint": "next lint"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -19,7 +16,8 @@
     "next": "^16.2.6",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",
-    "react-katex": "^3.1.0"
+    "react-katex": "^3.1.0",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -28,6 +26,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-katex": "^3.0.4",
+    "@types/three": "^0.184.1",
     "acorn": "^8.16.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.6",

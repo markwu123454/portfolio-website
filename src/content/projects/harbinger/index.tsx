@@ -1,6 +1,7 @@
 import { Shot } from '@/app/components/project/media';
 import { defineProject } from '../types';
 import electronicsBay from './electronics-bay.png';
+import turretAngle from './turret-angle.webp';
 
 export default defineProject({
     slug: 'harbinger',
@@ -14,12 +15,12 @@ export default defineProject({
 
     hero: (
         <Shot
-            src={electronicsBay}
-            alt="Harbinger’s yellow base from above, full of wiring, a mesh-covered power supply, the ESP32 board and motor drivers."
+            src={turretAngle}
+            alt="Harbinger’s yellow base at an angle: a black ring gear on bearings, driven by two blue pinions."
             priority
         />
     ),
-    thumb: electronicsBay,
+    thumb: turretAngle,
 
     stack: ['ESP32', 'SimpleFOC', 'C++', 'Qt', 'Bluetooth'],
     links: [
@@ -33,7 +34,13 @@ export default defineProject({
         { label: 'Projectile', value: 'Steel bearings' },
     ],
 
-    // No highlights yet: the only other photo is a duplicate of the hero.
+    highlights: [
+        {
+            media: <Shot src={electronicsBay} alt="Harbinger’s yellow base from above, full of wiring, a mesh-covered power supply, the ESP32 board and motor drivers." />,
+            wide: true,
+            caption: 'Inside the base: the ESP32 board, motor drivers and power supply.',
+        },
+    ],
 
     outlook: {
         now: 'Only the differential geared base is built, and the Qt app can enable it and move it by hand. Haven’t gotten to mounting anything on it, or tuning the voltage and speed of the motors.',

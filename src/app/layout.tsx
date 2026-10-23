@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { Geist, JetBrains_Mono, Source_Serif_4 } from 'next/font/google';
+import { PageViewTracker } from '@/app/components/site/page-view-tracker';
 
 // Self-hosted by next/font; tokens.css builds --font-sans/-mono/-serif on these variables.
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
@@ -35,6 +36,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <html lang="en" className={`${geist.variable} ${jetbrainsMono.variable} ${sourceSerif.variable}`}>
         <body className="m-0 p-0">
         {children}
+        {/* useSearchParams needs a Suspense boundary or every static page would bail out to client rendering. */}
+        <Suspense fallback={null}>
+            <PageViewTracker/>
+        </Suspense>
         </body>
         </html>
     );

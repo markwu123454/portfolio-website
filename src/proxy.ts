@@ -1,7 +1,7 @@
 import { neon } from '@neondatabase/serverless';
 import { NextResponse, type NextFetchEvent, type NextRequest } from 'next/server';
 
-// Logs every page fetch to Neon. The insert runs after the response is sent (waitUntil),
+// Logs every full page load to Neon. The insert runs after the response is sent (waitUntil),
 // so a slow or failing database never delays or breaks a page.
 const TABLE = 'visitors';
 
@@ -15,13 +15,19 @@ function clientIp(request: NextRequest): string | null {
     return ip;
 }
 
-function isPrefetch(request: NextRequest): boolean {
+// Next strips its own RSC/prefetch headers before the proxy runs, so <Link> prefetches look like
+// ordinary GETs here. The browser's Sec-Fetch-Dest survives: a real page load is "document",
+// while every RSC fetch (prefetch or client-side navigation) is "empty". Bots and curl send no
+// Sec-Fetch headers at all, so those are counted too.
+function isPageLoad(request: NextRequest): boolean {
     const h = request.headers;
-    return h.has('next-router-prefetch') || h.get('purpose') === 'prefetch' || h.get('sec-purpose')?.includes('prefetch') === true;
+    if (h.get('purpose') === 'prefetch' || h.get('sec-purpose')?.includes('prefetch')) return false;
+    const dest = h.get('sec-fetch-dest');
+    return dest === null || dest === 'document';
 }
 
 export function proxy(request: NextRequest, event: NextFetchEvent) {
-    if (sql && request.method === 'GET' && !isPrefetch(request)) {
+    if (sql && request.method === 'GET' && isPageLoad(request)) {
         const ip = clientIp(request);
         const userAgent = request.headers.get('user-agent');
         const path = request.nextUrl.pathname + request.nextUrl.search;

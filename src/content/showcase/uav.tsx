@@ -1,4 +1,4 @@
-import { Brief, CadRender, LoopVideo, Shot } from '@/app/components/project/media';
+import { Brief, LoopVideo, Shot } from '@/app/components/project/media';
 import { defineShowcase } from './types';
 import airborne from '../projects/aetherius/flight-02-airborne.png';
 import flyby from '../projects/aetherius/flight-flyby-houses.png';
@@ -6,7 +6,7 @@ import onField from '../projects/aetherius/flight-00-ground-test.png';
 import airframe from '../projects/aetherius/hero-airframe.jpg';
 import gcs from '../projects/aetherius-gcs/gcs-hardware.png';
 import flashing from '../projects/aetherius-gcs/gcs-firmware.png';
-import caelifer from '../projects/caelifer/cad-transparent.png';
+import caelifer from '../projects/caelifer/build-assembled.webp';
 import flowSim from '../projects/caelifer/flow-sim.png';
 
 const FLIGHT_05 = 'https://assets.markwu.org/portfolio/flight%205.mp4';
@@ -42,9 +42,9 @@ export default defineShowcase({
             span: 'wide',
         },
         {
-            title: 'Caelifer',
-            caption: 'Coaxial EDF tailsitter in a 150 mm tube.',
-            media: <CadRender src={caelifer} alt="Transparent CAD render of Caelifer: a tall tube with a rounded nose, the EDF pair and fins visible inside." />,
+            title: 'Caelifer test platform',
+            caption: 'For testing while the drone is in early development.',
+            media: <Shot src={caelifer} position="50% 25%" alt="Caelifer’s printed test platform on carpet: black EDF tube on blue legs, battery and wiring on the ring above, GPS and flight controller on top." />,
             href: '/projects/caelifer',
             span: 'tall',
         },

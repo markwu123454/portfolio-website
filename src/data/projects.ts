@@ -23,8 +23,12 @@ export interface Project {
     status: Status;
     domain: Domain;
     year: string;
-    /** Numeric recency key — higher = more recent. Used by /projects' sort=recent. */
-    recency: number;
+    /**
+     * Last time the project or its page was updated, as 'YYYY-MM-DD'. /projects' sort=recent
+     * shows the newest first, so bump this whenever you edit a project. Same-day ties keep
+     * the order of this array.
+     */
+    updated: string;
     /** Set when href points off-site — renders a plain anchor, opens in a new tab. */
     external?: boolean;
     /**
@@ -55,11 +59,11 @@ export const PROJECTS: Project[] = [
         num: '01',
         href: '/projects/aetherius',
         title: 'Aetherius UAV',
-        blurb: 'Twin-boom fixed-wing. First flight 2026.08.18 (two takeoffs, ~10 s combined); flown more since in FBWA, on RC.',
+        blurb: 'Twin-boom fixed-wing. Flown on RC.',
         status: 'building',
         domain: 'Drones',
         year: '2025 – present',
-        recency: 100,
+        updated: '2026-10-21',
         featured: 1,
         homeLabel: 'flown',
         homeTone: 'good',
@@ -76,12 +80,33 @@ export const PROJECTS: Project[] = [
         status: 'building',
         domain: 'Software',
         year: '2025 – present',
-        recency: 99,
+        updated: '2026-10-21',
         featured: 2,
         nowUpdate: {
             title: 'Ground station, third revision',
             body: 'Handled the real flight: firmware, calibration, failsafes, prearm, arming, mode switching, live dashboard. Covers ArduCopter and ArduPlane. Mission support works against SITL.',
         },
+    },
+    {
+        num: '08',
+        href: '/projects/caelifer',
+        title: 'Caelifer',
+        blurb: 'Tube-launchable coaxial EDF VTOL, steered by servo-actuated exhaust vanes. Bench tested only.',
+        status: 'building',
+        domain: 'Drones',
+        year: '2026 – present',
+        updated: '2026-10-25',
+    },
+    {
+        num: '05',
+        href: '/projects/mercedtime',
+        title: 'MercedTime',
+        blurb: 'Chrome extension on the Web Store (v1.2.1) that replaces the read side of UC Merced’s registration pages: class search, schedules, planning, degree roadmap.',
+        status: 'shipped',
+        domain: 'Software',
+        year: '2026 – present',
+        updated: '2026-10-21',
+        featured: 3,
     },
     {
         num: '03',
@@ -91,7 +116,7 @@ export const PROJECTS: Project[] = [
         status: 'archive',
         domain: 'Software',
         year: '2024–26',
-        recency: 95,
+        updated: '2026-10-21',
         nowUpdate: {
             title: 'Computer-vision rebuild',
             body: 'Rebuilding the scouting pipeline to integrate machine learning algorithms, currently building for the 2026 off-season.',
@@ -105,35 +130,12 @@ export const PROJECTS: Project[] = [
         status: 'shipped',
         domain: 'Software',
         year: '2024 – present',
-        recency: 94,
+        updated: '2026-10-21',
         homeLabel: 'live',
         nowUpdate: {
             title: 'Team operations and scouting platform.',
             body: 'In use by Team 3473.',
         },
-    },
-    {
-        num: '05',
-        href: '/projects/mercedtime',
-        title: 'MercedTime',
-        blurb: 'Chrome extension on the Web Store (v1.2.1) that replaces the read side of UC Merced’s registration pages: class search, schedules, planning, degree roadmap.',
-        status: 'shipped',
-        domain: 'Software',
-        year: '2026 – present',
-        recency: 97,
-        featured: 3,
-    },
-    {
-        num: '06',
-        href: 'https://github.com/markwu123454/FemtoJSON',
-        title: 'Femto',
-        blurb: 'Three orders of magnitude smaller than pico, Femto is a native file-viewer suite: FemtoJSON, FemtoDot, and more to come.',
-        status: 'paused',
-        domain: 'Software',
-        year: '2026 – present',
-        recency: 85,
-        external: true,
-        backBurnerNote: 'Source and release on GitHub.',
     },
     {
         num: '07',
@@ -143,30 +145,20 @@ export const PROJECTS: Project[] = [
         status: 'archive',
         domain: 'Software',
         year: '2026',
-        recency: 88,
+        updated: '2026-10-21',
         backBurnerNote: 'Prototype. Not planning to revisit it, but it still works and it is still fun to watch.',
     },
     {
-        num: '08',
-        href: '/projects/caelifer',
-        title: 'Caelifer',
-        blurb: 'Tube-launchable coaxial EDF VTOL, steered by servo-actuated exhaust vanes. Bench tested only.',
+        num: '06',
+        href: 'https://github.com/markwu123454/FemtoJSON',
+        title: 'Femto',
+        blurb: 'Three orders of magnitude smaller than pico, Femto is a native file-viewer suite: FemtoJSON, FemtoDot, and more to come.',
         status: 'paused',
-        domain: 'Drones',
+        domain: 'Software',
         year: '2026 – present',
-        recency: 85,
-        backBurnerNote: 'bench testing, will revisit after Aetherius, probably.',
-    },
-    {
-        num: '09',
-        href: '/projects/harbinger',
-        title: 'Harbinger',
-        blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
-        status: 'paused',
-        domain: 'Robotics',
-        year: '2025 – present',
-        recency: 60,
-        backBurnerNote: 'only differential geared base, got advice to not build it into a turret.',
+        updated: '2026-10-06',
+        external: true,
+        backBurnerNote: 'Source and release on GitHub.',
     },
     {
         num: '10',
@@ -176,7 +168,18 @@ export const PROJECTS: Project[] = [
         status: 'archive',
         domain: 'Robotics',
         year: '2024–26',
-        recency: 80,
+        updated: '2026-10-21',
+    },
+    {
+        num: '09',
+        href: '/projects/harbinger',
+        title: 'Harbinger',
+        blurb: 'Embedded C++ turret with coilgun actuator and closed-loop pid control.',
+        status: 'paused',
+        domain: 'Robotics',
+        year: '2025 – present',
+        updated: '2026-10-21',
+        backBurnerNote: 'only differential geared base, got advice to not build it into a turret.',
     },
     {
         num: '11',
@@ -186,6 +189,6 @@ export const PROJECTS: Project[] = [
         status: 'archive',
         domain: 'Robotics',
         year: '2020–24',
-        recency: 20,
+        updated: '2026-10-06',
     },
 ];

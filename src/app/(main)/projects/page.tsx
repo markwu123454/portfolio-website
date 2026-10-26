@@ -61,9 +61,9 @@ export default async function ProjectsIndexPage({searchParams}: PageProps) {
         if (sort === 'name') return a.title.localeCompare(b.title);
         if (sort === 'status') {
             const s = statusRank[a.status] - statusRank[b.status];
-            return s !== 0 ? s : b.recency - a.recency;
+            return s !== 0 ? s : b.updated.localeCompare(a.updated);
         }
-        return b.recency - a.recency;
+        return b.updated.localeCompare(a.updated);
     });
 
     // Active = building or shipped — i.e. currently getting work. Paused and
